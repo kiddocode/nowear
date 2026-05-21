@@ -21,39 +21,16 @@ body {
 html { scroll-behavior: smooth; }
 
 a { color: inherit; text-decoration: none; }
+
 @media (max-width: 768px) {
-  .hero-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .hero-img-col {
-    display: none !important;
-  }
-  .hero-left {
-    padding: 3rem 1.5rem !important;
-  }
-  .steps-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .steps-img-col {
-    min-height: 300px !important;
-  }
-  .pricing-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .contact-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .footer-grid {
-    grid-template-columns: 1fr 1fr !important;
-  }
-  .section-pad {
-    padding: 4rem 1.5rem !important;
-  }
-  nav .nav-center {
-    display: none !important;
-  }
-}
-@media (max-width: 768px) {
+
+  /* NAV */
+  nav { padding: 0 1.25rem !important; }
+  .nav-center { display: none !important; }
+  .nav-actions { display: none !important; }
+  .nav-hamburger { display: flex !important; }
+
+  /* LANDING */
   .hero-grid { grid-template-columns: 1fr !important; }
   .hero-img-col { display: none !important; }
   .hero-left { padding: 3rem 1.5rem !important; }
@@ -64,24 +41,40 @@ a { color: inherit; text-decoration: none; }
   .footer-grid { grid-template-columns: 1fr 1fr !important; }
   .section-pad { padding: 4rem 1.5rem !important; }
 
-  nav { padding: 0 1.25rem !important; }
-  nav > div:nth-child(2) { display: none !important; }
+  /* AUTH */
+  .auth-grid { grid-template-columns: 1fr !important; }
+  .auth-visual { display: none !important; }
 
+  /* DASHBOARD */
   .dashboard-grid { grid-template-columns: 1fr !important; }
   .dashboard-sidebar { display: none !important; }
 
+  /* NUEVO EVENTO */
   .nuevo-grid { grid-template-columns: 1fr !important; }
   .nuevo-img { display: none !important; }
   .nuevo-form { padding: 2rem 1.5rem !important; }
 
-  .auth-grid { grid-template-columns: 1fr !important; }
-  .auth-visual { display: none !important; }
-
+  /* EVENTO DETALLE */
   .evento-stats { grid-template-columns: repeat(2,1fr) !important; }
   .evento-tabla { overflow-x: auto !important; }
-}
-@media (max-width: 768px) {
-  .nav-center { display: none !important; }
-  .nav-actions { display: none !important; }
-  .nav-hamburger { display: flex !important; }
+  .evento-hero { padding: 2rem 1.5rem !important; flex-direction: column !important; align-items: flex-start !important; }
+  .evento-hero-link { min-width: unset !important; width: 100% !important; }
+  .evento-tabs { padding: 0 1.5rem !important; }
+  .evento-contenido { padding: 1.5rem !important; }
+
+  /* INVITADA */
+  .invitada-grid { grid-template-columns: 1fr !important; }
+  .invitada-izq { display: none !important; }
+  .invitada-form { padding: 2rem 1.5rem !important; }
+
+  /* DEMO ORGANIZADORA */
+  .demo-invitada-grid { grid-template-columns: 1fr !important; }
+  .demo-invitada-izq { display: none !important; }
+  .demo-tour { left: 1rem !important; right: 1rem !important; transform: none !important; }
+  .demo-planes { grid-template-columns: 1fr !important; }
+
+  /* POP-UP PLANES */
+  .planes-grid { grid-template-columns: 1fr !important; }
+  .planes-modal { margin: 1rem !important; }
+  .planes-footer { flex-direction: column !important; gap: 1rem !important; }
 }
