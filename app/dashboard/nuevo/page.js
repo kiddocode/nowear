@@ -19,7 +19,6 @@ const PLANES = [
     precio: '9€',
     nombre: 'Básico',
     duracion: '1 mes',
-    descripcion: 'Perfecto para eventos próximos',
     features: ['1 evento activo', 'Hasta 50 invitadas', 'Link único', 'Detección de conflictos']
   },
   {
@@ -27,7 +26,6 @@ const PLANES = [
     precio: '19€',
     nombre: 'Estándar',
     duracion: '3 meses',
-    descripcion: 'El más popular',
     popular: true,
     features: ['1 evento activo', 'Hasta 150 invitadas', 'Link único', 'Detección de conflictos', 'Exportar lista']
   },
@@ -36,7 +34,6 @@ const PLANES = [
     precio: '29€',
     nombre: 'Premium',
     duracion: 'Sin límite de tiempo',
-    descripcion: 'Para eventos con mucha antelación',
     features: ['1 evento activo', 'Invitadas ilimitadas', 'Link único', 'Detección de conflictos', 'Exportar lista', 'Soporte prioritario']
   }
 ]
@@ -49,6 +46,7 @@ export default function NuevoEvento() {
   const [lugar, setLugar] = useState('')
   const [numInvitadas, setNumInvitadas] = useState('')
   const [coloresBloqueados, setColoresBloqueados] = useState('')
+  const [damasHonor, setDamasHonor] = useState('')
   const [error, setError] = useState('')
   const [showPlanes, setShowPlanes] = useState(false)
   const [planSeleccionado, setPlanSeleccionado] = useState(null)
@@ -81,6 +79,7 @@ export default function NuevoEvento() {
       lugar,
       num_invitadas: numInvitadas ? parseInt(numInvitadas) : null,
       colores_bloqueados: coloresBloqueados || null,
+      damas_honor: damasHonor || null,
       plan: planSeleccionado
     })
 
@@ -94,10 +93,7 @@ export default function NuevoEvento() {
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        plan: planSeleccionado,
-        eventoData: { nombre, slug }
-      })
+      body: JSON.stringify({ plan: planSeleccionado, eventoData: { nombre, slug } })
     })
 
     const data = await res.json()
@@ -110,6 +106,10 @@ export default function NuevoEvento() {
       setShowPlanes(false)
     }
   }
+
+  const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
+  const labelStyle = {display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}
+  const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
 
   return (
     <div style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
@@ -146,11 +146,8 @@ export default function NuevoEvento() {
           </div>
 
           <div style={{marginBottom:'1.25rem'}}>
-            <label style={{display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}}>
-              Tipo de evento <span style={{color:'#C4917C'}}>*</span>
-            </label>
-            <select value={tipo} onChange={e => setTipo(e.target.value)}
-              style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}}>
+            <label style={labelStyle}>Tipo de evento <span style={{color:'#C4917C'}}>*</span></label>
+            <select value={tipo} onChange={e => setTipo(e.target.value)} style={selectStyle}>
               <option value="">Selecciona el tipo...</option>
               <option>Boda</option>
               <option>Bautizo</option>
@@ -163,47 +160,49 @@ export default function NuevoEvento() {
           </div>
 
           <div style={{marginBottom:'1.25rem'}}>
-            <label style={{display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}}>
-              Nombre del evento <span style={{color:'#C4917C'}}>*</span>
-            </label>
-            <input type="text" placeholder="Ej: Boda de Ana & Carlos" value={nombre} onChange={e => setNombre(e.target.value)}
-              style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}}/>
+            <label style={labelStyle}>Nombre del evento <span style={{color:'#C4917C'}}>*</span></label>
+            <input type="text" placeholder="Ej: Boda de Ana & Carlos" value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
           </div>
 
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.25rem'}}>
             <div>
-              <label style={{display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}}>
-                Fecha <span style={{color:'#C4917C'}}>*</span>
-              </label>
-              <input type="date" value={fecha} onChange={e => setFecha(e.target.value)}
-                style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}}/>
+              <label style={labelStyle}>Fecha <span style={{color:'#C4917C'}}>*</span></label>
+              <input type="date" value={fecha} onChange={e => setFecha(e.target.value)} style={inputStyle}/>
             </div>
             <div>
-              <label style={{display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}}>
-                Lugar <span style={{color:'#C4917C'}}>*</span>
-              </label>
-              <input type="text" placeholder="Ciudad o venue" value={lugar} onChange={e => setLugar(e.target.value)}
-                style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}}/>
+              <label style={labelStyle}>Lugar <span style={{color:'#C4917C'}}>*</span></label>
+              <input type="text" placeholder="Ciudad o venue" value={lugar} onChange={e => setLugar(e.target.value)} style={inputStyle}/>
             </div>
           </div>
 
           <div style={{marginBottom:'1.25rem'}}>
-            <label style={{display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}}>
-              Número de invitadas
-            </label>
-            <input type="number" placeholder="Aproximado" value={numInvitadas} onChange={e => setNumInvitadas(e.target.value)}
-              style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}}/>
+            <label style={labelStyle}>Número de invitadas</label>
+            <input type="number" placeholder="Aproximado" value={numInvitadas} onChange={e => setNumInvitadas(e.target.value)} style={inputStyle}/>
           </div>
 
-          <div style={{marginBottom:'2.5rem'}}>
-            <label style={{display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.25rem'}}>
+          <div style={{marginBottom:'1.25rem'}}>
+            <label style={labelStyle}>
               Colores bloqueados <span style={{fontSize:'0.58rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span>
             </label>
             <p style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA',marginBottom:'0.75rem',lineHeight:1.6}}>
               Colores que ninguna invitada podrá registrar.
             </p>
-            <input type="text" placeholder="Ej: blanco, crudo, verde botella..." value={coloresBloqueados} onChange={e => setColoresBloqueados(e.target.value)}
-              style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}}/>
+            <input type="text" placeholder="Ej: blanco, crudo, verde botella..." value={coloresBloqueados} onChange={e => setColoresBloqueados(e.target.value)} style={inputStyle}/>
+          </div>
+
+          <div style={{marginBottom:'2.5rem'}}>
+            <label style={labelStyle}>
+              Damas de honor <span style={{fontSize:'0.58rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span>
+            </label>
+            <p style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA',marginBottom:'0.75rem',lineHeight:1.6}}>
+              ¿Las damas de honor llevan el mismo look?
+            </p>
+            <select value={damasHonor} onChange={e => setDamasHonor(e.target.value)} style={selectStyle}>
+              <option value="">Selecciona una opción...</option>
+              <option value="si">Sí, llevan el mismo look</option>
+              <option value="no">No, cada una elige su look</option>
+              <option value="color">Mismo color pero look diferente</option>
+            </select>
           </div>
 
           {error && <p style={{fontSize:'0.72rem',fontWeight:300,color:'#C4917C',marginBottom:'1rem'}}>{error}</p>}
@@ -238,7 +237,7 @@ export default function NuevoEvento() {
       {/* POP-UP PLANES */}
       {showPlanes && (
         <div style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.7)',zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
-          <div style={{background:'#FFFFFF',maxWidth:'860px',width:'100%',maxHeight:'90vh',overflowY:'auto'}}>
+          <div style={{background:'#FFFFFF',maxWidth:'1060px',width:'100%',maxHeight:'90vh',overflowY:'auto'}}>
             <div style={{padding:'2.5rem 3rem 2rem',borderBottom:'1px solid #E0E0DC',display:'flex',justifyContent:'space-between',alignItems:'flex-start'}}>
               <div>
                 <h2 style={{fontSize:'1.8rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.3rem'}}>Elige tu plan</h2>
@@ -248,7 +247,7 @@ export default function NuevoEvento() {
                 style={{background:'none',border:'none',fontSize:'1.2rem',cursor:'pointer',color:'#888884',padding:'0.25rem',lineHeight:1}}>✕</button>
             </div>
 
-            <div className="planes-grid" style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:'#E0E0DC',margin:'2rem 3rem'}}>
+            <div className="planes-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',margin:'2rem 3rem'}}>
               {PLANES.map(plan => (
                 <div key={plan.id} onClick={() => setPlanSeleccionado(plan.id)}
                   style={{background:planSeleccionado===plan.id?'#0A0A0A':'#FFFFFF',padding:'2rem',cursor:'pointer',position:'relative',transition:'background 0.15s'}}>
@@ -268,6 +267,26 @@ export default function NuevoEvento() {
                   </div>
                 </div>
               ))}
+
+              {/* PLAN ENTERPRISE */}
+              <div style={{background:'#F7F7F5',padding:'2rem',position:'relative',border:'1px dashed #E0E0DC'}}>
+                <div style={{position:'absolute',top:'1rem',right:'1rem',fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',background:'#0A0A0A',color:'#FFFFFF',padding:'0.2rem 0.5rem'}}>Enterprise</div>
+                <div style={{fontSize:'1.4rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.02em',lineHeight:1.2,marginBottom:'0.25rem',marginTop:'0.5rem'}}>A medida</div>
+                <div style={{fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.25rem'}}>Solución personalizada</div>
+                <div style={{fontSize:'0.85rem',fontWeight:300,color:'#0A0A0A',marginBottom:'1.5rem'}}>Para empresas y eventos recurrentes</div>
+                <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',marginBottom:'1.5rem'}}>
+                  {['Múltiples eventos','Cuenta de empresa','Tarifa anual','Desarrollo ad-hoc','Soporte dedicado'].map((f,i) => (
+                    <div key={i} style={{display:'flex',alignItems:'center',gap:'0.6rem',fontSize:'0.72rem',fontWeight:300,color:'#888884'}}>
+                      <span style={{width:'4px',height:'4px',borderRadius:'50%',background:'#BEBEBA',flexShrink:0}}></span>
+                      {f}
+                    </div>
+                  ))}
+                </div>
+                <a href="/#contacto" onClick={() => setShowPlanes(false)}
+                  style={{display:'block',textAlign:'center',padding:'0.75rem',fontSize:'0.72rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',fontFamily:'Poppins,sans-serif'}}>
+                  Contactar →
+                </a>
+              </div>
             </div>
 
             <div className="planes-footer" style={{padding:'1.5rem 3rem 2.5rem',display:'flex',justifyContent:'space-between',alignItems:'center'}}>
