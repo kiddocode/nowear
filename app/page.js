@@ -17,7 +17,7 @@ export default function Home() {
           </p>
           <div style={{display:'flex',gap:'1rem',flexWrap:'wrap'}}>
             <a href="/register" style={{fontSize:'0.78rem',fontWeight:500,padding:'0.9rem 2.25rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none'}}>Crear mi evento</a>
-            <a href="/demo" style={{fontSize:'0.78rem',fontWeight:500,padding:'0.9rem 2.25rem',border:'1px solid #0A0A0A',color:'#0A0A0A',textDecoration:'none'}}>Ver demo</a>
+            <a href="/demo/organizadora" style={{fontSize:'0.78rem',fontWeight:500,padding:'0.9rem 2.25rem',border:'1px solid #0A0A0A',color:'#0A0A0A',textDecoration:'none'}}>Ver demo</a>
           </div>
         </div>
         <div className="hero-img-col" style={{position:'relative',overflow:'hidden'}}>

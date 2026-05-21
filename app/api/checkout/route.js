@@ -30,8 +30,8 @@ export async function POST(req) {
         },
       ],
       mode: 'payment',
-      success_url: `https://nowear.es/dashboard?pago=ok`,
-cancel_url: `https://nowear.es/dashboard/nuevo`,
+      success_url: `https://www.nowear.es/dashboard?pago=ok`,
+      cancel_url: `https://www.nowear.es/dashboard/nuevo`,
       metadata: {
         plan,
         eventoNombre: eventoData?.nombre || '',
