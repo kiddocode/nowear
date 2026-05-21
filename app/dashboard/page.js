@@ -1,0 +1,90 @@
+export default function Dashboard() {
+  return (
+<div className="dashboard-grid" style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>      
+      {/* SIDEBAR */}
+<aside className="dashboard-sidebar" style={{borderRight:'1px solid #E0E0DC',padding:'2rem 0',display:'flex',flexDirection:'column',background:'#FFFFFF',position:'sticky',top:'68px',height:'calc(100vh - 68px)'}}>
+          <div style={{marginBottom:'1.5rem'}}>
+          <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.5rem'}}>Principal</div>
+          <a href="/dashboard" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:500,color:'#0A0A0A',background:'#F0F0EE',borderLeft:'2px solid #0A0A0A',textDecoration:'none'}}>
+            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'#0A0A0A',flexShrink:0}}></span>Mis eventos
+          </a>
+          <a href="/dashboard/nuevo" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:300,color:'#888884',textDecoration:'none'}}>
+            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'currentColor',flexShrink:0,opacity:0.4}}></span>Nuevo evento
+          </a>
+        </div>
+        <div style={{marginBottom:'1.5rem'}}>
+          <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.5rem'}}>Cuenta</div>
+          <a href="#" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:300,color:'#888884',textDecoration:'none'}}>
+            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'currentColor',flexShrink:0,opacity:0.4}}></span>Perfil
+          </a>
+          <a href="#" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:300,color:'#888884',textDecoration:'none'}}>
+            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'currentColor',flexShrink:0,opacity:0.4}}></span>Facturación
+          </a>
+          <a href="#" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:300,color:'#888884',textDecoration:'none'}}>
+            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'currentColor',flexShrink:0,opacity:0.4}}></span>Ayuda
+          </a>
+        </div>
+        <div style={{marginTop:'auto',padding:'1.25rem 1.5rem',borderTop:'1px solid #E0E0DC'}}>
+          <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+            <div style={{width:'32px',height:'32px',borderRadius:'50%',background:'#0A0A0A',color:'#FFFFFF',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.62rem',fontWeight:600,flexShrink:0}}>MT</div>
+            <div>
+              <div style={{fontSize:'0.75rem',fontWeight:500,color:'#0A0A0A'}}>Maria Teresa</div>
+              <div style={{fontSize:'0.62rem',fontWeight:300,color:'#888884'}}>1 evento activo</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* MAIN */}
+      <main style={{padding:'3rem'}}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
+          <div>
+            <h1 style={{fontSize:'2.2rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Mis eventos</h1>
+            <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>Gestiona tus eventos y comparte los links con tus invitadas</p>
+          </div>
+          <a href="/dashboard/nuevo" style={{fontSize:'0.72rem',fontWeight:500,padding:'0.65rem 1.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none'}}>+ Nuevo evento</a>
+        </div>
+
+        {/* STATS */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC',marginBottom:'3rem'}}>
+          {[
+            {num:'1',label:'Evento activo'},
+            {num:'12',label:'Looks registrados'},
+            {num:'0',label:'Conflictos'},
+          ].map((s,i)=>(
+            <div key={i} style={{background:'#F7F7F5',padding:'2rem'}}>
+              <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',lineHeight:1,marginBottom:'0.4rem',letterSpacing:'-0.03em'}}>{s.num}</div>
+              <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>{s.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* EVENTOS */}
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
+          
+          {/* EVENTO CRIS */}
+          <a href="/evento/cris-pablo" style={{background:'#FFFFFF',padding:'2rem',cursor:'pointer',textDecoration:'none',display:'block'}}>
+            <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.65rem'}}>Boda</div>
+            <div style={{fontSize:'1.4rem',fontWeight:300,color:'#0A0A0A',letterSpacing:'-0.01em',marginBottom:'0.2rem'}}>Cris & Pablo</div>
+            <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>10 de octubre de 2026 · Zahara de los Atunes</div>
+            <div style={{display:'flex',gap:'1.5rem',paddingTop:'1.25rem',borderTop:'1px solid #E0E0DC'}}>
+              {[{n:'12',l:'Looks'},{n:'0',l:'Conflictos'},{n:'142d',l:'Restantes'}].map((s,i)=>(
+                <div key={i}>
+                  <div style={{fontSize:'1.4rem',fontWeight:200,color:'#0A0A0A',lineHeight:1,marginBottom:'0.15rem'}}>{s.n}</div>
+                  <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#BEBEBA'}}>{s.l}</div>
+                </div>
+              ))}
+            </div>
+            <span style={{display:'inline-block',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.2rem 0.6rem',marginTop:'1rem',background:'#F5EDE8',color:'#C4917C'}}>● Regalo</span>
+          </a>
+
+          {/* NUEVO EVENTO */}
+          <a href="/dashboard/nuevo" style={{background:'#FFFFFF',padding:'2rem',border:'2px dashed #E0E0DC',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'200px',textDecoration:'none',cursor:'pointer'}}>
+            <div style={{fontSize:'2rem',fontWeight:100,color:'#BEBEBA',lineHeight:1}}>+</div>
+            <div style={{fontSize:'0.65rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>Nuevo evento</div>
+          </a>
+        </div>
+      </main>
+    </div>
+  )
+}
