@@ -80,3 +80,8 @@ a { color: inherit; text-decoration: none; }
   .evento-stats { grid-template-columns: repeat(2,1fr) !important; }
   .evento-tabla { overflow-x: auto !important; }
 }
+@media (max-width: 768px) {
+  .nav-center { display: none !important; }
+  .nav-actions { display: none !important; }
+  .nav-hamburger { display: flex !important; }
+}
