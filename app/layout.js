@@ -16,8 +16,9 @@ export default function RootLayout({ children }) {
       </head>
       <body style={{fontFamily:"'Poppins', sans-serif"}}>
         <nav style={{position:'fixed',top:0,left:0,right:0,height:'68px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 3rem',background:'rgba(255,255,255,0.96)',backdropFilter:'blur(16px)',borderBottom:'1px solid #E0E0DC',zIndex:1000}}>
-          <a href="/" style={{fontSize:'0.95rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#0A0A0A',textDecoration:'none'}}>NOWEAR</a>
-
+          <a href="/" style={{textDecoration:'none'}}>
+  <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/No_Wear%20logo.png" alt="NOWEAR" style={{height:'28px',display:'block'}}/>
+</a>
           {/* NAV DESKTOP */}
 <div className="nav-center" style={{display:'flex',gap:'0',background:'#F0F0EE',borderRadius:'50px',padding:'0.35rem 0.5rem'}}>
   {['Cómo funciona','Marcas','FAQ','Contacto'].map((item,i) => (
