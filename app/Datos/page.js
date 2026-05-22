@@ -1,4 +1,4 @@
-export default function Datos() {
+export default function datos() {
   return (
     <div style={{maxWidth:'760px',margin:'0 auto',padding:'6rem 2rem'}}>
       <span style={{display:'inline-flex',alignItems:'center',gap:'0.6rem',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#F07987',marginBottom:'2rem'}}>

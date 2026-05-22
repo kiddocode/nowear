@@ -20,41 +20,43 @@ export default function Home() {
   }, [texto, fase])
 
   const marcas = [
-    {name:'t.ba', url:'https://www.tba.es'},
-    {name:'Basyco Jerez', url:'https://www.basyco.com'},
-    {name:'Baymo', url:'https://www.baymo.es'},
-    {name:'Bimani', url:'https://www.bimani.es'},
-    {name:'Caye & Co', url:'https://www.cayeandco.com'},
-    {name:'El Corte Inglés', url:'https://www.elcorteingles.es/moda-mujer'},
-    {name:'Inés Martín Alcalde', url:'https://www.inesmartinalcalde.com'},
-    {name:'The IQ Collection', url:'https://theiqcollection.com'},
-    {name:'Zara', url:'https://www.zara.com/es'},
-    {name:'Mango', url:'https://www.mango.com/es'},
-    {name:'Massimo Dutti', url:'https://www.massimodutti.com/es'},
-    {name:'Stradivarius', url:'https://www.stradivarius.com/es'},
-    {name:'Sandro', url:'https://www.sandro-paris.com/es'},
-    {name:'Maje', url:'https://www.maje.com/es'},
-    {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com'},
-    {name:'Santa Bárbara', url:'https://www.santabarbara.es'},
-    {name:'Philipa 1970', url:'https://www.philippa1970.com'},
-    {name:'Bícolo', url:'https://www.bicolo.es'},
-    {name:'Rental Mode', url:'https://www.rentalmode.com'},
-    {name:'Martina Maletti', url:'https://www.martinamaletti.es'},
-    {name:'Agua by Agua Bendita', url:'https://www.aguabendita.com'},
-    {name:'Dahlia Dahlia', url:'https://www.dahliadahlia.com'},
-    {name:'Johanna Ortiz', url:'https://www.johannaortiz.com'},
-    {name:'Galü', url:'https://www.galu.es'},
-    {name:'Lozanía', url:'https://www.lozania.es'},
-    {name:'AVECSTUDIO', url:'https://www.avecstudio.es'},
-    {name:'Sandra Rosa', url:'https://www.sandrarosa.es'},
-    {name:'Miphai', url:'https://www.miphai.com'},
-    {name:'Dafonte', url:'https://www.dafonte.es'},
-    {name:'Vogana', url:'https://www.vogana.es'},
-    {name:'Cardié Moda', url:'https://www.cardiemoda.es'},
-    {name:'Nicolett', url:'https://www.nicolett.es'},
-    {name:'Dew & Corch', url:'https://www.dewandcorch.com'},
-    {name:'Blanche Vintage', url:'https://www.blanchevintage.es'},
-    {name:'+ Sugerir marca', url:'/#contacto'},
+    {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com', domain:'adolfodominguez.com'},
+    {name:'ASOS', url:'https://www.asos.com/es', domain:'asos.com'},
+    {name:'Agua by Agua Bendita', url:'https://www.aguabendita.com', domain:'aguabendita.com'},
+    {name:'AVECSTUDIO', url:'https://avec-studio.com', domain:'avec-studio.com'},
+    {name:'Basyco Jerez', url:'https://basycojerez.com', domain:'basycojerez.com'},
+    {name:'Baymo', url:'https://www.baymo.com/es', domain:'baymo.com'},
+    {name:'Bicolo', url:'https://bicolobrand.com/en', domain:'bicolobrand.com'},
+    {name:'Bimani', url:'https://www.bimani.es', domain:'bimani.es'},
+    {name:'Blanche Vintage', url:'https://www.instagram.com/blanche__vintage/', domain:null},
+    {name:'Cardié Moda', url:'https://cardiemoda.com', domain:'cardiemoda.com'},
+    {name:'Caye & Co', url:'https://www.instagram.com/caye.andco/', domain:null},
+    {name:'Dafonte', url:'https://dafontecollection.com/en', domain:'dafontecollection.com'},
+    {name:'Dahlia Dahlia', url:'https://www.dahliadahlia.com', domain:'dahliadahlia.com'},
+    {name:'Dew & Corch', url:'https://www.dewandcorch.com', domain:'dewandcorch.com'},
+    {name:'El Corte Inglés', url:'https://www.elcorteingles.es/moda-mujer', domain:'elcorteingles.es'},
+    {name:'Galü', url:'https://galuathelier.es/en', domain:'galuathelier.es'},
+    {name:'Inés Martín Alcalde', url:'https://www.inesmartinalcalde.com', domain:'inesmartinalcalde.com'},
+    {name:'Johanna Ortiz', url:'https://www.johannaortiz.com', domain:'johannaortiz.com'},
+    {name:'Lozanía', url:'https://lozaniabrand.com', domain:'lozaniabrand.com'},
+    {name:'Maje', url:'https://www.maje.com/es', domain:'maje.com'},
+    {name:'Mango', url:'https://www.mango.com/es', domain:'mango.com'},
+    {name:'Martina Maletti', url:'https://martinamaletti.com/en', domain:'martinamaletti.com'},
+    {name:'Massimo Dutti', url:'https://www.massimodutti.com/es', domain:'massimodutti.com'},
+    {name:'Miphai', url:'https://www.miphai.com', domain:'miphai.com'},
+    {name:'Nicolett', url:'https://www.nicolettaoficial.com', domain:'nicolettaoficial.com'},
+    {name:'Philipa 1970', url:'https://www.philippa1970.com', domain:'philippa1970.com'},
+    {name:'Rental Mode', url:'https://www.rentalmode.com', domain:'rentalmode.com'},
+    {name:'Sandra Rosa', url:'https://www.sandrarosa.es', domain:'sandrarosa.es'},
+    {name:'Sandra Rosa', url:'https://www.sandrarosa.es', domain:'sandrarosa.es'},
+    {name:'Santa Bato', url:'https://santabato.com', domain:'santabato.com'},
+    {name:'Sandro', url:'https://www.sandro-paris.com/es', domain:'sandro-paris.com'},
+    {name:'Stradivarius', url:'https://www.stradivarius.com/es', domain:'stradivarius.com'},
+    {name:'t.ba', url:'https://www.tbalife.com/en-es', domain:'tbalife.com'},
+    {name:'The IQ Collection', url:'https://theiqcollection.com', domain:'theiqcollection.com'},
+    {name:'Vogana', url:'https://www.vogana.es', domain:'vogana.es'},
+    {name:'Zara', url:'https://www.zara.com/es', domain:'zara.com'},
+    {name:'+ Sugerir marca', url:'/#contacto', domain:null},
   ]
 
   return (
@@ -94,7 +96,10 @@ export default function Home() {
         </div>
       </section>
 
-      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
+      <style>{`
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
+        .marca-card:hover { background: #F7F7F5 !important; }
+      `}</style>
 
       {/* CÓMO FUNCIONA */}
       <section id="como" className="section-pad" style={{padding:'7rem 3rem'}}>
@@ -142,8 +147,9 @@ export default function Home() {
         <h2 style={{fontSize:'clamp(2.5rem,4vw,4.5rem)',fontWeight:100,lineHeight:1.08,letterSpacing:'-0.025em',marginBottom:'1.25rem'}}>
           Un pago único.<br/><strong style={{fontWeight:700}}>Por evento.</strong>
         </h2>
-        <p style={{fontSize:'0.9rem',fontWeight:300,lineHeight:2,color:'#888884',maxWidth:'520px',marginBottom:'4rem'}}>
-          Sin suscripciones. Sin sorpresas.<br/>Pagas una vez y tienes tu evento activo hasta el día de la celebración.
+        <p style={{fontSize:'0.9rem',fontWeight:300,lineHeight:1.9,color:'#888884',maxWidth:'540px',marginBottom:'4rem'}}>
+          Sin suscripciones. Sin sorpresas. Pagas una vez y tienes tu evento activo hasta el día de la celebración.<br/>
+          <span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas. No les supone ningún esfuerzo y dentro de un presupuesto de boda, es lo de menos.</span>
         </p>
         <div className="pricing-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {[
@@ -161,7 +167,7 @@ export default function Home() {
               sub:'3 meses antes',
               price:'19',
               desc:'El registro abre 3 meses antes del evento. Tiempo suficiente para todas.',
-              feats:['Todo lo del plan Básico','Exportar lista de looks','Soporte prioritario'],
+              feats:['Todo lo del plan Básico','Exportar lista de looks','Soporte prioritario por email'],
               featured:true,
               enterprise:false
             },
@@ -170,7 +176,7 @@ export default function Home() {
               sub:'Sin límite de tiempo',
               price:'29',
               desc:'El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.',
-              feats:['Todo lo anterior','Acceso anticipado a nuevas funciones','Soporte VIP por WhatsApp'],
+              feats:['Todo lo anterior','Acceso anticipado a nuevas funciones','Badge de evento verificado'],
               featured:false,
               enterprise:false
             },
@@ -193,7 +199,7 @@ export default function Home() {
             }}>
               {p.featured && <span style={{fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',background:'#F07987',color:'#FFFFFF',padding:'0.22rem 0.65rem',display:'inline-block',marginBottom:'1.25rem'}}>Más popular</span>}
               {p.enterprise && <span style={{fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',background:'#0A0A0A',color:'#FFFFFF',padding:'0.22rem 0.65rem',display:'inline-block',marginBottom:'1.25rem'}}>Enterprise</span>}
-              <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color: p.featured ? '#888884' : '#888884',marginBottom:'0.25rem'}}>{p.plan}</div>
+              <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#888884',marginBottom:'0.25rem'}}>{p.plan}</div>
               <div style={{fontSize:'0.55rem',fontWeight:400,letterSpacing:'0.1em',textTransform:'uppercase',color:'#F07987',marginBottom:'0.85rem'}}>{p.sub}</div>
               {p.price ? (
                 <div style={{fontSize:'4rem',fontWeight:100,lineHeight:1,letterSpacing:'-0.04em',marginBottom:'0.5rem',color:p.featured?'#FFFFFF':'#0A0A0A'}}>
@@ -221,20 +227,45 @@ export default function Home() {
       {/* MARCAS */}
       <section id="marcas" className="section-pad" style={{padding:'7rem 3rem'}}>
         <span style={{display:'flex',alignItems:'center',gap:'0.6rem',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#F07987',marginBottom:'1.75rem'}}>
-          <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>Marcas populares
+          <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>Inspiración
         </span>
         <h2 style={{fontSize:'clamp(2.5rem,4vw,4.5rem)',fontWeight:100,lineHeight:1.08,letterSpacing:'-0.025em',marginBottom:'1.25rem'}}>
-          Las tiendas que<br/><strong style={{fontWeight:700}}>más se registran.</strong>
+          Tu look perfecto<br/><strong style={{fontWeight:700}}>te está esperando.</strong>
         </h2>
         <p style={{fontSize:'0.9rem',fontWeight:300,lineHeight:2,color:'#888884',maxWidth:'480px',marginBottom:'4rem'}}>
           Estas son las marcas favoritas de las invitadas.
         </p>
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
-          {marcas.map((brand,i)=>(
-            <a key={i} href={brand.url} target={brand.url.startsWith('http')?'_blank':'_self'} rel="noopener noreferrer" style={{background:'#FFFFFF',padding:'1.75rem 1rem',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.82rem',fontWeight:300,color:'#3A3A38',minHeight:'90px',textAlign:'center',letterSpacing:'0.02em',textDecoration:'none',transition:'background 0.15s'}}>
-              {brand.name}
-            </a>
-          ))}
+          {marcas.map((brand,i)=>{
+            const initials = brand.name.replace('+ ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
+            const isInstagram = brand.url.includes('instagram.com')
+            const isSuggest = brand.url === '/#contacto'
+            return (
+              <a key={i} href={brand.url} target={brand.url.startsWith('http')?'_blank':'_self'} rel="noopener noreferrer"
+                className="marca-card"
+                style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'100px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
+                {!isSuggest && brand.domain ? (
+                  <img
+                    src={`https://logo.clearbit.com/${brand.domain}`}
+                    alt={brand.name}
+                    style={{height:'28px',maxWidth:'100px',objectFit:'contain',filter:'grayscale(1)',opacity:0.7}}
+                    onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex'}}
+                  />
+                ) : null}
+                <span style={{
+                  display: (!isSuggest && brand.domain) ? 'none' : 'flex',
+                  width:'36px',height:'36px',borderRadius:'50%',
+                  background: isSuggest ? '#F07987' : '#F0F0EE',
+                  alignItems:'center',justifyContent:'center',
+                  fontSize:'0.65rem',fontWeight:600,color: isSuggest ? '#FFFFFF' : '#888884'
+                }}>{isSuggest ? '+' : initials}</span>
+                <span style={{fontSize:'0.75rem',fontWeight: isSuggest ? 500 : 300,color: isSuggest ? '#F07987' : '#3A3A38',letterSpacing:'0.02em'}}>
+                  {brand.name}
+                  {isInstagram && <span style={{display:'block',fontSize:'0.6rem',color:'#BEBEBA'}}>Instagram</span>}
+                </span>
+              </a>
+            )
+          })}
         </div>
       </section>
 
@@ -250,7 +281,7 @@ export default function Home() {
             </h2>
             <p style={{fontSize:'0.85rem',fontWeight:300,lineHeight:2,color:'#888884',marginTop:'1rem'}}>
               ¿Más preguntas?<br/>
-              <span style={{color:'#F07987'}}>support@nowear.es</span>
+              <a href="mailto:support@nowear.es" style={{color:'#F07987',textDecoration:'none'}}>support@nowear.es</a>
             </p>
           </div>
           <div>
@@ -276,16 +307,16 @@ export default function Home() {
 
       {/* CONTACTO */}
       <section id="contacto" className="contact-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr'}}>
-        <div style={{background:'#0A0A0A',padding:'5rem 4rem',display:'flex',flexDirection:'column',justifyContent:'space-between',minHeight:'400px'}}>
+        <div style={{background:'#0A0A0A',padding:'5rem 4rem',display:'flex',flexDirection:'column',justifyContent:'center',gap:'1.5rem',minHeight:'400px'}}>
           <div>
             <h2 style={{fontSize:'3.5rem',fontWeight:100,color:'#FFFFFF',lineHeight:1.08,letterSpacing:'-0.025em',marginBottom:'1rem'}}>
               ¿Alguna<br/><strong style={{fontWeight:700}}>pregunta?</strong>
             </h2>
-            <p style={{fontSize:'0.85rem',fontWeight:300,color:'#888884',lineHeight:1.9}}>
+            <p style={{fontSize:'0.85rem',fontWeight:300,color:'#888884',lineHeight:1.9,marginBottom:'1.5rem'}}>
               Estamos aquí para ayudarte. Te respondemos en menos de 24 horas.
             </p>
+            <a href="mailto:support@nowear.es" style={{fontSize:'0.85rem',fontWeight:400,color:'#F07987',textDecoration:'none'}}>support@nowear.es</a>
           </div>
-          <div style={{fontSize:'0.85rem',fontWeight:400,color:'#F07987'}}>support@nowear.es</div>
         </div>
         <div style={{padding:'5rem 4rem',background:'#F7F7F5'}}>
           {['Tu nombre','Email'].map((label,i)=>(
@@ -306,7 +337,8 @@ export default function Home() {
       <footer style={{background:'#0A0A0A',padding:'5rem 3rem 2.5rem'}}>
         <div className="footer-grid" style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:'3rem',marginBottom:'4rem'}}>
           <div>
-<img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_white.png" alt="NOWEAR" style={{height:'36px',marginBottom:'1.25rem',display:'block'}}/>            <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',lineHeight:1.85,maxWidth:'260px',letterSpacing:'0.5px'}}>La plataforma para que ninguna invitada llegue vestida igual.</p>
+            <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_white.png" alt="NOWEAR" style={{height:'36px',marginBottom:'1.25rem',display:'block'}}/>
+            <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',lineHeight:1.85,maxWidth:'260px',letterSpacing:'0.5px'}}>La plataforma para que ninguna invitada llegue vestida igual.</p>
           </div>
           {[
             {title:'Producto',links:[
