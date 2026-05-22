@@ -43,6 +43,7 @@ export default function InvitadaPage() {
   const [enviando, setEnviando] = useState(false)
 
   const [nombre, setNombre] = useState('')
+  const [email, setEmail] = useState('')
   const [colores, setColores] = useState([])
   const [estado, setEstado] = useState('confirmado')
   const [foto, setFoto] = useState(null)
@@ -77,10 +78,39 @@ export default function InvitadaPage() {
 
   async function handleEnviar() {
     setError('')
-    if (!nombre || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
+
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
       setError('Por favor, rellena todos los campos obligatorios marcados con *')
       return
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      setError('Por favor, introduce un email válido.')
+      return
+    }
+
+    // Comprobar límites por email
+    const { data: looksExistentes } = await supabase
+      .from('looks')
+      .select('estado')
+      .eq('evento_id', evento.id)
+      .eq('email_invitada', email.toLowerCase().trim())
+
+    if (looksExistentes && looksExistentes.length > 0) {
+      const confirmados = looksExistentes.filter(l => l.estado === 'confirmado').length
+      const prereservados = looksExistentes.filter(l => l.estado === 'prereservado').length
+
+      if (estado === 'confirmado' && confirmados >= 1) {
+        setError('Ya tienes un look confirmado en este evento. Solo se permite 1 look confirmado por persona.')
+        return
+      }
+      if (estado === 'prereservado' && prereservados >= 3) {
+        setError('Ya tienes 3 prerreservas activas en este evento. Ese es el máximo permitido.')
+        return
+      }
+    }
+
     setEnviando(true)
 
     let foto_url = null
@@ -94,9 +124,10 @@ export default function InvitadaPage() {
       }
     }
 
-    const { error } = await supabase.from('looks').insert({
+    const { error: insertError } = await supabase.from('looks').insert({
       evento_id: evento.id,
       nombre_invitada: nombre,
+      email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0],
       color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
@@ -105,7 +136,7 @@ export default function InvitadaPage() {
     })
 
     setEnviando(false)
-    if (error) { setError('Error al registrar el look. Inténtalo de nuevo.'); return }
+    if (insertError) { setError('Error al registrar el look. Inténtalo de nuevo.'); return }
     setEnviado(true)
   }
 
@@ -120,14 +151,14 @@ export default function InvitadaPage() {
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center'}}>
       <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>¡Look registrado!</div>
       <p style={{fontSize:'0.9rem',fontWeight:300,color:'#888884',marginBottom:'2rem',maxWidth:'400px',lineHeight:1.7}}>
-        Tu look ha sido registrado para <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>.
+        Tu look ha sido registrado para <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>. Te hemos enviado un email de confirmación a <strong style={{fontWeight:600,color:'#0A0A0A'}}>{email}</strong>.
       </p>
       <div style={{display:'flex',gap:'0.5rem',marginBottom:'2rem'}}>
         {colores.map((c,i) => (
           <div key={i} style={{width:'32px',height:'32px',borderRadius:'50%',background:c,border:'1px solid #E0E0DC'}}></div>
         ))}
       </div>
-      <button onClick={() => { setEnviado(false); setNombre(''); setColores([]); setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null) }}
+      <button onClick={() => { setEnviado(false); setNombre(''); setEmail(''); setColores([]); setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null) }}
         style={{fontSize:'0.78rem',fontWeight:500,padding:'0.75rem 2rem',background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
         Registrar otro look
       </button>
@@ -141,7 +172,7 @@ export default function InvitadaPage() {
   return (
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
 
-      {/* LADO IZQUIERDO — fijo */}
+      {/* LADO IZQUIERDO fijo */}
       <div style={{position:'sticky',top:'68px',height:'calc(100vh - 68px)',overflow:'hidden'}}>
         <img src={FOTO_FIJA} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -172,6 +203,13 @@ export default function InvitadaPage() {
         <div style={{marginBottom:'1.25rem'}}>
           <label style={labelStyle}>Tu nombre <span style={{color:'#F07987'}}>*</span></label>
           <input type="text" placeholder="Ej: María García" value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
+        </div>
+
+        {/* EMAIL */}
+        <div style={{marginBottom:'1.25rem'}}>
+          <label style={labelStyle}>Tu email <span style={{color:'#F07987'}}>*</span></label>
+          <input type="email" placeholder="Ej: maria@gmail.com" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle}/>
+          <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem'}}>Solo para enviarte la confirmación. No lo verán otras invitadas.</p>
         </div>
 
         {/* COLORES */}
@@ -278,6 +316,10 @@ export default function InvitadaPage() {
         {/* ESTADO */}
         <div style={{marginBottom:'2rem'}}>
           <label style={labelStyle}>Estado <span style={{color:'#F07987'}}>*</span></label>
+          <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
+            <strong style={{fontWeight:600,color:'#0A0A0A'}}>Confirmado:</strong> ya tienes el look comprado.<br/>
+            <strong style={{fontWeight:600,color:'#0A0A0A'}}>Prereservado:</strong> lo has visto pero aún no lo has comprado. Máximo 3 prerreservas.
+          </p>
           <div style={{display:'flex',gap:'1rem'}}>
             {[{val:'confirmado',label:'Confirmado'},{val:'prereservado',label:'Prereservado'}].map(e => (
               <button key={e.val} onClick={() => setEstado(e.val)}
@@ -291,7 +333,7 @@ export default function InvitadaPage() {
         {error && <p style={{fontSize:'0.82rem',fontWeight:600,color:'#F07987',marginBottom:'1rem',padding:'0.75rem',background:'#FFF0F1',border:'1px solid #F07987'}}>{error}</p>}
 
         <button onClick={handleEnviar} disabled={enviando}
-          style={{width:'100%',padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1}}>
+          style={{width:'100%',padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1,borderRadius:'4px'}}>
           {enviando ? 'Registrando...' : 'Registrar mi look →'}
         </button>
       </div>
