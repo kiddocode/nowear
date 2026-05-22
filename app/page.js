@@ -19,45 +19,60 @@ export default function Home() {
     }
   }, [texto, fase])
 
+  const handlePago = async (plan) => {
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({plan, eventoData: {}})
+      })
+      const data = await res.json()
+      if (data.url) window.location.href = data.url
+    } catch(e) {
+      alert('Error al procesar el pago. Inténtalo de nuevo.')
+    }
+  }
+
   const marcas = [
-    {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com', domain:'adolfodominguez.com'},
-    {name:'ASOS', url:'https://www.asos.com/es', domain:'asos.com'},
-    {name:'Agua by Agua Bendita', url:'https://www.aguabendita.com', domain:'aguabendita.com'},
-    {name:'AVECSTUDIO', url:'https://avec-studio.com', domain:'avec-studio.com'},
-    {name:'Basyco Jerez', url:'https://basycojerez.com', domain:'basycojerez.com'},
-    {name:'Baymo', url:'https://www.baymo.com/es', domain:'baymo.com'},
-    {name:'Bicolo', url:'https://bicolobrand.com/en', domain:'bicolobrand.com'},
-    {name:'Bimani', url:'https://www.bimani.es', domain:'bimani.es'},
-    {name:'Blanche Vintage', url:'https://www.instagram.com/blanche__vintage/', domain:null},
-    {name:'Cardié Moda', url:'https://cardiemoda.com', domain:'cardiemoda.com'},
-    {name:'Caye & Co', url:'https://www.instagram.com/caye.andco/', domain:null},
-    {name:'Dafonte', url:'https://dafontecollection.com/en', domain:'dafontecollection.com'},
-    {name:'Dahlia Dahlia', url:'https://www.dahliadahlia.com', domain:'dahliadahlia.com'},
-    {name:'Dew & Corch', url:'https://www.dewandcorch.com', domain:'dewandcorch.com'},
-    {name:'El Corte Inglés', url:'https://www.elcorteingles.es/moda-mujer', domain:'elcorteingles.es'},
-    {name:'Galü', url:'https://galuathelier.es/en', domain:'galuathelier.es'},
-    {name:'Inés Martín Alcalde', url:'https://www.inesmartinalcalde.com', domain:'inesmartinalcalde.com'},
-    {name:'Johanna Ortiz', url:'https://www.johannaortiz.com', domain:'johannaortiz.com'},
-    {name:'Lozanía', url:'https://lozaniabrand.com', domain:'lozaniabrand.com'},
-    {name:'Maje', url:'https://www.maje.com/es', domain:'maje.com'},
-    {name:'Mango', url:'https://www.mango.com/es', domain:'mango.com'},
-    {name:'Martina Maletti', url:'https://martinamaletti.com/en', domain:'martinamaletti.com'},
-    {name:'Massimo Dutti', url:'https://www.massimodutti.com/es', domain:'massimodutti.com'},
-    {name:'Miphai', url:'https://www.miphai.com', domain:'miphai.com'},
-    {name:'Nicolett', url:'https://www.nicolettaoficial.com', domain:'nicolettaoficial.com'},
-    {name:'Philipa 1970', url:'https://www.philippa1970.com', domain:'philippa1970.com'},
-    {name:'Rental Mode', url:'https://www.rentalmode.com', domain:'rentalmode.com'},
-    {name:'Sandra Rosa', url:'https://www.sandrarosa.es', domain:'sandrarosa.es'},
-    {name:'Sandra Rosa', url:'https://www.sandrarosa.es', domain:'sandrarosa.es'},
-    {name:'Santa Bato', url:'https://santabato.com', domain:'santabato.com'},
-    {name:'Sandro', url:'https://www.sandro-paris.com/es', domain:'sandro-paris.com'},
-    {name:'Stradivarius', url:'https://www.stradivarius.com/es', domain:'stradivarius.com'},
-    {name:'t.ba', url:'https://www.tbalife.com/en-es', domain:'tbalife.com'},
-    {name:'The IQ Collection', url:'https://theiqcollection.com', domain:'theiqcollection.com'},
-    {name:'Vogana', url:'https://www.vogana.es', domain:'vogana.es'},
-    {name:'Zara', url:'https://www.zara.com/es', domain:'zara.com'},
-    {name:'+ Sugerir marca', url:'/#contacto', domain:null},
+    {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com', logo:'logo-adolfo.png'},
+    {name:'ASOS', url:'https://www.asos.com/es', logo:'logo-asos.png'},
+    {name:'Agua by Agua Bendita', url:'https://www.aguabendita.com', logo:'logo-aguabendita.png'},
+    {name:'AVECSTUDIO', url:'https://avec-studio.com', logo:'logo-avec.png'},
+    {name:'Basyco Jerez', url:'https://basycojerez.com', logo:'logo-basyco.png'},
+    {name:'Baymo', url:'https://www.baymo.com/es', logo:'logo-baymo.png'},
+    {name:'Bicolo', url:'https://bicolobrand.com/en', logo:'logo-bicolo.png'},
+    {name:'Bimani', url:'https://www.bimani.es', logo:'logo-bimani.png'},
+    {name:'Blanche Vintage', url:'https://www.instagram.com/blanche__vintage/', logo:'logo-blanche.png'},
+    {name:'Cardié Moda', url:'https://cardiemoda.com', logo:'logo-cardie.png'},
+    {name:'Caye & Co', url:'https://www.instagram.com/caye.andco/', logo:'logo-caye.png'},
+    {name:'Dafonte', url:'https://dafontecollection.com/en', logo:'logo-dafonte.png'},
+    {name:'Dahlia Dahlia', url:'https://www.dahliadahlia.com', logo:'logo-dahlia.png'},
+    {name:'Dew & Corch', url:'https://www.dewandcorch.com', logo:'logo-dew.png'},
+    {name:'El Corte Inglés', url:'https://www.elcorteingles.es/moda-mujer', logo:'logo-eci.png'},
+    {name:'Galü', url:'https://galuathelier.es/en', logo:'logo-galu.png'},
+    {name:'Inés Martín Alcalde', url:'https://www.inesmartinalcalde.com', logo:'logo-ines.png'},
+    {name:'Johanna Ortiz', url:'https://www.johannaortiz.com', logo:'logo-johannaortiz.png'},
+    {name:'Lozanía', url:'https://lozaniabrand.com', logo:'logo-lozania.png'},
+    {name:'Maje', url:'https://www.maje.com/es', logo:'logo-maje.png'},
+    {name:'Mango', url:'https://www.mango.com/es', logo:'logo-mango.png'},
+    {name:'Martina Maletti', url:'https://martinamaletti.com/en', logo:'logo-martinamaletti.png'},
+    {name:'Massimo Dutti', url:'https://www.massimodutti.com/es', logo:'logo-massimo.png'},
+    {name:'Miphai', url:'https://www.miphai.com', logo:'logo-miphai.png'},
+    {name:'Nicolett', url:'https://www.nicolettaoficial.com', logo:'logo-nicolett.png'},
+    {name:'Philipa 1970', url:'https://www.philippa1970.com', logo:'logo-philipa.png'},
+    {name:'Rental Mode', url:'https://www.rentalmode.com', logo:'logo-rentalmode.png'},
+    {name:'Sandra Rosa', url:'https://www.sandrarosa.es', logo:'logo-sandrarosa.png'},
+    {name:'Santa Bato', url:'https://santabato.com', logo:'logo-santabato.png'},
+    {name:'Sandro', url:'https://www.sandro-paris.com/es', logo:'logo-sandro.png'},
+    {name:'Stradivarius', url:'https://www.stradivarius.com/es', logo:'logo-stradivarius.png'},
+    {name:'t.ba', url:'https://www.tbalife.com/en-es', logo:'logo-tba.png'},
+    {name:'The IQ Collection', url:'https://theiqcollection.com', logo:'logo-iq.png'},
+    {name:'Vogana', url:'https://www.vogana.es', logo:'logo-vogana.png'},
+    {name:'Zara', url:'https://www.zara.com/es', logo:'logo-zara.png'},
+    {name:'+ Sugerir marca', url:'/#contacto', logo:null},
   ]
+
+  const SUPABASE = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/'
 
   return (
     <>
@@ -154,46 +169,37 @@ export default function Home() {
         <div className="pricing-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {[
             {
-              plan:'Básico',
-              sub:'1 mes antes',
-              price:'9',
+              plan:'Básico', planKey:'basico',
+              sub:'1 mes antes', price:'9',
               desc:'El registro abre 1 mes antes del evento. Ideal para planificación corta.',
               feats:['Link único para invitadas','Detección de coincidencias','Prerreserva de looks','Colores bloqueados'],
-              featured:false,
-              enterprise:false
+              featured:false, enterprise:false
             },
             {
-              plan:'Estándar',
-              sub:'3 meses antes',
-              price:'19',
+              plan:'Estándar', planKey:'estandar',
+              sub:'3 meses antes', price:'19',
               desc:'El registro abre 3 meses antes del evento. Tiempo suficiente para todas.',
               feats:['Todo lo del plan Básico','Exportar lista de looks','Soporte prioritario por email'],
-              featured:true,
-              enterprise:false
+              featured:true, enterprise:false
             },
             {
-              plan:'Premium',
-              sub:'Sin límite de tiempo',
-              price:'29',
+              plan:'Premium', planKey:'premium',
+              sub:'Sin límite de tiempo', price:'29',
               desc:'El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.',
               feats:['Todo lo anterior','Acceso anticipado a nuevas funciones','Badge de evento verificado'],
-              featured:false,
-              enterprise:false
+              featured:false, enterprise:false
             },
             {
-              plan:'Enterprise',
-              sub:'A medida',
-              price:null,
+              plan:'Enterprise', planKey:null,
+              sub:'A medida', price:null,
               desc:'Solución personalizada para empresas y eventos recurrentes.',
               feats:['Múltiples eventos','Cuenta de empresa','Tarifa anual','Desarrollo ad-hoc','Soporte dedicado'],
-              featured:false,
-              enterprise:true
+              featured:false, enterprise:true
             },
           ].map((p,i)=>(
             <div key={i} style={{
               background: p.enterprise ? '#F7F7F5' : p.featured ? '#0A0A0A' : '#FFFFFF',
-              padding:'2.5rem 2rem',
-              position:'relative',
+              padding:'2.5rem 2rem', position:'relative',
               border: p.enterprise ? '2px dashed #C4C4C0' : 'none',
               boxSizing:'border-box'
             }}>
@@ -217,7 +223,7 @@ export default function Home() {
               {p.enterprise ? (
                 <a href="/#contacto" style={{display:'block',textAlign:'center',marginTop:'2rem',padding:'0.9rem',fontSize:'0.82rem',fontWeight:500,background:'transparent',color:'#0A0A0A',border:'1.5px solid #0A0A0A',textDecoration:'none',borderRadius:'4px'}}>Contactar →</a>
               ) : (
-                <a href="/register" style={{display:'block',textAlign:'center',marginTop:'2rem',padding:'0.9rem',fontSize:'0.82rem',fontWeight:500,background:p.featured?'#F07987':'transparent',color:p.featured?'#FFFFFF':'#0A0A0A',border:p.featured?'none':'1.5px solid #0A0A0A',textDecoration:'none',borderRadius:'4px'}}>Empezar</a>
+                <button onClick={()=>handlePago(p.planKey)} style={{display:'block',width:'100%',textAlign:'center',marginTop:'2rem',padding:'0.9rem',fontSize:'0.82rem',fontWeight:500,background:p.featured?'#F07987':'transparent',color:p.featured?'#FFFFFF':'#0A0A0A',border:p.featured?'none':'1.5px solid #0A0A0A',cursor:'pointer',fontFamily:"'Poppins',sans-serif",borderRadius:'4px'}}>Empezar</button>
               )}
             </div>
           ))}
@@ -238,31 +244,32 @@ export default function Home() {
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {marcas.map((brand,i)=>{
             const initials = brand.name.replace('+ ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
-            const isInstagram = brand.url.includes('instagram.com')
             const isSuggest = brand.url === '/#contacto'
             return (
-              <a key={i} href={brand.url} target={brand.url.startsWith('http')?'_blank':'_self'} rel="noopener noreferrer"
+              <a key={i} href={brand.url}
+                target={brand.url.startsWith('http')?'_blank':'_self'}
+                rel="noopener noreferrer"
                 className="marca-card"
-                style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'100px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
-                {!isSuggest && brand.domain ? (
-                  <img
-                    src={`https://logo.clearbit.com/${brand.domain}`}
-                    alt={brand.name}
-                    style={{height:'28px',maxWidth:'100px',objectFit:'contain',filter:'grayscale(1)',opacity:0.7}}
-                    onError={e=>{e.target.style.display='none';e.target.nextSibling.style.display='flex'}}
-                  />
-                ) : null}
-                <span style={{
-                  display: (!isSuggest && brand.domain) ? 'none' : 'flex',
-                  width:'36px',height:'36px',borderRadius:'50%',
-                  background: isSuggest ? '#F07987' : '#F0F0EE',
-                  alignItems:'center',justifyContent:'center',
-                  fontSize:'0.65rem',fontWeight:600,color: isSuggest ? '#FFFFFF' : '#888884'
-                }}>{isSuggest ? '+' : initials}</span>
-                <span style={{fontSize:'0.75rem',fontWeight: isSuggest ? 500 : 300,color: isSuggest ? '#F07987' : '#3A3A38',letterSpacing:'0.02em'}}>
-                  {brand.name}
-                  {isInstagram && <span style={{display:'block',fontSize:'0.6rem',color:'#BEBEBA'}}>Instagram</span>}
-                </span>
+                style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'110px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
+                {isSuggest ? (
+                  <>
+                    <span style={{width:'36px',height:'36px',borderRadius:'50%',background:'#F07987',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2rem',color:'#FFFFFF',fontWeight:300}}>+</span>
+                    <span style={{fontSize:'0.75rem',fontWeight:500,color:'#F07987'}}>Sugerir marca</span>
+                  </>
+                ) : (
+                  <>
+                    <img
+                      src={`${SUPABASE}${brand.logo}`}
+                      alt={brand.name}
+                      style={{height:'32px',maxWidth:'110px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}
+                      onError={e=>{
+                        e.target.style.display='none'
+                        e.target.nextSibling.style.display='block'
+                      }}
+                    />
+                    <span style={{display:'none',fontSize:'0.75rem',fontWeight:300,color:'#3A3A38',letterSpacing:'0.02em'}}>{brand.name}</span>
+                  </>
+                )}
               </a>
             )
           })}

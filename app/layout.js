@@ -13,6 +13,7 @@ export default function RootLayout({ children }) {
         <meta name="description" content="La plataforma para que ninguna invitada llegue vestida igual." />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;1,200;1,300;1,400&display=swap" rel="stylesheet" />
+      <link rel="icon" href="/favicon.ico"/>
       </head>
       <body style={{fontFamily:"'Poppins', sans-serif"}}>
         <nav style={{position:'fixed',top:0,left:0,right:0,height:'68px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 3rem',background:'rgba(255,255,255,0.96)',backdropFilter:'blur(16px)',borderBottom:'1px solid #E0E0DC',zIndex:1000}}>
