@@ -33,15 +33,16 @@ export default function Login() {
     <div className="auth-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
       <div className="auth-visual" style={{background:'#0A0A0A',position:'relative',overflow:'hidden'}}>
         <img
-          src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?w=900&q=80"
+          src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-cottonbro-3171765.jpg"
           alt=""
-          style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0,opacity:0.4}}
+          style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0,opacity:0.5}}
         />
-        <div style={{position:'relative',zIndex:2,padding:'5rem 4rem',height:'100%',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-          <h2 style={{fontSize:'3rem',fontWeight:100,color:'#FFFFFF',lineHeight:1.05,letterSpacing:'-0.025em',marginBottom:'1rem'}}>
-            Bienvenida<br/><em style={{fontStyle:'italic',color:'#C4917C'}}>de nuevo.</em>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.7) 0%, rgba(10,10,10,0.2) 60%)',zIndex:1}}></div>
+        <div style={{position:'relative',zIndex:2,padding:'5rem 4rem',height:'100%',display:'flex',flexDirection:'column',justifyContent:'flex-end',boxSizing:'border-box'}}>
+          <h2 style={{fontSize:'3rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.05,letterSpacing:'-0.025em',marginBottom:'1rem'}}>
+            Bienvenida<br/><em style={{fontStyle:'italic',color:'#F07987'}}>de nuevo.</em>
           </h2>
-          <p style={{fontSize:'0.8rem',fontWeight:300,color:'#888884',lineHeight:1.85,maxWidth:'340px'}}>
+          <p style={{fontSize:'0.85rem',fontWeight:400,color:'#FFFFFF',lineHeight:1.85,maxWidth:'340px'}}>
             Tu evento te espera. Entra para gestionar los looks y compartir el link con tus invitadas.
           </p>
         </div>
@@ -73,13 +74,13 @@ export default function Login() {
         </div>
 
         {error && (
-          <p style={{fontSize:'0.72rem',fontWeight:300,color:'#C4917C',marginBottom:'1rem'}}>{error}</p>
+          <p style={{fontSize:'0.72rem',fontWeight:300,color:'#F07987',marginBottom:'1rem'}}>{error}</p>
         )}
 
         <button
           onClick={handleLogin}
           disabled={loading}
-          style={{width:'100%',padding:'0.9rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginTop:'0.5rem',opacity:loading?0.6:1}}
+          style={{width:'100%',padding:'0.9rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginTop:'0.5rem',opacity:loading?0.6:1,borderRadius:'4px'}}
         >
           {loading ? 'Entrando...' : 'Entrar'}
         </button>
@@ -92,7 +93,7 @@ export default function Login() {
 
         <button
           onClick={handleGoogle}
-          style={{width:'100%',padding:'0.9rem',fontSize:'0.78rem',fontWeight:500,background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}
+          style={{width:'100%',padding:'0.9rem',fontSize:'0.78rem',fontWeight:500,background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}
         >
           Continuar con Google
         </button>
