@@ -1,7 +1,4 @@
-export default function Home() {
-  return (
-    <>
-      'use client'
+'use client'
 import { useState, useEffect } from 'react'
 
 export default function Home() {
@@ -31,32 +28,24 @@ export default function Home() {
             <span style={{width:'24px',height:'1px',background:'#F07987',display:'inline-block'}}></span>
             Bodas · Comuniones · Bautizos · Eventos
           </span>
-
           <h1 style={{fontSize:'clamp(3.5rem,5.5vw,6.5rem)',fontWeight:100,lineHeight:1.06,letterSpacing:'-0.03em',marginBottom:'2rem',minHeight:'2.2em',whiteSpace:'pre-line'}}>
-            {texto.split('\n').map((line, i) => (
+            {texto.split('\n').map((line,i) => (
               <span key={i} style={{display:'block'}}>
-                {i === 1 ? <strong style={{fontWeight:700}}>{line}</strong> : line}
+                {i===1 ? <strong style={{fontWeight:700}}>{line}</strong> : line}
               </span>
             ))}
-            {fase === 0 && <span style={{borderRight:'2px solid #0A0A0A',marginLeft:'2px',animation:'blink 0.7s infinite'}}></span>}
+            {fase===0 && <span style={{borderRight:'2px solid #0A0A0A',marginLeft:'2px',animation:'blink 0.7s infinite'}}></span>}
           </h1>
-
           <p style={{fontSize:'0.95rem',fontWeight:300,lineHeight:2,color:'#888884',maxWidth:'420px',marginBottom:'3rem',opacity:fase>=1?1:0,transition:'opacity 0.6s ease'}}>
             Crea tu evento, comparte el link con tus invitadas<br/>y deja que cada una registre su look. El sistema<br/>detecta coincidencias al instante.
           </p>
-
           <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',opacity:fase>=1?1:0,transition:'opacity 0.6s ease 0.3s'}}>
             <a href="/register" style={{fontSize:'0.85rem',fontWeight:500,padding:'1rem 2.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'4px'}}>Crear mi evento</a>
             <a href="/demo/organizadora" style={{fontSize:'0.85rem',fontWeight:500,padding:'1rem 2.5rem',border:'1.5px solid #0A0A0A',color:'#0A0A0A',textDecoration:'none',borderRadius:'4px'}}>Ver demo</a>
           </div>
         </div>
-
         <div className="hero-img-col" style={{position:'relative',overflow:'hidden'}}>
-          <img
-            src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-ainnnek-251119282-20390920.jpg"
-            alt="Invitadas de boda"
-            style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}
-          />
+          <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-ainnnek-251119282-20390920.jpg" alt="Invitadas de boda" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.0) 50%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
             <p style={{fontSize:'1.3rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.4,margin:0,textShadow:'0 2px 12px rgba(0,0,0,0.3)'}}>
               Cada invitada llega<br/>
@@ -66,12 +55,7 @@ export default function Home() {
         </div>
       </section>
 
-      <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
-        }
-      `}</style>
+      <style>{`@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }`}</style>
 
       {/* CÓMO FUNCIONA */}
       <section id="como" className="section-pad" style={{padding:'7rem 3rem'}}>
