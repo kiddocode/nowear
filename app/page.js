@@ -33,6 +33,8 @@ export default function Home() {
     }
   }
 
+  const SUPABASE = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/'
+
   const marcas = [
     {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com', logo:'logo-adolfo.png'},
     {name:'ASOS', url:'https://www.asos.com/es', logo:'logo-asos.png'},
@@ -71,8 +73,6 @@ export default function Home() {
     {name:'Zara', url:'https://www.zara.com/es', logo:'logo-zara.png'},
     {name:'+ Sugerir marca', url:'/#contacto', logo:null},
   ]
-
-  const SUPABASE = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/'
 
   return (
     <>
@@ -168,41 +168,12 @@ export default function Home() {
         </p>
         <div className="pricing-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {[
-            {
-              plan:'Básico', planKey:'basico',
-              sub:'1 mes antes', price:'9',
-              desc:'El registro abre 1 mes antes del evento. Ideal para planificación corta.',
-              feats:['Link único para invitadas','Detección de coincidencias','Prerreserva de looks','Colores bloqueados'],
-              featured:false, enterprise:false
-            },
-            {
-              plan:'Estándar', planKey:'estandar',
-              sub:'3 meses antes', price:'19',
-              desc:'El registro abre 3 meses antes del evento. Tiempo suficiente para todas.',
-              feats:['Todo lo del plan Básico','Exportar lista de looks','Soporte prioritario por email'],
-              featured:true, enterprise:false
-            },
-            {
-              plan:'Premium', planKey:'premium',
-              sub:'Sin límite de tiempo', price:'29',
-              desc:'El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.',
-              feats:['Todo lo anterior','Acceso anticipado a nuevas funciones','Badge de evento verificado'],
-              featured:false, enterprise:false
-            },
-            {
-              plan:'Enterprise', planKey:null,
-              sub:'A medida', price:null,
-              desc:'Solución personalizada para empresas y eventos recurrentes.',
-              feats:['Múltiples eventos','Cuenta de empresa','Tarifa anual','Desarrollo ad-hoc','Soporte dedicado'],
-              featured:false, enterprise:true
-            },
+            {plan:'Básico',planKey:'basico',sub:'1 mes antes',price:'9',desc:'El registro abre 1 mes antes del evento. Ideal para planificación corta.',feats:['Link único para invitadas','Detección de coincidencias','Prerreserva de looks','Colores bloqueados'],featured:false,enterprise:false},
+            {plan:'Estándar',planKey:'estandar',sub:'3 meses antes',price:'19',desc:'El registro abre 3 meses antes del evento. Tiempo suficiente para todas.',feats:['Todo lo del plan Básico','Exportar lista de looks','Soporte prioritario por email'],featured:true,enterprise:false},
+            {plan:'Premium',planKey:'premium',sub:'Sin límite de tiempo',price:'29',desc:'El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.',feats:['Todo lo anterior','Acceso anticipado a nuevas funciones','Badge de evento verificado'],featured:false,enterprise:false},
+            {plan:'Enterprise',planKey:null,sub:'A medida',price:null,desc:'Solución personalizada para empresas y eventos recurrentes.',feats:['Múltiples eventos','Cuenta de empresa','Tarifa anual','Desarrollo ad-hoc','Soporte dedicado'],featured:false,enterprise:true},
           ].map((p,i)=>(
-            <div key={i} style={{
-              background: p.enterprise ? '#F7F7F5' : p.featured ? '#0A0A0A' : '#FFFFFF',
-              padding:'2.5rem 2rem', position:'relative',
-              border: p.enterprise ? '2px dashed #C4C4C0' : 'none',
-              boxSizing:'border-box'
-            }}>
+            <div key={i} style={{background:p.enterprise?'#F7F7F5':p.featured?'#0A0A0A':'#FFFFFF',padding:'2.5rem 2rem',position:'relative',border:p.enterprise?'2px dashed #C4C4C0':'none',boxSizing:'border-box'}}>
               {p.featured && <span style={{fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',background:'#F07987',color:'#FFFFFF',padding:'0.22rem 0.65rem',display:'inline-block',marginBottom:'1.25rem'}}>Más popular</span>}
               {p.enterprise && <span style={{fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',background:'#0A0A0A',color:'#FFFFFF',padding:'0.22rem 0.65rem',display:'inline-block',marginBottom:'1.25rem'}}>Enterprise</span>}
               <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.14em',textTransform:'uppercase',color:'#888884',marginBottom:'0.25rem'}}>{p.plan}</div>
@@ -243,14 +214,9 @@ export default function Home() {
         </p>
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(160px,1fr))',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {marcas.map((brand,i)=>{
-            const initials = brand.name.replace('+ ','').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()
             const isSuggest = brand.url === '/#contacto'
             return (
-              <a key={i} href={brand.url}
-                target={brand.url.startsWith('http')?'_blank':'_self'}
-                rel="noopener noreferrer"
-                className="marca-card"
-                style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'110px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
+              <a key={i} href={brand.url} target={brand.url.startsWith('http')?'_blank':'_self'} rel="noopener noreferrer" className="marca-card" style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.5rem',minHeight:'110px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
                 {isSuggest ? (
                   <>
                     <span style={{width:'36px',height:'36px',borderRadius:'50%',background:'#F07987',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2rem',color:'#FFFFFF',fontWeight:300}}>+</span>
@@ -258,16 +224,8 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <img
-                      src={`${SUPABASE}${brand.logo}`}
-                      alt={brand.name}
-                      style={{height:'32px',maxWidth:'110px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}
-                      onError={e=>{
-                        e.target.style.display='none'
-                        e.target.nextSibling.style.display='block'
-                      }}
-                    />
-                    <span style={{display:'none',fontSize:'0.75rem',fontWeight:300,color:'#3A3A38',letterSpacing:'0.02em'}}>{brand.name}</span>
+                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name} style={{height:'48px',maxWidth:'130px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}/>
+                    <span style={{fontSize:'0.75rem',fontWeight:300,color:'#3A3A38',letterSpacing:'0.02em'}}>{brand.name}</span>
                   </>
                 )}
               </a>
