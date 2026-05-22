@@ -136,7 +136,7 @@ export default function Dashboard() {
             {num:'0', label:'Conflictos'},
           ].map((s,i) => (
             <div key={i} style={{background:'#F7F7F5',padding:'2rem'}}>
-              <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',lineHeight:1,marginBottom:'0.4rem',letterSpacing:'-0.03em'}}>{s.num}</div>
+              <div style={{fontSize:'2.5rem',fontWeight:700,color:'#0A0A0A',lineHeight:1,marginBottom:'0.4rem',letterSpacing:'-0.03em'}}>{s.num}</div>
               <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>{s.label}</div>
             </div>
           ))}
@@ -168,7 +168,7 @@ export default function Dashboard() {
                     {n: diasRestantes(evento.fecha), l:'Restantes'}
                   ].map((s,i) => (
                     <div key={i}>
-                      <div style={{fontSize:'1.4rem',fontWeight:200,color:'#0A0A0A',lineHeight:1,marginBottom:'0.15rem'}}>{s.n}</div>
+                      <div style={{fontSize:'1.4rem',fontWeight:700,color:'#0A0A0A',lineHeight:1,marginBottom:'0.15rem'}}>{s.n}</div>
                       <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#BEBEBA'}}>{s.l}</div>
                     </div>
                   ))}
