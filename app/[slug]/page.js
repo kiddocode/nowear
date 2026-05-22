@@ -32,6 +32,8 @@ const COLORES = [
   {hex:'#E0E0DC',nombre:'Otro'},
 ]
 
+const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
+
 export default function InvitadaPage() {
   const { slug } = useParams()
   const [evento, setEvento] = useState(null)
@@ -50,7 +52,6 @@ export default function InvitadaPage() {
   const [modelo1, setModelo1] = useState('')
   const [tipo1, setTipo1] = useState('')
   const [referencia1, setReferencia1] = useState('')
-
   const [marca2, setMarca2] = useState('')
   const [modelo2, setModelo2] = useState('')
   const [tipo2, setTipo2] = useState('')
@@ -77,7 +78,7 @@ export default function InvitadaPage() {
   async function handleEnviar() {
     setError('')
     if (!nombre || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
-      setError('Rellena todos los campos obligatorios')
+      setError('Por favor, rellena todos los campos obligatorios marcados con *')
       return
     }
     setEnviando(true)
@@ -86,9 +87,7 @@ export default function InvitadaPage() {
     if (foto) {
       const ext = foto.name.split('.').pop()
       const fileName = `${evento.id}-${Date.now()}.${ext}`
-      const { data: uploadData } = await supabase.storage
-        .from('fotos')
-        .upload(fileName, foto, { contentType: foto.type })
+      const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, foto, { contentType: foto.type })
       if (uploadData) {
         const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
         foto_url = urlData.publicUrl
@@ -100,16 +99,9 @@ export default function InvitadaPage() {
       nombre_invitada: nombre,
       color_hex: colores[0],
       color_hex_2: colores[1] || null,
-      marca: marca1,
-      modelo: modelo1,
-      tipo: tipo1,
-      referencia: referencia1 || null,
-      marca2: marca2 || null,
-      modelo2: modelo2 || null,
-      tipo2: tipo2 || null,
-      referencia2: referencia2 || null,
-      estado,
-      foto_url
+      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
+      estado, foto_url
     })
 
     setEnviando(false)
@@ -118,74 +110,74 @@ export default function InvitadaPage() {
   }
 
   if (loading) return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>Cargando...</div>
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>Cargando...</div>
   )
-
   if (!evento) return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>Evento no encontrado.</div>
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>Evento no encontrado.</div>
   )
 
   if (enviado) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center'}}>
       <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>¡Look registrado!</div>
-      <p style={{fontSize:'0.85rem',fontWeight:300,color:'#888884',marginBottom:'2rem',maxWidth:'400px',lineHeight:1.7}}>
-        Tu look ha sido registrado para <strong style={{fontWeight:500,color:'#0A0A0A'}}>{evento.nombre}</strong>.
+      <p style={{fontSize:'0.9rem',fontWeight:300,color:'#888884',marginBottom:'2rem',maxWidth:'400px',lineHeight:1.7}}>
+        Tu look ha sido registrado para <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>.
       </p>
       <div style={{display:'flex',gap:'0.5rem',marginBottom:'2rem'}}>
         {colores.map((c,i) => (
           <div key={i} style={{width:'32px',height:'32px',borderRadius:'50%',background:c,border:'1px solid #E0E0DC'}}></div>
         ))}
       </div>
-      <button
-        onClick={() => { setEnviado(false); setNombre(''); setColores([]); setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null) }}
-        style={{fontSize:'0.72rem',fontWeight:500,padding:'0.75rem 2rem',background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}
-      >
+      <button onClick={() => { setEnviado(false); setNombre(''); setColores([]); setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null) }}
+        style={{fontSize:'0.78rem',fontWeight:500,padding:'0.75rem 2rem',background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
         Registrar otro look
       </button>
     </div>
   )
 
-  const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
-  const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
-  const labelStyle = {display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}
+  const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.88rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
+  const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.88rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
+  const labelStyle = {display:'block',fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',marginBottom:'0.55rem'}
 
   return (
-    <div className="invitada-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
 
-      {/* LADO IZQUIERDO */}
-      <div className="invitada-izq" style={{background:'#0A0A0A',padding:'4rem',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-        <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'1rem'}}>{evento.tipo}</div>
-        <h1 style={{fontSize:'3rem',fontWeight:200,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.5rem'}}>{evento.nombre}</h1>
-        <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',marginBottom:'3rem'}}>
-          {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
-          {evento.lugar ? ` · ${evento.lugar}` : ''}
-        </p>
-        <p style={{fontSize:'0.85rem',fontWeight:300,color:'rgba(255,255,255,0.6)',lineHeight:1.8,maxWidth:'380px'}}>
-          Registra tu look para que ninguna invitada llegue vestida igual. El sistema detecta coincidencias automáticamente.
-        </p>
-        {evento.colores_bloqueados && (
-          <div style={{marginTop:'2rem',padding:'1rem 1.25rem',background:'rgba(196,145,124,0.15)',border:'1px solid rgba(196,145,124,0.3)'}}>
-            <p style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.3rem'}}>Colores no disponibles</p>
-            <p style={{fontSize:'0.75rem',fontWeight:300,color:'rgba(255,255,255,0.6)'}}>{evento.colores_bloqueados}</p>
-          </div>
-        )}
+      {/* LADO IZQUIERDO — fijo */}
+      <div style={{position:'sticky',top:'68px',height:'calc(100vh - 68px)',overflow:'hidden'}}>
+        <img src={FOTO_FIJA} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
+        <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
+          <div style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.18em',textTransform:'uppercase',color:'rgba(255,255,255,0.6)',marginBottom:'0.75rem'}}>{evento.tipo}</div>
+          <h1 style={{fontSize:'2.8rem',fontWeight:700,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.5rem'}}>{evento.nombre}</h1>
+          <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.75)',marginBottom:'2rem'}}>
+            {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
+            {evento.lugar ? ` · ${evento.lugar}` : ''}
+          </p>
+          <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.8)',lineHeight:1.8,maxWidth:'380px'}}>
+            Registra tu look para que ninguna invitada llegue vestida igual.
+          </p>
+          {evento.colores_bloqueados && (
+            <div style={{marginTop:'1.5rem',padding:'1rem 1.25rem',background:'rgba(196,145,124,0.2)',border:'1px solid rgba(196,145,124,0.4)'}}>
+              <p style={{fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#F07987',marginBottom:'0.3rem'}}>Colores no disponibles</p>
+              <p style={{fontSize:'0.8rem',fontWeight:400,color:'rgba(255,255,255,0.8)'}}>{evento.colores_bloqueados}</p>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* FORMULARIO */}
-      <div className="invitada-form" style={{padding:'4rem',background:'#FFFFFF',overflowY:'auto'}}>
-        <h2 style={{fontSize:'1.8rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>Tu look</h2>
-        <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2.5rem'}}>Registra tu outfit para {evento.nombre}</p>
+      <div style={{padding:'3rem',background:'#FFFFFF',overflowY:'auto'}}>
+        <h2 style={{fontSize:'2rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>Tu look</h2>
+        <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552',marginBottom:'2.5rem'}}>Registra tu outfit para <strong style={{fontWeight:700}}>{evento.nombre}</strong></p>
 
         {/* NOMBRE */}
         <div style={{marginBottom:'1.25rem'}}>
-          <label style={labelStyle}>Tu nombre <span style={{color:'#C4917C'}}>*</span></label>
+          <label style={labelStyle}>Tu nombre <span style={{color:'#F07987'}}>*</span></label>
           <input type="text" placeholder="Ej: María García" value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
         </div>
 
         {/* COLORES */}
         <div style={{marginBottom:'1.25rem'}}>
-          <label style={{...labelStyle,marginBottom:'0.25rem'}}>Color del look <span style={{color:'#C4917C'}}>*</span></label>
-          <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginBottom:'0.55rem'}}>Selecciona hasta 2 colores</p>
+          <label style={{...labelStyle,marginBottom:'0.25rem'}}>Color del look <span style={{color:'#F07987'}}>*</span></label>
+          <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.55rem'}}>Selecciona hasta 2 colores</p>
           <select onChange={e => { if(e.target.value) toggleColor(e.target.value); e.target.value='' }} style={{...selectStyle,marginBottom:'0.75rem'}}>
             <option value="">Selecciona un color...</option>
             {COLORES.filter(c => !colores.includes(c.hex)).map((c,i) => (
@@ -197,7 +189,7 @@ export default function InvitadaPage() {
               {colores.map((hex,i) => (
                 <div key={i} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.4rem 0.75rem',border:'1px solid #E0E0DC',background:'#F7F7F5'}}>
                   <div style={{width:'14px',height:'14px',borderRadius:'50%',background:hex,border:'1px solid #E0E0DC',flexShrink:0}}></div>
-                  <span style={{fontSize:'0.72rem',fontWeight:300,color:'#0A0A0A'}}>{COLORES.find(c=>c.hex===hex)?.nombre}</span>
+                  <span style={{fontSize:'0.78rem',fontWeight:400,color:'#0A0A0A'}}>{COLORES.find(c=>c.hex===hex)?.nombre}</span>
                   <button onClick={() => toggleColor(hex)} style={{background:'none',border:'none',cursor:'pointer',color:'#888884',fontSize:'0.75rem',padding:'0',lineHeight:1,marginLeft:'0.25rem'}}>✕</button>
                 </div>
               ))}
@@ -207,45 +199,38 @@ export default function InvitadaPage() {
 
         {/* PRENDA 1 */}
         <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC'}}>
-          <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
-            Prenda 1 <span style={{color:'#C4917C'}}>*</span>
+          <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
+            Prenda 1 <span style={{color:'#F07987'}}>*</span>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
             <div>
-              <label style={labelStyle}>Marca <span style={{color:'#C4917C'}}>*</span></label>
+              <label style={labelStyle}>Marca <span style={{color:'#F07987'}}>*</span></label>
               <input type="text" placeholder="Ej: Zara" value={marca1} onChange={e => setMarca1(e.target.value)} style={inputStyle}/>
             </div>
             <div>
-              <label style={labelStyle}>Tipo <span style={{color:'#C4917C'}}>*</span></label>
+              <label style={labelStyle}>Tipo <span style={{color:'#F07987'}}>*</span></label>
               <select value={tipo1} onChange={e => setTipo1(e.target.value)} style={selectStyle}>
                 <option value="">Selecciona...</option>
-                <option>Vestido corto</option>
-                <option>Vestido midi</option>
-                <option>Vestido largo</option>
-                <option>Falda</option>
-                <option>Pantalón</option>
-                <option>Top</option>
-                <option>Blusa</option>
-                <option>Traje</option>
-                <option>Conjunto</option>
-                <option>Otro</option>
+                <option>Vestido corto</option><option>Vestido midi</option><option>Vestido largo</option>
+                <option>Falda</option><option>Pantalón</option><option>Top</option><option>Blusa</option>
+                <option>Traje</option><option>Conjunto</option><option>Otro</option>
               </select>
             </div>
           </div>
           <div style={{marginBottom:'1rem'}}>
-            <label style={labelStyle}>Modelo <span style={{color:'#C4917C'}}>*</span></label>
+            <label style={labelStyle}>Modelo <span style={{color:'#F07987'}}>*</span></label>
             <input type="text" placeholder="Nombre del vestido o modelo" value={modelo1} onChange={e => setModelo1(e.target.value)} style={inputStyle}/>
           </div>
           <div>
-            <label style={labelStyle}>Referencia o link <span style={{fontSize:'0.58rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+            <label style={labelStyle}>Referencia o link <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
             <input type="text" placeholder="URL o referencia del producto" value={referencia1} onChange={e => setReferencia1(e.target.value)} style={inputStyle}/>
           </div>
         </div>
 
         {/* PRENDA 2 */}
         <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC'}}>
-          <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
-            Prenda 2 <span style={{fontSize:'0.58rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span>
+          <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
+            Prenda 2 <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span>
           </div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
             <div>
@@ -256,16 +241,9 @@ export default function InvitadaPage() {
               <label style={labelStyle}>Tipo</label>
               <select value={tipo2} onChange={e => setTipo2(e.target.value)} style={selectStyle}>
                 <option value="">Selecciona...</option>
-                <option>Vestido corto</option>
-                <option>Vestido midi</option>
-                <option>Vestido largo</option>
-                <option>Falda</option>
-                <option>Pantalón</option>
-                <option>Top</option>
-                <option>Blusa</option>
-                <option>Traje</option>
-                <option>Conjunto</option>
-                <option>Otro</option>
+                <option>Vestido corto</option><option>Vestido midi</option><option>Vestido largo</option>
+                <option>Falda</option><option>Pantalón</option><option>Top</option><option>Blusa</option>
+                <option>Traje</option><option>Conjunto</option><option>Otro</option>
               </select>
             </div>
           </div>
@@ -281,15 +259,15 @@ export default function InvitadaPage() {
 
         {/* FOTO */}
         <div style={{marginBottom:'1.25rem'}}>
-          <label style={labelStyle}>Foto del look <span style={{fontSize:'0.58rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+          <label style={labelStyle}>Foto del look <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
           <div onClick={() => document.getElementById('foto-input').click()}
             style={{border:'1px dashed #E0E0DC',padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5'}}>
             {fotoPreview ? (
               <img src={fotoPreview} alt="Preview" style={{maxHeight:'200px',maxWidth:'100%',objectFit:'contain'}}/>
             ) : (
               <div>
-                <div style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'0.25rem'}}>Toca para subir una foto de tu look</div>
-                <div style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA'}}>JPG, PNG o WEBP</div>
+                <div style={{fontSize:'0.82rem',fontWeight:300,color:'#888884',marginBottom:'0.25rem'}}>Toca para subir una foto de tu look</div>
+                <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>JPG, PNG o WEBP</div>
               </div>
             )}
           </div>
@@ -299,21 +277,21 @@ export default function InvitadaPage() {
 
         {/* ESTADO */}
         <div style={{marginBottom:'2rem'}}>
-          <label style={labelStyle}>Estado <span style={{color:'#C4917C'}}>*</span></label>
+          <label style={labelStyle}>Estado <span style={{color:'#F07987'}}>*</span></label>
           <div style={{display:'flex',gap:'1rem'}}>
             {[{val:'confirmado',label:'Confirmado'},{val:'prereservado',label:'Prereservado'}].map(e => (
               <button key={e.val} onClick={() => setEstado(e.val)}
-                style={{flex:1,padding:'0.75rem',fontSize:'0.72rem',fontWeight:500,fontFamily:'Poppins,sans-serif',cursor:'pointer',border:'1px solid',borderColor:estado===e.val?'#0A0A0A':'#E0E0DC',background:estado===e.val?'#0A0A0A':'#FFFFFF',color:estado===e.val?'#FFFFFF':'#888884'}}>
+                style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,fontFamily:'Poppins,sans-serif',cursor:'pointer',border:'1px solid',borderColor:estado===e.val?'#0A0A0A':'#E0E0DC',background:estado===e.val?'#0A0A0A':'#FFFFFF',color:estado===e.val?'#FFFFFF':'#888884'}}>
                 {e.label}
               </button>
             ))}
           </div>
         </div>
 
-        {error && <p style={{fontSize:'0.72rem',fontWeight:300,color:'#C4917C',marginBottom:'1rem'}}>{error}</p>}
+        {error && <p style={{fontSize:'0.82rem',fontWeight:600,color:'#F07987',marginBottom:'1rem',padding:'0.75rem',background:'#FFF0F1',border:'1px solid #F07987'}}>{error}</p>}
 
         <button onClick={handleEnviar} disabled={enviando}
-          style={{width:'100%',padding:'0.9rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1}}>
+          style={{width:'100%',padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1}}>
           {enviando ? 'Registrando...' : 'Registrar mi look →'}
         </button>
       </div>
