@@ -306,9 +306,7 @@ export default function Home() {
       <footer style={{background:'#0A0A0A',padding:'5rem 3rem 2.5rem'}}>
         <div className="footer-grid" style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:'3rem',marginBottom:'4rem'}}>
           <div>
-            {/* Cambia esta URL por la del logo blanco cuando lo subas a Supabase */}
-            <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/No_Wear%20logo.png" alt="NOWEAR" style={{height:'40px',marginBottom:'1.25rem',filter:'invert(1)',display:'block'}}/>
-            <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',lineHeight:1.85,maxWidth:'260px',letterSpacing:'0.5px'}}>La plataforma para que ninguna invitada llegue vestida igual.</p>
+<img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_white.png" alt="NOWEAR" style={{height:'36px',marginBottom:'1.25rem',display:'block'}}/>            <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',lineHeight:1.85,maxWidth:'260px',letterSpacing:'0.5px'}}>La plataforma para que ninguna invitada llegue vestida igual.</p>
           </div>
           {[
             {title:'Producto',links:[
