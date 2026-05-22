@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const PASOS = [
   {
@@ -38,8 +38,22 @@ const LOOKS_DEMO = [
 export default function DemoOrganizadora() {
   const [paso, setPaso] = useState(0)
   const [tab, setTab] = useState(0)
+  const invitadaRef = useRef(null)
+  const statsRef = useRef(null)
+  const tablaRef = useRef(null)
+  const linkRef = useRef(null)
 
   const pasoActual = PASOS[paso]
+
+  useEffect(() => {
+    const refs = { stats: statsRef, link: linkRef, invitada: invitadaRef, tabla: tablaRef }
+    const ref = refs[pasoActual.target]
+    if (ref?.current) {
+      setTimeout(() => {
+        ref.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 100)
+    }
+  }, [paso])
 
   function isHighlighted(target) {
     return pasoActual.target === target
@@ -89,7 +103,7 @@ export default function DemoOrganizadora() {
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
           <div style={{display:'flex',gap:'0.4rem'}}>
             {PASOS.map((_,i) => (
-              <div key={i} onClick={() => setPaso(i)} style={{width: i===paso ? '20px' : '6px',height:'6px',borderRadius:'3px',background: i===paso ? '#C4917C' : 'rgba(255,255,255,0.2)',cursor:'pointer',transition:'all 0.2s'}}></div>
+              <div key={i} onClick={() => setPaso(i)} style={{width:i===paso?'20px':'6px',height:'6px',borderRadius:'3px',background:i===paso?'#C4917C':'rgba(255,255,255,0.2)',cursor:'pointer',transition:'all 0.2s'}}></div>
             ))}
           </div>
           <div style={{display:'flex',gap:'0.75rem'}}>
@@ -125,8 +139,7 @@ export default function DemoOrganizadora() {
             <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>10 de octubre de 2026 · Zahara de los Atunes</p>
           </div>
 
-          {/* LINK */}
-          <div id="link-demo" style={{...highlightStyle('link'),background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',padding:'1.25rem 1.5rem',minWidth:'280px'}}>
+          <div ref={linkRef} id="link-demo" style={{...highlightStyle('link'),background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)',padding:'1.25rem 1.5rem',minWidth:'280px'}}>
             <p style={{fontSize:'0.56rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>Link para invitadas</p>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
               <span style={{fontSize:'0.8rem',fontWeight:300,color:'#FFFFFF'}}>nowear.es/cris-pablo</span>
@@ -153,7 +166,7 @@ export default function DemoOrganizadora() {
         <div style={{padding:'2.5rem 3rem'}}>
 
           {/* STATS */}
-          <div id="stats-demo" style={{...highlightStyle('stats'),display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC',marginBottom:'2.5rem'}}>
+          <div ref={statsRef} style={{...highlightStyle('stats'),display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC',marginBottom:'2.5rem'}}>
             {[
               {n:'4',l:'Looks registrados'},
               {n:'1',l:'Prereservados'},
@@ -172,8 +185,44 @@ export default function DemoOrganizadora() {
             )}
           </div>
 
+          {/* FORMULARIO INVITADA - siempre visible */}
+          <div ref={invitadaRef} style={{...highlightStyle('invitada'),marginBottom:'2.5rem',border: isHighlighted('invitada') ? '3px solid #C4917C' : '1px solid #E0E0DC',borderRadius:'2px',overflow:'hidden'}}>
+            {isHighlighted('invitada') && (
+              <div style={{background:'#C4917C',padding:'0.75rem 1.5rem'}}>
+                <p style={{fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#FFFFFF'}}>👆 Esto es lo que verá tu invitada cuando abra el link</p>
+              </div>
+            )}
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr'}}>
+              <div style={{background:'#0A0A0A',padding:'3rem',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
+                <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>Boda</div>
+                <h2 style={{fontSize:'2rem',fontWeight:200,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Cris & Pablo</h2>
+                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>10 de octubre de 2026 · Zahara de los Atunes</p>
+                <p style={{fontSize:'0.78rem',fontWeight:300,color:'rgba(255,255,255,0.5)',lineHeight:1.7}}>Registra tu look para que ninguna invitada llegue vestida igual.</p>
+              </div>
+              <div style={{padding:'3rem',background:'#FFFFFF'}}>
+                <h3 style={{fontSize:'1.4rem',fontWeight:200,color:'#0A0A0A',marginBottom:'0.3rem'}}>Tu look</h3>
+                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>Registra tu outfit para Cris & Pablo</p>
+                {[
+                  {label:'Tu nombre', placeholder:'Ej: María García', obligatorio:true},
+                  {label:'Color del look', placeholder:'Selecciona el color...', obligatorio:true},
+                  {label:'Marca', placeholder:'Ej: Zara', obligatorio:true},
+                ].map((f,i) => (
+                  <div key={i} style={{marginBottom:'1rem'}}>
+                    <label style={{display:'block',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.4rem'}}>
+                      {f.label} {f.obligatorio && <span style={{color:'#C4917C'}}>*</span>}
+                    </label>
+                    <div style={{padding:'0.7rem 0.85rem',border:'1px solid #E0E0DC',fontSize:'0.75rem',fontWeight:300,color:'#BEBEBA'}}>{f.placeholder}</div>
+                  </div>
+                ))}
+                <div style={{padding:'0.7rem',background:'#0A0A0A',textAlign:'center',fontSize:'0.72rem',fontWeight:500,color:'#FFFFFF',marginTop:'1rem'}}>
+                  Registrar mi look →
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* TABLA */}
-          <div id="tabla-demo" style={highlightStyle('tabla')}>
+          <div ref={tablaRef} style={highlightStyle('tabla')}>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1.5rem'}}>
               <span style={{fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>4 looks registrados</span>
               <button style={{fontSize:'0.62rem',fontWeight:500,padding:'0.5rem 1.25rem',background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>Exportar lista</button>
@@ -211,42 +260,6 @@ export default function DemoOrganizadora() {
               </div>
             )}
           </div>
-
-          {/* FORMULARIO INVITADA */}
-          {isHighlighted('invitada') && (
-            <div style={{marginTop:'2.5rem',border:'3px solid #C4917C',borderRadius:'2px',overflow:'hidden'}}>
-              <div style={{background:'#C4917C',padding:'0.75rem 1.5rem'}}>
-                <p style={{fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#FFFFFF'}}>👆 Esto es lo que verá tu invitada cuando abra el link</p>
-              </div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1fr'}}>
-                <div style={{background:'#0A0A0A',padding:'3rem',display:'flex',flexDirection:'column',justifyContent:'flex-end'}}>
-                  <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>Boda</div>
-                  <h2 style={{fontSize:'2rem',fontWeight:200,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Cris & Pablo</h2>
-                  <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>10 de octubre de 2026 · Zahara de los Atunes</p>
-                  <p style={{fontSize:'0.78rem',fontWeight:300,color:'rgba(255,255,255,0.5)',lineHeight:1.7}}>Registra tu look para que ninguna invitada llegue vestida igual.</p>
-                </div>
-                <div style={{padding:'3rem',background:'#FFFFFF'}}>
-                  <h3 style={{fontSize:'1.4rem',fontWeight:200,color:'#0A0A0A',marginBottom:'0.3rem'}}>Tu look</h3>
-                  <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>Registra tu outfit para Cris & Pablo</p>
-                  {[
-                    {label:'Tu nombre', placeholder:'Ej: María García', obligatorio:true},
-                    {label:'Color del look', placeholder:'Selecciona el color...', obligatorio:true},
-                    {label:'Marca', placeholder:'Ej: Zara', obligatorio:true},
-                  ].map((f,i) => (
-                    <div key={i} style={{marginBottom:'1rem'}}>
-                      <label style={{display:'block',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.4rem'}}>
-                        {f.label} {f.obligatorio && <span style={{color:'#C4917C'}}>*</span>}
-                      </label>
-                      <div style={{padding:'0.7rem 0.85rem',border:'1px solid #E0E0DC',fontSize:'0.75rem',fontWeight:300,color:'#BEBEBA'}}>{f.placeholder}</div>
-                    </div>
-                  ))}
-                  <div style={{padding:'0.7rem',background:'#0A0A0A',textAlign:'center',fontSize:'0.72rem',fontWeight:500,color:'#FFFFFF',marginTop:'1rem'}}>
-                    Registrar mi look →
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>
