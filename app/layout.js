@@ -19,11 +19,13 @@ export default function RootLayout({ children }) {
           <a href="/" style={{fontSize:'0.95rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#0A0A0A',textDecoration:'none'}}>NOWEAR</a>
 
           {/* NAV DESKTOP */}
-          <div className="nav-center" style={{display:'flex',gap:'2.5rem'}}>
-            {['Cómo funciona','Marcas','FAQ','Contacto'].map((item,i) => (
-              <a key={i} href={`/#${['como','marcas','faq','contacto'][i]}`} style={{fontSize:'0.72rem',fontWeight:300,color:'#3A3A38',textDecoration:'none'}}>{item}</a>
-            ))}
-          </div>
+<div className="nav-center" style={{display:'flex',gap:'0',background:'#F0F0EE',borderRadius:'50px',padding:'0.35rem 0.5rem'}}>
+  {['Cómo funciona','Marcas','FAQ','Contacto'].map((item,i) => (
+    <a key={i} href={`/#${['como','marcas','faq','contacto'][i]}`} style={{fontSize:'0.72rem',fontWeight:300,color:'#3A3A38',textDecoration:'none',padding:'0.5rem 1.1rem',borderRadius:'50px'}}>
+      {item}
+    </a>
+  ))}
+</div>
 
           {/* BOTONES DESKTOP */}
           <div className="nav-actions" style={{display:'flex',gap:'0.75rem',alignItems:'center'}}>
