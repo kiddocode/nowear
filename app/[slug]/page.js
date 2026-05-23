@@ -120,10 +120,20 @@ export default function InvitadaPage() {
 
     if (looksConflicto && looksConflicto.length > 0) {
       const conflicto = looksConflicto[0]
+      // Guardar conflicto en la tabla
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id,
+        nombre_invitada: nombre,
+        email_invitada: email.toLowerCase().trim(),
+        marca: marca1,
+        modelo: modelo1,
+        color_hex: colores[0],
+        nombre_conflicto_con: conflicto.nombre_invitada
+      })
       setError(`Este look (${marca1}, ${modelo1}, ${COLORES.find(c=>c.hex===colores[0])?.nombre}) ya está registrado por ${conflicto.nombre_invitada}. Por favor elige otro look.`)
       return
     }
-
+    
     setEnviando(true)
 
     let foto_url = null

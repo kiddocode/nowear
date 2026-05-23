@@ -142,9 +142,11 @@ export default function Dashboard() {
           ))}
         </div>
 
-        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:'1.5rem'}}>
           {eventos.map((evento) => (
-            <div key={evento.id} style={{background:'#FFFFFF',padding:'2rem',position:'relative'}}>
+            <div key={evento.id} style={{background:'#FFFFFF',padding:'2rem',position:'relative',borderRadius:'16px',boxShadow:'0 2px 16px rgba(0,0,0,0.06)',border:'1px solid #F0F0EE',transition:'transform 0.15s, box-shadow 0.15s',cursor:'pointer'}}
+    onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 8px 32px rgba(0,0,0,0.12)'}}
+    onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 2px 16px rgba(0,0,0,0.06)'}}>
               {esAdmin && (
                 <button
                   onClick={(e) => handleEliminar(e, evento.id)}
@@ -178,7 +180,7 @@ export default function Dashboard() {
             </div>
           ))}
 
-          <a href="/dashboard/nuevo" style={{background:'#FFFFFF',padding:'2rem',border:'2px dashed #E0E0DC',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'200px',textDecoration:'none',cursor:'pointer'}}>
+          <a href="/dashboard/nuevo" style={{background:'#FFFFFF',padding:'2rem',border:'2px dashed #E0E0DC',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.6rem',minHeight:'200px',textDecoration:'none',cursor:'pointer',borderRadius:'16px'}}>
             <div style={{fontSize:'2rem',fontWeight:100,color:'#BEBEBA',lineHeight:1}}>+</div>
             <div style={{fontSize:'0.65rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>Nuevo evento</div>
           </a>
