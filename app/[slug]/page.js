@@ -5,7 +5,6 @@ import { supabase } from '@/lib/supabase'
 
 const COLORES = [
   {hex:'#F5C6D0',nombre:'Rosa palo'},
-  {hex:'#E8C4D4',nombre:'Palo de rosa'},
   {hex:'#D4A8D4',nombre:'Lila'},
   {hex:'#6B3FA0',nombre:'Morado'},
   {hex:'#D4006A',nombre:'Fucsia'},
@@ -100,7 +99,6 @@ export default function InvitadaPage() {
     if (looksExistentes && looksExistentes.length > 0) {
       const confirmados = looksExistentes.filter(l => l.estado === 'confirmado').length
       const prereservados = looksExistentes.filter(l => l.estado === 'prereservado').length
-
       if (estado === 'confirmado' && confirmados >= 1) {
         setError('Ya tienes un look confirmado en este evento. Solo se permite 1 look confirmado por persona.')
         return
@@ -109,6 +107,21 @@ export default function InvitadaPage() {
         setError('Ya tienes 3 prerreservas activas en este evento. Ese es el máximo permitido.')
         return
       }
+    }
+
+    // Comprobar conflicto de look (color + marca + modelo)
+    const { data: looksConflicto } = await supabase
+      .from('looks')
+      .select('nombre_invitada, estado')
+      .eq('evento_id', evento.id)
+      .eq('color_hex', colores[0])
+      .ilike('marca', marca1.trim())
+      .ilike('modelo', modelo1.trim())
+
+    if (looksConflicto && looksConflicto.length > 0) {
+      const conflicto = looksConflicto[0]
+      setError(`Este look (${marca1}, ${modelo1}, ${COLORES.find(c=>c.hex===colores[0])?.nombre}) ya está registrado por ${conflicto.nombre_invitada}. Por favor elige otro look.`)
+      return
     }
 
     setEnviando(true)
@@ -172,7 +185,6 @@ export default function InvitadaPage() {
   return (
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
 
-      {/* LADO IZQUIERDO fijo */}
       <div style={{position:'sticky',top:'68px',height:'calc(100vh - 68px)',overflow:'hidden'}}>
         <img src={FOTO_FIJA} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -194,25 +206,21 @@ export default function InvitadaPage() {
         </div>
       </div>
 
-      {/* FORMULARIO */}
       <div style={{padding:'3rem',background:'#FFFFFF',overflowY:'auto'}}>
         <h2 style={{fontSize:'2rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>Tu look</h2>
         <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552',marginBottom:'2.5rem'}}>Registra tu outfit para <strong style={{fontWeight:700}}>{evento.nombre}</strong></p>
 
-        {/* NOMBRE */}
         <div style={{marginBottom:'1.25rem'}}>
           <label style={labelStyle}>Tu nombre <span style={{color:'#F07987'}}>*</span></label>
           <input type="text" placeholder="Ej: María García" value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
         </div>
 
-        {/* EMAIL */}
         <div style={{marginBottom:'1.25rem'}}>
           <label style={labelStyle}>Tu email <span style={{color:'#F07987'}}>*</span></label>
           <input type="email" placeholder="Ej: maria@gmail.com" value={email} onChange={e => setEmail(e.target.value)} style={inputStyle}/>
           <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem'}}>Solo para enviarte la confirmación. No lo verán otras invitadas.</p>
         </div>
 
-        {/* COLORES */}
         <div style={{marginBottom:'1.25rem'}}>
           <label style={{...labelStyle,marginBottom:'0.25rem'}}>Color del look <span style={{color:'#F07987'}}>*</span></label>
           <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.55rem'}}>Selecciona hasta 2 colores</p>
@@ -235,7 +243,6 @@ export default function InvitadaPage() {
           )}
         </div>
 
-        {/* PRENDA 1 */}
         <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC'}}>
           <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
             Prenda 1 <span style={{color:'#F07987'}}>*</span>
@@ -265,7 +272,6 @@ export default function InvitadaPage() {
           </div>
         </div>
 
-        {/* PRENDA 2 */}
         <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC'}}>
           <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
             Prenda 2 <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span>
@@ -295,7 +301,6 @@ export default function InvitadaPage() {
           </div>
         </div>
 
-        {/* FOTO */}
         <div style={{marginBottom:'1.25rem'}}>
           <label style={labelStyle}>Foto del look <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
           <div onClick={() => document.getElementById('foto-input').click()}
@@ -313,7 +318,6 @@ export default function InvitadaPage() {
             onChange={e => { const file=e.target.files[0]; if(file){ setFoto(file); setFotoPreview(URL.createObjectURL(file)) } }}/>
         </div>
 
-        {/* ESTADO */}
         <div style={{marginBottom:'2rem'}}>
           <label style={labelStyle}>Estado <span style={{color:'#F07987'}}>*</span></label>
           <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
