@@ -129,13 +129,13 @@ export default function Dashboard() {
           <a href="/dashboard/nuevo" style={{fontSize:'0.82rem',fontWeight:600,padding:'0.85rem 2rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',whiteSpace:'nowrap',borderRadius:'4px'}}>+ Nuevo evento</a>
         </div>
 
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC',marginBottom:'3rem'}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1.5rem',marginBottom:'3rem'}}>
           {[
             {num: eventos.length.toString(), label:'Eventos activos'},
             {num: totalLooks.toString(), label:'Looks registrados'},
             {num:'0', label:'Conflictos'},
           ].map((s,i) => (
-            <div key={i} style={{background:'#F7F7F5',padding:'2rem'}}>
+            <div key={i} style={{background:'#FFFFFF',padding:'2rem',borderRadius:'16px',boxShadow:'0 2px 16px rgba(0,0,0,0.06)',border:'1px solid #F0F0EE'}}>
               <div style={{fontSize:'2.5rem',fontWeight:700,color:'#0A0A0A',lineHeight:1,marginBottom:'0.4rem',letterSpacing:'-0.03em'}}>{s.num}</div>
               <div style={{fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>{s.label}</div>
             </div>
@@ -170,8 +170,8 @@ export default function Dashboard() {
                     {n: diasRestantes(evento.fecha), l:'Restantes'}
                   ].map((s,i) => (
                     <div key={i}>
-                      <div style={{fontSize:'1.4rem',fontWeight:700,color:'#0A0A0A',lineHeight:1,marginBottom:'0.15rem'}}>{s.n}</div>
-                      <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#BEBEBA'}}>{s.l}</div>
+                      <div style={{fontSize:'2rem',fontWeight:700,color:'#0A0A0A',lineHeight:1,marginBottom:'0.25rem',letterSpacing:'-0.02em'}}>{s.n}</div>
+                      <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#888884'}}>{s.l}</div>
                     </div>
                   ))}
                 </div>
