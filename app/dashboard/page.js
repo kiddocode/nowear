@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import Sidebar from '../components/Sidebar'
+import ModalPlanes from '../components/ModalPlanes'
 
 const PLAN_COLORES = {
   basico:     { bg: '#F0F0EE', color: '#888884', label: 'Básico' },
@@ -28,6 +29,8 @@ export default function Dashboard() {
   const [conflictosPorEvento, setConflictosPorEvento] = useState({})
   const [loading, setLoading] = useState(true)
   const [eliminando, setEliminando] = useState(null)
+  const [modalPlanes, setModalPlanes] = useState(false)
+  const [eventoSeleccionado, setEventoSeleccionado] = useState(null)
 
   useEffect(() => {
     async function cargarDatos() {
@@ -45,7 +48,6 @@ export default function Dashboard() {
         .order('created_at', { ascending: false })
       setEventos(evs || [])
 
-      // Cargar conflictos reales agrupados por evento
       if (evs && evs.length > 0) {
         const eventoIds = evs.map(e => e.id)
         const { data: cnfs } = await supabase
@@ -64,11 +66,6 @@ export default function Dashboard() {
     cargarDatos()
   }, [])
 
-  async function handleLogout() {
-    await supabase.auth.signOut()
-    router.push('/')
-  }
-
   async function handleEliminar(e, eventoId) {
     e.preventDefault()
     e.stopPropagation()
@@ -86,18 +83,15 @@ export default function Dashboard() {
     return diff > 0 ? diff + 'd' : 'Pasado'
   }
 
-  function getNombreCompleto() {
-    if (user?.user_metadata?.full_name) return user.user_metadata.full_name
-    if (user?.user_metadata?.name) return user.user_metadata.name
-    if (profile?.nombre) return profile.nombre
-    return user?.email || ''
+  function abrirModal(evento = null) {
+    setEventoSeleccionado(evento)
+    setModalPlanes(true)
   }
 
   const totalLooks = eventos.reduce((acc, e) => acc + (e.looks?.[0]?.count || 0), 0)
   const totalConflictos = Object.values(conflictosPorEvento).reduce((a, b) => a + b, 0)
   const esAdmin = profile?.is_admin
 
-  // Detectar plan más alto del usuario
   const tieneAlgunBasico = eventos.some(e => getPlan(e) === 'basico')
   const tieneAlgunEstandar = eventos.some(e => getPlan(e) === 'estandar')
   const tienePremiumOSuperior = eventos.some(e => ['premium','enterprise'].includes(getPlan(e)))
@@ -114,7 +108,6 @@ export default function Dashboard() {
 
       <main style={{padding:'3rem'}}>
 
-        {/* CABECERA */}
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
           <div>
             <h1 style={{fontSize:'2.2rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Mis eventos</h1>
@@ -123,8 +116,7 @@ export default function Dashboard() {
           <a href="/dashboard/nuevo" style={{fontSize:'0.82rem',fontWeight:600,padding:'0.85rem 2rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',whiteSpace:'nowrap',borderRadius:'4px'}}>+ Nuevo evento</a>
         </div>
 
-        {/* STATS */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1.5rem',marginBottom: tieneAlgunBasico ? '1.5rem' : '3rem'}}>
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1.5rem',marginBottom: (tieneAlgunBasico || tieneAlgunEstandar) && !tienePremiumOSuperior ? '1.5rem' : '3rem'}}>
           {[
             {num: eventos.length.toString(), label:'Eventos activos'},
             {num: totalLooks.toString(), label:'Looks registrados'},
@@ -137,9 +129,9 @@ export default function Dashboard() {
           ))}
         </div>
 
-        {/* BANNER UPGRADE - solo si tiene eventos en plan básico */}
+        {/* Banner upgrade Básico -> Estándar */}
         {tieneAlgunBasico && !tienePremiumOSuperior && (
-          <div style={{marginBottom:'3rem',padding:'1rem 1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'12px',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
+          <div style={{marginBottom:'1rem',padding:'1rem 1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'12px',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
             <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
               <span style={{fontSize:'1.1rem'}}>✨</span>
               <div>
@@ -147,13 +139,13 @@ export default function Dashboard() {
                 <span style={{fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>Disponible desde el plan Estándar (19€).</span>
               </div>
             </div>
-            <a href="/dashboard/facturacion" style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.6rem 1.25rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'4px',whiteSpace:'nowrap'}}>
+            <button onClick={() => abrirModal()} style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.6rem 1.25rem',background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',whiteSpace:'nowrap'}}>
               Ver planes
-            </a>
+            </button>
           </div>
         )}
 
-        {/* BANNER UPGRADE - tiene estándar pero no premium */}
+        {/* Banner upgrade Estándar -> Premium */}
         {tieneAlgunEstandar && !tienePremiumOSuperior && (
           <div style={{marginBottom:'3rem',padding:'1rem 1.5rem',background:'#F5EDE8',border:'1px solid #F0D8CC',borderRadius:'12px',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem',flexWrap:'wrap'}}>
             <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
@@ -163,13 +155,13 @@ export default function Dashboard() {
                 <span style={{fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>Disponible en el plan Premium (29€).</span>
               </div>
             </div>
-            <a href="/dashboard/facturacion" style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.6rem 1.25rem',background:'#C4917C',color:'#FFFFFF',textDecoration:'none',borderRadius:'4px',whiteSpace:'nowrap'}}>
+            <button onClick={() => abrirModal()} style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.6rem 1.25rem',background:'#C4917C',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',whiteSpace:'nowrap'}}>
               Ver Premium
-            </a>
+            </button>
           </div>
         )}
 
-        {/* TARJETAS EVENTOS */}
+        {/* TARJETAS */}
         <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))',gap:'1.5rem'}}>
           {eventos.map((evento) => {
             const planKey = getPlan(evento)
@@ -182,9 +174,7 @@ export default function Dashboard() {
                 onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='0 2px 16px rgba(0,0,0,0.06)'}}>
 
                 {esAdmin && (
-                  <button
-                    onClick={(e) => handleEliminar(e, evento.id)}
-                    disabled={eliminando === evento.id}
+                  <button onClick={(e) => handleEliminar(e, evento.id)} disabled={eliminando === evento.id}
                     style={{position:'absolute',top:'1rem',right:'1rem',background:'none',border:'none',cursor:'pointer',color:'#BEBEBA',fontSize:'0.75rem',fontFamily:'Poppins,sans-serif',padding:'0.25rem 0.5rem'}}>
                     {eliminando === evento.id ? '...' : '×'}
                   </button>
@@ -193,7 +183,6 @@ export default function Dashboard() {
                 <a href={`/evento/${evento.slug}`} style={{textDecoration:'none',display:'block'}}>
                   <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'0.65rem'}}>
                     <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>{evento.tipo}</div>
-                    {/* Badge plan */}
                     <span style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.2rem 0.6rem',borderRadius:'20px',background:planInfo.bg,color:planInfo.color,flexShrink:0}}>
                       {planInfo.label}
                     </span>
@@ -217,21 +206,21 @@ export default function Dashboard() {
                       </div>
                     ))}
                   </div>
-
-                  {/* Features bloqueadas para Básico */}
-                  {planKey === 'basico' && (
-                    <div style={{marginTop:'1rem',padding:'0.6rem 0.75rem',background:'#F7F7F5',borderRadius:'6px',display:'flex',alignItems:'center',gap:'0.5rem'}}>
-                      <span style={{fontSize:'0.7rem'}}>🔒</span>
-                      <span style={{fontSize:'0.62rem',fontWeight:400,color:'#888884'}}>Exportar y personalización desde Estándar</span>
-                    </div>
-                  )}
-                  {planKey === 'estandar' && (
-                    <div style={{marginTop:'1rem',padding:'0.6rem 0.75rem',background:'#F5EDE8',borderRadius:'6px',display:'flex',alignItems:'center',gap:'0.5rem'}}>
-                      <span style={{fontSize:'0.7rem'}}>🎨</span>
-                      <span style={{fontSize:'0.62rem',fontWeight:400,color:'#C4917C'}}>Personalización disponible en Premium</span>
-                    </div>
-                  )}
                 </a>
+
+                {/* Botón upgrade inline en la tarjeta */}
+                {planKey === 'basico' && (
+                  <button onClick={(e) => { e.preventDefault(); abrirModal(evento) }}
+                    style={{marginTop:'1rem',width:'100%',padding:'0.6rem',fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',background:'#F7F7F5',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',boxSizing:'border-box'}}>
+                    🔒 Mejorar plan
+                  </button>
+                )}
+                {planKey === 'estandar' && (
+                  <button onClick={(e) => { e.preventDefault(); abrirModal(evento) }}
+                    style={{marginTop:'1rem',width:'100%',padding:'0.6rem',fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',background:'#F5EDE8',color:'#C4917C',border:'1px solid #F0D8CC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',boxSizing:'border-box'}}>
+                    🎨 Mejorar a Premium
+                  </button>
+                )}
               </div>
             )
           })}
@@ -242,6 +231,14 @@ export default function Dashboard() {
           </a>
         </div>
       </main>
+
+      {modalPlanes && (
+        <ModalPlanes
+          onClose={() => { setModalPlanes(false); setEventoSeleccionado(null) }}
+          planActual={eventoSeleccionado?.plan}
+          eventoId={eventoSeleccionado?.id}
+        />
+      )}
     </div>
   )
 }
