@@ -11,6 +11,7 @@ const PRECIOS = {
 export async function POST(req) {
   try {
     const body = await req.json()
+    console.log('Checkout body:', JSON.stringify(body))
     const { plan, eventoData, eventoId, eventoNombre, eventoSlug } = body
 
     const precio = PRECIOS[plan]
