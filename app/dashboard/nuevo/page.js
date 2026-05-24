@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import Sidebar from '../../components/Sidebar'
 
 function slugify(text) {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9\s-]/g, '').trim().replace(/\s+/g, '-')
@@ -60,11 +61,7 @@ export default function NuevoEvento() {
   function handleSeleccionarPlan(planId) {
     setPlanSeleccionado(planId)
     const validacion = validarFechaPlan(fecha, planId)
-    if (!validacion.ok) {
-      setPlanError(validacion.msg)
-    } else {
-      setPlanError('')
-    }
+    setPlanError(!validacion.ok ? validacion.msg : '')
   }
 
   async function handlePagar() {
@@ -118,35 +115,9 @@ export default function NuevoEvento() {
   return (
     <div style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
 
-      {/* SIDEBAR */}
-      <aside style={{borderRight:'1px solid #E0E0DC',padding:'2rem 0',display:'flex',flexDirection:'column',background:'#FFFFFF',position:'sticky',top:'68px',height:'calc(100vh - 68px)'}}>
-        <div style={{marginBottom:'1.5rem'}}>
-          <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.5rem'}}>Principal</div>
-          <a href="/dashboard" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:300,color:'#888884',textDecoration:'none'}}>
-            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'currentColor',flexShrink:0,opacity:0.4}}></span>Mis eventos
-          </a>
-          <a href="/dashboard/nuevo" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:500,color:'#0A0A0A',background:'#F0F0EE',borderLeft:'2px solid #0A0A0A',textDecoration:'none'}}>
-            <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'#0A0A0A',flexShrink:0}}></span>Nuevo evento
-          </a>
-        </div>
-        <div style={{marginBottom:'1.5rem'}}>
-          <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.5rem'}}>Cuenta</div>
-          {[
-            {label:'Perfil', href:'/dashboard/perfil'},
-            {label:'Facturación', href:'/dashboard/facturacion'},
-            {label:'Ayuda', href:'/dashboard/ayuda'},
-          ].map((item,i) => (
-            <a key={i} href={item.href} style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.7rem 1.5rem',fontSize:'0.75rem',fontWeight:300,color:'#888884',textDecoration:'none'}}>
-              <span style={{width:'5px',height:'5px',borderRadius:'50%',background:'currentColor',flexShrink:0,opacity:0.4}}></span>{item.label}
-            </a>
-          ))}
-        </div>
-      </aside>
+      <Sidebar activo="/dashboard/nuevo" />
 
-      {/* MAIN */}
       <main style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
-
-        {/* FORMULARIO */}
         <div style={{padding:'3rem',borderRight:'1px solid #E0E0DC'}}>
           <div style={{marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
             <h1 style={{fontSize:'2.2rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Nuevo evento</h1>
@@ -208,7 +179,6 @@ export default function NuevoEvento() {
           </button>
         </div>
 
-        {/* IMAGEN LATERAL */}
         <div style={{position:'relative',overflow:'hidden'}}>
           <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=80" alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(10,10,10,0.75) 0%,rgba(10,10,10,0.1) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -228,7 +198,6 @@ export default function NuevoEvento() {
         </div>
       </main>
 
-      {/* POP-UP PLANES */}
       {showPlanes && (
         <div style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.7)',zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
           <div style={{background:'#FFFFFF',maxWidth:'1060px',width:'100%',maxHeight:'90vh',overflowY:'auto'}}>
@@ -264,7 +233,6 @@ export default function NuevoEvento() {
                 )
               })}
 
-              {/* ENTERPRISE */}
               <div style={{background:'#F7F7F5',padding:'2rem',position:'relative',border:'1px dashed #E0E0DC'}}>
                 <div style={{position:'absolute',top:'1rem',right:'1rem',fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',background:'#0A0A0A',color:'#FFFFFF',padding:'0.2rem 0.5rem'}}>Enterprise</div>
                 <div style={{fontSize:'1.4rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.02em',lineHeight:1.2,marginBottom:'0.25rem',marginTop:'0.5rem'}}>A medida</div>

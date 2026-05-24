@@ -164,7 +164,7 @@ export default function Home() {
         </h2>
         <p style={{fontSize:'0.9rem',fontWeight:300,lineHeight:1.9,color:'#888884',maxWidth:'540px',marginBottom:'4rem'}}>
           Sin suscripciones. Sin sorpresas. Pagas una vez y tienes tu evento activo hasta el día de la celebración.<br/>
-          <span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas. No les supone ningún esfuerzo y dentro de un presupuesto de boda, es lo de menos.</span>
+          <span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas. Ellas llegan seguras, tú disfrutas tranquila. Sin esfuerzo, sin dramas, sin coincidencias.</span>
         </p>
         <div className="pricing-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {[
