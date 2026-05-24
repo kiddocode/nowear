@@ -197,7 +197,7 @@ return () => clearInterval(interval)
     estado
   }
   
-  const emailGuardado = email.toLowerCase().trim()
+ const emailGestionRef = useRef('')
   setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
   setEmailGestion(emailGuardado)
   setModoGestion(true)
