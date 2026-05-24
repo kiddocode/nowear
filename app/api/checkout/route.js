@@ -3,19 +3,33 @@ import Stripe from 'stripe'
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const PRECIOS = {
-  basico: { amount: 900, label: 'NOWEAR Básico - 1 mes' },
+  basico:   { amount: 900,  label: 'NOWEAR Básico - 1 mes' },
   estandar: { amount: 1900, label: 'NOWEAR Estándar - 3 meses' },
-  premium: { amount: 2900, label: 'NOWEAR Premium - Sin límite' },
+  premium:  { amount: 2900, label: 'NOWEAR Premium - Sin límite' },
 }
 
 export async function POST(req) {
   try {
-    const { plan, eventoData } = await req.json()
+    const body = await req.json()
+    const { plan, eventoData, eventoId, eventoNombre, eventoSlug } = body
 
     const precio = PRECIOS[plan]
     if (!precio) {
       return Response.json({ error: 'Plan no válido' }, { status: 400 })
     }
+
+    // Compatibilidad con ambos formatos: eventoData objeto o campos sueltos
+    const nombre = eventoData?.nombre || eventoNombre || ''
+    const slug   = eventoData?.slug   || eventoSlug   || ''
+    const id     = eventoData?.id     || eventoId     || ''
+
+    const successUrl = slug
+      ? `https://www.nowear.es/evento/${slug}?pago=ok`
+      : `https://www.nowear.es/dashboard?pago=ok`
+
+    const cancelUrl = slug
+      ? `https://www.nowear.es/evento/${slug}`
+      : `https://www.nowear.es/dashboard/nuevo`
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -30,12 +44,13 @@ export async function POST(req) {
         },
       ],
       mode: 'payment',
-      success_url: `https://www.nowear.es/dashboard?pago=ok`,
-      cancel_url: `https://www.nowear.es/dashboard/nuevo`,
+      success_url: successUrl,
+      cancel_url: cancelUrl,
       metadata: {
         plan,
-        eventoNombre: eventoData?.nombre || '',
-        eventoSlug: eventoData?.slug || '',
+        eventoId: id,
+        eventoNombre: nombre,
+        eventoSlug: slug,
       },
     })
 

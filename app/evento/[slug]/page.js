@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
+import ModalPlanes from '@/app/components/ModalPlanes'
 
 const PLAN_NIVEL = { 'basico': 1, 'estandar': 2, 'premium': 3, 'enterprise': 4 }
 
@@ -41,6 +42,7 @@ export default function EventoDetalle() {
   const [editFecha, setEditFecha] = useState('')
   const [editLugar, setEditLugar] = useState('')
   const [editColores, setEditColores] = useState('')
+  const [modalPlanes, setModalPlanes] = useState(false)
 
   // Personalización Premium
   const [editFotoEvento, setEditFotoEvento] = useState('')
@@ -75,11 +77,10 @@ export default function EventoDetalle() {
       const { data: cnf } = await supabase.from('conflictos').select('*').eq('evento_id', ev.id).order('created_at', { ascending: false })
       setConflictos(cnf || [])
 
-      // Cargar co-organizadores si es Enterprise
       if (esEnterprise(ev)) {
         const { data: orgs } = await supabase
           .from('evento_organizadores')
-          .select('*, profiles(nombre, email:id)')
+          .select('*, profiles(nombre)')
           .eq('evento_id', ev.id)
         setOrganizadores(orgs || [])
       }
@@ -119,10 +120,7 @@ export default function EventoDetalle() {
     setGuardandoAjustes(true)
     setAjustesMensaje('')
     await supabase.from('eventos').update({
-      nombre: editNombre,
-      fecha: editFecha,
-      lugar: editLugar,
-      colores_bloqueados: editColores || null
+      nombre: editNombre, fecha: editFecha, lugar: editLugar, colores_bloqueados: editColores || null
     }).eq('id', evento.id)
     setEvento(prev => ({...prev, nombre: editNombre, fecha: editFecha, lugar: editLugar, colores_bloqueados: editColores}))
     setGuardandoAjustes(false)
@@ -133,9 +131,7 @@ export default function EventoDetalle() {
   async function handleGuardarPersonalizacion() {
     setGuardandoPersonalizacion(true)
     setPersonalizacionMensaje('')
-
     let foto_url = editFotoEvento
-
     if (fotoEventoFile) {
       const ext = fotoEventoFile.name.split('.').pop()
       const fileName = `evento-${evento.id}-${Date.now()}.${ext}`
@@ -145,12 +141,7 @@ export default function EventoDetalle() {
         foto_url = urlData.publicUrl
       }
     }
-
-    await supabase.from('eventos').update({
-      foto_evento_url: foto_url || null,
-      mensaje_invitada: editMensajeInvitada || null
-    }).eq('id', evento.id)
-
+    await supabase.from('eventos').update({ foto_evento_url: foto_url || null, mensaje_invitada: editMensajeInvitada || null }).eq('id', evento.id)
     setEvento(prev => ({...prev, foto_evento_url: foto_url, mensaje_invitada: editMensajeInvitada}))
     setEditFotoEvento(foto_url)
     setGuardandoPersonalizacion(false)
@@ -162,25 +153,18 @@ export default function EventoDetalle() {
     if (!emailNuevoOrg.trim()) return
     setAñadiendoOrg(true)
     setOrgMensaje('')
-
-    // Buscar perfil por email
     const { data: perfil } = await supabase.from('profiles').select('id, nombre').eq('email', emailNuevoOrg.trim().toLowerCase()).single()
-
     if (!perfil) {
       setOrgMensaje('No se encontró ningún usuario con ese email. Debe estar registrado en NOWEAR.')
       setAñadiendoOrg(false)
       return
     }
-
-    // Verificar si ya existe
     const { data: yaExiste } = await supabase.from('evento_organizadores').select('id').eq('evento_id', evento.id).eq('user_id', perfil.id).single()
-
     if (yaExiste) {
       setOrgMensaje('Ese usuario ya es organizador de este evento.')
       setAñadiendoOrg(false)
       return
     }
-
     await supabase.from('evento_organizadores').insert({ evento_id: evento.id, user_id: perfil.id })
     setOrganizadores(prev => [...prev, { user_id: perfil.id, profiles: { nombre: perfil.nombre } }])
     setEmailNuevoOrg('')
@@ -198,18 +182,21 @@ export default function EventoDetalle() {
     <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>Cargando...</div>
   )
 
-  const prereservados = looks.filter(l => l.estado === 'prereservado').length
-  const confirmados = looks.filter(l => l.estado === 'confirmado').length
   const planEvento = getPlan(evento)
   const canExport = puedeExportar(evento)
   const isPremium = esPremiumOSuperior(evento)
   const isEnterprise = esEnterprise(evento)
+  const prereservados = looks.filter(l => l.estado === 'prereservado').length
+  const confirmados = looks.filter(l => l.estado === 'confirmado').length
+
+  const PLAN_LABEL_COLORES = {
+    basico: '#888884', estandar: '#8B9DC3', premium: '#C4917C', enterprise: '#F07987'
+  }
 
   const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
   const labelStyle = {display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}
   const textareaStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box',resize:'vertical',minHeight:'100px'}
 
-  // Tabs dinámicos según plan
   const tabs = ['Looks registrados', 'Conflictos', 'Colores bloqueados', 'Ajustes']
   if (isPremium) tabs.push('Personalización')
   if (isEnterprise) tabs.push('Organizadores')
@@ -226,16 +213,20 @@ export default function EventoDetalle() {
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>
           <div>
             <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>
-              {evento.tipo} ·{' '}
-              <span style={{color: planEvento === 'premium' ? '#C4917C' : planEvento === 'enterprise' ? '#F07987' : planEvento === 'estandar' ? '#8B9DC3' : '#888884'}}>
-                Plan {evento.plan}
-              </span>
+              {evento.tipo} · <span style={{color: PLAN_LABEL_COLORES[planEvento]}}>Plan {evento.plan}</span>
             </div>
             <h1 style={{fontSize:'clamp(2rem,4vw,3.5rem)',fontWeight:700,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1.05,marginBottom:'0.5rem'}}>{evento.nombre}</h1>
             <p style={{fontSize:'0.82rem',fontWeight:300,color:'#888884'}}>
               {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
               {evento.lugar ? ` · ${evento.lugar}` : ''}
             </p>
+            {/* Botón upgrade inline en hero - solo Básico y Estándar */}
+            {!isPremium && (
+              <button onClick={() => setModalPlanes(true)}
+                style={{marginTop:'1.25rem',display:'inline-flex',alignItems:'center',gap:'0.5rem',fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.55rem 1.25rem',background:'rgba(196,145,124,0.15)',color:'#C4917C',border:'1px solid rgba(196,145,124,0.4)',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
+                {planEvento === 'basico' ? '✨ Mejorar plan' : '🎨 Activar personalización Premium'}
+              </button>
+            )}
           </div>
           <div style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'280px',borderRadius:'4px',flexShrink:0}}>
             <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>Link para invitadas</p>
@@ -291,12 +282,9 @@ export default function EventoDetalle() {
                   Exportar lista
                 </button>
               ) : (
-                <div style={{position:'relative',display:'inline-flex',alignItems:'center',gap:'0.5rem'}}>
-                  <button
-                    disabled
-                    title="Disponible desde el plan Estándar (19€)"
-                    style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.65rem 1.5rem',background:'#E0E0DC',color:'#BEBEBA',border:'none',cursor:'not-allowed',fontFamily:'Poppins,sans-serif',borderRadius:'4px',display:'flex',alignItems:'center',gap:'0.5rem'}}>
-                    <span>🔒</span> Exportar lista
+                <div style={{display:'inline-flex',alignItems:'center',gap:'0.75rem'}}>
+                  <button disabled style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.65rem 1.5rem',background:'#E0E0DC',color:'#BEBEBA',border:'none',cursor:'not-allowed',fontFamily:'Poppins,sans-serif',borderRadius:'4px',display:'flex',alignItems:'center',gap:'0.5rem'}}>
+                    🔒 Exportar lista
                   </button>
                   <span style={{fontSize:'0.6rem',fontWeight:600,color:'#888884',whiteSpace:'nowrap'}}>desde Estándar</span>
                 </div>
@@ -304,12 +292,14 @@ export default function EventoDetalle() {
             </div>
 
             {!canExport && (
-              <div style={{marginBottom:'1.5rem',padding:'0.9rem 1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',display:'flex',alignItems:'center',gap:'0.75rem'}}>
-                <span style={{fontSize:'1rem'}}>📊</span>
-                <div>
-                  <span style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A'}}>Exportar lista disponible en Plan Estándar (19€) o superior. </span>
-                  <a href="/dashboard/facturacion" style={{fontSize:'0.78rem',fontWeight:600,color:'#C4917C',textDecoration:'underline'}}>Actualizar plan</a>
+              <div style={{marginBottom:'1.5rem',padding:'0.9rem 1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'0.75rem',flexWrap:'wrap'}}>
+                <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                  <span style={{fontSize:'1rem'}}>📊</span>
+                  <span style={{fontSize:'0.78rem',fontWeight:400,color:'#0A0A0A'}}>Exportar lista disponible en Plan Estándar (19€) o superior.</span>
                 </div>
+                <button onClick={() => setModalPlanes(true)} style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.5rem 1rem',background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',whiteSpace:'nowrap'}}>
+                  Ver planes
+                </button>
               </div>
             )}
 
@@ -411,7 +401,6 @@ export default function EventoDetalle() {
           <div style={{maxWidth:'520px'}}>
             <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>Ajustes del evento</h2>
             <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>Modifica los datos de tu evento.</p>
-
             <div style={{marginBottom:'1.25rem'}}>
               <label style={labelStyle}>Nombre del evento</label>
               <input type="text" value={editNombre} onChange={e=>setEditNombre(e.target.value)} style={inputStyle}/>
@@ -430,9 +419,7 @@ export default function EventoDetalle() {
               <label style={labelStyle}>Colores bloqueados</label>
               <input type="text" value={editColores} onChange={e=>setEditColores(e.target.value)} placeholder="Ej: blanco, crudo..." style={inputStyle}/>
             </div>
-
             {ajustesMensaje && <p style={{fontSize:'0.78rem',fontWeight:400,color:'#4A6B42',marginBottom:'1rem',padding:'0.75rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px'}}>{ajustesMensaje}</p>}
-
             <button onClick={handleGuardarAjustes} disabled={guardandoAjustes} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:guardandoAjustes?0.6:1}}>
               {guardandoAjustes ? 'Guardando...' : 'Guardar cambios'}
             </button>
@@ -443,16 +430,10 @@ export default function EventoDetalle() {
         {isPremium && tabs.indexOf('Personalización') === tabActiva && (
           <div style={{maxWidth:'600px'}}>
             <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>Personalización del link</h2>
-            <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>
-              Personaliza lo que ven tus invitadas al abrir el link del evento.
-            </p>
-
-            {/* Imagen del evento */}
+            <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>Personaliza lo que ven tus invitadas al abrir el link del evento.</p>
             <div style={{marginBottom:'1.75rem'}}>
               <label style={labelStyle}>Imagen del evento <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
-              <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
-                Sustituye la foto por defecto por una imagen de tu evento. Recomendamos una foto horizontal de al menos 1200px.
-              </p>
+              <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>Sustituye la foto por defecto por una imagen de tu evento. Recomendamos una foto horizontal de al menos 1200px.</p>
               <div onClick={() => document.getElementById('foto-evento-input').click()}
                 style={{border:'1px dashed #E0E0DC',padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoEventoPreview?'transparent':'#F7F7F5',borderRadius:'8px',overflow:'hidden',marginBottom:'0.75rem'}}>
                 {fotoEventoPreview ? (
@@ -473,48 +454,25 @@ export default function EventoDetalle() {
                 </button>
               )}
             </div>
-
-            {/* Mensaje personalizado */}
             <div style={{marginBottom:'2rem'}}>
               <label style={labelStyle}>Mensaje para invitadas <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
-              <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
-                Este mensaje aparece en el formulario de registro debajo del nombre del evento.
-              </p>
-              <textarea
-                placeholder="Ej: Hola a todas, os pido que evitéis el blanco y el beige. ¡Muchas gracias!"
-                value={editMensajeInvitada}
-                onChange={e => setEditMensajeInvitada(e.target.value)}
-                style={textareaStyle}
-                maxLength={300}
-              />
+              <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>Este mensaje aparece en el formulario de registro debajo del nombre del evento.</p>
+              <textarea placeholder="Ej: Hola a todas, os pido que evitéis el blanco y el beige. ¡Muchas gracias!" value={editMensajeInvitada} onChange={e => setEditMensajeInvitada(e.target.value)} style={textareaStyle} maxLength={300}/>
               <p style={{fontSize:'0.62rem',fontWeight:300,color:'#BEBEBA',textAlign:'right',marginTop:'0.25rem'}}>{editMensajeInvitada.length}/300</p>
             </div>
-
-            {/* Preview */}
             <div style={{marginBottom:'2rem',padding:'1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px'}}>
               <p style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1rem'}}>Preview de cómo lo verán tus invitadas</p>
               <div style={{background:'#0A0A0A',borderRadius:'4px',padding:'1.5rem',position:'relative',overflow:'hidden'}}>
-                {fotoEventoPreview && (
-                  <img src={fotoEventoPreview} alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:0.4}}/>
-                )}
+                {fotoEventoPreview && <img src={fotoEventoPreview} alt="" style={{position:'absolute',inset:0,width:'100%',height:'100%',objectFit:'cover',opacity:0.4}}/>}
                 <div style={{position:'relative',zIndex:1}}>
                   <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.18em',textTransform:'uppercase',color:'rgba(255,255,255,0.5)',marginBottom:'0.5rem'}}>{evento.tipo}</div>
                   <div style={{fontSize:'1.5rem',fontWeight:700,color:'#FFFFFF',letterSpacing:'-0.02em',marginBottom:'0.25rem'}}>{evento.nombre}</div>
-                  {editMensajeInvitada && (
-                    <p style={{fontSize:'0.75rem',fontWeight:400,color:'rgba(255,255,255,0.75)',marginTop:'0.75rem',lineHeight:1.7,fontStyle:'italic'}}>
-                      "{editMensajeInvitada}"
-                    </p>
-                  )}
+                  {editMensajeInvitada && <p style={{fontSize:'0.75rem',fontWeight:400,color:'rgba(255,255,255,0.75)',marginTop:'0.75rem',lineHeight:1.7,fontStyle:'italic'}}>"{editMensajeInvitada}"</p>}
                 </div>
               </div>
             </div>
-
-            {personalizacionMensaje && (
-              <p style={{fontSize:'0.78rem',fontWeight:400,color:'#4A6B42',marginBottom:'1rem',padding:'0.75rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px'}}>{personalizacionMensaje}</p>
-            )}
-
-            <button onClick={handleGuardarPersonalizacion} disabled={guardandoPersonalizacion}
-              style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#C4917C',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:guardandoPersonalizacion?0.6:1}}>
+            {personalizacionMensaje && <p style={{fontSize:'0.78rem',fontWeight:400,color:'#4A6B42',marginBottom:'1rem',padding:'0.75rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px'}}>{personalizacionMensaje}</p>}
+            <button onClick={handleGuardarPersonalizacion} disabled={guardandoPersonalizacion} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#C4917C',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:guardandoPersonalizacion?0.6:1}}>
               {guardandoPersonalizacion ? 'Guardando...' : 'Guardar personalización'}
             </button>
           </div>
@@ -524,31 +482,18 @@ export default function EventoDetalle() {
         {isEnterprise && tabs.indexOf('Organizadores') === tabActiva && (
           <div style={{maxWidth:'560px'}}>
             <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>Co-organizadores</h2>
-            <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>
-              Añade otras personas de tu equipo para que puedan gestionar este evento.
-            </p>
-
+            <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>Añade otras personas de tu equipo para que puedan gestionar este evento.</p>
             <div style={{display:'flex',gap:'0.75rem',marginBottom:'1.5rem'}}>
-              <input
-                type="email"
-                placeholder="email@ejemplo.com"
-                value={emailNuevoOrg}
-                onChange={e => setEmailNuevoOrg(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleAñadirOrganizador()}
-                style={{...inputStyle, flex:1}}
-              />
-              <button onClick={handleAñadirOrganizador} disabled={añadiendoOrg}
-                style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:añadiendoOrg?0.6:1,borderRadius:'4px'}}>
+              <input type="email" placeholder="email@ejemplo.com" value={emailNuevoOrg} onChange={e => setEmailNuevoOrg(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAñadirOrganizador()} style={{...inputStyle, flex:1}}/>
+              <button onClick={handleAñadirOrganizador} disabled={añadiendoOrg} style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:añadiendoOrg?0.6:1,borderRadius:'4px'}}>
                 {añadiendoOrg ? 'Añadiendo...' : 'Añadir'}
               </button>
             </div>
-
             {orgMensaje && (
               <p style={{fontSize:'0.78rem',fontWeight:400,color: orgMensaje.includes('añadido') ? '#4A6B42' : '#F07987',marginBottom:'1rem',padding:'0.75rem',background: orgMensaje.includes('añadido') ? '#EEF4E8' : '#FFF0F1',border:`1px solid ${orgMensaje.includes('añadido') ? '#C8DFC0' : '#F07987'}`,borderRadius:'4px'}}>
                 {orgMensaje}
               </p>
             )}
-
             {organizadores.length === 0 ? (
               <div style={{padding:'2rem',background:'#F7F7F5',border:'1px dashed #E0E0DC',borderRadius:'8px',textAlign:'center',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>
                 Aún no hay co-organizadores. Añade a alguien por su email.
@@ -557,12 +502,8 @@ export default function EventoDetalle() {
               <div style={{display:'flex',flexDirection:'column',gap:'0.75rem'}}>
                 {organizadores.map((org, i) => (
                   <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'1rem 1.25rem',border:'1px solid #E0E0DC',borderRadius:'8px',background:'#FFFFFF'}}>
-                    <div>
-                      <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{org.profiles?.nombre || 'Sin nombre'}</div>
-                      <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884'}}>{org.profiles?.email || ''}</div>
-                    </div>
-                    <button onClick={() => handleEliminarOrganizador(org.user_id)}
-                      style={{fontSize:'0.65rem',fontWeight:600,color:'#F07987',background:'none',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.35rem 0.75rem',borderRadius:'4px'}}>
+                    <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{org.profiles?.nombre || 'Sin nombre'}</div>
+                    <button onClick={() => handleEliminarOrganizador(org.user_id)} style={{fontSize:'0.65rem',fontWeight:600,color:'#F07987',background:'none',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.35rem 0.75rem',borderRadius:'4px'}}>
                       Eliminar
                     </button>
                   </div>
@@ -571,8 +512,16 @@ export default function EventoDetalle() {
             )}
           </div>
         )}
-
       </div>
+
+      {/* MODAL PLANES */}
+      {modalPlanes && (
+        <ModalPlanes
+          onClose={() => setModalPlanes(false)}
+          planActual={evento.plan}
+          evento={evento}
+        />
+      )}
     </div>
   )
 }

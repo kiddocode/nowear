@@ -1,100 +1,162 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { supabase } from '@/lib/supabase'
-import Sidebar from '../../components/Sidebar'
-import ModalPlanes from '../../components/ModalPlanes'
+import { useState } from 'react'
 
-export default function Facturacion() {
-  const router = useRouter()
-  const [user, setUser] = useState(null)
-  const [eventos, setEventos] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [modalPlanes, setModalPlanes] = useState(false)
-  const [eventoSeleccionado, setEventoSeleccionado] = useState(null)
+const PLANES = [
+  {
+    key: 'basico',
+    nombre: 'Básico',
+    precio: '9€',
+    descripcion: '1 mes antes del evento',
+    features: [
+      'Hasta 50 invitadas',
+      'Link único del evento',
+      'Detección de conflictos',
+      'Emails automáticos',
+    ],
+    color: '#888884',
+    bg: '#F0F0EE',
+  },
+  {
+    key: 'estandar',
+    nombre: 'Estándar',
+    precio: '19€',
+    descripcion: '3 meses antes del evento',
+    features: [
+      'Hasta 150 invitadas',
+      'Link único del evento',
+      'Detección de conflictos',
+      'Emails automáticos',
+      'Exportar lista CSV',
+    ],
+    color: '#8B9DC3',
+    bg: '#EEF2F8',
+  },
+  {
+    key: 'premium',
+    nombre: 'Premium',
+    precio: '29€',
+    descripcion: 'Sin límite de tiempo',
+    features: [
+      'Invitadas ilimitadas',
+      'Link único del evento',
+      'Detección de conflictos',
+      'Emails automáticos',
+      'Exportar lista CSV',
+      'Foto personalizada del evento',
+      'Mensaje para invitadas',
+    ],
+    color: '#C4917C',
+    bg: '#F5EDE8',
+    destacado: true,
+  },
+]
 
-  useEffect(() => {
-    async function cargar() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
-      setUser(user)
-      const { data: evs } = await supabase.from('eventos').select('*').eq('organizadora_id', user.id).order('created_at', { ascending: false })
-      setEventos(evs || [])
-      setLoading(false)
+export default function ModalPlanes({ onClose, planActual, evento }) {
+  const [cargando, setCargando] = useState(null)
+
+  async function handlePago(planKey) {
+    setCargando(planKey)
+    try {
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          plan: planKey,
+          eventoData: evento ? {
+            id: evento.id,
+            nombre: evento.nombre,
+            slug: evento.slug,
+          } : null,
+        })
+      })
+      const data = await res.json()
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        setCargando(null)
+        alert('Error al iniciar el pago. Inténtalo de nuevo.')
+      }
+    } catch (e) {
+      setCargando(null)
+      alert('Error al conectar con el servidor de pagos.')
     }
-    cargar()
-  }, [])
-
-  const PRECIOS = { basico: 9, estandar: 19, premium: 29 }
-
-  if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>Cargando...</div>
+  }
 
   return (
-    <div style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
-      <Sidebar activo="/dashboard/facturacion" />
-      <main style={{padding:'3rem',maxWidth:'760px'}}>
-        <div style={{marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC',display:'flex',justifyContent:'space-between',alignItems:'flex-end'}}>
+    <div
+      style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.7)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1rem'}}
+      onClick={e => e.target === e.currentTarget && onClose()}
+    >
+      <div style={{background:'#FFFFFF',borderRadius:'16px',width:'100%',maxWidth:'800px',maxHeight:'90vh',overflowY:'auto',padding:'2.5rem',position:'relative'}}>
+
+        <button onClick={onClose}
+          style={{position:'absolute',top:'1.25rem',right:'1.25rem',background:'none',border:'none',cursor:'pointer',fontSize:'1.4rem',color:'#888884',fontFamily:'Poppins,sans-serif',lineHeight:1,padding:'0.25rem'}}>
+          ×
+        </button>
+
+        <h2 style={{fontSize:'1.6rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.025em',marginBottom:'0.35rem'}}>Elige tu plan</h2>
+        <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>Pago único por evento, sin suscripciones.</p>
+
+        <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1.25rem',marginBottom:'1.5rem'}}>
+          {PLANES.map(plan => {
+            const esActual = planActual && planActual.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(plan.key)
+            const esCargando = cargando === plan.key
+
+            return (
+              <div key={plan.key} style={{border: plan.destacado ? `2px solid ${plan.color}` : '1px solid #E0E0DC',borderRadius:'12px',padding:'1.75rem',position:'relative',background: plan.destacado ? plan.bg : '#FFFFFF'}}>
+                {plan.destacado && (
+                  <div style={{position:'absolute',top:'-12px',left:'50%',transform:'translateX(-50%)',background:plan.color,color:'#FFFFFF',fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',padding:'0.25rem 0.75rem',borderRadius:'20px',whiteSpace:'nowrap'}}>
+                    Más popular
+                  </div>
+                )}
+
+                <div style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:plan.color,marginBottom:'0.5rem'}}>{plan.nombre}</div>
+                <div style={{fontSize:'2.2rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.03em',lineHeight:1,marginBottom:'0.25rem'}}>{plan.precio}</div>
+                <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>{plan.descripcion}</div>
+
+                <div style={{display:'flex',flexDirection:'column',gap:'0.5rem',marginBottom:'1.75rem'}}>
+                  {plan.features.map((f,i) => (
+                    <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',fontSize:'0.75rem',fontWeight:300,color:'#0A0A0A'}}>
+                      <span style={{color:plan.color,fontWeight:700,flexShrink:0,marginTop:'1px'}}>✓</span>
+                      <span>{f}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {esActual ? (
+                  <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:600,textAlign:'center',background:'#F0F0EE',color:'#888884',borderRadius:'6px',boxSizing:'border-box'}}>
+                    Plan actual
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => handlePago(plan.key)}
+                    disabled={!!cargando}
+                    style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',background: plan.destacado ? plan.color : '#0A0A0A',color:'#FFFFFF',border:'none',cursor:cargando?'not-allowed':'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:cargando?0.7:1,boxSizing:'border-box',transition:'opacity 0.15s'}}>
+                    {esCargando ? 'Redirigiendo...' : `Elegir ${plan.nombre}`}
+                  </button>
+                )}
+              </div>
+            )
+          })}
+        </div>
+
+        {/* Enterprise */}
+        <div style={{padding:'1.25rem 1.5rem',border:'1px solid #E0E0DC',borderRadius:'12px',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem',flexWrap:'wrap',background:'#FAFAFA'}}>
           <div>
-            <h1 style={{fontSize:'2.2rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Facturación</h1>
-            <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>Historial de pagos de tus eventos</p>
+            <div style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#F07987',marginBottom:'0.25rem'}}>Enterprise</div>
+            <div style={{fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>Múltiples eventos, varios organizadores, soporte dedicado.</div>
+            <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884'}}>Precio a medida según necesidades.</div>
           </div>
-          <button onClick={() => { setEventoSeleccionado(null); setModalPlanes(true) }}
-            style={{fontSize:'0.72rem',fontWeight:600,padding:'0.75rem 1.5rem',background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
-            Ver planes
-          </button>
+          <a href="mailto:support@nowear.es?subject=Plan Enterprise NOWEAR"
+            style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.7rem 1.5rem',background:'#F07987',color:'#FFFFFF',textDecoration:'none',borderRadius:'6px',whiteSpace:'nowrap'}}>
+            Contactar
+          </a>
         </div>
 
-        {eventos.length === 0 ? (
-          <div style={{textAlign:'center',padding:'4rem',border:'1px dashed #E0E0DC',color:'#888884',fontSize:'0.75rem',borderRadius:'8px'}}>
-            Todavía no has creado ningún evento.
-          </div>
-        ) : (
-          <div style={{border:'1px solid #E0E0DC',borderRadius:'8px',overflow:'hidden'}}>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr 120px',padding:'0.75rem 1.5rem',borderBottom:'1px solid #E0E0DC',background:'#F7F7F5'}}>
-              {['Evento','Plan','Importe','Fecha',''].map((h,i) => (
-                <div key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552'}}>{h}</div>
-              ))}
-            </div>
-            {eventos.map((ev,i) => (
-              <div key={i} style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr 120px',padding:'1rem 1.5rem',borderBottom:i<eventos.length-1?'1px solid #E0E0DC':'none',alignItems:'center',background:i%2===0?'#FFFFFF':'#FAFAFA'}}>
-                <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{ev.nombre}</div>
-                <div style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',textTransform:'capitalize'}}>{ev.plan}</div>
-                <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{PRECIOS[ev.plan] ? `${PRECIOS[ev.plan]}€` : 'N/A'}</div>
-                <div style={{fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>
-                  {ev.created_at ? new Date(ev.created_at).toLocaleDateString('es-ES',{day:'numeric',month:'short',year:'numeric'}) : 'N/A'}
-                </div>
-                <div>
-                  {ev.plan !== 'premium' && ev.plan !== 'enterprise' && (
-                    <button onClick={() => { setEventoSeleccionado(ev); setModalPlanes(true) }}
-                      style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',padding:'0.4rem 0.75rem',background:'transparent',color:'#C4917C',border:'1px solid #C4917C',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',whiteSpace:'nowrap'}}>
-                      Mejorar
-                    </button>
-                  )}
-                </div>
-              </div>
-            ))}
-            <div style={{padding:'1rem 1.5rem',borderTop:'1px solid #E0E0DC',display:'flex',justifyContent:'flex-end',background:'#F7F7F5'}}>
-              <div style={{fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>
-                Total: {eventos.reduce((acc,ev) => acc + (PRECIOS[ev.plan] || 0), 0)}€
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div style={{marginTop:'2rem',padding:'1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px'}}>
-          <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',lineHeight:1.7}}>
-            ¿Necesitas una factura? Escríbenos a <a href="mailto:support@nowear.es" style={{color:'#F07987',textDecoration:'none'}}>support@nowear.es</a> con el nombre de tu evento y te la enviamos en menos de 24 horas.
-          </p>
-        </div>
-      </main>
-
-      {modalPlanes && (
-        <ModalPlanes
-          onClose={() => { setModalPlanes(false); setEventoSeleccionado(null) }}
-          planActual={eventoSeleccionado?.plan}
-          eventoId={eventoSeleccionado?.id}
-        />
-      )}
+        <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',textAlign:'center',marginTop:'1.5rem'}}>
+          Pago seguro con Stripe. El plan se activa en cuanto se confirma el pago.
+        </p>
+      </div>
     </div>
   )
 }
