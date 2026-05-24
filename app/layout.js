@@ -25,7 +25,8 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>NOWEAR — No two looks alike</title>
         <meta name="description" content="La plataforma para que ninguna invitada llegue vestida igual." />
-        <link rel="icon" href="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_transparent.png" type="image/png"/>
+        <link rel="icon" href="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/favicon.png" type="image/png"/>
+        <link rel="apple-touch-icon" href="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/favicon.png"/>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet" />
       </head>
