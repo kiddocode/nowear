@@ -228,8 +228,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name} style={{height:'48px',maxWidth:'130px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}/>
-                    <span style={{fontSize:'0.75rem',fontWeight:300,color:'#3A3A38',letterSpacing:'0.02em'}}>{brand.name}</span>
+                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name} style={{height:'64px',maxWidth:'140px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}/>
                   </>
                 )}
               </a>
