@@ -42,7 +42,6 @@ export default function InvitadaPage() {
   const [error, setError] = useState('')
   const [enviando, setEnviando] = useState(false)
 
-  // Modo gestión looks existentes
   const [modoGestion, setModoGestion] = useState(false)
   const [emailGestion, setEmailGestion] = useState('')
   const [buscandoLooks, setBuscandoLooks] = useState(false)
@@ -56,7 +55,6 @@ export default function InvitadaPage() {
   const [estado, setEstado] = useState('confirmado')
   const [foto, setFoto] = useState(null)
   const [fotoPreview, setFotoPreview] = useState(null)
-
   const [marca1, setMarca1] = useState('')
   const [modelo1, setModelo1] = useState('')
   const [tipo1, setTipo1] = useState('')
@@ -154,7 +152,6 @@ export default function InvitadaPage() {
     }
     setEnviando(true)
 
-    // Comprobar conflicto con otros looks (excluyendo el look actual)
     const { data: looksConflicto } = await supabase
       .from('looks').select('nombre_invitada, id')
       .eq('evento_id', evento.id)
@@ -165,6 +162,15 @@ export default function InvitadaPage() {
 
     if (looksConflicto && looksConflicto.length > 0) {
       setEnviando(false)
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id,
+        nombre_invitada: nombre,
+        email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1,
+        color_hex: colores[0],
+        nombre_conflicto_con: looksConflicto[0].nombre_invitada
+      })
+      await enviarEmail('conflicto_invitada')
       setError(`Este look ya está registrado por ${looksConflicto[0].nombre_invitada}. Por favor elige otro.`)
       return
     }
@@ -177,6 +183,7 @@ export default function InvitadaPage() {
       estado
     }).eq('id', lookEditando.id)
 
+    await enviarEmail('confirmacion')
     setEnviando(false)
     setLookEditando(null)
     setEnviado(true)
@@ -310,7 +317,6 @@ export default function InvitadaPage() {
   return (
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
 
-      {/* LADO IZQUIERDO */}
       <div style={{position:'sticky',top:'68px',height:'calc(100vh - 68px)',overflow:'hidden'}}>
         <img src={FOTO_FIJA} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -332,10 +338,7 @@ export default function InvitadaPage() {
         </div>
       </div>
 
-      {/* FORMULARIO */}
       <div style={{padding:'3rem',background:'#FFFFFF',overflowY:'auto'}}>
-
-        {/* MODO GESTIÓN */}
         {modoGestion ? (
           <div>
             <button onClick={() => { setModoGestion(false); setLooksExistentes(null); setEmailGestion('') }}
@@ -344,17 +347,14 @@ export default function InvitadaPage() {
             </button>
             <h2 style={{fontSize:'1.8rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>Mis looks</h2>
             <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552',marginBottom:'2rem'}}>Introduce tu email para ver y gestionar tus looks registrados.</p>
-
             <div style={{display:'flex',gap:'0.75rem',marginBottom:'1.5rem'}}>
               <input type="email" placeholder="tu@email.com" value={emailGestion} onChange={e => setEmailGestion(e.target.value)}
-                style={{...inputStyle,flex:1}}
-                onKeyDown={e => e.key === 'Enter' && buscarLooks()}/>
+                style={{...inputStyle,flex:1}} onKeyDown={e => e.key === 'Enter' && buscarLooks()}/>
               <button onClick={buscarLooks} disabled={buscandoLooks}
                 style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:buscandoLooks?0.6:1}}>
                 {buscandoLooks ? 'Buscando...' : 'Buscar'}
               </button>
             </div>
-
             {looksExistentes !== null && (
               looksExistentes.length === 0 ? (
                 <div style={{padding:'2rem',background:'#F7F7F5',border:'1px solid #E0E0DC',textAlign:'center',fontSize:'0.82rem',color:'#888884'}}>
@@ -366,8 +366,8 @@ export default function InvitadaPage() {
                     <div key={i} style={{padding:'1.25rem',border:'1px solid #E0E0DC',background:'#FFFFFF',borderRadius:'8px'}}>
                       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'0.75rem'}}>
                         <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
-                          <span style={{width:'18px',height:'18px',borderRadius:'50%',background:look.color_hex,border:'1px solid rgba(0,0,0,0.08)',display:'inline-block',boxShadow:'0 1px 3px rgba(0,0,0,0.1)'}}></span>
-                          {look.color_hex_2 && <span style={{width:'18px',height:'18px',borderRadius:'50%',background:look.color_hex_2,border:'1px solid rgba(0,0,0,0.08)',display:'inline-block',boxShadow:'0 1px 3px rgba(0,0,0,0.1)'}}></span>}
+                          <span style={{width:'18px',height:'18px',borderRadius:'50%',background:look.color_hex,border:'1px solid rgba(0,0,0,0.08)',display:'inline-block'}}></span>
+                          {look.color_hex_2 && <span style={{width:'18px',height:'18px',borderRadius:'50%',background:look.color_hex_2,border:'1px solid rgba(0,0,0,0.08)',display:'inline-block'}}></span>}
                           <span style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{look.marca} · {look.modelo}</span>
                         </div>
                         <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.2rem 0.6rem',borderRadius:'20px',background:look.estado==='confirmado'?'#0A0A0A':'#F5EDE8',color:look.estado==='confirmado'?'#FFFFFF':'#C4917C'}}>
