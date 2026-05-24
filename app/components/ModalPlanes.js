@@ -110,6 +110,10 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
                   <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:600,textAlign:'center',background:'rgba(255,255,255,0.1)',color: plan.destacado ? 'rgba(255,255,255,0.5)' : '#888884',borderRadius:'6px',boxSizing:'border-box',border:'1px solid #E0E0DC'}}>
                     Plan actual
                   </div>
+                ) : !evento ? (
+                  <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:500,textAlign:'center',background:'#F5EDE8',color:'#C4917C',borderRadius:'6px',boxSizing:'border-box',lineHeight:1.5}}>
+                    Entra al evento y mejora desde ahí
+                  </div>
                 ) : (
                   <button
                     onClick={() => handlePago(plan.key)}

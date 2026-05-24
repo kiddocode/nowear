@@ -236,7 +236,7 @@ export default function Dashboard() {
         <ModalPlanes
           onClose={() => { setModalPlanes(false); setEventoSeleccionado(null) }}
           planActual={eventoSeleccionado?.plan}
-          eventoId={eventoSeleccionado?.id}
+          evento={eventoSeleccionado}
         />
       )}
     </div>
