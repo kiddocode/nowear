@@ -79,7 +79,7 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-grid" style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
-      <Sidebar />
+      <Sidebar activo="/dashboard" />
 
       <main style={{padding:'3rem'}}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
