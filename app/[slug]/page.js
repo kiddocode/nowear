@@ -80,7 +80,7 @@ export default function InvitadaPage() {
       setColores([...colores, hex])
     }
   }
-  
+
   async function enviarEmail(tipo, extras = {}) {
     try {
     await fetch('/api/email', {
@@ -103,7 +103,6 @@ export default function InvitadaPage() {
   } catch (e) {
     console.error('Error enviando email:', e)
   }
-}
   }
 
   async function handleEnviar() {
