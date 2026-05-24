@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export default function Sidebar({ activo }) {
@@ -45,11 +45,6 @@ export default function Sidebar({ activo }) {
 
   return (
     <aside style={{borderRight:'1px solid #E0E0DC',padding:'2rem 0',display:'flex',flexDirection:'column',background:'#FFFFFF',position:'sticky',top:'68px',height:'calc(100vh - 68px)'}}>
-      <style>{`
-        .sidebar-link { transition: background 0.15s, color 0.15s; }
-        .sidebar-link:hover { background: #F7F7F5 !important; color: #0A0A0A !important; }
-        .sidebar-link:hover span { opacity: 1 !important; background: #F07987 !important; }
-      `}</style>
 
       {/* PRINCIPAL */}
       <div style={{marginBottom:'1.5rem'}}>
@@ -57,7 +52,10 @@ export default function Sidebar({ activo }) {
         {links.filter(l=>l.grupo==='principal').map((link,i) => {
           const isActive = activo === link.href
           return (
-            <a key={i} href={link.href} className="sidebar-link" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:isActive?700:400,color:isActive?'#0A0A0A':'#888884',textDecoration:'none',background:isActive?'#F0F0EE':'transparent',borderLeft:isActive?'2px solid #0A0A0A':'2px solid transparent'}}>
+            <a key={i} href={link.href}
+              style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:isActive?700:400,color:isActive?'#0A0A0A':'#888884',textDecoration:'none',background:isActive?'#F0F0EE':'transparent',borderLeft:isActive?'2px solid #0A0A0A':'2px solid transparent',transition:'all 0.15s'}}
+              onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background='#F7F7F5'; e.currentTarget.style.color='#0A0A0A'; e.currentTarget.style.borderLeft='2px solid #E0E0DC' }}}
+              onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#888884'; e.currentTarget.style.borderLeft='2px solid transparent' }}}>
               <span style={{width:'6px',height:'6px',borderRadius:'50%',background:isActive?'#0A0A0A':'#BEBEBA',flexShrink:0,opacity:isActive?1:0.5}}></span>
               {link.label}
             </a>
@@ -71,13 +69,19 @@ export default function Sidebar({ activo }) {
         {links.filter(l=>l.grupo==='cuenta').map((link,i) => {
           const isActive = activo === link.href
           return (
-            <a key={i} href={link.href} className="sidebar-link" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:isActive?700:400,color:isActive?'#0A0A0A':'#888884',textDecoration:'none',background:isActive?'#F0F0EE':'transparent',borderLeft:isActive?'2px solid #0A0A0A':'2px solid transparent'}}>
+            <a key={i} href={link.href}
+              style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:isActive?700:400,color:isActive?'#0A0A0A':'#888884',textDecoration:'none',background:isActive?'#F0F0EE':'transparent',borderLeft:isActive?'2px solid #0A0A0A':'2px solid transparent',transition:'all 0.15s'}}
+              onMouseEnter={e => { if (!isActive) { e.currentTarget.style.background='#F7F7F5'; e.currentTarget.style.color='#0A0A0A'; e.currentTarget.style.borderLeft='2px solid #E0E0DC' }}}
+              onMouseLeave={e => { if (!isActive) { e.currentTarget.style.background='transparent'; e.currentTarget.style.color='#888884'; e.currentTarget.style.borderLeft='2px solid transparent' }}}>
               <span style={{width:'6px',height:'6px',borderRadius:'50%',background:isActive?'#0A0A0A':'#BEBEBA',flexShrink:0,opacity:isActive?1:0.5}}></span>
               {link.label}
             </a>
           )
         })}
-        <button onClick={handleLogout} className="sidebar-link" style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:400,color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',width:'100%',textAlign:'left',borderLeft:'2px solid transparent'}}>
+        <button onClick={handleLogout}
+          style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:400,color:'#888884',background:'none',border:'none',borderLeft:'2px solid transparent',cursor:'pointer',fontFamily:'Poppins,sans-serif',width:'100%',textAlign:'left',transition:'all 0.15s'}}
+          onMouseEnter={e => { e.currentTarget.style.background='#F7F7F5'; e.currentTarget.style.color='#0A0A0A'; e.currentTarget.style.borderLeft='2px solid #E0E0DC' }}
+          onMouseLeave={e => { e.currentTarget.style.background='none'; e.currentTarget.style.color='#888884'; e.currentTarget.style.borderLeft='2px solid transparent' }}>
           <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#BEBEBA',flexShrink:0,opacity:0.5}}></span>
           Cerrar sesión
         </button>
