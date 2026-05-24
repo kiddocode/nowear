@@ -220,7 +220,7 @@ export default function Home() {
           {marcas.map((brand,i)=>{
             const isSuggest = brand.url === '/#contacto'
             return (
-              <a key={i} href={brand.url} target={brand.url.startsWith('http')?'_blank':'_self'} rel="noopener noreferrer" className="marca-card" style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.5rem',minHeight:'110px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
+              <a key={i} href={brand.url} target={brand.url.startsWith('http')?'_blank':'_self'} rel="noopener noreferrer" className="marca-card" style={{background:'#FFFFFF',padding:'1.5rem 1rem',display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:'0.5rem',minHeight:'130px',textAlign:'center',textDecoration:'none',transition:'background 0.15s'}}>
                 {isSuggest ? (
                   <>
                     <span style={{width:'36px',height:'36px',borderRadius:'50%',background:'#F07987',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'1.2rem',color:'#FFFFFF',fontWeight:300}}>+</span>
@@ -228,7 +228,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name} style={{height:'64px',maxWidth:'140px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}/>
+                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name}style={{height:'80px',maxWidth:'160px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75}}/>
                   </>
                 )}
               </a>
