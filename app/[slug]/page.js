@@ -187,7 +187,11 @@ return () => clearInterval(interval)
 
    await enviarEmail('confirmacion')
 
-  const emailGuardado = email.toLowerCase().trim()
+    const emailGuardado = email.toLowerCase().trim()
+  
+  // Pequeña pausa para que Supabase procese el update
+  await new Promise(resolve => setTimeout(resolve, 500))
+  
   const { data: looksActualizados } = await supabase
     .from('looks').select('*')
     .eq('evento_id', evento.id)
@@ -199,7 +203,7 @@ return () => clearInterval(interval)
   setLookEditando(null)
   resetForm()
   setModoGestion(true)
-}
+   }
 
   async function handleEnviar() {
     setError('')
