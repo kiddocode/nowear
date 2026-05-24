@@ -65,7 +65,7 @@ export default function InvitadaPage() {
   const [referencia2, setReferencia2] = useState('')
 
   useEffect(() => {
-  async function cargar() {
+    async function cargar() {
       const { data: ev } = await supabase.from('eventos').select('*').eq('slug', slug).single()
       if (!ev) { setLoading(false); return }
       setEvento(ev)
@@ -75,7 +75,7 @@ export default function InvitadaPage() {
     }
     cargar()
     const interval = setInterval(cargar, 30000)
-return () => clearInterval(interval)
+    return () => clearInterval(interval)
   }, [slug])
 
   function toggleColor(hex) {
@@ -87,15 +87,26 @@ return () => clearInterval(interval)
     }
   }
 
-  async function enviarEmail(tipo, extras = {}) {
+  function resetForm() {
+    setNombre('')
+    setColores([])
+    setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1('')
+    setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
+    setEstado('confirmado')
+    setFoto(null); setFotoPreview(null)
+    setLookEditando(null)
+    setError('')
+  }
+
+  async function enviarEmailAsync(tipo, emailInv, nombreInv) {
     try {
-      await fetch('/api/email', {
+      fetch('/api/email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tipo,
-          emailInvitada: email.toLowerCase().trim(),
-          nombreInvitada: nombre,
+          emailInvitada: emailInv,
+          nombreInvitada: nombreInv,
           nombreEvento: evento.nombre,
           nombreOrganizadora: organizadora?.nombre || 'la organizadora',
           marca: marca1,
@@ -103,7 +114,6 @@ return () => clearInterval(interval)
           color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
           organizadoraId: evento.organizadora_id,
           eventoId: evento.slug,
-          ...extras
         })
       })
     } catch (e) {
@@ -146,68 +156,65 @@ return () => clearInterval(interval)
     setModoGestion(false)
   }
 
- async function handleActualizarLook() {
-  setError('')
-  if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
-    setError('Por favor, rellena todos los campos obligatorios marcados con *')
-    return
-  }
-  setEnviando(true)
+  async function handleActualizarLook() {
+    setError('')
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
+      setError('Por favor, rellena todos los campos obligatorios marcados con *')
+      return
+    }
+    setEnviando(true)
 
-  const { data: looksConflicto } = await supabase
-    .from('looks').select('nombre_invitada, id')
-    .eq('evento_id', evento.id)
-    .eq('color_hex', colores[0])
-    .ilike('marca', marca1.trim())
-    .ilike('modelo', modelo1.trim())
-    .neq('id', lookEditando.id)
+    const { data: looksConflicto } = await supabase
+      .from('looks').select('nombre_invitada, id')
+      .eq('evento_id', evento.id)
+      .eq('color_hex', colores[0])
+      .ilike('marca', marca1.trim())
+      .ilike('modelo', modelo1.trim())
+      .neq('id', lookEditando.id)
 
-  if (looksConflicto && looksConflicto.length > 0) {
-    setEnviando(false)
-    await supabase.from('conflictos').insert({
-      evento_id: evento.id,
+    if (looksConflicto && looksConflicto.length > 0) {
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id,
+        nombre_invitada: nombre,
+        email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1,
+        color_hex: colores[0],
+        nombre_conflicto_con: looksConflicto[0].nombre_invitada
+      })
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      setEnviando(false)
+      setError(`Este look ya está registrado por ${looksConflicto[0].nombre_invitada}. Por favor elige otro.`)
+      return
+    }
+
+    await supabase.from('looks').update({
       nombre_invitada: nombre,
-      email_invitada: email.toLowerCase().trim(),
-      marca: marca1, modelo: modelo1,
-      color_hex: colores[0],
-      nombre_conflicto_con: looksConflicto[0].nombre_invitada
-    })
-    await enviarEmail('conflicto_invitada')
-    setError(`Este look ya está registrado por ${looksConflicto[0].nombre_invitada}. Por favor elige otro.`)
-    return
+      color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
+      estado
+    }).eq('id', lookEditando.id)
+
+    const emailGuardado = email.toLowerCase().trim()
+    const nombreGuardado = nombre
+
+    const lookActualizado = {
+      ...lookEditando,
+      nombre_invitada: nombre,
+      color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
+      estado
+    }
+
+    setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
+    setEmailGestion(emailGuardado)
+    setEnviando(false)
+    resetForm()
+    setModoGestion(true)
+
+    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
-
-  await supabase.from('looks').update({
-    nombre_invitada: nombre,
-    color_hex: colores[0], color_hex_2: colores[1] || null,
-    marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
-    estado
-  }).eq('id', lookEditando.id)
-
- await enviarEmail('confirmacion')
-
-  const lookActualizado = {
-    ...lookEditando,
-    nombre_invitada: nombre,
-    color_hex: colores[0],
-    color_hex_2: colores[1] || null,
-    marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
-    estado
-  }
-  
- const emailGestionRef = useRef('')
-  setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
-  setEmailGestion(emailGuardado)
-  setModoGestion(true)
-  setLookEditando(null)
-  setNombre(''); setEmail(''); setColores([]); setMarca1(''); setModelo1('');
-  setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2('');
-  setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null);
-  setError('')
-  setEnviando(false)
-}
 
   async function handleEnviar() {
     setError('')
@@ -256,7 +263,7 @@ return () => clearInterval(interval)
         color_hex: colores[0],
         nombre_conflicto_con: conflicto.nombre_invitada
       })
-      await enviarEmail('conflicto_invitada')
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
       setError(`Este look (${marca1}, ${modelo1}, ${COLORES.find(c=>c.hex===colores[0])?.nombre}) ya está registrado por ${conflicto.nombre_invitada}. Por favor elige otro look.`)
       return
     }
@@ -290,16 +297,11 @@ return () => clearInterval(interval)
       return
     }
 
-    await enviarEmail('confirmacion')
+    const emailGuardado = email.toLowerCase().trim()
+    const nombreGuardado = nombre
     setEnviando(false)
     setEnviado(true)
-  }
-
-  function resetForm() {
-    setNombre(''); setEmail(''); setColores([]); setMarca1(''); setModelo1('');
-    setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2('');
-    setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null);
-    setLookEditando(null); setError('')
+    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
 
   if (loading) return (
@@ -311,18 +313,10 @@ return () => clearInterval(interval)
 
   if (enviado) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center'}}>
-      <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>
-        {lookEditando ? '¡Look actualizado!' : '¡Look registrado!'}
-      </div>
+      <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>¡Look registrado!</div>
       <p style={{fontSize:'0.9rem',fontWeight:300,color:'#888884',marginBottom:'2rem',maxWidth:'400px',lineHeight:1.7}}>
-        Tu look ha sido {lookEditando ? 'actualizado' : 'registrado'} para <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>.
-        {!lookEditando && <> Te hemos enviado un email de confirmación a <strong style={{fontWeight:600,color:'#0A0A0A'}}>{email}</strong>.</>}
+        Tu look ha sido registrado para <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>. Te hemos enviado un email de confirmación.
       </p>
-      <div style={{display:'flex',gap:'0.5rem',marginBottom:'2rem'}}>
-        {colores.map((c,i) => (
-          <div key={i} style={{width:'32px',height:'32px',borderRadius:'50%',background:c,border:'1px solid #E0E0DC'}}></div>
-        ))}
-      </div>
       <button onClick={() => { setEnviado(false); resetForm() }}
         style={{fontSize:'0.78rem',fontWeight:500,padding:'0.75rem 2rem',background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
         Registrar otro look
@@ -444,7 +438,7 @@ return () => clearInterval(interval)
 
             <div style={{marginBottom:'1.25rem'}}>
               <label style={labelStyle}>Tu email <span style={{color:'#F07987'}}>*</span></label>
-              <input type="email" placeholder="Ej: maria@gmail.com" value={email} onChange={e => setEmail(e.target.value)} style={{...inputStyle, background: lookEditando ? '#F7F7F5' : '#FFFFFF'}} disabled={!!lookEditando}/>
+              <input type="email" placeholder="Ej: maria@gmail.com" value={email} onChange={e => setEmail(e.target.value)} style={{...inputStyle,background:lookEditando?'#F7F7F5':'#FFFFFF'}} disabled={!!lookEditando}/>
               {!lookEditando && <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem'}}>Solo para enviarte la confirmación. No lo verán otras invitadas.</p>}
             </div>
 
