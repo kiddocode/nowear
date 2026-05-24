@@ -185,25 +185,25 @@ return () => clearInterval(interval)
     estado
   }).eq('id', lookEditando.id)
 
-   await enviarEmail('confirmacion')
+ await enviarEmail('confirmacion')
 
-    const emailGuardado = email.toLowerCase().trim()
-  
-  // Pequeña pausa para que Supabase procese el update
-  await new Promise(resolve => setTimeout(resolve, 500))
-  
-  const { data: looksActualizados } = await supabase
-    .from('looks').select('*')
-    .eq('evento_id', evento.id)
-    .eq('email_invitada', emailGuardado)
-
-  setLooksExistentes(looksActualizados || [])
-  setEmailGestion(emailGuardado)
+  // Actualizar estado local directamente sin re-fetch
+  const lookActualizado = {
+    ...lookEditando,
+    nombre_invitada: nombre,
+    color_hex: colores[0],
+    color_hex_2: colores[1] || null,
+    marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
+    estado
+  }
+  setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
+  setEmailGestion(email.toLowerCase().trim())
   setEnviando(false)
   setLookEditando(null)
   resetForm()
   setModoGestion(true)
-   }
+}
 
   async function handleEnviar() {
     setError('')
