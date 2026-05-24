@@ -150,6 +150,19 @@ export default function InvitadaPage() {
       setError('Por favor, rellena todos los campos obligatorios marcados con *')
       return
     }
+    
+    // Refrescar lista de looks en modo gestión
+const { data: looksActualizados } = await supabase
+  .from('looks').select('*')
+  .eq('evento_id', evento.id)
+  .eq('email_invitada', email.toLowerCase().trim())
+setLooksExistentes(looksActualizados || [])
+setModoGestion(true)
+setLookEditando(null)
+setEnviando(false)
+// No ponemos setEnviado(true) para volver directo al modo gestión
+return
+
     setEnviando(true)
 
     const { data: looksConflicto } = await supabase
