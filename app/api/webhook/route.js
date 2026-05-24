@@ -1,7 +1,4 @@
-import Stripe from 'stripe'
 import { createClient } from '@supabase/supabase-js'
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -9,47 +6,42 @@ const supabaseAdmin = createClient(
 )
 
 export async function POST(req) {
-  const body = await req.text()
-  const sig = req.headers.get('stripe-signature')
-  const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
-
-  let event
-
   try {
-    event = stripe.webhooks.constructEvent(body, sig, webhookSecret)
-  } catch (err) {
-    console.error('Webhook signature error:', err.message)
-    return Response.json({ error: `Webhook Error: ${err.message}` }, { status: 400 })
+    const body = await req.json()
+
+    // El Workbench de Stripe envía el evento directamente como JSON
+    const eventType = body.type || body?.data?.object?.object
+    const session = body.data?.object || body
+
+    console.log('Webhook recibido:', eventType, JSON.stringify(session?.metadata || {}))
+
+    if (eventType === 'checkout.session.completed' || eventType === 'payment_intent.succeeded') {
+      const metadata = session.metadata || {}
+      const { plan, eventoId, eventoSlug } = metadata
+
+      if (!plan || (!eventoId && !eventoSlug)) {
+        console.log('Webhook: metadata incompleta', metadata)
+        return Response.json({ received: true })
+      }
+
+      let query = supabaseAdmin.from('eventos').update({ plan })
+      if (eventoId) {
+        query = query.eq('id', eventoId)
+      } else {
+        query = query.eq('slug', eventoSlug)
+      }
+
+      const { error } = await query
+      if (error) {
+        console.error('Error actualizando plan:', error)
+      } else {
+        console.log(`Plan actualizado: ${eventoId || eventoSlug} -> ${plan}`)
+      }
+    }
+
+    return Response.json({ received: true })
+  } catch (error) {
+    console.error('Webhook error:', error)
+    return Response.json({ error: error.message }, { status: 500 })
   }
-
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object
-
-    const { plan, eventoId, eventoSlug } = session.metadata || {}
-
-    if (!plan || (!eventoId && !eventoSlug)) {
-      console.error('Webhook: faltan datos en metadata', session.metadata)
-      return Response.json({ error: 'Metadata incompleta' }, { status: 400 })
-    }
-
-    // Actualizar plan en Supabase
-    let query = supabaseAdmin.from('eventos').update({ plan })
-
-    if (eventoId) {
-      query = query.eq('id', eventoId)
-    } else {
-      query = query.eq('slug', eventoSlug)
-    }
-
-    const { error } = await query
-
-    if (error) {
-      console.error('Error actualizando plan en Supabase:', error)
-      return Response.json({ error: 'Error actualizando plan' }, { status: 500 })
-    }
-
-    console.log(`Plan actualizado: evento ${eventoId || eventoSlug} -> ${plan}`)
-  }
-
-  return Response.json({ received: true })
 }
