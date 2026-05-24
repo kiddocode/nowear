@@ -29,7 +29,7 @@ export async function POST(req) {
 
     const cancelUrl = slug
       ? `https://www.nowear.es/evento/${slug}`
-      : `https://www.nowear.es/dashboard/nuevo`
+      : `https://www.nowear.es/dashboard/`
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
