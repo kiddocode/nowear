@@ -65,7 +65,7 @@ export default function InvitadaPage() {
   const [referencia2, setReferencia2] = useState('')
 
   useEffect(() => {
-    async function cargar() {
+  async function cargar() {
       const { data: ev } = await supabase.from('eventos').select('*').eq('slug', slug).single()
       if (!ev) { setLoading(false); return }
       setEvento(ev)
@@ -74,6 +74,8 @@ export default function InvitadaPage() {
       setLoading(false)
     }
     cargar()
+    const interval = setInterval(cargar, 30000)
+return () => clearInterval(interval)
   }, [slug])
 
   function toggleColor(hex) {
@@ -144,63 +146,60 @@ export default function InvitadaPage() {
     setModoGestion(false)
   }
 
-  async function handleActualizarLook() {
-    setError('')
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
-      setError('Por favor, rellena todos los campos obligatorios marcados con *')
-      return
-    }
-    
-    // Refrescar lista de looks en modo gestión
-const { data: looksActualizados } = await supabase
-  .from('looks').select('*')
-  .eq('evento_id', evento.id)
-  .eq('email_invitada', email.toLowerCase().trim())
-setLooksExistentes(looksActualizados || [])
-setModoGestion(true)
-setLookEditando(null)
-setEnviando(false)
-// No ponemos setEnviado(true) para volver directo al modo gestión
-return
-
-    setEnviando(true)
-
-    const { data: looksConflicto } = await supabase
-      .from('looks').select('nombre_invitada, id')
-      .eq('evento_id', evento.id)
-      .eq('color_hex', colores[0])
-      .ilike('marca', marca1.trim())
-      .ilike('modelo', modelo1.trim())
-      .neq('id', lookEditando.id)
-
-    if (looksConflicto && looksConflicto.length > 0) {
-      setEnviando(false)
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id,
-        nombre_invitada: nombre,
-        email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1,
-        color_hex: colores[0],
-        nombre_conflicto_con: looksConflicto[0].nombre_invitada
-      })
-      await enviarEmail('conflicto_invitada')
-      setError(`Este look ya está registrado por ${looksConflicto[0].nombre_invitada}. Por favor elige otro.`)
-      return
-    }
-
-    await supabase.from('looks').update({
-      nombre_invitada: nombre,
-      color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
-      estado
-    }).eq('id', lookEditando.id)
-
-    await enviarEmail('confirmacion')
-    setEnviando(false)
-    setLookEditando(null)
-    setEnviado(true)
+ async function handleActualizarLook() {
+  setError('')
+  if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
+    setError('Por favor, rellena todos los campos obligatorios marcados con *')
+    return
   }
+  setEnviando(true)
+
+  const { data: looksConflicto } = await supabase
+    .from('looks').select('nombre_invitada, id')
+    .eq('evento_id', evento.id)
+    .eq('color_hex', colores[0])
+    .ilike('marca', marca1.trim())
+    .ilike('modelo', modelo1.trim())
+    .neq('id', lookEditando.id)
+
+  if (looksConflicto && looksConflicto.length > 0) {
+    setEnviando(false)
+    await supabase.from('conflictos').insert({
+      evento_id: evento.id,
+      nombre_invitada: nombre,
+      email_invitada: email.toLowerCase().trim(),
+      marca: marca1, modelo: modelo1,
+      color_hex: colores[0],
+      nombre_conflicto_con: looksConflicto[0].nombre_invitada
+    })
+    await enviarEmail('conflicto_invitada')
+    setError(`Este look ya está registrado por ${looksConflicto[0].nombre_invitada}. Por favor elige otro.`)
+    return
+  }
+
+  await supabase.from('looks').update({
+    nombre_invitada: nombre,
+    color_hex: colores[0], color_hex_2: colores[1] || null,
+    marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
+    estado
+  }).eq('id', lookEditando.id)
+
+   await enviarEmail('confirmacion')
+
+  const emailGuardado = email.toLowerCase().trim()
+  const { data: looksActualizados } = await supabase
+    .from('looks').select('*')
+    .eq('evento_id', evento.id)
+    .eq('email_invitada', emailGuardado)
+
+  setLooksExistentes(looksActualizados || [])
+  setEmailGestion(emailGuardado)
+  setEnviando(false)
+  setLookEditando(null)
+  resetForm()
+  setModoGestion(true)
+}
 
   async function handleEnviar() {
     setError('')
