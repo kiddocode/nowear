@@ -187,7 +187,6 @@ return () => clearInterval(interval)
 
  await enviarEmail('confirmacion')
 
-  // Actualizar estado local directamente sin re-fetch
   const lookActualizado = {
     ...lookEditando,
     nombre_invitada: nombre,
@@ -197,12 +196,17 @@ return () => clearInterval(interval)
     marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
     estado
   }
+  
+  const emailGuardado = email.toLowerCase().trim()
   setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
-  setEmailGestion(email.toLowerCase().trim())
-  setEnviando(false)
-  setLookEditando(null)
-  resetForm()
+  setEmailGestion(emailGuardado)
   setModoGestion(true)
+  setLookEditando(null)
+  setNombre(''); setEmail(''); setColores([]); setMarca1(''); setModelo1('');
+  setTipo1(''); setReferencia1(''); setMarca2(''); setModelo2(''); setTipo2('');
+  setReferencia2(''); setEstado('confirmado'); setFoto(null); setFotoPreview(null);
+  setError('')
+  setEnviando(false)
 }
 
   async function handleEnviar() {
