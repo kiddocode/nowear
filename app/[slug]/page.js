@@ -80,27 +80,30 @@ export default function InvitadaPage() {
       setColores([...colores, hex])
     }
   }
-
+  
   async function enviarEmail(tipo, extras = {}) {
     try {
-      await fetch('/api/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          tipo,
-          emailInvitada: email.toLowerCase().trim(),
-          nombreInvitada: nombre,
-          nombreEvento: evento.nombre,
-          nombreOrganizadora: organizadora?.nombre || 'la organizadora',
-          marca: marca1,
-          modelo: modelo1,
-          color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
-          ...extras
-        })
+    await fetch('/api/email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        tipo,
+        emailInvitada: email.toLowerCase().trim(),
+        nombreInvitada: nombre,
+        nombreEvento: evento.nombre,
+        nombreOrganizadora: organizadora?.nombre || 'la organizadora',
+        marca: marca1,
+        modelo: modelo1,
+        color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
+        organizadoraId: evento.organizadora_id,
+        eventoId: evento.slug,
+        ...extras
       })
-    } catch (e) {
-      console.error('Error enviando email:', e)
-    }
+    })
+  } catch (e) {
+    console.error('Error enviando email:', e)
+  }
+}
   }
 
   async function handleEnviar() {
