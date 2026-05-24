@@ -36,6 +36,7 @@ const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/pu
 export default function InvitadaPage() {
   const { slug } = useParams()
   const [evento, setEvento] = useState(null)
+  const [organizadora, setOrganizadora] = useState(null)
   const [loading, setLoading] = useState(true)
   const [enviado, setEnviado] = useState(false)
   const [error, setError] = useState('')
@@ -59,8 +60,13 @@ export default function InvitadaPage() {
 
   useEffect(() => {
     async function cargar() {
-      const { data } = await supabase.from('eventos').select('*').eq('slug', slug).single()
-      setEvento(data || null)
+      const { data: ev } = await supabase.from('eventos').select('*').eq('slug', slug).single()
+      if (!ev) { setLoading(false); return }
+      setEvento(ev)
+      // Cargar datos de la organizadora
+      const { data: prof } = await supabase.from('profiles').select('nombre, id').eq('id', ev.organizadora_id).single()
+      const { data: authUser } = await supabase.from('profiles').select('*').eq('id', ev.organizadora_id).single()
+      setOrganizadora(prof)
       setLoading(false)
     }
     cargar()
@@ -72,6 +78,28 @@ export default function InvitadaPage() {
     } else {
       if (colores.length >= 2) return
       setColores([...colores, hex])
+    }
+  }
+
+  async function enviarEmail(tipo, extras = {}) {
+    try {
+      await fetch('/api/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo,
+          emailInvitada: email.toLowerCase().trim(),
+          nombreInvitada: nombre,
+          nombreEvento: evento.nombre,
+          nombreOrganizadora: organizadora?.nombre || 'la organizadora',
+          marca: marca1,
+          modelo: modelo1,
+          color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
+          ...extras
+        })
+      })
+    } catch (e) {
+      console.error('Error enviando email:', e)
     }
   }
 
@@ -91,8 +119,7 @@ export default function InvitadaPage() {
 
     // Comprobar límites por email
     const { data: looksExistentes } = await supabase
-      .from('looks')
-      .select('estado')
+      .from('looks').select('estado')
       .eq('evento_id', evento.id)
       .eq('email_invitada', email.toLowerCase().trim())
 
@@ -109,10 +136,9 @@ export default function InvitadaPage() {
       }
     }
 
-    // Comprobar conflicto de look (color + marca + modelo)
+    // Comprobar conflicto (color + marca + modelo)
     const { data: looksConflicto } = await supabase
-      .from('looks')
-      .select('nombre_invitada, estado')
+      .from('looks').select('nombre_invitada, estado')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
       .ilike('marca', marca1.trim())
@@ -120,20 +146,20 @@ export default function InvitadaPage() {
 
     if (looksConflicto && looksConflicto.length > 0) {
       const conflicto = looksConflicto[0]
-      // Guardar conflicto en la tabla
       await supabase.from('conflictos').insert({
         evento_id: evento.id,
         nombre_invitada: nombre,
         email_invitada: email.toLowerCase().trim(),
-        marca: marca1,
-        modelo: modelo1,
+        marca: marca1, modelo: modelo1,
         color_hex: colores[0],
         nombre_conflicto_con: conflicto.nombre_invitada
       })
+      // Email conflicto a invitada
+      await enviarEmail('conflicto_invitada')
       setError(`Este look (${marca1}, ${modelo1}, ${COLORES.find(c=>c.hex===colores[0])?.nombre}) ya está registrado por ${conflicto.nombre_invitada}. Por favor elige otro look.`)
       return
     }
-    
+
     setEnviando(true)
 
     let foto_url = null
@@ -151,15 +177,22 @@ export default function InvitadaPage() {
       evento_id: evento.id,
       nombre_invitada: nombre,
       email_invitada: email.toLowerCase().trim(),
-      color_hex: colores[0],
-      color_hex_2: colores[1] || null,
+      color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
       estado, foto_url
     })
 
+    if (insertError) {
+      setEnviando(false)
+      setError('Error al registrar el look. Inténtalo de nuevo.')
+      return
+    }
+
+    // Email confirmación a invitada
+    await enviarEmail('confirmacion')
+
     setEnviando(false)
-    if (insertError) { setError('Error al registrar el look. Inténtalo de nuevo.'); return }
     setEnviado(true)
   }
 
