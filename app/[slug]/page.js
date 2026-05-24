@@ -33,6 +33,19 @@ const COLORES = [
 
 const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
 
+function getPlan(evento) {
+  if (!evento) return 'basico'
+  const p = (evento.plan || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (p.includes('enterprise')) return 'enterprise'
+  if (p.includes('premium')) return 'premium'
+  if (p.includes('estandar') || p.includes('estándar') || p.includes('standard')) return 'estandar'
+  return 'basico'
+}
+
+function esPremiumOSuperior(evento) {
+  return ['premium','enterprise'].includes(getPlan(evento))
+}
+
 export default function InvitadaPage() {
   const { slug } = useParams()
   const [evento, setEvento] = useState(null)
@@ -328,20 +341,26 @@ export default function InvitadaPage() {
   const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.88rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
   const labelStyle = {display:'block',fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',marginBottom:'0.55rem'}
 
+  // Panel izquierdo: Premium usa foto y mensaje propios, el resto foto fija
+  const isPremium = esPremiumOSuperior(evento)
+  const fotoPanel = isPremium && evento.foto_evento_url ? evento.foto_evento_url : FOTO_FIJA
+  const mensajePanel = isPremium && evento.mensaje_invitada ? evento.mensaje_invitada : 'Registra tu look para que ninguna invitada llegue vestida igual.'
+
   return (
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
 
+      {/* PANEL IZQUIERDO */}
       <div style={{position:'sticky',top:'68px',height:'calc(100vh - 68px)',overflow:'hidden'}}>
-        <img src={FOTO_FIJA} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
+        <img src={fotoPanel} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
           <div style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.18em',textTransform:'uppercase',color:'rgba(255,255,255,0.6)',marginBottom:'0.75rem'}}>{evento.tipo}</div>
           <h1 style={{fontSize:'2.8rem',fontWeight:700,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.5rem'}}>{evento.nombre}</h1>
-          <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.75)',marginBottom:'2rem'}}>
+          <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.75)',marginBottom:'1.5rem'}}>
             {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
             {evento.lugar ? ` · ${evento.lugar}` : ''}
           </p>
           <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.8)',lineHeight:1.8,maxWidth:'380px'}}>
-            Registra tu look para que ninguna invitada llegue vestida igual.
+            {mensajePanel}
           </p>
           {evento.colores_bloqueados && (
             <div style={{marginTop:'1.5rem',padding:'1rem 1.25rem',background:'rgba(196,145,124,0.2)',border:'1px solid rgba(196,145,124,0.4)'}}>
@@ -352,6 +371,7 @@ export default function InvitadaPage() {
         </div>
       </div>
 
+      {/* PANEL DERECHO: FORMULARIO */}
       <div style={{padding:'3rem',background:'#FFFFFF',overflowY:'auto'}}>
         {modoGestion ? (
           <div>
@@ -457,7 +477,7 @@ export default function InvitadaPage() {
                     <div key={i} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.4rem 0.75rem',border:'1px solid #E0E0DC',background:'#F7F7F5'}}>
                       <div style={{width:'14px',height:'14px',borderRadius:'50%',background:hex,border:'1px solid #E0E0DC',flexShrink:0}}></div>
                       <span style={{fontSize:'0.78rem',fontWeight:400,color:'#0A0A0A'}}>{COLORES.find(c=>c.hex===hex)?.nombre}</span>
-                      <button onClick={() => toggleColor(hex)} style={{background:'none',border:'none',cursor:'pointer',color:'#888884',fontSize:'0.75rem',padding:'0',lineHeight:1,marginLeft:'0.25rem'}}>✕</button>
+                      <button onClick={() => toggleColor(hex)} style={{background:'none',border:'none',cursor:'pointer',color:'#888884',fontSize:'0.75rem',padding:'0',lineHeight:1,marginLeft:'0.25rem'}}>×</button>
                     </div>
                   ))}
                 </div>
