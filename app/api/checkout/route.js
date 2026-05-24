@@ -11,17 +11,30 @@ const PRECIOS = {
 export async function POST(req) {
   try {
     const body = await req.json()
-    const { plan, eventoData, eventoId, eventoNombre, eventoSlug } = body
+    const { plan, planActual, eventoData, eventoId, eventoNombre, eventoSlug } = body
 
     const precio = PRECIOS[plan]
     if (!precio) {
       return Response.json({ error: 'Plan no válido' }, { status: 400 })
     }
 
-    // Compatibilidad con ambos formatos: eventoData objeto o campos sueltos
     const nombre = eventoData?.nombre || eventoNombre || ''
     const slug   = eventoData?.slug   || eventoSlug   || ''
     const id     = eventoData?.id     || eventoId     || ''
+
+    // Calcular diferencia si ya tiene un plan
+    const precioActual = planActual ? (PRECIOS[planActual]?.amount || 0) : 0
+    const diferencia = Math.max(precio.amount - precioActual, 0)
+
+    // Si ya tiene ese plan o uno superior, no cobrar
+    if (diferencia === 0) {
+      return Response.json({ error: 'Ya tienes este plan o uno superior.' }, { status: 400 })
+    }
+
+    const esMejora = precioActual > 0
+    const labelPago = esMejora
+      ? `${precio.label} (mejora desde ${PRECIOS[planActual]?.label || planActual})`
+      : precio.label
 
     const successUrl = slug
       ? `https://www.nowear.es/evento/${slug}?pago=ok`
@@ -29,7 +42,7 @@ export async function POST(req) {
 
     const cancelUrl = slug
       ? `https://www.nowear.es/evento/${slug}`
-      : `https://www.nowear.es/dashboard/`
+      : `https://www.nowear.es/dashboard`
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -37,8 +50,8 @@ export async function POST(req) {
         {
           price_data: {
             currency: 'eur',
-            product_data: { name: precio.label },
-            unit_amount: precio.amount,
+            product_data: { name: labelPago },
+            unit_amount: diferencia,
           },
           quantity: 1,
         },
@@ -46,8 +59,14 @@ export async function POST(req) {
       mode: 'payment',
       success_url: successUrl,
       cancel_url: cancelUrl,
+      custom_text: {
+        submit: {
+          message: 'Al completar el pago confirmas que el servicio se activa de inmediato y renuncias al derecho de desistimiento. No se realizan reembolsos una vez activado el plan.'
+        }
+      },
       metadata: {
         plan,
+        planAnterior: planActual || '',
         eventoId: id,
         eventoNombre: nombre,
         eventoSlug: slug,

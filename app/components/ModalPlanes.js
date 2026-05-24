@@ -5,40 +5,58 @@ const PLANES = [
   {
     key: 'basico',
     nombre: 'Básico',
-    precio: '9€',
+    precio: 9,
     descripcion: '1 mes antes',
     desc: 'El registro abre 1 mes antes del evento. Ideal para planificación corta.',
     features: ['Link único para invitadas', 'Detección de coincidencias', 'Prerreserva de looks', 'Colores bloqueados'],
     color: '#888884',
-    bg: '#FFFFFF',
   },
   {
     key: 'estandar',
     nombre: 'Estándar',
-    precio: '19€',
+    precio: 19,
     descripcion: '3 meses antes',
     desc: 'El registro abre 3 meses antes del evento. Tiempo suficiente para todas.',
     features: ['Todo lo del plan Básico', 'Exportar lista de looks', 'Soporte prioritario por email'],
     color: '#8B9DC3',
-    bg: '#EEF2F8',
     destacado: true,
   },
   {
     key: 'premium',
     nombre: 'Premium',
-    precio: '29€',
+    precio: 29,
     descripcion: 'Sin límite de tiempo',
     desc: 'El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.',
     features: ['Todo lo anterior', 'Acceso anticipado a nuevas funciones', 'Link de invitada personalizado'],
     color: '#C4917C',
-    bg: '#F5EDE8',
   },
 ]
+
+function getPlanNivel(planKey) {
+  if (!planKey) return 0
+  const p = planKey.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (p.includes('premium')) return 3
+  if (p.includes('estandar') || p.includes('standard')) return 2
+  if (p.includes('basico')) return 1
+  return 0
+}
+
+function getPlanPrecio(planKey) {
+  if (!planKey) return 0
+  const p = planKey.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (p.includes('premium')) return 29
+  if (p.includes('estandar') || p.includes('standard')) return 19
+  if (p.includes('basico')) return 9
+  return 0
+}
 
 export default function ModalPlanes({ onClose, planActual, evento }) {
   const [cargando, setCargando] = useState(null)
 
-  async function handlePago(planKey) {
+  const nivelActual = getPlanNivel(planActual)
+  const precioActual = getPlanPrecio(planActual)
+
+  async function handlePago(planKey, precioDiferencia) {
     setCargando(planKey)
     try {
       const res = await fetch('/api/checkout', {
@@ -46,6 +64,7 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           plan: planKey,
+          planActual: planActual || null,
           eventoData: evento ? { id: evento.id, nombre: evento.nombre, slug: evento.slug } : null,
         })
       })
@@ -54,7 +73,7 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
         window.location.href = data.url
       } else {
         setCargando(null)
-        alert('Error al iniciar el pago. Inténtalo de nuevo.')
+        alert(data.error || 'Error al iniciar el pago. Inténtalo de nuevo.')
       }
     } catch (e) {
       setCargando(null)
@@ -79,11 +98,15 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
 
         <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:'1.25rem',marginBottom:'1.5rem'}}>
           {PLANES.map(plan => {
-            const esActual = planActual && planActual.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').includes(plan.key)
+            const nivelPlan = getPlanNivel(plan.key)
+            const esActual = nivelPlan === nivelActual && !!planActual
+            const esInferior = nivelPlan < nivelActual
             const esCargando = cargando === plan.key
+            const diferencia = Math.max(plan.precio - precioActual, 0)
+            const esMejora = precioActual > 0 && nivelPlan > nivelActual
 
             return (
-              <div key={plan.key} style={{border: plan.destacado ? '2px solid #F07987' : '1px solid #E0E0DC',borderRadius:'12px',padding:'1.75rem',position:'relative',background: plan.destacado ? '#0A0A0A' : '#FFFFFF'}}>
+              <div key={plan.key} style={{border: plan.destacado ? '2px solid #F07987' : '1px solid #E0E0DC',borderRadius:'12px',padding:'1.75rem',position:'relative',background: plan.destacado ? '#0A0A0A' : '#FFFFFF',opacity: esInferior ? 0.5 : 1}}>
                 {plan.destacado && (
                   <div style={{position:'absolute',top:'-12px',left:'50%',transform:'translateX(-50%)',background:'#F07987',color:'#FFFFFF',fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',padding:'0.25rem 0.75rem',borderRadius:'20px',whiteSpace:'nowrap'}}>
                     Más popular
@@ -92,7 +115,24 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
 
                 <div style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color: plan.destacado ? 'rgba(255,255,255,0.5)' : plan.color,marginBottom:'0.25rem'}}>{plan.nombre}</div>
                 <div style={{fontSize:'0.62rem',fontWeight:300,color: plan.destacado ? 'rgba(255,255,255,0.4)' : '#888884',marginBottom:'0.75rem',textTransform:'uppercase',letterSpacing:'0.08em'}}>{plan.descripcion}</div>
-                <div style={{fontSize:'2.2rem',fontWeight:700,color: plan.destacado ? '#FFFFFF' : '#0A0A0A',letterSpacing:'-0.03em',lineHeight:1,marginBottom:'0.75rem'}}>{plan.precio}</div>
+
+                {/* Precio: muestra diferencia si es mejora */}
+                <div style={{marginBottom:'0.25rem'}}>
+                  <span style={{fontSize:'2.2rem',fontWeight:700,color: plan.destacado ? '#FFFFFF' : '#0A0A0A',letterSpacing:'-0.03em',lineHeight:1}}>
+                    {esMejora ? `${diferencia}€` : `${plan.precio}€`}
+                  </span>
+                  {esMejora && (
+                    <span style={{fontSize:'0.72rem',fontWeight:300,color: plan.destacado ? 'rgba(255,255,255,0.5)' : '#888884',marginLeft:'0.5rem'}}>
+                      (diferencia)
+                    </span>
+                  )}
+                </div>
+                {esMejora && (
+                  <div style={{fontSize:'0.65rem',fontWeight:300,color: plan.destacado ? 'rgba(255,255,255,0.4)' : '#BEBEBA',marginBottom:'0.5rem',textDecoration:'line-through'}}>
+                    Precio completo: {plan.precio}€
+                  </div>
+                )}
+
                 <div style={{fontSize:'0.72rem',fontWeight:300,color: plan.destacado ? 'rgba(255,255,255,0.65)' : '#888884',marginBottom:'1.25rem',lineHeight:1.6}}>{plan.desc}</div>
 
                 <div style={{width:'100%',height:'1px',background: plan.destacado ? 'rgba(255,255,255,0.1)' : '#E0E0DC',marginBottom:'1.25rem'}}></div>
@@ -107,8 +147,12 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
                 </div>
 
                 {esActual ? (
-                  <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:600,textAlign:'center',background:'rgba(255,255,255,0.1)',color: plan.destacado ? 'rgba(255,255,255,0.5)' : '#888884',borderRadius:'6px',boxSizing:'border-box',border:'1px solid #E0E0DC'}}>
+                  <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:600,textAlign:'center',background: plan.destacado ? 'rgba(255,255,255,0.1)' : '#F0F0EE',color: plan.destacado ? 'rgba(255,255,255,0.5)' : '#888884',borderRadius:'6px',boxSizing:'border-box',border:'1px solid #E0E0DC'}}>
                     Plan actual
+                  </div>
+                ) : esInferior ? (
+                  <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:500,textAlign:'center',background:'#F0F0EE',color:'#BEBEBA',borderRadius:'6px',boxSizing:'border-box'}}>
+                    No disponible
                   </div>
                 ) : !evento ? (
                   <div style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:500,textAlign:'center',background:'#F5EDE8',color:'#C4917C',borderRadius:'6px',boxSizing:'border-box',lineHeight:1.5}}>
@@ -116,10 +160,10 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
                   </div>
                 ) : (
                   <button
-                    onClick={() => handlePago(plan.key)}
+                    onClick={() => handlePago(plan.key, diferencia)}
                     disabled={!!cargando}
                     style={{width:'100%',padding:'0.8rem',fontSize:'0.72rem',fontWeight:700,letterSpacing:'0.08em',textTransform:'uppercase',background: plan.destacado ? '#F07987' : '#0A0A0A',color:'#FFFFFF',border:'none',cursor:cargando?'not-allowed':'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:cargando?0.7:1,boxSizing:'border-box',transition:'opacity 0.15s'}}>
-                    {esCargando ? 'Redirigiendo...' : `Elegir ${plan.nombre}`}
+                    {esCargando ? 'Redirigiendo...' : esMejora ? `Mejorar por ${diferencia}€` : `Elegir ${plan.nombre}`}
                   </button>
                 )}
               </div>
@@ -128,7 +172,7 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
         </div>
 
         {/* Enterprise */}
-        <div style={{padding:'1.25rem 1.5rem',border:'2px dashed #C4C4C0',borderRadius:'12px',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem',flexWrap:'wrap',background:'#F7F7F5'}}>
+        <div style={{padding:'1.25rem 1.5rem',border:'2px dashed #C4C4C0',borderRadius:'12px',display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem',flexWrap:'wrap',background:'#F7F7F5',marginBottom:'1.5rem'}}>
           <div>
             <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',background:'#0A0A0A',color:'#FFFFFF',padding:'0.22rem 0.65rem',display:'inline-block',marginBottom:'0.5rem'}}>Enterprise</div>
             <div style={{fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A',marginBottom:'0.25rem'}}>Solución personalizada para empresas y eventos recurrentes.</div>
@@ -146,9 +190,13 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
           </a>
         </div>
 
-        <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',textAlign:'center',marginTop:'1.5rem'}}>
-          Pago seguro con Stripe. El plan se activa en cuanto se confirma el pago.
-        </p>
+        {/* Aviso legal */}
+        <div style={{padding:'1rem 1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px'}}>
+          <p style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.7,margin:0}}>
+            Pago seguro con Stripe. Al completar el pago, el plan se activa de inmediato y aceptas que <strong style={{fontWeight:600,color:'#555552'}}>no se realizan reembolsos</strong> una vez activado el servicio. No es posible hacer downgrade a un plan inferior. Puedes mejorar a un plan superior pagando únicamente la diferencia. Consulta nuestros <a href="/terminos" style={{color:'#C4917C',textDecoration:'underline'}}>términos y condiciones</a>.
+          </p>
+        </div>
+
       </div>
     </div>
   )

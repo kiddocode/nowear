@@ -41,7 +41,8 @@ export default function RootLayout({ children }) {
           <div className="nav-center" style={{display:'flex',gap:'0.25rem',alignItems:'center'}}>
             {[
               {label:'Cómo funciona', href:'/#como'},
-              {label:'Marcas', href:'/#marcas'},
+              {label:'Paquetes', href:'/#precios'},
+              {label:'Inspiración', href:'/#marcas'},
               {label:'FAQ', href:'/#faq'},
               {label:'Contacto', href:'/#contacto'},
             ].map((item,i) => (
@@ -127,7 +128,8 @@ export default function RootLayout({ children }) {
           <div style={{position:'fixed',top:'68px',left:0,right:0,background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:999,padding:'1.5rem'}}>
             {[
               {label:'Cómo funciona', href:'/#como'},
-              {label:'Marcas', href:'/#marcas'},
+              {label:'Paquetes', href:'/#precios'},
+              {label:'Inspiración', href:'/#marcas'},
               {label:'FAQ', href:'/#faq'},
               {label:'Contacto', href:'/#contacto'},
             ].map((item,i) => (

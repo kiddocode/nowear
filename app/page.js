@@ -155,7 +155,7 @@ export default function Home() {
       </section>
 
       {/* PRICING */}
-      <section className="section-pad" style={{padding:'7rem 3rem',background:'#F7F7F5'}}>
+      <section id="precios" className="section-pad" style={{padding:'7rem 3rem',background:'#F7F7F5'}}>
         <span style={{display:'flex',alignItems:'center',gap:'0.6rem',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#F07987',marginBottom:'1.75rem'}}>
           <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>Planes
         </span>
@@ -199,9 +199,13 @@ export default function Home() {
             </div>
           ))}
         </div>
+        {/* DISCLAIMER PRECIOS */}
+        <p style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.7,marginTop:'1.5rem',maxWidth:'640px'}}>
+          Pago único por evento, sin suscripciones. No se realizan reembolsos una vez activado el plan. No es posible hacer downgrade a un plan inferior. Puedes mejorar a un plan superior pagando únicamente la diferencia. Consulta nuestros <a href="/terminos" style={{color:'#C4917C',textDecoration:'underline'}}>términos y condiciones</a>.
+        </p>
       </section>
 
-      {/* MARCAS */}
+      {/* INSPIRACIÓN / MARCAS */}
       <section id="marcas" className="section-pad" style={{padding:'7rem 3rem'}}>
         <span style={{display:'flex',alignItems:'center',gap:'0.6rem',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#F07987',marginBottom:'1.75rem'}}>
           <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>Inspiración
@@ -308,8 +312,9 @@ export default function Home() {
           {[
             {title:'Producto',links:[
               {label:'Cómo funciona',href:'/#como'},
+              {label:'Paquetes',href:'/#precios'},
+              {label:'Inspiración',href:'/#marcas'},
               {label:'Preguntas frecuentes',href:'/#faq'},
-              {label:'Marcas',href:'/#marcas'},
               {label:'Crear evento',href:'/register'},
             ]},
             {title:'Soporte',links:[
@@ -320,6 +325,7 @@ export default function Home() {
             ]},
             {title:'Idioma',links:[
               {label:'🇪🇸 Español',href:'#'},
+              {label:'🇫🇷 Français',href:'#'},
               {label:'🇬🇧 English',href:'#'},
               {label:'🇵🇹 Português',href:'#'},
               {label:'🇩🇪 Deutsch',href:'#'},
