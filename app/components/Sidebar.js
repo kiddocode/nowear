@@ -23,7 +23,7 @@ export default function Sidebar({ activo }) {
 
   async function handleLogout() {
     await supabase.auth.signOut()
-    router.push('/')
+    router.push(prefijo + '/')
   }
 
   function getNombre() {
@@ -38,11 +38,11 @@ export default function Sidebar({ activo }) {
   }
 
   const links = [
-    { label: t('misEventos'), href: '/dashboard', grupo: 'principal' },
-    { label: t('nuevoEvento'), href: '/dashboard/nuevo', grupo: 'principal' },
-    { label: t('perfil'), href: '/dashboard/perfil', grupo: 'cuenta' },
-    { label: t('facturacion'), href: '/dashboard/facturacion', grupo: 'cuenta' },
-    { label: t('ayuda'), href: '/dashboard/ayuda', grupo: 'cuenta' },
+    { label: t('misEventos'), href: prefijo + '/dashboard', grupo: 'principal' },
+    { label: t('nuevoEvento'), href: prefijo + '/dashboard/nuevo', grupo: 'principal' },
+    { label: t('perfil'), href: prefijo + '/dashboard/perfil', grupo: 'cuenta' },
+    { label: t('facturacion'), href: prefijo + '/dashboard/facturacion', grupo: 'cuenta' },
+    { label: t('ayuda'), href: prefijo + '/dashboard/ayuda', grupo: 'cuenta' },
   ]
 
   return (
