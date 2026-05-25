@@ -32,7 +32,7 @@ export default function NavbarWrapper({ locale }) {
   }
   if (!pathSinLocale) pathSinLocale = '/'
   const nuevaRuta = code === 'es' ? pathSinLocale : `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
-  window.location.href = nuevaRuta
+  window.location.replace(nuevaRuta)
 }
 
   const prefijo = locale && locale !== 'es' ? `/${locale}` : ''
