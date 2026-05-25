@@ -31,7 +31,7 @@ export default function NavbarWrapper({ locale }) {
     if (pathname.startsWith(`/${loc}/`)) { pathSinLocale = pathname.slice(loc.length + 1); break }
   }
   if (!pathSinLocale) pathSinLocale = '/'
-  console.log('pathname:', pathname, 'code:', code, 'nuevaRuta:', nuevaRuta)
+  console.log('pathname:', pathname, 'code:', code, 'nuevaRuta:', nuevaRuta)dame
   window.location.replace(nuevaRuta)
 }
 
@@ -74,8 +74,8 @@ export default function NavbarWrapper({ locale }) {
         <div className="nav-actions" style={{display:'flex',gap:'0.5rem',alignItems:'center',flexShrink:0}}>
           <div style={{position:'relative'}}>
             <button
-              onClick={() => setIdiomaOpen(!idiomaOpen)}
-              onBlur={() => setTimeout(() => setIdiomaOpen(false), 150)}
+              onMouseDown={() => cambiarIdioma(idioma.code)}
+              onBlur={() => setTimeout(() => setIdiomaOpen(false), 300)}
               style={{display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.75rem',fontWeight:600,color:'#0A0A0A',background:'none',border:'1px solid #E0E0DC',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.45rem 0.75rem'}}>
               <span style={{fontSize:'1rem'}}>{idiomaActual.flag}</span>
               <span style={{letterSpacing:'0.05em'}}>{idiomaActual.code.toUpperCase()}</span>
@@ -87,7 +87,7 @@ export default function NavbarWrapper({ locale }) {
               <div style={{position:'absolute',top:'calc(100% + 6px)',right:0,background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'8px',minWidth:'150px',boxShadow:'0 4px 16px rgba(0,0,0,0.08)',overflow:'hidden',zIndex:10}}>
                 {IDIOMAS.map((idioma,i) => (
                   <button key={i}
-                    onClick={() => cambiarIdioma(idioma.code)}
+                    onMouseDown={() => cambiarIdioma(idioma.code)}
                     style={{display:'flex',alignItems:'center',gap:'0.6rem',width:'100%',padding:'0.65rem 1rem',fontSize:'0.78rem',fontWeight:idioma.code===locale?600:400,color:idioma.code===locale?'#C4917C':'#0A0A0A',background:idioma.code===locale?'#F5EDE8':'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',textAlign:'left',borderBottom:i<IDIOMAS.length-1?'1px solid #F0F0EE':'none'}}>
                     <span style={{fontSize:'1rem'}}>{idioma.flag}</span>
                     <span>{idioma.label}</span>
