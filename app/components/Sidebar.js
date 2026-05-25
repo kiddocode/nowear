@@ -1,14 +1,19 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 
 export default function Sidebar({ activo }) {
   const router = useRouter()
+  const pathname = usePathname()
   const t = useTranslations('sidebar')
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
+
+  const localesPrefix = ['fr','en','pt','de','nl']
+  const locale = localesPrefix.find(loc => pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`) || 'es'
+  const prefijo = locale !== 'es' ? `/${locale}` : ''
 
   useEffect(() => {
     async function cargar() {
@@ -50,7 +55,7 @@ export default function Sidebar({ activo }) {
       <div style={{marginBottom:'1.5rem'}}>
         <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.75rem'}}>{t('principal')}</div>
         {links.filter(l=>l.grupo==='principal').map((link,i) => {
-          const isActive = activo === link.href
+          const isActive = activo === link.href || activo === link.href.replace(prefijo,'')
           return (
             <a key={i} href={link.href}
               style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:isActive?700:400,color:isActive?'#0A0A0A':'#888884',textDecoration:'none',background:isActive?'#F0F0EE':'transparent',borderLeft:isActive?'2px solid #0A0A0A':'2px solid transparent',transition:'all 0.15s'}}
@@ -66,7 +71,7 @@ export default function Sidebar({ activo }) {
       <div style={{marginBottom:'1.5rem'}}>
         <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.75rem'}}>{t('cuenta')}</div>
         {links.filter(l=>l.grupo==='cuenta').map((link,i) => {
-          const isActive = activo === link.href
+          const isActive = activo === link.href || activo === link.href.replace(prefijo,'')
           return (
             <a key={i} href={link.href}
               style={{display:'flex',alignItems:'center',gap:'0.65rem',padding:'0.75rem 1.5rem',fontSize:'0.78rem',fontWeight:isActive?700:400,color:isActive?'#0A0A0A':'#888884',textDecoration:'none',background:isActive?'#F0F0EE':'transparent',borderLeft:isActive?'2px solid #0A0A0A':'2px solid transparent',transition:'all 0.15s'}}
