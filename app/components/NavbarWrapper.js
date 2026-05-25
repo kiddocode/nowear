@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { useRouter, usePathname } from 'next-intl/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 const IDIOMAS = [
@@ -24,7 +24,15 @@ export default function NavbarWrapper({ locale }) {
 
   function cambiarIdioma(code) {
   setIdiomaOpen(false)
-  router.replace(pathname, { locale: code })
+  const localesPrefix = ['fr','en','pt','de','nl']
+  let pathSinLocale = pathname
+  for (const loc of localesPrefix) {
+    if (pathname === `/${loc}`) { pathSinLocale = '/'; break }
+    if (pathname.startsWith(`/${loc}/`)) { pathSinLocale = pathname.slice(loc.length + 1); break }
+  }
+  if (!pathSinLocale) pathSinLocale = '/'
+  const nuevaRuta = code === 'es' ? pathSinLocale : `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
+  window.location.href = nuevaRuta
 }
 
   const prefijo = locale && locale !== 'es' ? `/${locale}` : ''
