@@ -1,7 +1,5 @@
 'use client'
 import { useState, useEffect } from 'react'
-<parameter name="file_text">'use client'
-import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 import ModalPlanes from '@/app/components/ModalPlanes'
