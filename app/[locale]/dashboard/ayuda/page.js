@@ -70,7 +70,7 @@ export default function Perfil() {
 
   return (
     <div style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
-      <Sidebar activo="/dashboard/perfil" />
+      <Sidebar activo="/dashboard/ayuda" />
       <main style={{padding:'3rem',maxWidth:'680px'}}>
         <div style={{marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
           <h1 style={{fontSize:'2.2rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>Perfil</h1>
