@@ -1,57 +1,72 @@
-export default function privacidad() {
+export default function Privacidad() {
   return (
     <div style={{maxWidth:'760px',margin:'0 auto',padding:'6rem 2rem'}}>
       <span style={{display:'inline-flex',alignItems:'center',gap:'0.6rem',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#F07987',marginBottom:'2rem'}}>
         <span style={{width:'24px',height:'1px',background:'#F07987',display:'inline-block'}}></span>Legal
       </span>
       <h1 style={{fontSize:'2.5rem',fontWeight:100,letterSpacing:'-0.025em',marginBottom:'0.5rem'}}>Política de <strong style={{fontWeight:700}}>Privacidad</strong></h1>
-      <p style={{fontSize:'0.78rem',color:'#888884',marginBottom:'3rem'}}>Última actualización: mayo 2026</p>
+      <p style={{fontSize:'0.78rem',color:'#888884',marginBottom:'3rem'}}>Última actualización: mayo de 2026</p>
 
       {[
         {
-          title:'1. Responsable del tratamiento',
-          body:`El responsable del tratamiento de los datos personales recogidos a través de nowear.es es Nowear (en adelante, "Nowear"), con email de contacto support@nowear.es.\n\nNowear se compromete a tratar los datos personales de sus usuarios con pleno respeto a la normativa vigente en materia de protección de datos, en particular el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD).`
+          title: '1. Responsable del tratamiento',
+          body: `El responsable del tratamiento de los datos personales recogidos a través de nowear.es es María Teresa Navarrete González, con NIF 26748920N, titular de la marca registrada NOWEAR® (expediente OEPM, clases 35 y 42), con domicilio a efectos de notificaciones en support@nowear.es.\n\nNOWEAR® se compromete a tratar los datos personales de sus usuarios con pleno respeto a la normativa vigente en materia de protección de datos, en particular el Reglamento (UE) 2016/679 (RGPD) y la Ley Orgánica 3/2018 de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD).`
         },
         {
-          title:'2. Datos que recopilamos',
-          body:`Recopilamos los siguientes tipos de datos:\n\n• Datos de registro: nombre, dirección de correo electrónico y contraseña cuando creas una cuenta.\n• Datos del evento: nombre del evento, fecha, lista de invitadas y looks registrados.\n• Datos de pago: gestionados íntegramente por Stripe. Nowear no almacena datos de tarjetas de crédito.\n• Datos de uso: información técnica sobre cómo interactúas con la plataforma (navegador, dispositivo, páginas visitadas).\n• Datos de contacto: nombre y email cuando nos escribes a través del formulario de contacto.`
+          title: '2. Datos que recopilamos',
+          body: `Recopilamos los siguientes tipos de datos:\n\n• Datos de registro: nombre y dirección de correo electrónico cuando creas una cuenta como organizadora.\n• Datos del evento: nombre del evento, fecha, lugar, lista de looks registrados por las invitadas y posibles conflictos detectados.\n• Datos de pago: gestionados íntegramente por Stripe. NOWEAR® no almacena datos de tarjetas de crédito ni información bancaria.\n• Datos de uso: información técnica sobre cómo interactúas con la plataforma (navegador, dispositivo, páginas visitadas).\n• Datos de contacto: nombre y email cuando nos escribes a través del formulario de contacto.`
         },
         {
-          title:'3. Finalidad del tratamiento',
-          body:`Tratamos tus datos para:\n\n• Prestarte el servicio de coordinación de looks para eventos.\n• Gestionar tu cuenta y los eventos que crees.\n• Procesar los pagos asociados a los planes contratados.\n• Enviarte comunicaciones relacionadas con el servicio (confirmaciones, alertas de coincidencia).\n• Atender tus solicitudes de soporte.\n• Cumplir con obligaciones legales.`
+          title: '3. Finalidad del tratamiento',
+          body: `Tratamos tus datos para:\n\n• Prestarte el servicio de coordinación de looks para eventos.\n• Gestionar tu cuenta y los eventos que crees como organizadora.\n• Procesar los pagos asociados a los planes contratados a través de Stripe.\n• Enviarte comunicaciones relacionadas con el servicio: confirmaciones de look, alertas de coincidencia y notificaciones del evento.\n• Atender tus solicitudes de soporte.\n• Cumplir con las obligaciones legales que resulten de aplicación.`
         },
         {
-          title:'4. Base legal',
-          body:`El tratamiento de tus datos se basa en:\n\n• La ejecución del contrato de servicio que aceptas al registrarte.\n• Tu consentimiento, cuando sea requerido.\n• El cumplimiento de obligaciones legales aplicables.\n• El interés legítimo de Nowear para mejorar el servicio.`
+          title: '4. Base legal del tratamiento',
+          body: `El tratamiento de tus datos se basa en:\n\n• La ejecución del contrato de servicio que aceptas al registrarte o al usar el servicio como invitada (art. 6.1.b RGPD).\n• Tu consentimiento, cuando sea requerido (art. 6.1.a RGPD).\n• El cumplimiento de obligaciones legales aplicables (art. 6.1.c RGPD).\n• El interés legítimo de NOWEAR® para mejorar la plataforma y garantizar su seguridad (art. 6.1.f RGPD).`
         },
         {
-          title:'5. Conservación de datos',
-          body:`Conservaremos tus datos mientras mantengas tu cuenta activa o sea necesario para prestarte el servicio. Una vez eliminada tu cuenta, los datos se suprimirán en un plazo máximo de 30 días, salvo que la ley exija su conservación por un período mayor.`
+          title: '5. Conservación de datos',
+          body: `Conservaremos tus datos mientras mantengas tu cuenta activa o sea necesario para prestarte el servicio. Una vez eliminada tu cuenta, los datos se suprimirán en un plazo máximo de 30 días, salvo que la ley exija su conservación por un período mayor (por ejemplo, datos de facturación durante 5 años conforme a la legislación fiscal española).`
         },
         {
-          title:'6. Compartición de datos',
-          body:`Nowear no vende ni cede tus datos a terceros. Podemos compartir datos con proveedores de servicios que actúan como encargados del tratamiento bajo nuestras instrucciones:\n\n• Supabase: almacenamiento de datos y autenticación.\n• Stripe: procesamiento de pagos.\n• Vercel: infraestructura de hosting.\n\nTodos ellos ofrecen garantías adecuadas conforme al RGPD.`
+          title: '6. Compartición de datos con terceros',
+          body: `NOWEAR® no vende ni cede tus datos personales a terceros con fines comerciales. Podemos compartir datos con los siguientes proveedores de servicios que actúan como encargados del tratamiento bajo nuestras instrucciones:\n\n• Supabase (Supabase Inc.): almacenamiento de base de datos y autenticación.\n• Stripe (Stripe, Inc.): procesamiento seguro de pagos.\n• Vercel (Vercel Inc.): infraestructura de alojamiento web.\n• Resend: envío de emails transaccionales.\n\nTodos ellos ofrecen garantías adecuadas de protección de datos conforme al RGPD, incluyendo cláusulas contractuales tipo donde aplica.`
         },
         {
-          title:'7. Tus derechos',
-          body:`Puedes ejercer en cualquier momento los siguientes derechos:\n\n• Acceso: conocer qué datos tenemos sobre ti.\n• Rectificación: corregir datos inexactos.\n• Supresión: solicitar la eliminación de tus datos.\n• Oposición: oponerte a determinados tratamientos.\n• Portabilidad: recibir tus datos en formato estructurado.\n• Limitación: solicitar que restrinjamos el tratamiento.\n\nPara ejercer estos derechos, escríbenos a support@nowear.es. También puedes presentar una reclamación ante la Agencia Española de Protección de Datos (aepd.es).`
+          title: '7. Tus derechos',
+          body: `Puedes ejercer en cualquier momento los siguientes derechos enviando un email a support@nowear.es:\n\n• Acceso: conocer qué datos personales tenemos sobre ti.\n• Rectificación: corregir datos inexactos o incompletos.\n• Supresión: solicitar la eliminación de tus datos cuando ya no sean necesarios.\n• Oposición: oponerte a determinados tratamientos.\n• Portabilidad: recibir tus datos en formato estructurado y de uso común.\n• Limitación: solicitar que restrinjamos el tratamiento en determinadas circunstancias.\n\nTambién tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es) si consideras que el tratamiento de tus datos no es conforme a la normativa.`
         },
         {
-          title:'8. Cookies',
-          body:`Nowear utiliza cookies técnicas estrictamente necesarias para el funcionamiento del servicio (sesión, autenticación). No utilizamos cookies de publicidad ni de seguimiento de terceros.`
+          title: '8. Cookies',
+          body: `NOWEAR® utiliza únicamente cookies técnicas estrictamente necesarias para el funcionamiento del servicio (gestión de sesión y autenticación). No utilizamos cookies de publicidad, seguimiento de terceros ni perfilado comercial.`
         },
         {
-          title:'9. Cambios en esta política',
-          body:`Podemos actualizar esta política ocasionalmente. Te notificaremos cualquier cambio relevante por email o mediante un aviso en la plataforma. La fecha de última actualización figura siempre al inicio de este documento.`
+          title: '9. Seguridad',
+          body: `Aplicamos medidas técnicas y organizativas adecuadas para proteger tus datos frente a accesos no autorizados, pérdida o alteración, incluyendo conexiones cifradas mediante TLS/HTTPS, control de acceso por roles y copias de seguridad periódicas.`
         },
-      ].map((s,i)=>(
+        {
+          title: '10. Cambios en esta política',
+          body: `Podemos actualizar esta política ocasionalmente. Te notificaremos cualquier cambio relevante por email o mediante un aviso en la plataforma. La fecha de última actualización figura siempre al inicio de este documento.`
+        },
+      ].map((s, i) => (
         <div key={i} style={{marginBottom:'2.5rem'}}>
           <h2 style={{fontSize:'1rem',fontWeight:600,marginBottom:'0.75rem',letterSpacing:'-0.01em'}}>{s.title}</h2>
-          {s.body.split('\n').map((line,j)=>(
+          {s.body.split('\n').map((line, j) => (
             <p key={j} style={{fontSize:'0.875rem',fontWeight:300,color:'#444442',lineHeight:1.9,marginBottom:'0.25rem'}}>{line}</p>
           ))}
         </div>
       ))}
+
+      <div style={{marginTop:'3rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px'}}>
+        <p style={{fontSize:'0.78rem',fontWeight:300,color:'#888884',lineHeight:1.8}}>
+          ¿Tienes alguna pregunta sobre esta política? Escríbenos a{' '}
+          <a href="mailto:support@nowear.es" style={{color:'#F07987',textDecoration:'none'}}>support@nowear.es</a>
+        </p>
+      </div>
+
+      <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'3rem',textAlign:'center'}}>
+        © 2026 NOWEAR®. Todos los derechos reservados.
+      </p>
     </div>
   )
 }
