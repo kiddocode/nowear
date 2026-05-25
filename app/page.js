@@ -35,41 +35,41 @@ export default function Home() {
 
   const SUPABASE = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/'
   const marcas = [
-  {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com', logo:'logo-adolfo.png', zoom:1.8},
-  {name:'ASOS', url:'https://www.asos.com/es', logo:'logo-asos.png'},
-  {name:'Agua by Agua Bendita', url:'https://www.aguabendita.com', logo:'logo-aguabendita.png'},
+  {name:'Adolfo Domínguez', url:'https://www.adolfodominguez.com', logo:'logo-adolfo.png', zoom:2.5},
+  {name:'ASOS', url:'https://www.asos.com/es', logo:'logo-asos.png', zoom:1.8},
+  {name:'Agua by Agua Bendita', url:'https://www.aguabendita.com', logo:'logo-aguabendita.png', zoom:1.2},
   {name:'AVECSTUDIO', url:'https://avec-studio.com', logo:'logo-avec.png'},
   {name:'Basyco Jerez', url:'https://basycojerez.com', logo:'logo-basyco.png'},
   {name:'Baymo', url:'https://www.baymo.com/es', logo:'logo-baymo.png'},
-  {name:'Bicolo', url:'https://bicolobrand.com/en', logo:'logo-bicolo.png', zoom:1.6},
+  {name:'Bicolo', url:'https://bicolobrand.com/en', logo:'logo-bicolo.png', zoom:2.5},
   {name:'Bimani', url:'https://www.bimani.es', logo:'logo-bimani.png'},
-  {name:'Blanche Vintage', url:'https://www.instagram.com/blanche__vintage/', logo:'logo-blanche.png'},
-  {name:'Cardié Moda', url:'https://cardiemoda.com', logo:'logo-cardie.png', zoom:1.6},
-  {name:'Caye & Co', url:'https://www.instagram.com/caye.andco/', logo:'logo-caye.png'},
-  {name:'Dafonte', url:'https://dafontecollection.com/en', logo:'logo-dafonte.png'},
-  {name:'Dahlia Dahlia', url:'https://www.dahliadahlia.com', logo:'logo-dahlia.png'},
-  {name:'Dew & Corch', url:'https://www.dewandcorch.com', logo:'logo-dew.png', zoom:1.6},
+  {name:'Blanche Vintage', url:'https://www.instagram.com/blanche__vintage/', logo:'logo-blanche.png', zoom:2},
+  {name:'Cardié Moda', url:'https://cardiemoda.com', logo:'logo-cardie.png', zoom:2.5},
+  {name:'Caye & Co', url:'https://www.instagram.com/caye.andco/', logo:'logo-caye.png', zoom:2.5},
+  {name:'Dafonte', url:'https://dafontecollection.com/en', logo:'logo-dafonte.png', zoom:2.5},
+  {name:'Dahlia Dahlia', url:'https://www.dahliadahlia.com', logo:'logo-dahlia.png', zoom:2.5},
+  {name:'Dew & Corch', url:'https://www.dewandcorch.com', logo:'logo-dew.png', zoom:2.5},
   {name:'El Corte Inglés', url:'https://www.elcorteingles.es/moda-mujer', logo:'logo-eci.png'},
   {name:'Galü', url:'https://galuathelier.es/en', logo:'logo-galu.png'},
-  {name:'Inés Martín Alcalde', url:'https://www.inesmartinalcalde.com', logo:'logo-ines.png', zoom:1.6},
+  {name:'Inés Martín Alcalde', url:'https://www.inesmartinalcalde.com', logo:'logo-ines.png', zoom:2.5},
   {name:'Johanna Ortiz', url:'https://www.johannaortiz.com', logo:'logo-johannaortiz.png'},
-  {name:'Lozanía', url:'https://lozaniabrand.com', logo:'logo-lozania.png', zoom:1.8},
+  {name:'Lozanía', url:'https://lozaniabrand.com', logo:'logo-lozania.png', zoom:2.5},
   {name:'Maje', url:'https://www.maje.com/es', logo:'logo-maje.png'},
   {name:'Mango', url:'https://www.mango.com/es', logo:'logo-mango.png'},
-  {name:'Martina Maletti', url:'https://martinamaletti.com/en', logo:'logo-martinamaletti.png'},
+  {name:'Martina Maletti', url:'https://martinamaletti.com/en', logo:'logo-martinamaletti.png', zoom:2.5},
   {name:'Massimo Dutti', url:'https://www.massimodutti.com/es', logo:'logo-massimo.png'},
   {name:'Miphai', url:'https://www.miphai.com', logo:'logo-miphai.png'},
-  {name:'Nicolett', url:'https://www.nicolettaoficial.com', logo:'logo-nicolett.png', zoom:1.6},
+  {name:'Nicolett', url:'https://www.nicolettaoficial.com', logo:'logo-nicolett.png', zoom:2.5},
   {name:'Philipa 1970', url:'https://www.philippa1970.com', logo:'logo-philipa.png'},
-  {name:'Rental Mode', url:'https://www.rentalmode.com', logo:'logo-rentalmode.png', zoom:1.6},
-  {name:'Sandra Rosa', url:'https://www.sandrarosa.es', logo:'logo-sandrarosa.png'},
-  {name:'Santa Bato', url:'https://santabato.com', logo:'logo-santabato.png'},
+  {name:'Rental Mode', url:'https://www.rentalmode.com', logo:'logo-rentalmode.png', zoom:2.5},
+  {name:'Sandra Rosa', url:'https://www.sandrarosa.es', logo:'logo-sandrarosa.png', zoom:2.5},
+  {name:'Santa Bato', url:'https://santabato.com', logo:'logo-santabato.png', zoom:2},
   {name:'Sandro', url:'https://www.sandro-paris.com/es', logo:'logo-sandro.png'},
   {name:'Stradivarius', url:'https://www.stradivarius.com/es', logo:'logo-stradivarius.png'},
-  {name:'t.ba', url:'https://www.tbalife.com/en-es', logo:'logo-tba.png'},
+  {name:'t.ba', url:'https://www.tbalife.com/en-es', logo:'logo-tba.png', zoom:2.5},
   {name:'The IQ Collection', url:'https://theiqcollection.com', logo:'logo-iq.png'},
   {name:'Vogana', url:'https://www.vogana.es', logo:'logo-vogana.png'},
-  {name:'Zara', url:'https://www.zara.com/es', logo:'logo-zara.png'},
+  {name:'Zara', url:'https://www.zara.com/es', logo:'logo-zara.png', zoom:2.5},
   {name:'+ Sugerir marca', url:'/#contacto', logo:null},
 ]
 
@@ -227,7 +227,7 @@ export default function Home() {
                   </>
                 ) : (
                   <>
-                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name} style={{height:'60px',maxWidth:'150px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75,transform:`scale(${brand.zoom||1})`,transition:'transform 0.15s'}}/>
+                    <img src={`${SUPABASE}${brand.logo}`} alt={brand.name} style={{height:'50px',maxWidth:'130px',objectFit:'contain',filter:'grayscale(1)',opacity:0.75,transform:`scale(${brand.zoom||1})`,transition:'transform 0.15s'}}/>
                   </>
                 )}
               </a>
