@@ -326,7 +326,7 @@ export default function Home() {
               <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/video-empresa.mp4" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
               <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(10,10,10,0.65) 0%,rgba(10,10,10,0.2) 100%)',display:'flex',alignItems:'flex-end',padding:'2.5rem'}}>
                 <p style={{fontSize:'1.4rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.45}}>
-                  Soluciones a medida.<br/><em style={{color:'#C4917C',fontStyle:'normal'}}>Para cada institución.</em>
+                  Soluciones a medida<br/><em style={{color:'#C4917C',fontStyle:'normal'}}>Para cada institución.</em>
                 </p>
               </div>
             </div>
@@ -406,7 +406,7 @@ export default function Home() {
                   cursor:'default',
                   gridRow: caso.tipo === 'particular' ? 'span 2' : 'auto',
                 }}>
-                  
+
                 {/* Icono en círculo */}
                 <div style={{
                   width:'56px',
