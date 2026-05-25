@@ -27,12 +27,22 @@ export default function NavbarWrapper({ locale }) {
     const localesPrefix = ['fr','en','pt','de','nl']
     let pathSinLocale = pathname
     for (const loc of localesPrefix) {
-      if (pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`) {
-        pathSinLocale = pathname.slice(loc.length + 1) || '/'
+      if (pathname === `/${loc}`) {
+        pathSinLocale = '/'
+        break
+      }
+      if (pathname.startsWith(`/${loc}/`)) {
+        pathSinLocale = pathname.slice(loc.length + 1)
         break
       }
     }
-    const nuevaRuta = code === 'es' ? pathSinLocale : `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
+    if (!pathSinLocale) pathSinLocale = '/'
+    let nuevaRuta
+    if (code === 'es') {
+      nuevaRuta = pathSinLocale
+    } else {
+      nuevaRuta = `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
+    }
     router.push(nuevaRuta)
   }
 
