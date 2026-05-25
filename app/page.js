@@ -256,6 +256,12 @@ export default function Home() {
         .caso-card:hover { background: rgba(255,255,255,0.12) !important; transform: translateY(-4px); }
         .caso-card { transition: background 0.2s, transform 0.2s; }
         .tab-como { transition: color 0.15s, border-color 0.15s; cursor: pointer; }
+.casos-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.5rem; }
+.casos-grid > :nth-child(7) { grid-column: 2; }
+.casos-grid > :nth-child(8) { grid-column: 3; }
+.casos-grid > :nth-child(9) { grid-column: 4; }
+.casos-grid > :nth-child(10) { grid-column: 5; }
+.casos-grid > :nth-child(11) { grid-column: 6; }
       `}</style>
 
       {/* CÓMO FUNCIONA */}
@@ -385,7 +391,7 @@ export default function Home() {
           </p>
 
           {/* Grid de círculos */}
-          <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))',gap:'1.5rem'}}>
+          <div className="casos-grid" style={{gap:'1.5rem'}}>
             {CASOS_USO.map((caso, i) => (
               <div key={i} className="caso-card"
                 style={{
