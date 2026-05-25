@@ -231,8 +231,7 @@ export default function Home() {
             {fase===0 && <span style={{borderRight:'2px solid #0A0A0A',marginLeft:'2px',animation:'blink 0.7s infinite'}}></span>}
           </h1>
           <p style={{fontSize:'0.95rem',fontWeight:300,lineHeight:2,color:'#888884',maxWidth:'420px',marginBottom:'3rem',opacity:fase>=1?1:0,transition:'opacity 0.6s ease'}}>
-            Crea tu evento, comparte el link con tus invitadas y deja que cada una registre su look.<br/>
-            El sistema detecta coincidencias al instante.
+            Registra looks, detecta coincidencias al instante, disfruta tranquila.<br/>
           </p>
           <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',opacity:fase>=1?1:0,transition:'opacity 0.6s ease 0.3s'}}>
             <a href="/register" style={{fontSize:'0.85rem',fontWeight:500,padding:'1rem 2.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'4px'}}>Crear mi evento</a>
@@ -272,7 +271,7 @@ export default function Home() {
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem',marginBottom:'3rem'}}>
           <div>
             <h2 style={{fontSize:'clamp(2.5rem,4vw,4.5rem)',fontWeight:100,lineHeight:1.08,letterSpacing:'-0.025em',marginBottom:'1.25rem'}}>
-              Cómo funciona.<br/><strong style={{fontWeight:700}}>Para cada caso.</strong>
+              Cómo funciona<br/><strong style={{fontWeight:700}}>para cada caso.</strong>
             </h2>
           </div>
           {/* TABS */}
@@ -449,13 +448,12 @@ export default function Home() {
           <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>Paquetes
         </span>
         <h2 style={{fontSize:'clamp(2.5rem,4vw,4.5rem)',fontWeight:100,lineHeight:1.08,letterSpacing:'-0.025em',marginBottom:'1.25rem'}}>
-          Un pago único<br/><strong style={{fontWeight:700}}>Por evento.</strong>
+          Un pago único<br/><strong style={{fontWeight:700}}>por evento.</strong>
         </h2>
         <p style={{fontSize:'0.9rem',fontWeight:300,lineHeight:1.9,color:'#888884',maxWidth:'540px',marginBottom:'4rem'}}>
-          Sin suscripciones. Sin sorpresas.<br/> 
-          Pagas una vez y tienes tu evento activo hasta el día de la celebración.<br/>
-          <span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas. Ellas llegan seguras, tú disfrutas tranquila.<br/>
-          Sin esfuerzo, sin dramas, sin coincidencias.</span>
+          Sin suscripciones. Sin sorpresas.<br/>
+Pagas una vez y tienes tu evento activo hasta el día de la celebración.<br/>
+<span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas. Ellas llegan seguras, tú disfrutas tranquila. Sin esfuerzo, sin dramas, sin coincidencias.</span>
         </p>
         <div className="pricing-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
           {[
