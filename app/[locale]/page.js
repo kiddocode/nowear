@@ -133,6 +133,17 @@ export default function Home() {
             <a href="/register" style={{fontSize:'0.85rem',fontWeight:500,padding:'1rem 2.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'4px'}}>{t('hero.cta')}</a>
           </div>
         </div>
+        {/* VIDEO MÓVIL - visible solo en tablet/móvil */}
+        <div className="hero-video-mobile">
+          <video src={`${SUPABASE}video-inicio.mp4`} autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+          <div className="hero-video-mobile-overlay">
+            <p style={{fontSize:'1.1rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.4,margin:0}}>
+              {t('hero.tagline')}<br/>
+              <em style={{fontStyle:'italic',color:'#F07987',fontWeight:700}}>{t('hero.taglineEmphasis')}</em>
+            </p>
+          </div>
+        </div>
+
         <div className="hero-img-col" style={{position:'relative',overflow:'hidden'}}>
           <video src={`${SUPABASE}video-inicio.mp4`} autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.0) 50%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
