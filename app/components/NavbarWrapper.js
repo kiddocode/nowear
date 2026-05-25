@@ -50,7 +50,7 @@ export default function NavbarWrapper({ locale }) {
     <>
       <nav style={{position:'fixed',top:0,left:0,right:0,height:'68px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 3rem',background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:1000}}>
 
-        <a href={`${prefijo}/`} style={{textDecoration:'none',flexShrink:0}}>
+        <a href="/" style={{textDecoration:'none',flexShrink:0}}>
           <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_transparent.png" alt="NOWEAR" style={{height:'36px',display:'block'}}/>
         </a>
 
