@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import Sidebar from '../components/Sidebar'
-import ModalPlanes from '../components/ModalPlanes'
+import Sidebar from '../../components/Sidebar'
+import ModalPlanes from '../../components/ModalPlanes'
 
 const PLAN_COLORES = {
   basico:     { bg: '#F0F0EE', color: '#888884', label: 'Básico' },

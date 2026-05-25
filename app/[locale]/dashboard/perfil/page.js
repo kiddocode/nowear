@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
-import Sidebar from '../../components/Sidebar'
+import Sidebar from '../../../components/Sidebar'
 
 export default function Perfil() {
   const router = useRouter()
