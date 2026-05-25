@@ -231,7 +231,7 @@ export default function Home() {
             {fase===0 && <span style={{borderRight:'2px solid #0A0A0A',marginLeft:'2px',animation:'blink 0.7s infinite'}}></span>}
           </h1>
           <p style={{fontSize:'0.95rem',fontWeight:300,lineHeight:2,color:'#888884',maxWidth:'420px',marginBottom:'3rem',opacity:fase>=1?1:0,transition:'opacity 0.6s ease'}}>
-            Registra looks, detecta coincidencias al instante, disfruta tranquila.<br/>
+            Registra looks, detecta coincidencias, disfruta tranquila.<br/>
           </p>
           <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',opacity:fase>=1?1:0,transition:'opacity 0.6s ease 0.3s'}}>
             <a href="/register" style={{fontSize:'0.85rem',fontWeight:500,padding:'1rem 2.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'4px'}}>Crear mi evento</a>
