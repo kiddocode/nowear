@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>NOWEAR — No two looks alike</title>
         <meta name="description" content="La plataforma para que ninguna invitada llegue vestida igual." />
-        <link rel="icon" type="image/png" sizes="32x32" href="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/favicon.png"/>
+        <link rel="icon" href="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/favicon.png" type="image/png"/>
         <link rel="apple-touch-icon" href="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/favicon.png"/>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet" />
@@ -33,15 +33,14 @@ export default function RootLayout({ children }) {
       <body style={{fontFamily:"'Poppins', sans-serif"}}>
         <nav style={{position:'fixed',top:0,left:0,right:0,height:'68px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 3rem',background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:1000}}>
 
-          {/* LOGO */}
           <a href="/" style={{textDecoration:'none',flexShrink:0}}>
             <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_transparent.png" alt="NOWEAR" style={{height:'36px',display:'block'}}/>
           </a>
 
-          {/* LINKS CENTRO */}
           <div className="nav-center" style={{display:'flex',gap:'0.25rem',alignItems:'center'}}>
             {[
               {label:'Cómo funciona', href:'/#como'},
+              {label:'Casos de uso', href:'/#casos'},
               {label:'Paquetes', href:'/#precios'},
               {label:'Inspiración', href:'/#marcas'},
               {label:'FAQ', href:'/#faq'},
@@ -53,11 +52,11 @@ export default function RootLayout({ children }) {
                 onMouseEnter={() => setHoveredNav(i)}
                 onMouseLeave={() => setHoveredNav(null)}
                 style={{
-                  fontSize:'0.82rem',
+                  fontSize:'0.78rem',
                   fontWeight:600,
                   color: hoveredNav === i ? '#C4917C' : '#0A0A0A',
                   textDecoration:'none',
-                  padding:'0.5rem 1.1rem',
+                  padding:'0.5rem 0.9rem',
                   borderRadius:'6px',
                   background: hoveredNav === i ? '#F5EDE8' : 'transparent',
                   transition:'color 0.15s, background 0.15s',
@@ -69,10 +68,7 @@ export default function RootLayout({ children }) {
             ))}
           </div>
 
-          {/* ACCIONES DERECHA */}
           <div className="nav-actions" style={{display:'flex',gap:'0.5rem',alignItems:'center',flexShrink:0}}>
-
-            {/* Selector idioma */}
             <div style={{position:'relative'}}>
               <button
                 onClick={() => setIdiomaOpen(!idiomaOpen)}
@@ -112,7 +108,6 @@ export default function RootLayout({ children }) {
             </a>
           </div>
 
-          {/* HAMBURGER MÓVIL */}
           <button
             className="nav-hamburger"
             onClick={() => setMenuOpen(!menuOpen)}
@@ -124,11 +119,11 @@ export default function RootLayout({ children }) {
           </button>
         </nav>
 
-        {/* MENÚ MÓVIL */}
         {menuOpen && (
           <div style={{position:'fixed',top:'68px',left:0,right:0,background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:999,padding:'1.5rem'}}>
             {[
               {label:'Cómo funciona', href:'/#como'},
+              {label:'Casos de uso', href:'/#casos'},
               {label:'Paquetes', href:'/#precios'},
               {label:'Inspiración', href:'/#marcas'},
               {label:'FAQ', href:'/#faq'},
