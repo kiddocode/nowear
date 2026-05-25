@@ -1,1 +1,153 @@
-{}
+{
+  "hero": {
+    "badge": "Bruiloften · Communies · Dopen · Evenementen",
+    "titulo": "Zodat niemand hetzelfde\ngekleed aankomt.",
+    "subtitulo": "Registreer looks, detecteer conflicten, geniet zorgeloos.",
+    "cta": "Mijn evenement aanmaken",
+    "tagline": "Elke gaste komt aan",
+    "taglineEmphasis": "met haar unieke look."
+  },
+  "como": {
+    "badge": "Het proces",
+    "titulo": "Hoe het werkt",
+    "tituloEmphasis": "voor elk geval.",
+    "tabParticulares": "Particulieren",
+    "tabEmpresas": "Bedrijven & instellingen",
+    "particulares": {
+      "tagline": "Geen app\nGeen account\nAlleen de link",
+      "paso1titulo": "Maak je evenement aan",
+      "paso1body": "Registreer je bruiloft, communie, doop of elke viering. Kies wanneer de registratie opent en selecteer je plan.",
+      "paso2titulo": "Deel de link",
+      "paso2body": "Elk evenement heeft een unieke link. Stuur hem via WhatsApp, zet hem op je trouwwebsite of stuur hem per e-mail. Je gasten melden zich aan zonder te registreren.",
+      "paso3titulo": "Geen conflicten",
+      "paso3body": "Elke gaste registreert haar merk, model en kleur. Als iemand een al gereserveerde look kiest, verschijnt er onmiddellijk een waarschuwing."
+    },
+    "empresas": {
+      "tagline": "Oplossingen op maat",
+      "taglineEmphasis": "Voor elke instelling",
+      "sol1titulo": "Aangepast formulier",
+      "sol1body": "We ontwerpen het formulier in jouw omgeving, met jouw merkimago, aangepaste velden en een stroom afgestemd op jouw protocol.",
+      "sol2titulo": "Terugkerende pakketten",
+      "sol2body": "Oplossingen per seizoen, kwartaal of volume. Voor organisaties met meerdere evenementen per jaar zonder voor elk te betalen.",
+      "sol3titulo": "Multi-organisator",
+      "sol3body": "Meerdere teamleden beheren hetzelfde evenement. Gedifferentieerde rollen, per afdeling gecontroleerde toegang.",
+      "sol4titulo": "Dedicated ondersteuning",
+      "sol4body": "Een direct aanspreekpunt, gepersonaliseerde onboarding en begeleiding gedurende het hele proces.",
+      "cta": "Offerte aanvragen →"
+    }
+  },
+  "casos": {
+    "badge": "Gebruiksgevallen",
+    "titulo": "Ontworpen voor",
+    "tituloEmphasis": "elke gelegenheid.",
+    "subtitulo": "Van een bruiloft tot een institutionele protocolaala. NOWEAR past zich aan elk evenement aan waar kleding ertoe doet.",
+    "cta": "Jouw geval staat er niet bij? Vertel het ons →",
+    "tuBadge": "Jij",
+    "casos": [
+      { "titulo": "Privé-evenementen", "desc": "Bruiloften, communies, dopen, verlovingen, verjaardagen..." },
+      { "titulo": "Galas en prijsuitreikingen", "desc": "Oscar, BAFTA, voetbalgala's, prijsuitreikingen..." },
+      { "titulo": "Institutioneel protocol", "desc": "Koninklijke Huizen, staatsacten, officiële ontvangsten." },
+      { "titulo": "Modemerken & retail", "desc": "VIP-klantevenementen, showrooms, collectiepresentaties." },
+      { "titulo": "Productiebedrijven, TV & OTT", "desc": "Rode lopers, premières, filmfestivals." },
+      { "titulo": "Luxe hotels & venues", "desc": "Exclusieve evenementen, galadineers, privévieringen." },
+      { "titulo": "Evenementenbureaus", "desc": "Professioneel beheer van meerdere evenementen met één toegang." },
+      { "titulo": "Multibrand-boetieks", "desc": "Privémodeshows, modenachten, evenementen voor VIP-klanten." },
+      { "titulo": "Personal shoppers", "desc": "Look-coördinatie voor groepen klanten bij evenementen." },
+      { "titulo": "Restaurants met evenementen", "desc": "Privédineers met dresscode, openingen, gastronomische evenementen." },
+      { "titulo": "Bedrijfsevenementen", "desc": "Teambuildings, congressen, bedrijfsdineers, evenementen met dresscode." }
+    ]
+  },
+  "precios": {
+    "badge": "Pakketten",
+    "titulo": "Eenmalige betaling",
+    "tituloEmphasis": "per evenement.",
+    "subtitulo": "Geen abonnement. Geen verrassingen.\nEén keer betalen en je evenement is actief tot de dag van de viering.",
+    "subtituloEmphasis": "Geef dit cadeau aan je gasten. Ze komen vol vertrouwen, jij geniet zorgeloos. Geen moeite, geen drama, geen conflicten.",
+    "masPopular": "Meest populair",
+    "enterprise": "Enterprise",
+    "contactar": "Contact",
+    "empezar": "Aan de slag",
+    "contactarCta": "Contact →",
+    "disclaimer": "Eenmalige betaling per evenement, geen abonnement. Geen terugbetalingen na activering. Geen downgrade mogelijk. Je kunt upgraden naar een hoger plan en betaalt alleen het verschil. Raadpleeg onze",
+    "terminosLink": "algemene voorwaarden",
+    "planes": [
+      {
+        "plan": "Basis", "sub": "1 maand van tevoren", "price": "9",
+        "desc": "Registratie opent 1 maand voor het evenement. Ideaal voor korte planning.",
+        "feats": ["Unieke link voor gasten", "Conflictdetectie", "Look-voorbehouding", "Geblokkeerde kleuren"]
+      },
+      {
+        "plan": "Standaard", "sub": "3 maanden van tevoren", "price": "19",
+        "desc": "Registratie opent 3 maanden voor het evenement. Voldoende tijd voor iedereen.",
+        "feats": ["Alles uit Basis", "Looklijst exporteren", "Prioriteit e-mailondersteuning"]
+      },
+      {
+        "plan": "Premium", "sub": "Geen tijdslimiet", "price": "29",
+        "desc": "Registratie opent wanneer je wilt, zonder tijdslimiet. Voor de meest georganiseerden.",
+        "feats": ["Alles hiervoor", "Vroege toegang tot nieuwe functies", "Gepersonaliseerde gastenlink"]
+      },
+      {
+        "plan": "Enterprise", "sub": "Op maat", "price": null,
+        "desc": "Gepersonaliseerde oplossing voor bedrijven en instellingen met meerdere evenementen.",
+        "feats": ["Aangepast formulier", "Terugkerende pakketten", "Multi-organisator", "Dedicated ondersteuning"]
+      }
+    ]
+  },
+  "marcas": {
+    "badge": "Inspiratie",
+    "titulo": "Jouw perfecte look",
+    "tituloEmphasis": "wacht op je.",
+    "subtitulo": "Dit zijn de favoriete merken van de gasten.",
+    "sugerir": "Merk voorstellen"
+  },
+  "faq": {
+    "badge": "FAQ",
+    "titulo": "Alles wat je",
+    "tituloEmphasis": "moet weten.",
+    "masPreguntas": "Meer vragen?",
+    "preguntas": [
+      { "q": "Moeten mijn gasten zich registreren?", "a": "Nee. Je gasten gaan rechtstreeks via de link die je hen stuurt. Ze hoeven geen account aan te maken of een app te downloaden." },
+      { "q": "Wat gebeurt er als twee gasten hetzelfde willen dragen?", "a": "Het systeem waarschuwt de tweede gaste onmiddellijk wanneer ze een al gereserveerde look probeert te registreren. Niemand heeft meer rechten dan een ander, alleen wie het eerst registreerde." },
+      { "q": "Wat is een look-voorbehouding?", "a": "Dat betekent dat je een look hebt gezien maar nog niet gekocht. Niemand anders kan diezelfde look registreren zolang jouw voorbehouding actief is." },
+      { "q": "Werkt het voor andere evenementen dan bruiloften?", "a": "Ja. NOWEAR werkt voor elk evenement waar kleding ertoe doet: bruiloften, communies, dopen, verlovingen, verjaardagen, galas, prijsuitreikingen, bedrijfsevenementen en veel meer." },
+      { "q": "Kan ik specifieke kleuren blokkeren?", "a": "Ja. Bij het aanmaken van je evenement kun je geblokkeerde kleuren definiëren: wit voor de bruid, of de kleur van een speciaal familielid." },
+      { "q": "Hoe werkt de betaling?", "a": "Voor particulieren is het een eenmalige betaling per evenement. We accepteren kaart, Apple Pay en Google Pay. Geen abonnement of verrassingen. Voor bedrijven bieden we pakketten op maat. Schrijf ons op support@nowear.es." }
+    ]
+  },
+  "contacto": {
+    "titulo": "Een",
+    "tituloEmphasis": "vraag?",
+    "subtitulo": "We zijn hier om je te helpen. We antwoorden binnen 24 uur.",
+    "nombre": "Jouw naam",
+    "email": "E-mail",
+    "mensaje": "Bericht",
+    "enviar": "Bericht sturen"
+  },
+  "footer": {
+    "tagline": "Het platform zodat geen gaste hetzelfde gekleed aankomt.",
+    "producto": "Product",
+    "soporte": "Ondersteuning",
+    "idioma": "Taal",
+    "comoFunciona": "Hoe het werkt",
+    "casosDeUso": "Gebruiksgevallen",
+    "paquetes": "Pakketten",
+    "inspiracion": "Inspiratie",
+    "preguntasFrecuentes": "Veelgestelde vragen",
+    "crearEvento": "Evenement aanmaken",
+    "contacto": "Contact",
+    "privacidad": "Privacybeleid",
+    "terminos": "Gebruiksvoorwaarden",
+    "datos": "Gegevensbescherming",
+    "copyright": "© 2026 Nowear. Alle rechten voorbehouden."
+  },
+  "nav": {
+    "comoFunciona": "Hoe het werkt",
+    "casosDeUso": "Gebruiksgevallen",
+    "paquetes": "Pakketten",
+    "inspiracion": "Inspiratie",
+    "faq": "FAQ",
+    "contacto": "Contact",
+    "entrar": "Inloggen",
+    "empezar": "Aan de slag"
+  }
+}

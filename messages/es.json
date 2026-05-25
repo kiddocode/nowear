@@ -1,1 +1,153 @@
-{}
+{
+  "hero": {
+    "badge": "Bodas · Comuniones · Bautizos · Eventos",
+    "titulo": "Que nadie llegue\nvestida igual.",
+    "subtitulo": "Registra looks, detecta coincidencias, disfruta tranquila.",
+    "cta": "Crear mi evento",
+    "tagline": "Cada invitada llega",
+    "taglineEmphasis": "con su look único."
+  },
+  "como": {
+    "badge": "El proceso",
+    "titulo": "Cómo funciona",
+    "tituloEmphasis": "para cada caso.",
+    "tabParticulares": "Particulares",
+    "tabEmpresas": "Empresas e instituciones",
+    "particulares": {
+      "tagline": "Sin apps\nSin cuentas\nSolo el link",
+      "paso1titulo": "Crea tu evento",
+      "paso1body": "Registra tu boda, comunión, bautizo o cualquier celebración. Elige cuándo abrir el registro y selecciona tu plan.",
+      "paso2titulo": "Comparte el link",
+      "paso2body": "Cada evento tiene un link único. Pásalo por WhatsApp, ponlo en tu web de boda o mándalo por email. Tus invitadas entran sin registrarse.",
+      "paso3titulo": "Sin coincidencias",
+      "paso3body": "Cada invitada registra su marca, modelo y color. Si alguien elige un look ya registrado, le salta un aviso inmediato."
+    },
+    "empresas": {
+      "tagline": "Soluciones a medida",
+      "taglineEmphasis": "Para cada institución",
+      "sol1titulo": "Formulario a medida",
+      "sol1body": "Diseñamos el formulario dentro de tu entorno, con tu imagen de marca, campos personalizados y flujo adaptado a tu protocolo.",
+      "sol2titulo": "Paquetes recurrentes",
+      "sol2body": "Soluciones por temporada, trimestre o según volumen. Para organizaciones con múltiples eventos al año sin pagar por cada uno.",
+      "sol3titulo": "Multi-organizador",
+      "sol3body": "Varios miembros de tu equipo gestionando el mismo evento. Roles diferenciados, acceso controlado por departamento.",
+      "sol4titulo": "Soporte dedicado",
+      "sol4body": "Un punto de contacto directo, onboarding personalizado y acompañamiento durante todo el proceso.",
+      "cta": "Solicitar propuesta →"
+    }
+  },
+  "casos": {
+    "badge": "Casos de uso",
+    "titulo": "Diseñado para",
+    "tituloEmphasis": "cada ocasión.",
+    "subtitulo": "Desde una boda hasta una gala de protocolo institucional. NOWEAR se adapta a cualquier evento donde la vestimenta importa.",
+    "cta": "¿Tu caso no está aquí? Cuéntanos →",
+    "tuBadge": "Tú",
+    "casos": [
+      { "titulo": "Eventos particulares", "desc": "Bodas, comuniones, bautizos, pedidas, cumpleaños..." },
+      { "titulo": "Galas y premios", "desc": "Goya, BAFTA, galas de fútbol, entregas de premios..." },
+      { "titulo": "Protocolo institucional", "desc": "Casas Reales, actos de Estado, recepciones oficiales." },
+      { "titulo": "Marcas de moda y retail", "desc": "Eventos VIP para clientas, showrooms, presentaciones de colección." },
+      { "titulo": "Productoras, TV y OTT", "desc": "Alfombras rojas, estrenos, premières, festivales de cine." },
+      { "titulo": "Hoteles y venues de lujo", "desc": "Eventos exclusivos, cenas de gala, celebraciones privadas." },
+      { "titulo": "Agencias de eventos", "desc": "Gestión profesional de múltiples eventos con un solo acceso." },
+      { "titulo": "Tiendas multimarca", "desc": "Desfiles privados, noches de moda, eventos para clientas VIP." },
+      { "titulo": "Personal shoppers", "desc": "Coordinación de looks para grupos de clientas en eventos." },
+      { "titulo": "Restaurantes con eventos", "desc": "Cenas privadas con dress code, inauguraciones, eventos gastronómicos." },
+      { "titulo": "Eventos corporativos", "desc": "Team buildings, congresos, cenas de empresa, eventos con dress code." }
+    ]
+  },
+  "precios": {
+    "badge": "Paquetes",
+    "titulo": "Un pago único",
+    "tituloEmphasis": "por evento.",
+    "subtitulo": "Sin suscripciones. Sin sorpresas.\nPagas una vez y tienes tu evento activo hasta el día de la celebración.",
+    "subtituloEmphasis": "Hazle este regalo a tus invitadas. Ellas llegan seguras, tú disfrutas tranquila. Sin esfuerzo, sin dramas, sin coincidencias.",
+    "masPopular": "Más popular",
+    "enterprise": "Enterprise",
+    "contactar": "Contactar",
+    "empezar": "Empezar",
+    "contactarCta": "Contactar →",
+    "disclaimer": "Pago único por evento, sin suscripciones. No se realizan reembolsos una vez activado el plan. No es posible hacer downgrade a un plan inferior. Puedes mejorar a un plan superior pagando únicamente la diferencia. Consulta nuestros",
+    "terminosLink": "términos y condiciones",
+    "planes": [
+      {
+        "plan": "Básico", "sub": "1 mes antes", "price": "9",
+        "desc": "El registro abre 1 mes antes del evento. Ideal para planificación corta.",
+        "feats": ["Link único para invitadas", "Detección de coincidencias", "Prerreserva de looks", "Colores bloqueados"]
+      },
+      {
+        "plan": "Estándar", "sub": "3 meses antes", "price": "19",
+        "desc": "El registro abre 3 meses antes del evento. Tiempo suficiente para todas.",
+        "feats": ["Todo lo del plan Básico", "Exportar lista de looks", "Soporte prioritario por email"]
+      },
+      {
+        "plan": "Premium", "sub": "Sin límite de tiempo", "price": "29",
+        "desc": "El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.",
+        "feats": ["Todo lo anterior", "Acceso anticipado a nuevas funciones", "Link de invitada personalizado"]
+      },
+      {
+        "plan": "Enterprise", "sub": "A medida", "price": null,
+        "desc": "Solución personalizada para empresas e instituciones con múltiples eventos.",
+        "feats": ["Formulario a medida", "Paquetes recurrentes", "Multi-organizador", "Soporte dedicado"]
+      }
+    ]
+  },
+  "marcas": {
+    "badge": "Inspiración",
+    "titulo": "Tu look perfecto",
+    "tituloEmphasis": "te está esperando.",
+    "subtitulo": "Estas son las marcas favoritas de las invitadas.",
+    "sugerir": "Sugerir marca"
+  },
+  "faq": {
+    "badge": "FAQ",
+    "titulo": "Todo lo que",
+    "tituloEmphasis": "necesitas saber.",
+    "masPreguntas": "¿Más preguntas?",
+    "preguntas": [
+      { "q": "¿Necesitan registrarse mis invitadas?", "a": "No. Tus invitadas entran directamente a través del link que les mandas. No tienen que crearse ninguna cuenta ni descargar ninguna app." },
+      { "q": "¿Qué pasa si dos invitadas quieren llevar lo mismo?", "a": "El sistema avisa a la segunda invitada al instante cuando intenta registrar un look que ya está cogido. Nadie tiene más derecho que nadie, solo quien registró antes." },
+      { "q": "¿Qué es la prerreserva de looks?", "a": "Significa que has visto un look pero todavía no lo has comprado. Nadie más puede registrar ese mismo look mientras tengas tu prerreserva activa." },
+      { "q": "¿Funciona para otros eventos además de bodas?", "a": "Sí. NOWEAR funciona para cualquier evento donde la vestimenta importa: bodas, comuniones, bautizos, pedidas, cumpleaños, galas, entregas de premios, eventos corporativos, actos de protocolo institucional y mucho más." },
+      { "q": "¿Puedo bloquear colores específicos?", "a": "Sí. Al crear tu evento puedes definir colores bloqueados: blanco para la novia, o el color de algún familiar especial." },
+      { "q": "¿Cómo funciona el pago?", "a": "Para particulares es un pago único por evento. Aceptamos tarjeta, Apple Pay y Google Pay. Sin suscripciones ni sorpresas. Para empresas e instituciones ofrecemos paquetes a medida según volumen y necesidades. Escríbenos a support@nowear.es." }
+    ]
+  },
+  "contacto": {
+    "titulo": "¿Alguna",
+    "tituloEmphasis": "pregunta?",
+    "subtitulo": "Estamos aquí para ayudarte. Te respondemos en menos de 24 horas.",
+    "nombre": "Tu nombre",
+    "email": "Email",
+    "mensaje": "Mensaje",
+    "enviar": "Enviar mensaje"
+  },
+  "footer": {
+    "tagline": "La plataforma para que ninguna invitada llegue vestida igual.",
+    "producto": "Producto",
+    "soporte": "Soporte",
+    "idioma": "Idioma",
+    "comoFunciona": "Cómo funciona",
+    "casosDeUso": "Casos de uso",
+    "paquetes": "Paquetes",
+    "inspiracion": "Inspiración",
+    "preguntasFrecuentes": "Preguntas frecuentes",
+    "crearEvento": "Crear evento",
+    "contacto": "Contacto",
+    "privacidad": "Política de privacidad",
+    "terminos": "Términos de uso",
+    "datos": "Protección de datos",
+    "copyright": "© 2026 Nowear. Todos los derechos reservados."
+  },
+  "nav": {
+    "comoFunciona": "Cómo funciona",
+    "casosDeUso": "Casos de uso",
+    "paquetes": "Paquetes",
+    "inspiracion": "Inspiración",
+    "faq": "FAQ",
+    "contacto": "Contacto",
+    "entrar": "Entrar",
+    "empezar": "Empezar"
+  }
+}

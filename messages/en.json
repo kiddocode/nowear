@@ -1,1 +1,153 @@
-{}
+{
+  "hero": {
+    "badge": "Weddings · Communions · Baptisms · Events",
+    "titulo": "No one shows up\nwearing the same.",
+    "subtitulo": "Register looks, detect conflicts, enjoy in peace.",
+    "cta": "Create my event",
+    "tagline": "Every guest arrives",
+    "taglineEmphasis": "with her unique look."
+  },
+  "como": {
+    "badge": "The process",
+    "titulo": "How it works",
+    "tituloEmphasis": "for every case.",
+    "tabParticulares": "Individuals",
+    "tabEmpresas": "Businesses & institutions",
+    "particulares": {
+      "tagline": "No app\nNo account\nJust the link",
+      "paso1titulo": "Create your event",
+      "paso1body": "Register your wedding, communion, baptism or any celebration. Choose when to open registration and select your plan.",
+      "paso2titulo": "Share the link",
+      "paso2body": "Every event has a unique link. Share it via WhatsApp, put it on your wedding website or send it by email. Your guests enter without signing up.",
+      "paso3titulo": "No conflicts",
+      "paso3body": "Each guest registers her brand, model and color. If someone chooses an already-taken look, an alert pops up immediately."
+    },
+    "empresas": {
+      "tagline": "Tailored solutions",
+      "taglineEmphasis": "For every institution",
+      "sol1titulo": "Custom form",
+      "sol1body": "We design the form within your environment, with your brand image, custom fields and a flow adapted to your protocol.",
+      "sol2titulo": "Recurring packages",
+      "sol2body": "Solutions by season, quarter or volume. For organizations with multiple events per year without paying for each one.",
+      "sol3titulo": "Multi-organizer",
+      "sol3body": "Multiple team members managing the same event. Differentiated roles, department-controlled access.",
+      "sol4titulo": "Dedicated support",
+      "sol4body": "A direct point of contact, personalized onboarding and accompaniment throughout the entire process.",
+      "cta": "Request a proposal →"
+    }
+  },
+  "casos": {
+    "badge": "Use cases",
+    "titulo": "Designed for",
+    "tituloEmphasis": "every occasion.",
+    "subtitulo": "From a wedding to an institutional protocol gala. NOWEAR adapts to any event where attire matters.",
+    "cta": "Your case isn't here? Tell us →",
+    "tuBadge": "You",
+    "casos": [
+      { "titulo": "Private events", "desc": "Weddings, communions, baptisms, engagements, birthdays..." },
+      { "titulo": "Galas and awards", "desc": "Oscars, BAFTAs, sports galas, award ceremonies..." },
+      { "titulo": "Institutional protocol", "desc": "Royal Households, State events, official receptions." },
+      { "titulo": "Fashion brands & retail", "desc": "VIP client events, showrooms, collection presentations." },
+      { "titulo": "Production, TV & OTT", "desc": "Red carpets, premieres, film festivals." },
+      { "titulo": "Luxury hotels & venues", "desc": "Exclusive events, gala dinners, private celebrations." },
+      { "titulo": "Event agencies", "desc": "Professional management of multiple events with single access." },
+      { "titulo": "Multi-brand boutiques", "desc": "Private fashion shows, style nights, VIP client events." },
+      { "titulo": "Personal shoppers", "desc": "Look coordination for groups of clients at events." },
+      { "titulo": "Restaurants with events", "desc": "Private dinners with dress code, openings, gastronomic events." },
+      { "titulo": "Corporate events", "desc": "Team buildings, conferences, company dinners, dress code events." }
+    ]
+  },
+  "precios": {
+    "badge": "Packages",
+    "titulo": "One single payment",
+    "tituloEmphasis": "per event.",
+    "subtitulo": "No subscriptions. No surprises.\nPay once and your event is active until the day of the celebration.",
+    "subtituloEmphasis": "Give this gift to your guests. They arrive confident, you enjoy in peace. No effort, no drama, no conflicts.",
+    "masPopular": "Most popular",
+    "enterprise": "Enterprise",
+    "contactar": "Contact",
+    "empezar": "Get started",
+    "contactarCta": "Contact →",
+    "disclaimer": "One-time payment per event, no subscriptions. No refunds once the plan is activated. No downgrade possible. You can upgrade to a higher plan paying only the difference. See our",
+    "terminosLink": "terms and conditions",
+    "planes": [
+      {
+        "plan": "Basic", "sub": "1 month before", "price": "9",
+        "desc": "Registration opens 1 month before the event. Ideal for short planning.",
+        "feats": ["Unique link for guests", "Conflict detection", "Look pre-reservation", "Blocked colors"]
+      },
+      {
+        "plan": "Standard", "sub": "3 months before", "price": "19",
+        "desc": "Registration opens 3 months before the event. Enough time for everyone.",
+        "feats": ["Everything in Basic", "Export look list", "Priority email support"]
+      },
+      {
+        "plan": "Premium", "sub": "No time limit", "price": "29",
+        "desc": "Registration opens whenever you want, with no time limit. For the most organized.",
+        "feats": ["Everything before", "Early access to new features", "Personalized guest link"]
+      },
+      {
+        "plan": "Enterprise", "sub": "Custom", "price": null,
+        "desc": "Personalized solution for businesses and institutions with multiple events.",
+        "feats": ["Custom form", "Recurring packages", "Multi-organizer", "Dedicated support"]
+      }
+    ]
+  },
+  "marcas": {
+    "badge": "Inspiration",
+    "titulo": "Your perfect look",
+    "tituloEmphasis": "is waiting for you.",
+    "subtitulo": "These are the guests' favorite brands.",
+    "sugerir": "Suggest a brand"
+  },
+  "faq": {
+    "badge": "FAQ",
+    "titulo": "Everything you",
+    "tituloEmphasis": "need to know.",
+    "masPreguntas": "More questions?",
+    "preguntas": [
+      { "q": "Do my guests need to sign up?", "a": "No. Your guests access directly through the link you send them. They don't need to create an account or download any app." },
+      { "q": "What happens if two guests want to wear the same thing?", "a": "The system immediately alerts the second guest when she tries to register an already-taken look. No one has more rights than another, only whoever registered first." },
+      { "q": "What is a look pre-reservation?", "a": "It means you've seen a look but haven't bought it yet. No one else can register that same look while your pre-reservation is active." },
+      { "q": "Does it work for events other than weddings?", "a": "Yes. NOWEAR works for any event where attire matters: weddings, communions, baptisms, engagements, birthdays, galas, award ceremonies, corporate events, institutional protocol acts and much more." },
+      { "q": "Can I block specific colors?", "a": "Yes. When creating your event you can define blocked colors: white for the bride, or a special family member's color." },
+      { "q": "How does payment work?", "a": "For individuals it's a one-time payment per event. We accept card, Apple Pay and Google Pay. No subscriptions or surprises. For businesses, we offer custom packages. Write to us at support@nowear.es." }
+    ]
+  },
+  "contacto": {
+    "titulo": "Any",
+    "tituloEmphasis": "questions?",
+    "subtitulo": "We're here to help. We reply in less than 24 hours.",
+    "nombre": "Your name",
+    "email": "Email",
+    "mensaje": "Message",
+    "enviar": "Send message"
+  },
+  "footer": {
+    "tagline": "The platform so no guest arrives wearing the same.",
+    "producto": "Product",
+    "soporte": "Support",
+    "idioma": "Language",
+    "comoFunciona": "How it works",
+    "casosDeUso": "Use cases",
+    "paquetes": "Packages",
+    "inspiracion": "Inspiration",
+    "preguntasFrecuentes": "FAQ",
+    "crearEvento": "Create event",
+    "contacto": "Contact",
+    "privacidad": "Privacy policy",
+    "terminos": "Terms of use",
+    "datos": "Data protection",
+    "copyright": "© 2026 Nowear. All rights reserved."
+  },
+  "nav": {
+    "comoFunciona": "How it works",
+    "casosDeUso": "Use cases",
+    "paquetes": "Packages",
+    "inspiracion": "Inspiration",
+    "faq": "FAQ",
+    "contacto": "Contact",
+    "entrar": "Log in",
+    "empezar": "Get started"
+  }
+}
