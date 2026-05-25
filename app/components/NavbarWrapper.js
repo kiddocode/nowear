@@ -31,7 +31,7 @@ export default function NavbarWrapper({ locale }) {
     if (pathname.startsWith(`/${loc}/`)) { pathSinLocale = pathname.slice(loc.length + 1); break }
   }
   if (!pathSinLocale) pathSinLocale = '/'
-  const nuevaRuta = code === 'es' ? pathSinLocale : `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
+  console.log('pathname:', pathname, 'code:', code, 'nuevaRuta:', nuevaRuta)
   window.location.replace(nuevaRuta)
 }
 
