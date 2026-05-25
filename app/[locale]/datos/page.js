@@ -26,7 +26,7 @@ export default function Datos() {
         },
         {
           title: '5. Plazo de conservación',
-          body: `• Datos de cuenta de organizadora: mientras la cuenta permanezca activa y hasta 30 días tras su eliminación voluntaria.\n• Datos de invitadas (looks registrados): hasta 30 días después de la fecha del evento, salvo que la organizadora los elimine antes.\n• Datos de facturación: 5 años conforme a la legislación fiscal española.\n• Datos de contacto (formulario): hasta que se resuelva la consulta planteada.`
+          body: `• Datos de cuenta de organizadora: mientras la cuenta permanezca activa y tras su eliminación voluntaria.\n• Datos de invitadas (looks registrados): quedan registrados salvo que la organizadora los elimine.\n• Datos de facturación: 5 años conforme a la legislación fiscal española.\n• Datos de contacto (formulario): hasta que se resuelva la consulta planteada.`
         },
         {
           title: '6. Encargados del tratamiento',
