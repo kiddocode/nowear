@@ -1,6 +1,6 @@
 'use client'
-import { useState } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
+import { useState, useEffect, useRef } from 'react'
+import { usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 
 const IDIOMAS = [
@@ -16,33 +16,46 @@ export default function NavbarWrapper({ locale }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [idiomaOpen, setIdiomaOpen] = useState(false)
   const [hoveredNav, setHoveredNav] = useState(null)
-  const router = useRouter()
   const pathname = usePathname()
   const t = useTranslations('nav')
+  const dropdownRef = useRef(null)
 
   const idiomaActual = IDIOMAS.find(i => i.code === locale) || IDIOMAS[0]
 
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setIdiomaOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   function cambiarIdioma(code) {
-  setIdiomaOpen(false)
-  const localesPrefix = ['fr','en','pt','de','nl']
-  let pathSinLocale = pathname
-  for (const loc of localesPrefix) {
-    if (pathname === `/${loc}`) { pathSinLocale = '/'; break }
-    if (pathname.startsWith(`/${loc}/`)) { pathSinLocale = pathname.slice(loc.length + 1); break }
+    setIdiomaOpen(false)
+    const localesPrefix = ['fr', 'en', 'pt', 'de', 'nl']
+    let pathSinLocale = pathname
+    for (const loc of localesPrefix) {
+      if (pathname === `/${loc}`) { pathSinLocale = '/'; break }
+      if (pathname.startsWith(`/${loc}/`)) { pathSinLocale = pathname.slice(loc.length + 1); break }
+    }
+    if (!pathSinLocale) pathSinLocale = '/'
+    const nuevaRuta = code === 'es'
+      ? pathSinLocale
+      : `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
+    window.location.href = nuevaRuta
   }
-  if (!pathSinLocale) pathSinLocale = '/'
-  window.location.replace(nuevaRuta)
-}
 
   const prefijo = locale && locale !== 'es' ? `/${locale}` : ''
 
   const navLinks = [
-    {label: t('comoFunciona'), href:`${prefijo}/#como`},
-    {label: t('casosDeUso'), href:`${prefijo}/#casos`},
-    {label: t('paquetes'), href:`${prefijo}/#precios`},
-    {label: t('inspiracion'), href:`${prefijo}/#marcas`},
-    {label: t('faq'), href:`${prefijo}/#faq`},
-    {label: t('contacto'), href:`${prefijo}/#contacto`},
+    { label: t('comoFunciona'), href: `${prefijo}/#como` },
+    { label: t('casosDeUso'), href: `${prefijo}/#casos` },
+    { label: t('paquetes'), href: `${prefijo}/#precios` },
+    { label: t('inspiracion'), href: `${prefijo}/#marcas` },
+    { label: t('faq'), href: `${prefijo}/#faq` },
+    { label: t('contacto'), href: `${prefijo}/#contacto` },
   ]
 
   return (
@@ -54,27 +67,20 @@ export default function NavbarWrapper({ locale }) {
         </a>
 
         <div className="nav-center" style={{display:'flex',gap:'0.25rem',alignItems:'center'}}>
-          {navLinks.map((item,i) => (
+          {navLinks.map((item, i) => (
             <a key={i} href={item.href}
               onMouseEnter={() => setHoveredNav(i)}
               onMouseLeave={() => setHoveredNav(null)}
-              style={{
-                fontSize:'0.78rem',fontWeight:600,
-                color: hoveredNav===i ? '#C4917C' : '#0A0A0A',
-                textDecoration:'none',padding:'0.5rem 0.9rem',borderRadius:'6px',
-                background: hoveredNav===i ? '#F5EDE8' : 'transparent',
-                transition:'color 0.15s, background 0.15s',letterSpacing:'0.01em',
-              }}>
+              style={{fontSize:'0.78rem',fontWeight:600,color:hoveredNav===i?'#C4917C':'#0A0A0A',textDecoration:'none',padding:'0.5rem 0.9rem',borderRadius:'6px',background:hoveredNav===i?'#F5EDE8':'transparent',transition:'color 0.15s, background 0.15s',letterSpacing:'0.01em'}}>
               {item.label}
             </a>
           ))}
         </div>
 
         <div className="nav-actions" style={{display:'flex',gap:'0.5rem',alignItems:'center',flexShrink:0}}>
-          <div style={{position:'relative'}}>
+          <div ref={dropdownRef} style={{position:'relative'}}>
             <button
-              onMouseDown={() => cambiarIdioma(idioma.code)}
-              onBlur={() => setTimeout(() => setIdiomaOpen(false), 300)}
+              onClick={() => setIdiomaOpen(!idiomaOpen)}
               style={{display:'flex',alignItems:'center',gap:'0.4rem',fontSize:'0.75rem',fontWeight:600,color:'#0A0A0A',background:'none',border:'1px solid #E0E0DC',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.45rem 0.75rem'}}>
               <span style={{fontSize:'1rem'}}>{idiomaActual.flag}</span>
               <span style={{letterSpacing:'0.05em'}}>{idiomaActual.code.toUpperCase()}</span>
@@ -84,9 +90,9 @@ export default function NavbarWrapper({ locale }) {
             </button>
             {idiomaOpen && (
               <div style={{position:'absolute',top:'calc(100% + 6px)',right:0,background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'8px',minWidth:'150px',boxShadow:'0 4px 16px rgba(0,0,0,0.08)',overflow:'hidden',zIndex:10}}>
-                {IDIOMAS.map((idioma,i) => (
+                {IDIOMAS.map((idioma, i) => (
                   <button key={i}
-                    onMouseDown={() => cambiarIdioma(idioma.code)}
+                    onClick={() => cambiarIdioma(idioma.code)}
                     style={{display:'flex',alignItems:'center',gap:'0.6rem',width:'100%',padding:'0.65rem 1rem',fontSize:'0.78rem',fontWeight:idioma.code===locale?600:400,color:idioma.code===locale?'#C4917C':'#0A0A0A',background:idioma.code===locale?'#F5EDE8':'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',textAlign:'left',borderBottom:i<IDIOMAS.length-1?'1px solid #F0F0EE':'none'}}>
                     <span style={{fontSize:'1rem'}}>{idioma.flag}</span>
                     <span>{idioma.label}</span>
@@ -120,7 +126,7 @@ export default function NavbarWrapper({ locale }) {
 
       {menuOpen && (
         <div style={{position:'fixed',top:'68px',left:0,right:0,background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:999,padding:'1.5rem'}}>
-          {navLinks.map((item,i) => (
+          {navLinks.map((item, i) => (
             <a key={i} href={item.href} onClick={() => setMenuOpen(false)}
               style={{display:'block',fontSize:'0.88rem',fontWeight:600,color:'#0A0A0A',padding:'0.85rem 0',borderBottom:'1px solid #F0F0EE',textDecoration:'none'}}>
               {item.label}
@@ -129,6 +135,16 @@ export default function NavbarWrapper({ locale }) {
           <div style={{display:'flex',flexDirection:'column',gap:'0.75rem',marginTop:'1.25rem'}}>
             <a href={`${prefijo}/login`} style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.75rem',border:'1px solid #E0E0DC',textAlign:'center',textDecoration:'none',borderRadius:'8px'}}>{t('entrar')}</a>
             <a href={`${prefijo}/register`} style={{fontSize:'0.82rem',fontWeight:600,padding:'0.75rem',background:'#0A0A0A',color:'#FFFFFF',textAlign:'center',textDecoration:'none',borderRadius:'50px'}}>{t('empezar')}</a>
+          </div>
+
+          {/* Selector idioma en móvil */}
+          <div style={{marginTop:'1.25rem',borderTop:'1px solid #F0F0EE',paddingTop:'1.25rem',display:'flex',flexWrap:'wrap',gap:'0.5rem'}}>
+            {IDIOMAS.map((idioma, i) => (
+              <button key={i} onClick={() => cambiarIdioma(idioma.code)}
+                style={{fontSize:'0.75rem',fontWeight:idioma.code===locale?600:400,color:idioma.code===locale?'#C4917C':'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.25rem 0.5rem'}}>
+                {idioma.flag} {idioma.label}
+              </button>
+            ))}
           </div>
         </div>
       )}
