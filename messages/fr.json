@@ -44,17 +44,50 @@
     "cta": "Votre cas n'est pas ici ? Dites-le nous →",
     "tuBadge": "Vous",
     "casos": [
-      { "titulo": "Événements particuliers", "desc": "Mariages, communions, baptêmes, fiançailles, anniversaires..." },
-      { "titulo": "Galas et prix", "desc": "César, BAFTA, galas de football, remises de prix..." },
-      { "titulo": "Protocole institutionnel", "desc": "Maisons Royales, actes d'État, réceptions officielles." },
-      { "titulo": "Marques de mode et retail", "desc": "Événements VIP pour clientes, showrooms, présentations de collection." },
-      { "titulo": "Producteurs, TV et OTT", "desc": "Tapis rouges, avant-premières, premières, festivals de cinéma." },
-      { "titulo": "Hôtels et lieux de luxe", "desc": "Événements exclusifs, dîners de gala, célébrations privées." },
-      { "titulo": "Agences événementielles", "desc": "Gestion professionnelle de plusieurs événements avec un seul accès." },
-      { "titulo": "Boutiques multimarques", "desc": "Défilés privés, soirées mode, événements pour clientes VIP." },
-      { "titulo": "Personal shoppers", "desc": "Coordination de looks pour des groupes de clientes lors d'événements." },
-      { "titulo": "Restaurants avec événements", "desc": "Dîners privés avec dress code, inaugurations, événements gastronomiques." },
-      { "titulo": "Événements corporatifs", "desc": "Team buildings, congrès, dîners d'entreprise, événements avec dress code." }
+      {
+        "titulo": "Événements particuliers",
+        "desc": "Mariages, communions, baptêmes, fiançailles, anniversaires..."
+      },
+      {
+        "titulo": "Galas et prix",
+        "desc": "César, BAFTA, galas de football, remises de prix..."
+      },
+      {
+        "titulo": "Protocole institutionnel",
+        "desc": "Maisons Royales, actes d'État, réceptions officielles."
+      },
+      {
+        "titulo": "Marques de mode et retail",
+        "desc": "Événements VIP pour clientes, showrooms, présentations de collection."
+      },
+      {
+        "titulo": "Producteurs, TV et OTT",
+        "desc": "Tapis rouges, avant-premières, premières, festivals de cinéma."
+      },
+      {
+        "titulo": "Hôtels et lieux de luxe",
+        "desc": "Événements exclusifs, dîners de gala, célébrations privées."
+      },
+      {
+        "titulo": "Agences événementielles",
+        "desc": "Gestion professionnelle de plusieurs événements avec un seul accès."
+      },
+      {
+        "titulo": "Boutiques multimarques",
+        "desc": "Défilés privés, soirées mode, événements pour clientes VIP."
+      },
+      {
+        "titulo": "Personal shoppers",
+        "desc": "Coordination de looks pour des groupes de clientes lors d'événements."
+      },
+      {
+        "titulo": "Restaurants avec événements",
+        "desc": "Dîners privés avec dress code, inaugurations, événements gastronomiques."
+      },
+      {
+        "titulo": "Événements corporatifs",
+        "desc": "Team buildings, congrès, dîners d'entreprise, événements avec dress code."
+      }
     ]
   },
   "precios": {
@@ -72,24 +105,50 @@
     "terminosLink": "conditions générales",
     "planes": [
       {
-        "plan": "Basique", "sub": "1 mois avant", "price": "9",
+        "plan": "Basique",
+        "sub": "1 mois avant",
+        "price": "9",
         "desc": "L'inscription ouvre 1 mois avant l'événement. Idéal pour une planification courte.",
-        "feats": ["Lien unique pour les invitées", "Détection des conflits", "Pré-réservation de looks", "Couleurs bloquées"]
+        "feats": [
+          "Lien unique pour les invitées",
+          "Détection des conflits",
+          "Pré-réservation de looks",
+          "Couleurs bloquées"
+        ]
       },
       {
-        "plan": "Standard", "sub": "3 mois avant", "price": "19",
+        "plan": "Standard",
+        "sub": "3 mois avant",
+        "price": "19",
         "desc": "L'inscription ouvre 3 mois avant l'événement. Suffisant pour toutes.",
-        "feats": ["Tout du forfait Basique", "Exporter la liste des looks", "Support prioritaire par email"]
+        "feats": [
+          "Tout du forfait Basique",
+          "Exporter la liste des looks",
+          "Support prioritaire par email"
+        ]
       },
       {
-        "plan": "Premium", "sub": "Sans limite de temps", "price": "29",
+        "plan": "Premium",
+        "sub": "Sans limite de temps",
+        "price": "29",
         "desc": "L'inscription ouvre quand vous voulez, sans limite de temps. Pour les plus organisées.",
-        "feats": ["Tout le précédent", "Accès anticipé aux nouvelles fonctions", "Lien invitée personnalisé"]
+        "feats": [
+          "Tout le précédent",
+          "Accès anticipé aux nouvelles fonctions",
+          "Lien invitée personnalisé"
+        ]
       },
       {
-        "plan": "Enterprise", "sub": "Sur mesure", "price": null,
+        "plan": "Enterprise",
+        "sub": "Sur mesure",
+        "price": null,
         "desc": "Solution personnalisée pour entreprises et institutions avec plusieurs événements.",
-        "feats": ["Formulaire sur mesure", "Forfaits récurrents", "Multi-organisateur", "Support dédié"]
+        "feats": [
+          "Formulaire sur mesure",
+          "Forfaits récurrents",
+          "Multi-organisateur",
+          "Support dédié"
+        ]
       }
     ]
   },
@@ -106,12 +165,30 @@
     "tituloEmphasis": "vous devez savoir.",
     "masPreguntas": "Plus de questions ?",
     "preguntas": [
-      { "q": "Mes invitées doivent-elles s'inscrire ?", "a": "Non. Vos invitées accèdent directement via le lien que vous leur envoyez. Elles n'ont pas besoin de créer un compte ni de télécharger une application." },
-      { "q": "Que se passe-t-il si deux invitées veulent porter la même chose ?", "a": "Le système alerte immédiatement la deuxième invitée lorsqu'elle tente d'enregistrer un look déjà pris. Personne n'a plus de droits que l'autre, seulement celle qui a enregistré en premier." },
-      { "q": "Qu'est-ce que la pré-réservation de looks ?", "a": "Cela signifie que vous avez vu un look mais ne l'avez pas encore acheté. Personne d'autre ne peut enregistrer ce même look tant que votre pré-réservation est active." },
-      { "q": "Fonctionne-t-il pour d'autres événements que les mariages ?", "a": "Oui. NOWEAR fonctionne pour tout événement où la tenue vestimentaire compte : mariages, communions, baptêmes, fiançailles, anniversaires, galas, remises de prix, événements corporatifs et bien plus." },
-      { "q": "Puis-je bloquer des couleurs spécifiques ?", "a": "Oui. En créant votre événement, vous pouvez définir des couleurs bloquées : le blanc pour la mariée, ou la couleur d'un membre de la famille spécial." },
-      { "q": "Comment fonctionne le paiement ?", "a": "Pour les particuliers, c'est un paiement unique par événement. Nous acceptons les cartes, Apple Pay et Google Pay. Sans abonnement ni surprises. Pour les entreprises, nous proposons des forfaits sur mesure. Écrivez-nous à support@nowear.es." }
+      {
+        "q": "Mes invitées doivent-elles s'inscrire ?",
+        "a": "Non. Vos invitées accèdent directement via le lien que vous leur envoyez. Elles n'ont pas besoin de créer un compte ni de télécharger une application."
+      },
+      {
+        "q": "Que se passe-t-il si deux invitées veulent porter la même chose ?",
+        "a": "Le système alerte immédiatement la deuxième invitée lorsqu'elle tente d'enregistrer un look déjà pris. Personne n'a plus de droits que l'autre, seulement celle qui a enregistré en premier."
+      },
+      {
+        "q": "Qu'est-ce que la pré-réservation de looks ?",
+        "a": "Cela signifie que vous avez vu un look mais ne l'avez pas encore acheté. Personne d'autre ne peut enregistrer ce même look tant que votre pré-réservation est active."
+      },
+      {
+        "q": "Fonctionne-t-il pour d'autres événements que les mariages ?",
+        "a": "Oui. NOWEAR fonctionne pour tout événement où la tenue vestimentaire compte : mariages, communions, baptêmes, fiançailles, anniversaires, galas, remises de prix, événements corporatifs et bien plus."
+      },
+      {
+        "q": "Puis-je bloquer des couleurs spécifiques ?",
+        "a": "Oui. En créant votre événement, vous pouvez définir des couleurs bloquées : le blanc pour la mariée, ou la couleur d'un membre de la famille spécial."
+      },
+      {
+        "q": "Comment fonctionne le paiement ?",
+        "a": "Pour les particuliers, c'est un paiement unique par événement. Nous acceptons les cartes, Apple Pay et Google Pay. Sans abonnement ni surprises. Pour les entreprises, nous proposons des forfaits sur mesure. Écrivez-nous à support@nowear.es."
+      }
     ]
   },
   "contacto": {
@@ -149,5 +226,239 @@
     "contacto": "Contact",
     "entrar": "Se connecter",
     "empezar": "Commencer"
+  },
+  "login": {
+    "bienvenida": "Bienvenue",
+    "bienvenidaEmphasis": "à nouveau.",
+    "visual": "Votre événement vous attend. Connectez-vous pour gérer les looks et partager le lien avec vos invitées.",
+    "titulo": "Se connecter",
+    "subtitulo": "Accédez à votre compte nowear",
+    "password": "Mot de passe",
+    "errorCredenciales": "Email ou mot de passe incorrect",
+    "entrando": "Connexion...",
+    "entrar": "Se connecter",
+    "o": "ou",
+    "google": "Continuer avec Google",
+    "sinCuenta": "Pas encore de compte ?",
+    "crearCuenta": "Créer un compte gratuit"
+  },
+  "register": {
+    "tituloVisual": "Votre événement,",
+    "tituloVisualEmphasis": "sans répétitions.",
+    "visual": "Créez votre compte, enregistrez votre événement et partagez le lien avec vos invitées en moins de 2 minutes.",
+    "titulo": "Créer un compte",
+    "subtitulo": "Gratuit et sans engagement",
+    "nombre": "Prénom",
+    "password": "Mot de passe",
+    "passwordPlaceholder": "Minimum 8 caractères",
+    "errorPassword": "Le mot de passe doit contenir au moins 8 caractères",
+    "creando": "Création du compte...",
+    "crear": "Créer un compte",
+    "google": "Continuer avec Google",
+    "yaTieneCuenta": "Vous avez déjà un compte ?",
+    "iniciarSesion": "Se connecter"
+  },
+  "invitada": {
+    "cargando": "Chargement...",
+    "noEncontrado": "Événement non trouvé.",
+    "registraLook": "Enregistrez votre look pour qu'aucune invitée n'arrive habillée pareil.",
+    "lookRegistrado": "Look enregistré !",
+    "lookRegistradoDesc": "Votre look a été enregistré pour",
+    "lookRegistradoEmail": "Nous vous avons envoyé un email de confirmation.",
+    "registrarOtro": "Enregistrer un autre look",
+    "coloresNoDisponibles": "Couleurs non disponibles",
+    "volver": "Retour",
+    "misLooks": "Mes looks",
+    "emailParaGestionar": "Entrez votre email pour voir et gérer vos looks enregistrés.",
+    "buscando": "Recherche...",
+    "buscar": "Rechercher",
+    "sinLooks": "Aucun look enregistré avec cet email pour cet événement.",
+    "editar": "Modifier",
+    "eliminando": "Suppression...",
+    "eliminar": "Supprimer",
+    "tuLook": "Votre look",
+    "editarLook": "Modifier le look",
+    "registraOutfit": "Enregistrez votre tenue pour",
+    "modificaTuLookPara": "Modifiez votre look pour",
+    "modificarLook": "Modifier le look",
+    "editandoAviso": "Vous modifiez votre look. Les changements remplaceront l'enregistrement précédent.",
+    "tuNombre": "Votre nom",
+    "nombrePlaceholder": "Ex : Marie Dupont",
+    "tuEmail": "Votre email",
+    "emailPlaceholder": "Ex : marie@gmail.com",
+    "emailInfo": "Uniquement pour vous envoyer la confirmation. Les autres invitées ne le verront pas.",
+    "colorLook": "Couleur du look",
+    "hastaColores": "Sélectionnez jusqu'à 2 couleurs",
+    "seleccionaColor": "Sélectionnez une couleur...",
+    "prenda1": "Vêtement 1",
+    "prenda2": "Deuxième vêtement (optionnel)",
+    "marca": "Marque",
+    "marcaPlaceholder": "Ex : Zara",
+    "tipo": "Type",
+    "selecciona": "Sélectionner...",
+    "modelo": "Modèle",
+    "modeloPlaceholder": "Nom de la robe ou du modèle",
+    "referencia": "Référence ou lien",
+    "referenciaPlaceholder": "URL ou référence du produit",
+    "opcional": "optionnel",
+    "foto": "Photo du look",
+    "fotoInfo": "Touchez pour télécharger une photo de votre look",
+    "estado": "Statut",
+    "estadoConfirmado": "Confirmé",
+    "estadoConfirmadoDesc": "vous avez déjà acheté le look.",
+    "estadoPrereservado": "Pré-réservé",
+    "estadoPrereservadoDesc": "vous l'avez vu mais ne l'avez pas encore acheté. Maximum 3 pré-réservations.",
+    "cancelar": "Annuler",
+    "guardando": "Enregistrement...",
+    "guardarCambios": "Enregistrer les modifications →",
+    "registrar": "Enregistrer mon look →",
+    "errorCampos": "Veuillez remplir tous les champs obligatoires marqués avec *",
+    "errorEmail": "Veuillez entrer un email valide.",
+    "errorMaxConfirmados": "Vous avez déjà un look confirmé pour cet événement. Une seule confirmation par personne.",
+    "errorMaxPrereservas": "Vous avez déjà 3 pré-réservations actives. C'est le maximum autorisé.",
+    "errorConflicto": "Ce look est déjà enregistré par",
+    "errorConflictoElige": "Veuillez choisir un autre look.",
+    "errorRegistro": "Erreur lors de l'enregistrement. Veuillez réessayer.",
+    "tipos": [
+      "Robe courte",
+      "Robe midi",
+      "Robe longue",
+      "Jupe",
+      "Pantalon",
+      "Top",
+      "Chemisier",
+      "Costume",
+      "Ensemble",
+      "Autre"
+    ],
+    "colores": {
+      "rosapalo": "Rose poudré",
+      "lila": "Lilas",
+      "morado": "Violet",
+      "fucsia": "Fuchsia",
+      "azulcielo": "Bleu ciel",
+      "azulmarino": "Bleu marine",
+      "verdementa": "Vert menthe",
+      "verdebotella": "Vert bouteille",
+      "verdeoliva": "Vert olive",
+      "beige": "Beige",
+      "camel": "Camel",
+      "marronclaro": "Marron clair",
+      "marron": "Marron",
+      "crudo": "Écru",
+      "amarillo": "Jaune moutarde",
+      "terracota": "Terre cuite",
+      "teja": "Tuile",
+      "nude": "Nude",
+      "granate": "Grenat",
+      "negro": "Noir",
+      "gris": "Gris",
+      "blanco": "Blanc",
+      "dorado": "Doré",
+      "plateado": "Argenté",
+      "otro": "Autre"
+    }
+  },
+  "sidebar": {
+    "principal": "Principal",
+    "cuenta": "Compte",
+    "misEventos": "Mes événements",
+    "nuevoEvento": "Nouvel événement",
+    "perfil": "Profil",
+    "facturacion": "Facturation",
+    "ayuda": "Aide",
+    "cerrarSesion": "Se déconnecter",
+    "miCuenta": "Mon compte"
+  },
+  "perfil": {
+    "titulo": "Profil",
+    "subtitulo": "Gérez vos informations personnelles et préférences",
+    "nombre": "Prénom",
+    "email": "Email",
+    "emailNoCambia": "L'email ne peut pas être modifié.",
+    "notificaciones": "Notifications par email",
+    "notificacionesSub": "Choisissez quand vous souhaitez recevoir des alertes.",
+    "notifLookLabel": "Nouvelle invitée enregistre un look",
+    "notifLookSub": "Nous vous avertissons chaque fois que quelqu'un enregistre sa tenue.",
+    "notifConflictoLabel": "Conflit détecté",
+    "notifConflictoSub": "Nous vous avertissons si deux invitées enregistrent le même look.",
+    "guardar": "Enregistrer les modifications",
+    "guardando": "Enregistrement...",
+    "guardado": "Modifications enregistrées avec succès.",
+    "zonaRiesgo": "Zone de danger",
+    "zonaRiesgoSub": "Cette action est permanente et irréversible.",
+    "eliminarCuenta": "Supprimer mon compte",
+    "eliminando": "Suppression...",
+    "confirmar1": "Êtes-vous sûre de vouloir supprimer votre compte ? Cette action est irréversible.",
+    "confirmar2": "Dernière confirmation : supprimer le compte définitivement ?"
+  },
+  "facturacion": {
+    "titulo": "Facturation",
+    "subtitulo": "Historique des paiements de vos événements",
+    "verPlanes": "Voir les forfaits",
+    "sinEventos": "Vous n'avez encore créé aucun événement.",
+    "colEvento": "Événement",
+    "colPlan": "Forfait",
+    "colImporte": "Montant",
+    "colFecha": "Date",
+    "mejorar": "Améliorer",
+    "total": "Total",
+    "facturaInfo": "Vous avez besoin d'une facture ? Écrivez-nous à support@nowear.es avec le nom de votre événement et nous vous l'envoyons sous 24 heures."
+  },
+  "ayuda": {
+    "titulo": "Aide",
+    "subtitulo": "Nous répondons à toutes vos questions",
+    "masAyuda": "Besoin d'aide supplémentaire ?",
+    "masAyudaSub": "Notre équipe est disponible du lundi au vendredi. Nous répondons en moins de 24 heures.",
+    "preguntas": [
+      {
+        "q": "Comment partager le lien avec mes invitées ?",
+        "a": "Depuis votre tableau de bord, entrez dans l'événement et copiez le lien qui apparaît en haut. Vous pouvez l'envoyer par WhatsApp, email ou l'inclure sur votre site de mariage."
+      },
+      {
+        "q": "Puis-je changer la date de mon événement ?",
+        "a": "Oui. Entrez dans votre événement, allez dans l'onglet Paramètres et vous pourrez modifier la date, le nom et le lieu."
+      },
+      {
+        "q": "Que se passe-t-il si une invitée enregistre le mauvais look ?",
+        "a": "L'invitée peut revenir au lien et enregistrer un nouveau look. Le précédent reste en pré-réservation jusqu'à confirmation."
+      },
+      {
+        "q": "Comment exporter la liste des looks ?",
+        "a": "Depuis l'onglet Looks enregistrés de votre événement, cliquez sur Exporter la liste. Vous recevrez un fichier CSV."
+      },
+      {
+        "q": "Puis-je avoir plusieurs événements actifs ?",
+        "a": "Avec les forfaits actuels, chaque paiement active un événement. Pour gérer plusieurs événements, contactez-nous pour le forfait Enterprise."
+      },
+      {
+        "q": "Comment fonctionne la pré-réservation ?",
+        "a": "Une invitée peut marquer un look comme pré-réservé quand elle l'a vu mais ne l'a pas encore acheté. Personne d'autre ne peut enregistrer ce look tant que la pré-réservation est active."
+      },
+      {
+        "q": "Besoin d'aide supplémentaire ?",
+        "a": "Écrivez-nous à support@nowear.es et nous vous répondons en moins de 24 heures."
+      }
+    ]
+  },
+  "modal": {
+    "titulo": "Choisissez votre forfait",
+    "subtitulo": "Paiement unique par événement, sans abonnement.",
+    "masPopular": "Le plus populaire",
+    "planActual": "Forfait actuel",
+    "noDisponible": "Non disponible",
+    "entraAlEvento": "Entrez dans l'événement et améliorez depuis là",
+    "redirigiendo": "Redirection...",
+    "mejorarPor": "Améliorer pour",
+    "elegir": "Choisir",
+    "diferencia": "différence",
+    "precioCompleto": "Prix complet",
+    "enterprise": "Enterprise",
+    "enterpriseDesc": "Solution personnalisée pour les entreprises et événements récurrents.",
+    "contactar": "Contacter →",
+    "avisoLegal": "Paiement sécurisé avec Stripe. En complétant le paiement, le forfait est activé immédiatement et vous acceptez qu'aucun remboursement ne sera effectué une fois le service activé.",
+    "terminosLink": "conditions générales",
+    "errorPago": "Erreur lors de l'initiation du paiement. Veuillez réessayer.",
+    "errorConexion": "Erreur de connexion au serveur de paiement."
   }
 }

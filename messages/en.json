@@ -44,17 +44,50 @@
     "cta": "Your case isn't here? Tell us →",
     "tuBadge": "You",
     "casos": [
-      { "titulo": "Private events", "desc": "Weddings, communions, baptisms, engagements, birthdays..." },
-      { "titulo": "Galas and awards", "desc": "Oscars, BAFTAs, sports galas, award ceremonies..." },
-      { "titulo": "Institutional protocol", "desc": "Royal Households, State events, official receptions." },
-      { "titulo": "Fashion brands & retail", "desc": "VIP client events, showrooms, collection presentations." },
-      { "titulo": "Production, TV & OTT", "desc": "Red carpets, premieres, film festivals." },
-      { "titulo": "Luxury hotels & venues", "desc": "Exclusive events, gala dinners, private celebrations." },
-      { "titulo": "Event agencies", "desc": "Professional management of multiple events with single access." },
-      { "titulo": "Multi-brand boutiques", "desc": "Private fashion shows, style nights, VIP client events." },
-      { "titulo": "Personal shoppers", "desc": "Look coordination for groups of clients at events." },
-      { "titulo": "Restaurants with events", "desc": "Private dinners with dress code, openings, gastronomic events." },
-      { "titulo": "Corporate events", "desc": "Team buildings, conferences, company dinners, dress code events." }
+      {
+        "titulo": "Private events",
+        "desc": "Weddings, communions, baptisms, engagements, birthdays..."
+      },
+      {
+        "titulo": "Galas and awards",
+        "desc": "Oscars, BAFTAs, sports galas, award ceremonies..."
+      },
+      {
+        "titulo": "Institutional protocol",
+        "desc": "Royal Households, State events, official receptions."
+      },
+      {
+        "titulo": "Fashion brands & retail",
+        "desc": "VIP client events, showrooms, collection presentations."
+      },
+      {
+        "titulo": "Production, TV & OTT",
+        "desc": "Red carpets, premieres, film festivals."
+      },
+      {
+        "titulo": "Luxury hotels & venues",
+        "desc": "Exclusive events, gala dinners, private celebrations."
+      },
+      {
+        "titulo": "Event agencies",
+        "desc": "Professional management of multiple events with single access."
+      },
+      {
+        "titulo": "Multi-brand boutiques",
+        "desc": "Private fashion shows, style nights, VIP client events."
+      },
+      {
+        "titulo": "Personal shoppers",
+        "desc": "Look coordination for groups of clients at events."
+      },
+      {
+        "titulo": "Restaurants with events",
+        "desc": "Private dinners with dress code, openings, gastronomic events."
+      },
+      {
+        "titulo": "Corporate events",
+        "desc": "Team buildings, conferences, company dinners, dress code events."
+      }
     ]
   },
   "precios": {
@@ -72,24 +105,50 @@
     "terminosLink": "terms and conditions",
     "planes": [
       {
-        "plan": "Basic", "sub": "1 month before", "price": "9",
+        "plan": "Basic",
+        "sub": "1 month before",
+        "price": "9",
         "desc": "Registration opens 1 month before the event. Ideal for short planning.",
-        "feats": ["Unique link for guests", "Conflict detection", "Look pre-reservation", "Blocked colors"]
+        "feats": [
+          "Unique link for guests",
+          "Conflict detection",
+          "Look pre-reservation",
+          "Blocked colors"
+        ]
       },
       {
-        "plan": "Standard", "sub": "3 months before", "price": "19",
+        "plan": "Standard",
+        "sub": "3 months before",
+        "price": "19",
         "desc": "Registration opens 3 months before the event. Enough time for everyone.",
-        "feats": ["Everything in Basic", "Export look list", "Priority email support"]
+        "feats": [
+          "Everything in Basic",
+          "Export look list",
+          "Priority email support"
+        ]
       },
       {
-        "plan": "Premium", "sub": "No time limit", "price": "29",
+        "plan": "Premium",
+        "sub": "No time limit",
+        "price": "29",
         "desc": "Registration opens whenever you want, with no time limit. For the most organized.",
-        "feats": ["Everything before", "Early access to new features", "Personalized guest link"]
+        "feats": [
+          "Everything before",
+          "Early access to new features",
+          "Personalized guest link"
+        ]
       },
       {
-        "plan": "Enterprise", "sub": "Custom", "price": null,
+        "plan": "Enterprise",
+        "sub": "Custom",
+        "price": null,
         "desc": "Personalized solution for businesses and institutions with multiple events.",
-        "feats": ["Custom form", "Recurring packages", "Multi-organizer", "Dedicated support"]
+        "feats": [
+          "Custom form",
+          "Recurring packages",
+          "Multi-organizer",
+          "Dedicated support"
+        ]
       }
     ]
   },
@@ -106,12 +165,30 @@
     "tituloEmphasis": "need to know.",
     "masPreguntas": "More questions?",
     "preguntas": [
-      { "q": "Do my guests need to sign up?", "a": "No. Your guests access directly through the link you send them. They don't need to create an account or download any app." },
-      { "q": "What happens if two guests want to wear the same thing?", "a": "The system immediately alerts the second guest when she tries to register an already-taken look. No one has more rights than another, only whoever registered first." },
-      { "q": "What is a look pre-reservation?", "a": "It means you've seen a look but haven't bought it yet. No one else can register that same look while your pre-reservation is active." },
-      { "q": "Does it work for events other than weddings?", "a": "Yes. NOWEAR works for any event where attire matters: weddings, communions, baptisms, engagements, birthdays, galas, award ceremonies, corporate events, institutional protocol acts and much more." },
-      { "q": "Can I block specific colors?", "a": "Yes. When creating your event you can define blocked colors: white for the bride, or a special family member's color." },
-      { "q": "How does payment work?", "a": "For individuals it's a one-time payment per event. We accept card, Apple Pay and Google Pay. No subscriptions or surprises. For businesses, we offer custom packages. Write to us at support@nowear.es." }
+      {
+        "q": "Do my guests need to sign up?",
+        "a": "No. Your guests access directly through the link you send them. They don't need to create an account or download any app."
+      },
+      {
+        "q": "What happens if two guests want to wear the same thing?",
+        "a": "The system immediately alerts the second guest when she tries to register an already-taken look. No one has more rights than another, only whoever registered first."
+      },
+      {
+        "q": "What is a look pre-reservation?",
+        "a": "It means you've seen a look but haven't bought it yet. No one else can register that same look while your pre-reservation is active."
+      },
+      {
+        "q": "Does it work for events other than weddings?",
+        "a": "Yes. NOWEAR works for any event where attire matters: weddings, communions, baptisms, engagements, birthdays, galas, award ceremonies, corporate events, institutional protocol acts and much more."
+      },
+      {
+        "q": "Can I block specific colors?",
+        "a": "Yes. When creating your event you can define blocked colors: white for the bride, or a special family member's color."
+      },
+      {
+        "q": "How does payment work?",
+        "a": "For individuals it's a one-time payment per event. We accept card, Apple Pay and Google Pay. No subscriptions or surprises. For businesses, we offer custom packages. Write to us at support@nowear.es."
+      }
     ]
   },
   "contacto": {
@@ -149,5 +226,239 @@
     "contacto": "Contact",
     "entrar": "Log in",
     "empezar": "Get started"
+  },
+  "login": {
+    "bienvenida": "Welcome",
+    "bienvenidaEmphasis": "back.",
+    "visual": "Your event is waiting. Log in to manage looks and share the link with your guests.",
+    "titulo": "Log in",
+    "subtitulo": "Access your nowear account",
+    "password": "Password",
+    "errorCredenciales": "Incorrect email or password",
+    "entrando": "Logging in...",
+    "entrar": "Log in",
+    "o": "or",
+    "google": "Continue with Google",
+    "sinCuenta": "Don't have an account?",
+    "crearCuenta": "Create free account"
+  },
+  "register": {
+    "tituloVisual": "Your event,",
+    "tituloVisualEmphasis": "no repeats.",
+    "visual": "Create your account, register your event and share the link with your guests in less than 2 minutes.",
+    "titulo": "Create account",
+    "subtitulo": "Free and no commitment",
+    "nombre": "Name",
+    "password": "Password",
+    "passwordPlaceholder": "Minimum 8 characters",
+    "errorPassword": "Password must be at least 8 characters",
+    "creando": "Creating account...",
+    "crear": "Create account",
+    "google": "Continue with Google",
+    "yaTieneCuenta": "Already have an account?",
+    "iniciarSesion": "Log in"
+  },
+  "invitada": {
+    "cargando": "Loading...",
+    "noEncontrado": "Event not found.",
+    "registraLook": "Register your look so no guest arrives wearing the same.",
+    "lookRegistrado": "Look registered!",
+    "lookRegistradoDesc": "Your look has been registered for",
+    "lookRegistradoEmail": "We've sent you a confirmation email.",
+    "registrarOtro": "Register another look",
+    "coloresNoDisponibles": "Unavailable colors",
+    "volver": "Back",
+    "misLooks": "My looks",
+    "emailParaGestionar": "Enter your email to view and manage your registered looks.",
+    "buscando": "Searching...",
+    "buscar": "Search",
+    "sinLooks": "No looks registered with that email for this event.",
+    "editar": "Edit",
+    "eliminando": "Deleting...",
+    "eliminar": "Delete",
+    "tuLook": "Your look",
+    "editarLook": "Edit look",
+    "registraOutfit": "Register your outfit for",
+    "modificaTuLookPara": "Edit your look for",
+    "modificarLook": "Edit look",
+    "editandoAviso": "You're editing your look. Changes will replace the previous registration.",
+    "tuNombre": "Your name",
+    "nombrePlaceholder": "E.g.: Jane Smith",
+    "tuEmail": "Your email",
+    "emailPlaceholder": "E.g.: jane@gmail.com",
+    "emailInfo": "Only to send you the confirmation. Other guests won't see it.",
+    "colorLook": "Look color",
+    "hastaColores": "Select up to 2 colors",
+    "seleccionaColor": "Select a color...",
+    "prenda1": "Garment 1",
+    "prenda2": "Second garment (optional)",
+    "marca": "Brand",
+    "marcaPlaceholder": "E.g.: Zara",
+    "tipo": "Type",
+    "selecciona": "Select...",
+    "modelo": "Model",
+    "modeloPlaceholder": "Name of the dress or model",
+    "referencia": "Reference or link",
+    "referenciaPlaceholder": "URL or product reference",
+    "opcional": "optional",
+    "foto": "Look photo",
+    "fotoInfo": "Tap to upload a photo of your look",
+    "estado": "Status",
+    "estadoConfirmado": "Confirmed",
+    "estadoConfirmadoDesc": "you've already bought the look.",
+    "estadoPrereservado": "Pre-reserved",
+    "estadoPrereservadoDesc": "you've seen it but haven't bought it yet. Maximum 3 pre-reservations.",
+    "cancelar": "Cancel",
+    "guardando": "Saving...",
+    "guardarCambios": "Save changes →",
+    "registrar": "Register my look →",
+    "errorCampos": "Please fill in all required fields marked with *",
+    "errorEmail": "Please enter a valid email address.",
+    "errorMaxConfirmados": "You already have a confirmed look for this event. Only 1 confirmed look per person.",
+    "errorMaxPrereservas": "You already have 3 active pre-reservations. That's the maximum allowed.",
+    "errorConflicto": "This look is already registered by",
+    "errorConflictoElige": "Please choose another look.",
+    "errorRegistro": "Error registering the look. Please try again.",
+    "tipos": [
+      "Short dress",
+      "Midi dress",
+      "Long dress",
+      "Skirt",
+      "Trousers",
+      "Top",
+      "Blouse",
+      "Suit",
+      "Set",
+      "Other"
+    ],
+    "colores": {
+      "rosapalo": "Blush pink",
+      "lila": "Lilac",
+      "morado": "Purple",
+      "fucsia": "Fuchsia",
+      "azulcielo": "Sky blue",
+      "azulmarino": "Navy blue",
+      "verdementa": "Mint green",
+      "verdebotella": "Bottle green",
+      "verdeoliva": "Olive green",
+      "beige": "Beige",
+      "camel": "Camel",
+      "marronclaro": "Light brown",
+      "marron": "Brown",
+      "crudo": "Ecru",
+      "amarillo": "Mustard yellow",
+      "terracota": "Terracotta",
+      "teja": "Rust",
+      "nude": "Nude",
+      "granate": "Burgundy",
+      "negro": "Black",
+      "gris": "Grey",
+      "blanco": "White",
+      "dorado": "Gold",
+      "plateado": "Silver",
+      "otro": "Other"
+    }
+  },
+  "sidebar": {
+    "principal": "Main",
+    "cuenta": "Account",
+    "misEventos": "My events",
+    "nuevoEvento": "New event",
+    "perfil": "Profile",
+    "facturacion": "Billing",
+    "ayuda": "Help",
+    "cerrarSesion": "Log out",
+    "miCuenta": "My account"
+  },
+  "perfil": {
+    "titulo": "Profile",
+    "subtitulo": "Manage your personal information and preferences",
+    "nombre": "Name",
+    "email": "Email",
+    "emailNoCambia": "Email cannot be changed.",
+    "notificaciones": "Email notifications",
+    "notificacionesSub": "Choose when you want to receive alerts in your inbox.",
+    "notifLookLabel": "New guest registers a look",
+    "notifLookSub": "We'll notify you every time someone registers their outfit for your event.",
+    "notifConflictoLabel": "Conflict detected",
+    "notifConflictoSub": "We'll notify you if two guests register the same look.",
+    "guardar": "Save changes",
+    "guardando": "Saving...",
+    "guardado": "Changes saved successfully.",
+    "zonaRiesgo": "Danger zone",
+    "zonaRiesgoSub": "This action is permanent and irreversible.",
+    "eliminarCuenta": "Delete my account",
+    "eliminando": "Deleting...",
+    "confirmar1": "Are you sure you want to delete your account? This action is irreversible.",
+    "confirmar2": "Final confirmation: delete account permanently?"
+  },
+  "facturacion": {
+    "titulo": "Billing",
+    "subtitulo": "Payment history for your events",
+    "verPlanes": "View plans",
+    "sinEventos": "You haven't created any events yet.",
+    "colEvento": "Event",
+    "colPlan": "Plan",
+    "colImporte": "Amount",
+    "colFecha": "Date",
+    "mejorar": "Upgrade",
+    "total": "Total",
+    "facturaInfo": "Need an invoice? Write to us at support@nowear.es with your event name and we'll send it within 24 hours."
+  },
+  "ayuda": {
+    "titulo": "Help",
+    "subtitulo": "We answer all your questions",
+    "masAyuda": "Need more help?",
+    "masAyudaSub": "Our team is available Monday to Friday. We reply in less than 24 hours.",
+    "preguntas": [
+      {
+        "q": "How do I share the link with my guests?",
+        "a": "From your dashboard, enter the event and copy the link at the top. You can send it via WhatsApp, email or include it on your wedding website."
+      },
+      {
+        "q": "Can I change my event date?",
+        "a": "Yes. Enter your event, go to the Settings tab and you can edit the date, name and location."
+      },
+      {
+        "q": "What if a guest registers the wrong look?",
+        "a": "The guest can return to the link and register a new look. The previous one stays as a pre-reservation until confirmed."
+      },
+      {
+        "q": "How do I export the look list?",
+        "a": "From the Registered Looks tab of your event, click Export list. You'll receive a CSV file with all looks."
+      },
+      {
+        "q": "Can I have more than one active event?",
+        "a": "With current plans, each payment activates one event. For multiple events, contact us for the Enterprise plan."
+      },
+      {
+        "q": "How does pre-reservation work?",
+        "a": "A guest can mark a look as pre-reserved when she's seen it but hasn't bought it yet. No one else can register that look while the pre-reservation is active."
+      },
+      {
+        "q": "Need more help?",
+        "a": "Write to us at support@nowear.es and we'll reply within 24 hours."
+      }
+    ]
+  },
+  "modal": {
+    "titulo": "Choose your plan",
+    "subtitulo": "One-time payment per event, no subscriptions.",
+    "masPopular": "Most popular",
+    "planActual": "Current plan",
+    "noDisponible": "Not available",
+    "entraAlEvento": "Enter the event and upgrade from there",
+    "redirigiendo": "Redirecting...",
+    "mejorarPor": "Upgrade for",
+    "elegir": "Choose",
+    "diferencia": "difference",
+    "precioCompleto": "Full price",
+    "enterprise": "Enterprise",
+    "enterpriseDesc": "Custom solution for businesses and recurring events.",
+    "contactar": "Contact →",
+    "avisoLegal": "Secure payment with Stripe. Upon completing payment, the plan is activated immediately and you accept that no refunds are made once the service is activated.",
+    "terminosLink": "terms and conditions",
+    "errorPago": "Error initiating payment. Please try again.",
+    "errorConexion": "Error connecting to payment server."
   }
 }

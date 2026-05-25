@@ -44,17 +44,50 @@
     "cta": "O teu caso não está aqui? Conta-nos →",
     "tuBadge": "Tu",
     "casos": [
-      { "titulo": "Eventos particulares", "desc": "Casamentos, comunhões, batizados, pedidos, aniversários..." },
-      { "titulo": "Galas e prémios", "desc": "Globos de Ouro, BAFTAs, galas de futebol, entregas de prémios..." },
-      { "titulo": "Protocolo institucional", "desc": "Casas Reais, atos de Estado, receções oficiais." },
-      { "titulo": "Marcas de moda e retalho", "desc": "Eventos VIP para clientes, showrooms, apresentações de coleção." },
-      { "titulo": "Produtoras, TV e OTT", "desc": "Tapetes vermelhos, estreias, festivais de cinema." },
-      { "titulo": "Hotéis e venues de luxo", "desc": "Eventos exclusivos, jantares de gala, celebrações privadas." },
-      { "titulo": "Agências de eventos", "desc": "Gestão profissional de múltiplos eventos com acesso único." },
-      { "titulo": "Lojas multimarca", "desc": "Desfiles privados, noites de moda, eventos para clientes VIP." },
-      { "titulo": "Personal shoppers", "desc": "Coordenação de looks para grupos de clientes em eventos." },
-      { "titulo": "Restaurantes com eventos", "desc": "Jantares privados com dress code, inaugurações, eventos gastronómicos." },
-      { "titulo": "Eventos corporativos", "desc": "Team buildings, congressos, jantares de empresa, eventos com dress code." }
+      {
+        "titulo": "Eventos particulares",
+        "desc": "Casamentos, comunhões, batizados, pedidos, aniversários..."
+      },
+      {
+        "titulo": "Galas e prémios",
+        "desc": "Globos de Ouro, BAFTAs, galas de futebol, entregas de prémios..."
+      },
+      {
+        "titulo": "Protocolo institucional",
+        "desc": "Casas Reais, atos de Estado, receções oficiais."
+      },
+      {
+        "titulo": "Marcas de moda e retalho",
+        "desc": "Eventos VIP para clientes, showrooms, apresentações de coleção."
+      },
+      {
+        "titulo": "Produtoras, TV e OTT",
+        "desc": "Tapetes vermelhos, estreias, festivais de cinema."
+      },
+      {
+        "titulo": "Hotéis e venues de luxo",
+        "desc": "Eventos exclusivos, jantares de gala, celebrações privadas."
+      },
+      {
+        "titulo": "Agências de eventos",
+        "desc": "Gestão profissional de múltiplos eventos com acesso único."
+      },
+      {
+        "titulo": "Lojas multimarca",
+        "desc": "Desfiles privados, noites de moda, eventos para clientes VIP."
+      },
+      {
+        "titulo": "Personal shoppers",
+        "desc": "Coordenação de looks para grupos de clientes em eventos."
+      },
+      {
+        "titulo": "Restaurantes com eventos",
+        "desc": "Jantares privados com dress code, inaugurações, eventos gastronómicos."
+      },
+      {
+        "titulo": "Eventos corporativos",
+        "desc": "Team buildings, congressos, jantares de empresa, eventos com dress code."
+      }
     ]
   },
   "precios": {
@@ -72,24 +105,50 @@
     "terminosLink": "termos e condições",
     "planes": [
       {
-        "plan": "Básico", "sub": "1 mês antes", "price": "9",
+        "plan": "Básico",
+        "sub": "1 mês antes",
+        "price": "9",
         "desc": "O registo abre 1 mês antes do evento. Ideal para planeamento curto.",
-        "feats": ["Link único para convidadas", "Deteção de conflitos", "Pré-reserva de looks", "Cores bloqueadas"]
+        "feats": [
+          "Link único para convidadas",
+          "Deteção de conflitos",
+          "Pré-reserva de looks",
+          "Cores bloqueadas"
+        ]
       },
       {
-        "plan": "Standard", "sub": "3 meses antes", "price": "19",
+        "plan": "Standard",
+        "sub": "3 meses antes",
+        "price": "19",
         "desc": "O registo abre 3 meses antes do evento. Tempo suficiente para todas.",
-        "feats": ["Tudo do plano Básico", "Exportar lista de looks", "Suporte prioritário por email"]
+        "feats": [
+          "Tudo do plano Básico",
+          "Exportar lista de looks",
+          "Suporte prioritário por email"
+        ]
       },
       {
-        "plan": "Premium", "sub": "Sem limite de tempo", "price": "29",
+        "plan": "Premium",
+        "sub": "Sem limite de tempo",
+        "price": "29",
         "desc": "O registo abre quando quiseres, sem limite de tempo. Para as mais organizadas.",
-        "feats": ["Tudo anterior", "Acesso antecipado a novas funcionalidades", "Link de convidada personalizado"]
+        "feats": [
+          "Tudo anterior",
+          "Acesso antecipado a novas funcionalidades",
+          "Link de convidada personalizado"
+        ]
       },
       {
-        "plan": "Enterprise", "sub": "À medida", "price": null,
+        "plan": "Enterprise",
+        "sub": "À medida",
+        "price": null,
         "desc": "Solução personalizada para empresas e instituições com múltiplos eventos.",
-        "feats": ["Formulário personalizado", "Pacotes recorrentes", "Multi-organizador", "Suporte dedicado"]
+        "feats": [
+          "Formulário personalizado",
+          "Pacotes recorrentes",
+          "Multi-organizador",
+          "Suporte dedicado"
+        ]
       }
     ]
   },
@@ -106,12 +165,30 @@
     "tituloEmphasis": "precisas saber.",
     "masPreguntas": "Mais perguntas?",
     "preguntas": [
-      { "q": "As minhas convidadas precisam de se registar?", "a": "Não. As tuas convidadas acedem diretamente através do link que lhes envias. Não precisam de criar conta nem descarregar nenhuma app." },
-      { "q": "O que acontece se duas convidadas quiserem usar o mesmo look?", "a": "O sistema avisa imediatamente a segunda convidada quando tenta registar um look já ocupado. Ninguém tem mais direitos do que outra, só quem registou primeiro." },
-      { "q": "O que é a pré-reserva de looks?", "a": "Significa que viste um look mas ainda não o compraste. Ninguém mais pode registar esse mesmo look enquanto a tua pré-reserva estiver ativa." },
-      { "q": "Funciona para outros eventos além de casamentos?", "a": "Sim. NOWEAR funciona para qualquer evento onde o vestuário importa: casamentos, comunhões, batizados, pedidos, aniversários, galas, entregas de prémios, eventos corporativos e muito mais." },
-      { "q": "Posso bloquear cores específicas?", "a": "Sim. Ao criar o teu evento podes definir cores bloqueadas: branco para a noiva, ou a cor de algum familiar especial." },
-      { "q": "Como funciona o pagamento?", "a": "Para particulares é um pagamento único por evento. Aceitamos cartão, Apple Pay e Google Pay. Sem subscrições nem surpresas. Para empresas, oferecemos pacotes à medida. Escreve-nos para support@nowear.es." }
+      {
+        "q": "As minhas convidadas precisam de se registar?",
+        "a": "Não. As tuas convidadas acedem diretamente através do link que lhes envias. Não precisam de criar conta nem descarregar nenhuma app."
+      },
+      {
+        "q": "O que acontece se duas convidadas quiserem usar o mesmo look?",
+        "a": "O sistema avisa imediatamente a segunda convidada quando tenta registar um look já ocupado. Ninguém tem mais direitos do que outra, só quem registou primeiro."
+      },
+      {
+        "q": "O que é a pré-reserva de looks?",
+        "a": "Significa que viste um look mas ainda não o compraste. Ninguém mais pode registar esse mesmo look enquanto a tua pré-reserva estiver ativa."
+      },
+      {
+        "q": "Funciona para outros eventos além de casamentos?",
+        "a": "Sim. NOWEAR funciona para qualquer evento onde o vestuário importa: casamentos, comunhões, batizados, pedidos, aniversários, galas, entregas de prémios, eventos corporativos e muito mais."
+      },
+      {
+        "q": "Posso bloquear cores específicas?",
+        "a": "Sim. Ao criar o teu evento podes definir cores bloqueadas: branco para a noiva, ou a cor de algum familiar especial."
+      },
+      {
+        "q": "Como funciona o pagamento?",
+        "a": "Para particulares é um pagamento único por evento. Aceitamos cartão, Apple Pay e Google Pay. Sem subscrições nem surpresas. Para empresas, oferecemos pacotes à medida. Escreve-nos para support@nowear.es."
+      }
     ]
   },
   "contacto": {
@@ -149,5 +226,239 @@
     "contacto": "Contacto",
     "entrar": "Entrar",
     "empezar": "Começar"
+  },
+  "login": {
+    "bienvenida": "Bem-vinda",
+    "bienvenidaEmphasis": "de volta.",
+    "visual": "O teu evento está à espera. Entra para gerir os looks e partilhar o link com as tuas convidadas.",
+    "titulo": "Iniciar sessão",
+    "subtitulo": "Acede à tua conta nowear",
+    "password": "Palavra-passe",
+    "errorCredenciales": "Email ou palavra-passe incorretos",
+    "entrando": "A entrar...",
+    "entrar": "Entrar",
+    "o": "ou",
+    "google": "Continuar com Google",
+    "sinCuenta": "Não tens conta?",
+    "crearCuenta": "Criar conta grátis"
+  },
+  "register": {
+    "tituloVisual": "O teu evento,",
+    "tituloVisualEmphasis": "sem repetições.",
+    "visual": "Cria a tua conta, regista o teu evento e partilha o link com as tuas convidadas em menos de 2 minutos.",
+    "titulo": "Criar conta",
+    "subtitulo": "É grátis e sem compromisso",
+    "nombre": "Nome",
+    "password": "Palavra-passe",
+    "passwordPlaceholder": "Mínimo 8 caracteres",
+    "errorPassword": "A palavra-passe deve ter pelo menos 8 caracteres",
+    "creando": "A criar conta...",
+    "crear": "Criar conta",
+    "google": "Continuar com Google",
+    "yaTieneCuenta": "Já tens conta?",
+    "iniciarSesion": "Iniciar sessão"
+  },
+  "invitada": {
+    "cargando": "A carregar...",
+    "noEncontrado": "Evento não encontrado.",
+    "registraLook": "Regista o teu look para que nenhuma convidada chegue vestida igual.",
+    "lookRegistrado": "Look registado!",
+    "lookRegistradoDesc": "O teu look foi registado para",
+    "lookRegistradoEmail": "Enviámos-te um email de confirmação.",
+    "registrarOtro": "Registar outro look",
+    "coloresNoDisponibles": "Cores não disponíveis",
+    "volver": "Voltar",
+    "misLooks": "Os meus looks",
+    "emailParaGestionar": "Introduz o teu email para ver e gerir os teus looks registados.",
+    "buscando": "A procurar...",
+    "buscar": "Procurar",
+    "sinLooks": "Não há looks registados com esse email neste evento.",
+    "editar": "Editar",
+    "eliminando": "A eliminar...",
+    "eliminar": "Eliminar",
+    "tuLook": "O teu look",
+    "editarLook": "Editar look",
+    "registraOutfit": "Regista o teu outfit para",
+    "modificaTuLookPara": "Modifica o teu look para",
+    "modificarLook": "Modificar look",
+    "editandoAviso": "Estás a editar o teu look. As alterações substituirão o registo anterior.",
+    "tuNombre": "O teu nome",
+    "nombrePlaceholder": "Ex: Maria Silva",
+    "tuEmail": "O teu email",
+    "emailPlaceholder": "Ex: maria@gmail.com",
+    "emailInfo": "Só para te enviar a confirmação. As outras convidadas não o verão.",
+    "colorLook": "Cor do look",
+    "hastaColores": "Seleciona até 2 cores",
+    "seleccionaColor": "Seleciona uma cor...",
+    "prenda1": "Peça 1",
+    "prenda2": "Segunda peça (opcional)",
+    "marca": "Marca",
+    "marcaPlaceholder": "Ex: Zara",
+    "tipo": "Tipo",
+    "selecciona": "Selecionar...",
+    "modelo": "Modelo",
+    "modeloPlaceholder": "Nome do vestido ou modelo",
+    "referencia": "Referência ou link",
+    "referenciaPlaceholder": "URL ou referência do produto",
+    "opcional": "opcional",
+    "foto": "Foto do look",
+    "fotoInfo": "Toca para fazer upload de uma foto do teu look",
+    "estado": "Estado",
+    "estadoConfirmado": "Confirmado",
+    "estadoConfirmadoDesc": "já compraste o look.",
+    "estadoPrereservado": "Pré-reservado",
+    "estadoPrereservadoDesc": "já viste mas ainda não compraste. Máximo 3 pré-reservas.",
+    "cancelar": "Cancelar",
+    "guardando": "A guardar...",
+    "guardarCambios": "Guardar alterações →",
+    "registrar": "Registar o meu look →",
+    "errorCampos": "Por favor, preenche todos os campos obrigatórios marcados com *",
+    "errorEmail": "Por favor, introduz um email válido.",
+    "errorMaxConfirmados": "Já tens um look confirmado neste evento. Só se permite 1 look confirmado por pessoa.",
+    "errorMaxPrereservas": "Já tens 3 pré-reservas ativas neste evento. Esse é o máximo permitido.",
+    "errorConflicto": "Este look já está registado por",
+    "errorConflictoElige": "Por favor escolhe outro look.",
+    "errorRegistro": "Erro ao registar o look. Tenta novamente.",
+    "tipos": [
+      "Vestido curto",
+      "Vestido midi",
+      "Vestido longo",
+      "Saia",
+      "Calças",
+      "Top",
+      "Blusa",
+      "Fato",
+      "Conjunto",
+      "Outro"
+    ],
+    "colores": {
+      "rosapalo": "Rosa pálido",
+      "lila": "Lilás",
+      "morado": "Roxo",
+      "fucsia": "Fúcsia",
+      "azulcielo": "Azul céu",
+      "azulmarino": "Azul marinho",
+      "verdementa": "Verde menta",
+      "verdebotella": "Verde garrafa",
+      "verdeoliva": "Verde oliva",
+      "beige": "Bege",
+      "camel": "Camel",
+      "marronclaro": "Castanho claro",
+      "marron": "Castanho",
+      "crudo": "Cru",
+      "amarillo": "Amarelo mostarda",
+      "terracota": "Terracota",
+      "teja": "Telha",
+      "nude": "Nude",
+      "granate": "Grená",
+      "negro": "Preto",
+      "gris": "Cinzento",
+      "blanco": "Branco",
+      "dorado": "Dourado",
+      "plateado": "Prateado",
+      "otro": "Outro"
+    }
+  },
+  "sidebar": {
+    "principal": "Principal",
+    "cuenta": "Conta",
+    "misEventos": "Os meus eventos",
+    "nuevoEvento": "Novo evento",
+    "perfil": "Perfil",
+    "facturacion": "Faturação",
+    "ayuda": "Ajuda",
+    "cerrarSesion": "Terminar sessão",
+    "miCuenta": "A minha conta"
+  },
+  "perfil": {
+    "titulo": "Perfil",
+    "subtitulo": "Gere as tuas informações pessoais e preferências",
+    "nombre": "Nome",
+    "email": "Email",
+    "emailNoCambia": "O email não pode ser alterado.",
+    "notificaciones": "Notificações por email",
+    "notificacionesSub": "Escolhe quando queres receber avisos na tua caixa de entrada.",
+    "notifLookLabel": "Nova convidada regista um look",
+    "notifLookSub": "Avisamos-te sempre que alguém registe o seu outfit no teu evento.",
+    "notifConflictoLabel": "Conflito detetado",
+    "notifConflictoSub": "Avisamos-te se duas convidadas registarem o mesmo look.",
+    "guardar": "Guardar alterações",
+    "guardando": "A guardar...",
+    "guardado": "Alterações guardadas com sucesso.",
+    "zonaRiesgo": "Zona de perigo",
+    "zonaRiesgoSub": "Esta ação é permanente e irreversível.",
+    "eliminarCuenta": "Eliminar a minha conta",
+    "eliminando": "A eliminar...",
+    "confirmar1": "Tens a certeza que queres eliminar a tua conta? Esta ação é irreversível.",
+    "confirmar2": "Última confirmação: eliminar conta permanentemente?"
+  },
+  "facturacion": {
+    "titulo": "Faturação",
+    "subtitulo": "Histórico de pagamentos dos teus eventos",
+    "verPlanes": "Ver pacotes",
+    "sinEventos": "Ainda não criaste nenhum evento.",
+    "colEvento": "Evento",
+    "colPlan": "Plano",
+    "colImporte": "Valor",
+    "colFecha": "Data",
+    "mejorar": "Melhorar",
+    "total": "Total",
+    "facturaInfo": "Precisas de uma fatura? Escreve-nos para support@nowear.es com o nome do teu evento e enviamo-la em menos de 24 horas."
+  },
+  "ayuda": {
+    "titulo": "Ajuda",
+    "subtitulo": "Respondemos a todas as tuas dúvidas",
+    "masAyuda": "Precisas de mais ajuda?",
+    "masAyudaSub": "A nossa equipa está disponível de segunda a sexta. Respondemos em menos de 24 horas.",
+    "preguntas": [
+      {
+        "q": "Como partilho o link com as minhas convidadas?",
+        "a": "No teu dashboard, entra no evento e copia o link que aparece no topo. Podes enviá-lo por WhatsApp, email ou incluí-lo no teu site de casamento."
+      },
+      {
+        "q": "Posso alterar a data do meu evento?",
+        "a": "Sim. Entra no teu evento, vai ao separador Ajustes e podes modificar a data, nome e local."
+      },
+      {
+        "q": "O que acontece se uma convidada registar o look errado?",
+        "a": "A convidada pode voltar ao link e registar um novo look. O anterior fica como pré-reserva até confirmar."
+      },
+      {
+        "q": "Como exporto a lista de looks?",
+        "a": "No separador Looks registados do teu evento, clica em Exportar lista. Receberás um ficheiro CSV com todos os looks."
+      },
+      {
+        "q": "Posso ter mais de um evento ativo?",
+        "a": "Com os planos atuais, cada pagamento ativa um evento. Para gerir múltiplos eventos, contacta-nos para o plano Enterprise."
+      },
+      {
+        "q": "Como funciona a pré-reserva?",
+        "a": "Uma convidada pode marcar um look como pré-reservado quando já o viu mas ainda não o comprou. Ninguém mais pode registar esse look enquanto a pré-reserva estiver ativa."
+      },
+      {
+        "q": "Precisas de mais ajuda?",
+        "a": "Escreve-nos para support@nowear.es e respondemos em menos de 24 horas."
+      }
+    ]
+  },
+  "modal": {
+    "titulo": "Escolhe o teu plano",
+    "subtitulo": "Pagamento único por evento, sem subscrições.",
+    "masPopular": "Mais popular",
+    "planActual": "Plano atual",
+    "noDisponible": "Não disponível",
+    "entraAlEvento": "Entra no evento e melhora a partir daí",
+    "redirigiendo": "A redirecionar...",
+    "mejorarPor": "Melhorar por",
+    "elegir": "Escolher",
+    "diferencia": "diferença",
+    "precioCompleto": "Preço completo",
+    "enterprise": "Enterprise",
+    "enterpriseDesc": "Solução personalizada para empresas e eventos recorrentes.",
+    "contactar": "Contactar →",
+    "avisoLegal": "Pagamento seguro com Stripe. Ao completar o pagamento, o plano é ativado imediatamente e aceitas que não são feitos reembolsos após a ativação do serviço.",
+    "terminosLink": "termos e condições",
+    "errorPago": "Erro ao iniciar o pagamento. Tenta novamente.",
+    "errorConexion": "Erro ao ligar ao servidor de pagamentos."
   }
 }

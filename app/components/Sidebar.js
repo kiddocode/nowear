@@ -1,10 +1,12 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 
 export default function Sidebar({ activo }) {
   const router = useRouter()
+  const t = useTranslations('sidebar')
   const [user, setUser] = useState(null)
   const [profile, setProfile] = useState(null)
 
@@ -36,19 +38,17 @@ export default function Sidebar({ activo }) {
   }
 
   const links = [
-    { label: 'Mis eventos', href: '/dashboard', grupo: 'principal' },
-    { label: 'Nuevo evento', href: '/dashboard/nuevo', grupo: 'principal' },
-    { label: 'Perfil', href: '/dashboard/perfil', grupo: 'cuenta' },
-    { label: 'Facturación', href: '/dashboard/facturacion', grupo: 'cuenta' },
-    { label: 'Ayuda', href: '/dashboard/ayuda', grupo: 'cuenta' },
+    { label: t('misEventos'), href: '/dashboard', grupo: 'principal' },
+    { label: t('nuevoEvento'), href: '/dashboard/nuevo', grupo: 'principal' },
+    { label: t('perfil'), href: '/dashboard/perfil', grupo: 'cuenta' },
+    { label: t('facturacion'), href: '/dashboard/facturacion', grupo: 'cuenta' },
+    { label: t('ayuda'), href: '/dashboard/ayuda', grupo: 'cuenta' },
   ]
 
   return (
     <aside style={{borderRight:'1px solid #E0E0DC',padding:'2rem 0',display:'flex',flexDirection:'column',background:'#FFFFFF',position:'sticky',top:'68px',height:'calc(100vh - 68px)'}}>
-
-      {/* PRINCIPAL */}
       <div style={{marginBottom:'1.5rem'}}>
-        <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.75rem'}}>Principal</div>
+        <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.75rem'}}>{t('principal')}</div>
         {links.filter(l=>l.grupo==='principal').map((link,i) => {
           const isActive = activo === link.href
           return (
@@ -63,9 +63,8 @@ export default function Sidebar({ activo }) {
         })}
       </div>
 
-      {/* CUENTA */}
       <div style={{marginBottom:'1.5rem'}}>
-        <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.75rem'}}>Cuenta</div>
+        <div style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.2em',textTransform:'uppercase',color:'#BEBEBA',padding:'0 1.5rem',marginBottom:'0.75rem'}}>{t('cuenta')}</div>
         {links.filter(l=>l.grupo==='cuenta').map((link,i) => {
           const isActive = activo === link.href
           return (
@@ -83,11 +82,10 @@ export default function Sidebar({ activo }) {
           onMouseEnter={e => { e.currentTarget.style.background='#F7F7F5'; e.currentTarget.style.color='#0A0A0A'; e.currentTarget.style.borderLeft='2px solid #E0E0DC' }}
           onMouseLeave={e => { e.currentTarget.style.background='none'; e.currentTarget.style.color='#888884'; e.currentTarget.style.borderLeft='2px solid transparent' }}>
           <span style={{width:'6px',height:'6px',borderRadius:'50%',background:'#BEBEBA',flexShrink:0,opacity:0.5}}></span>
-          Cerrar sesión
+          {t('cerrarSesion')}
         </button>
       </div>
 
-      {/* USUARIO */}
       <div style={{marginTop:'auto',padding:'1.25rem 1.5rem',borderTop:'1px solid #E0E0DC'}}>
         <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
           <div style={{width:'34px',height:'34px',borderRadius:'50%',background:'#0A0A0A',color:'#FFFFFF',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'0.65rem',fontWeight:700,flexShrink:0}}>
@@ -95,7 +93,7 @@ export default function Sidebar({ activo }) {
           </div>
           <div style={{overflow:'hidden'}}>
             <div style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A',whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'}}>{getNombre()}</div>
-            <div style={{fontSize:'0.62rem',fontWeight:300,color:'#888884'}}>Mi cuenta</div>
+            <div style={{fontSize:'0.62rem',fontWeight:300,color:'#888884'}}>{t('miCuenta')}</div>
           </div>
         </div>
       </div>

@@ -44,17 +44,50 @@
     "cta": "Jouw geval staat er niet bij? Vertel het ons →",
     "tuBadge": "Jij",
     "casos": [
-      { "titulo": "Privé-evenementen", "desc": "Bruiloften, communies, dopen, verlovingen, verjaardagen..." },
-      { "titulo": "Galas en prijsuitreikingen", "desc": "Oscar, BAFTA, voetbalgala's, prijsuitreikingen..." },
-      { "titulo": "Institutioneel protocol", "desc": "Koninklijke Huizen, staatsacten, officiële ontvangsten." },
-      { "titulo": "Modemerken & retail", "desc": "VIP-klantevenementen, showrooms, collectiepresentaties." },
-      { "titulo": "Productiebedrijven, TV & OTT", "desc": "Rode lopers, premières, filmfestivals." },
-      { "titulo": "Luxe hotels & venues", "desc": "Exclusieve evenementen, galadineers, privévieringen." },
-      { "titulo": "Evenementenbureaus", "desc": "Professioneel beheer van meerdere evenementen met één toegang." },
-      { "titulo": "Multibrand-boetieks", "desc": "Privémodeshows, modenachten, evenementen voor VIP-klanten." },
-      { "titulo": "Personal shoppers", "desc": "Look-coördinatie voor groepen klanten bij evenementen." },
-      { "titulo": "Restaurants met evenementen", "desc": "Privédineers met dresscode, openingen, gastronomische evenementen." },
-      { "titulo": "Bedrijfsevenementen", "desc": "Teambuildings, congressen, bedrijfsdineers, evenementen met dresscode." }
+      {
+        "titulo": "Privé-evenementen",
+        "desc": "Bruiloften, communies, dopen, verlovingen, verjaardagen..."
+      },
+      {
+        "titulo": "Galas en prijsuitreikingen",
+        "desc": "Oscar, BAFTA, voetbalgala's, prijsuitreikingen..."
+      },
+      {
+        "titulo": "Institutioneel protocol",
+        "desc": "Koninklijke Huizen, staatsacten, officiële ontvangsten."
+      },
+      {
+        "titulo": "Modemerken & retail",
+        "desc": "VIP-klantevenementen, showrooms, collectiepresentaties."
+      },
+      {
+        "titulo": "Productiebedrijven, TV & OTT",
+        "desc": "Rode lopers, premières, filmfestivals."
+      },
+      {
+        "titulo": "Luxe hotels & venues",
+        "desc": "Exclusieve evenementen, galadineers, privévieringen."
+      },
+      {
+        "titulo": "Evenementenbureaus",
+        "desc": "Professioneel beheer van meerdere evenementen met één toegang."
+      },
+      {
+        "titulo": "Multibrand-boetieks",
+        "desc": "Privémodeshows, modenachten, evenementen voor VIP-klanten."
+      },
+      {
+        "titulo": "Personal shoppers",
+        "desc": "Look-coördinatie voor groepen klanten bij evenementen."
+      },
+      {
+        "titulo": "Restaurants met evenementen",
+        "desc": "Privédineers met dresscode, openingen, gastronomische evenementen."
+      },
+      {
+        "titulo": "Bedrijfsevenementen",
+        "desc": "Teambuildings, congressen, bedrijfsdineers, evenementen met dresscode."
+      }
     ]
   },
   "precios": {
@@ -72,24 +105,50 @@
     "terminosLink": "algemene voorwaarden",
     "planes": [
       {
-        "plan": "Basis", "sub": "1 maand van tevoren", "price": "9",
+        "plan": "Basis",
+        "sub": "1 maand van tevoren",
+        "price": "9",
         "desc": "Registratie opent 1 maand voor het evenement. Ideaal voor korte planning.",
-        "feats": ["Unieke link voor gasten", "Conflictdetectie", "Look-voorbehouding", "Geblokkeerde kleuren"]
+        "feats": [
+          "Unieke link voor gasten",
+          "Conflictdetectie",
+          "Look-voorbehouding",
+          "Geblokkeerde kleuren"
+        ]
       },
       {
-        "plan": "Standaard", "sub": "3 maanden van tevoren", "price": "19",
+        "plan": "Standaard",
+        "sub": "3 maanden van tevoren",
+        "price": "19",
         "desc": "Registratie opent 3 maanden voor het evenement. Voldoende tijd voor iedereen.",
-        "feats": ["Alles uit Basis", "Looklijst exporteren", "Prioriteit e-mailondersteuning"]
+        "feats": [
+          "Alles uit Basis",
+          "Looklijst exporteren",
+          "Prioriteit e-mailondersteuning"
+        ]
       },
       {
-        "plan": "Premium", "sub": "Geen tijdslimiet", "price": "29",
+        "plan": "Premium",
+        "sub": "Geen tijdslimiet",
+        "price": "29",
         "desc": "Registratie opent wanneer je wilt, zonder tijdslimiet. Voor de meest georganiseerden.",
-        "feats": ["Alles hiervoor", "Vroege toegang tot nieuwe functies", "Gepersonaliseerde gastenlink"]
+        "feats": [
+          "Alles hiervoor",
+          "Vroege toegang tot nieuwe functies",
+          "Gepersonaliseerde gastenlink"
+        ]
       },
       {
-        "plan": "Enterprise", "sub": "Op maat", "price": null,
+        "plan": "Enterprise",
+        "sub": "Op maat",
+        "price": null,
         "desc": "Gepersonaliseerde oplossing voor bedrijven en instellingen met meerdere evenementen.",
-        "feats": ["Aangepast formulier", "Terugkerende pakketten", "Multi-organisator", "Dedicated ondersteuning"]
+        "feats": [
+          "Aangepast formulier",
+          "Terugkerende pakketten",
+          "Multi-organisator",
+          "Dedicated ondersteuning"
+        ]
       }
     ]
   },
@@ -106,12 +165,30 @@
     "tituloEmphasis": "moet weten.",
     "masPreguntas": "Meer vragen?",
     "preguntas": [
-      { "q": "Moeten mijn gasten zich registreren?", "a": "Nee. Je gasten gaan rechtstreeks via de link die je hen stuurt. Ze hoeven geen account aan te maken of een app te downloaden." },
-      { "q": "Wat gebeurt er als twee gasten hetzelfde willen dragen?", "a": "Het systeem waarschuwt de tweede gaste onmiddellijk wanneer ze een al gereserveerde look probeert te registreren. Niemand heeft meer rechten dan een ander, alleen wie het eerst registreerde." },
-      { "q": "Wat is een look-voorbehouding?", "a": "Dat betekent dat je een look hebt gezien maar nog niet gekocht. Niemand anders kan diezelfde look registreren zolang jouw voorbehouding actief is." },
-      { "q": "Werkt het voor andere evenementen dan bruiloften?", "a": "Ja. NOWEAR werkt voor elk evenement waar kleding ertoe doet: bruiloften, communies, dopen, verlovingen, verjaardagen, galas, prijsuitreikingen, bedrijfsevenementen en veel meer." },
-      { "q": "Kan ik specifieke kleuren blokkeren?", "a": "Ja. Bij het aanmaken van je evenement kun je geblokkeerde kleuren definiëren: wit voor de bruid, of de kleur van een speciaal familielid." },
-      { "q": "Hoe werkt de betaling?", "a": "Voor particulieren is het een eenmalige betaling per evenement. We accepteren kaart, Apple Pay en Google Pay. Geen abonnement of verrassingen. Voor bedrijven bieden we pakketten op maat. Schrijf ons op support@nowear.es." }
+      {
+        "q": "Moeten mijn gasten zich registreren?",
+        "a": "Nee. Je gasten gaan rechtstreeks via de link die je hen stuurt. Ze hoeven geen account aan te maken of een app te downloaden."
+      },
+      {
+        "q": "Wat gebeurt er als twee gasten hetzelfde willen dragen?",
+        "a": "Het systeem waarschuwt de tweede gaste onmiddellijk wanneer ze een al gereserveerde look probeert te registreren. Niemand heeft meer rechten dan een ander, alleen wie het eerst registreerde."
+      },
+      {
+        "q": "Wat is een look-voorbehouding?",
+        "a": "Dat betekent dat je een look hebt gezien maar nog niet gekocht. Niemand anders kan diezelfde look registreren zolang jouw voorbehouding actief is."
+      },
+      {
+        "q": "Werkt het voor andere evenementen dan bruiloften?",
+        "a": "Ja. NOWEAR werkt voor elk evenement waar kleding ertoe doet: bruiloften, communies, dopen, verlovingen, verjaardagen, galas, prijsuitreikingen, bedrijfsevenementen en veel meer."
+      },
+      {
+        "q": "Kan ik specifieke kleuren blokkeren?",
+        "a": "Ja. Bij het aanmaken van je evenement kun je geblokkeerde kleuren definiëren: wit voor de bruid, of de kleur van een speciaal familielid."
+      },
+      {
+        "q": "Hoe werkt de betaling?",
+        "a": "Voor particulieren is het een eenmalige betaling per evenement. We accepteren kaart, Apple Pay en Google Pay. Geen abonnement of verrassingen. Voor bedrijven bieden we pakketten op maat. Schrijf ons op support@nowear.es."
+      }
     ]
   },
   "contacto": {
@@ -149,5 +226,239 @@
     "contacto": "Contact",
     "entrar": "Inloggen",
     "empezar": "Aan de slag"
+  },
+  "login": {
+    "bienvenida": "Welkom",
+    "bienvenidaEmphasis": "terug.",
+    "visual": "Jouw evenement wacht. Log in om looks te beheren en de link te delen met je gasten.",
+    "titulo": "Inloggen",
+    "subtitulo": "Toegang tot jouw nowear-account",
+    "password": "Wachtwoord",
+    "errorCredenciales": "Onjuist e-mailadres of wachtwoord",
+    "entrando": "Inloggen...",
+    "entrar": "Inloggen",
+    "o": "of",
+    "google": "Doorgaan met Google",
+    "sinCuenta": "Nog geen account?",
+    "crearCuenta": "Gratis account aanmaken"
+  },
+  "register": {
+    "tituloVisual": "Jouw evenement,",
+    "tituloVisualEmphasis": "zonder herhalingen.",
+    "visual": "Maak je account aan, registreer je evenement en deel de link met je gasten in minder dan 2 minuten.",
+    "titulo": "Account aanmaken",
+    "subtitulo": "Gratis en vrijblijvend",
+    "nombre": "Naam",
+    "password": "Wachtwoord",
+    "passwordPlaceholder": "Minimaal 8 tekens",
+    "errorPassword": "Het wachtwoord moet minimaal 8 tekens bevatten",
+    "creando": "Account aanmaken...",
+    "crear": "Account aanmaken",
+    "google": "Doorgaan met Google",
+    "yaTieneCuenta": "Heb je al een account?",
+    "iniciarSesion": "Inloggen"
+  },
+  "invitada": {
+    "cargando": "Laden...",
+    "noEncontrado": "Evenement niet gevonden.",
+    "registraLook": "Registreer je look zodat geen gaste hetzelfde gekleed aankomt.",
+    "lookRegistrado": "Look geregistreerd!",
+    "lookRegistradoDesc": "Je look is geregistreerd voor",
+    "lookRegistradoEmail": "We hebben je een bevestigingsmail gestuurd.",
+    "registrarOtro": "Nog een look registreren",
+    "coloresNoDisponibles": "Niet beschikbare kleuren",
+    "volver": "Terug",
+    "misLooks": "Mijn looks",
+    "emailParaGestionar": "Vul je e-mail in om je geregistreerde looks te bekijken en te beheren.",
+    "buscando": "Zoeken...",
+    "buscar": "Zoeken",
+    "sinLooks": "Geen looks geregistreerd met dat e-mailadres voor dit evenement.",
+    "editar": "Bewerken",
+    "eliminando": "Verwijderen...",
+    "eliminar": "Verwijderen",
+    "tuLook": "Jouw look",
+    "editarLook": "Look bewerken",
+    "registraOutfit": "Registreer je outfit voor",
+    "modificaTuLookPara": "Bewerk je look voor",
+    "modificarLook": "Look bewerken",
+    "editandoAviso": "Je bewerkt je look. Wijzigingen vervangen de vorige registratie.",
+    "tuNombre": "Jouw naam",
+    "nombrePlaceholder": "Bijv.: Marie Jansen",
+    "tuEmail": "Jouw e-mail",
+    "emailPlaceholder": "Bijv.: marie@gmail.com",
+    "emailInfo": "Alleen om je de bevestiging te sturen. Andere gasten zien het niet.",
+    "colorLook": "Look kleur",
+    "hastaColores": "Selecteer tot 2 kleuren",
+    "seleccionaColor": "Selecteer een kleur...",
+    "prenda1": "Kledingstuk 1",
+    "prenda2": "Tweede kledingstuk (optioneel)",
+    "marca": "Merk",
+    "marcaPlaceholder": "Bijv.: Zara",
+    "tipo": "Type",
+    "selecciona": "Selecteren...",
+    "modelo": "Model",
+    "modeloPlaceholder": "Naam van de jurk of het model",
+    "referencia": "Referentie of link",
+    "referenciaPlaceholder": "URL of productreferentie",
+    "opcional": "optioneel",
+    "foto": "Look foto",
+    "fotoInfo": "Tik om een foto van je look te uploaden",
+    "estado": "Status",
+    "estadoConfirmado": "Bevestigd",
+    "estadoConfirmadoDesc": "je hebt de look al gekocht.",
+    "estadoPrereservado": "Voorbesteld",
+    "estadoPrereservadoDesc": "je hebt het gezien maar nog niet gekocht. Maximaal 3 voorbestellingen.",
+    "cancelar": "Annuleren",
+    "guardando": "Opslaan...",
+    "guardarCambios": "Wijzigingen opslaan →",
+    "registrar": "Mijn look registreren →",
+    "errorCampos": "Vul alle verplichte velden in, gemarkeerd met *",
+    "errorEmail": "Vul een geldig e-mailadres in.",
+    "errorMaxConfirmados": "Je hebt al een bevestigde look voor dit evenement. Slechts 1 bevestigde look per persoon.",
+    "errorMaxPrereservas": "Je hebt al 3 actieve voorbestellingen. Dat is het maximum.",
+    "errorConflicto": "Deze look is al geregistreerd door",
+    "errorConflictoElige": "Kies een andere look.",
+    "errorRegistro": "Fout bij het registreren. Probeer het opnieuw.",
+    "tipos": [
+      "Korte jurk",
+      "Midi jurk",
+      "Lange jurk",
+      "Rok",
+      "Broek",
+      "Top",
+      "Blouse",
+      "Pak",
+      "Set",
+      "Overig"
+    ],
+    "colores": {
+      "rosapalo": "Poederroze",
+      "lila": "Lila",
+      "morado": "Paars",
+      "fucsia": "Fuchsia",
+      "azulcielo": "Hemelsblauw",
+      "azulmarino": "Marineblauw",
+      "verdementa": "Mintgroen",
+      "verdebotella": "Flessengroen",
+      "verdeoliva": "Olijfgroen",
+      "beige": "Beige",
+      "camel": "Camel",
+      "marronclaro": "Lichtbruin",
+      "marron": "Bruin",
+      "crudo": "Ecru",
+      "amarillo": "Mosterdgeel",
+      "terracota": "Terracotta",
+      "teja": "Roestbruin",
+      "nude": "Nude",
+      "granate": "Bordeaux",
+      "negro": "Zwart",
+      "gris": "Grijs",
+      "blanco": "Wit",
+      "dorado": "Goud",
+      "plateado": "Zilver",
+      "otro": "Overig"
+    }
+  },
+  "sidebar": {
+    "principal": "Hoofdmenu",
+    "cuenta": "Account",
+    "misEventos": "Mijn evenementen",
+    "nuevoEvento": "Nieuw evenement",
+    "perfil": "Profiel",
+    "facturacion": "Facturering",
+    "ayuda": "Help",
+    "cerrarSesion": "Uitloggen",
+    "miCuenta": "Mijn account"
+  },
+  "perfil": {
+    "titulo": "Profiel",
+    "subtitulo": "Beheer uw persoonlijke informatie en voorkeuren",
+    "nombre": "Naam",
+    "email": "E-mail",
+    "emailNoCambia": "Het e-mailadres kan niet worden gewijzigd.",
+    "notificaciones": "E-mailmeldingen",
+    "notificacionesSub": "Kies wanneer u meldingen wilt ontvangen.",
+    "notifLookLabel": "Nieuwe gaste registreert een look",
+    "notifLookSub": "We informeren u telkens wanneer iemand een outfit registreert.",
+    "notifConflictoLabel": "Conflict gedetecteerd",
+    "notifConflictoSub": "We informeren u als twee gasten dezelfde look registreren.",
+    "guardar": "Wijzigingen opslaan",
+    "guardando": "Opslaan...",
+    "guardado": "Wijzigingen succesvol opgeslagen.",
+    "zonaRiesgo": "Gevarenzone",
+    "zonaRiesgoSub": "Deze actie is permanent en onomkeerbaar.",
+    "eliminarCuenta": "Mijn account verwijderen",
+    "eliminando": "Verwijderen...",
+    "confirmar1": "Weet u zeker dat u uw account wilt verwijderen? Deze actie is onomkeerbaar.",
+    "confirmar2": "Laatste bevestiging: account permanent verwijderen?"
+  },
+  "facturacion": {
+    "titulo": "Facturering",
+    "subtitulo": "Betalingsgeschiedenis van uw evenementen",
+    "verPlanes": "Pakketten bekijken",
+    "sinEventos": "U heeft nog geen evenementen aangemaakt.",
+    "colEvento": "Evenement",
+    "colPlan": "Pakket",
+    "colImporte": "Bedrag",
+    "colFecha": "Datum",
+    "mejorar": "Upgraden",
+    "total": "Totaal",
+    "facturaInfo": "Heeft u een factuur nodig? Schrijf ons op support@nowear.es met de naam van uw evenement en we sturen het binnen 24 uur."
+  },
+  "ayuda": {
+    "titulo": "Help",
+    "subtitulo": "We beantwoorden al uw vragen",
+    "masAyuda": "Meer hulp nodig?",
+    "masAyudaSub": "Ons team is beschikbaar van maandag tot vrijdag. We antwoorden binnen 24 uur.",
+    "preguntas": [
+      {
+        "q": "Hoe deel ik de link met mijn gasten?",
+        "a": "Ga in uw dashboard naar het evenement en kopieer de link bovenaan. U kunt deze sturen via WhatsApp, e-mail of op uw trouwwebsite plaatsen."
+      },
+      {
+        "q": "Kan ik de datum van mijn evenement wijzigen?",
+        "a": "Ja. Ga naar uw evenement, klik op Instellingen en u kunt de datum, naam en locatie wijzigen."
+      },
+      {
+        "q": "Wat als een gaste de verkeerde look registreert?",
+        "a": "De gaste kan terugkeren naar de link en een nieuwe look registreren. De vorige blijft als voorbestelling totdat deze bevestigd wordt."
+      },
+      {
+        "q": "Hoe exporteer ik de looklijst?",
+        "a": "Op het tabblad Geregistreerde looks van uw evenement klikt u op Lijst exporteren. U ontvangt een CSV-bestand."
+      },
+      {
+        "q": "Kan ik meer dan één actief evenement hebben?",
+        "a": "Met de huidige pakketten activeert elke betaling één evenement. Voor meerdere evenementen, neem contact op voor het Enterprise-pakket."
+      },
+      {
+        "q": "Hoe werkt de voorbestelling?",
+        "a": "Een gaste kan een look als voorbesteld markeren als ze het gezien maar nog niet gekocht heeft. Niemand anders kan die look registreren zolang de voorbestelling actief is."
+      },
+      {
+        "q": "Meer hulp nodig?",
+        "a": "Schrijf ons op support@nowear.es en we antwoorden binnen 24 uur."
+      }
+    ]
+  },
+  "modal": {
+    "titulo": "Kies uw pakket",
+    "subtitulo": "Eenmalige betaling per evenement, geen abonnement.",
+    "masPopular": "Meest populair",
+    "planActual": "Huidig pakket",
+    "noDisponible": "Niet beschikbaar",
+    "entraAlEvento": "Ga naar het evenement en upgrade van daaruit",
+    "redirigiendo": "Doorsturen...",
+    "mejorarPor": "Upgraden voor",
+    "elegir": "Kiezen",
+    "diferencia": "verschil",
+    "precioCompleto": "Volledige prijs",
+    "enterprise": "Enterprise",
+    "enterpriseDesc": "Oplossing op maat voor bedrijven en terugkerende evenementen.",
+    "contactar": "Contact →",
+    "avisoLegal": "Veilige betaling met Stripe. Bij het voltooien van de betaling wordt het pakket onmiddellijk geactiveerd en accepteert u dat er geen terugbetalingen worden gedaan na activering.",
+    "terminosLink": "algemene voorwaarden",
+    "errorPago": "Fout bij het starten van de betaling. Probeer het opnieuw.",
+    "errorConexion": "Verbindingsfout met de betalingsserver."
   }
 }

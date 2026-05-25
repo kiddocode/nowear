@@ -1,35 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
-
-const COLORES = [
-  {hex:'#F5C6D0',nombre:'Rosa palo'},
-  {hex:'#D4A8D4',nombre:'Lila'},
-  {hex:'#6B3FA0',nombre:'Morado'},
-  {hex:'#D4006A',nombre:'Fucsia'},
-  {hex:'#A8C4E0',nombre:'Azul cielo'},
-  {hex:'#8B9DC3',nombre:'Azul marino'},
-  {hex:'#A8D4B4',nombre:'Verde menta'},
-  {hex:'#4A7C59',nombre:'Verde botella'},
-  {hex:'#6B7C3A',nombre:'Verde oliva'},
-  {hex:'#F5E6C8',nombre:'Beige'},
-  {hex:'#D4B896',nombre:'Camel'},
-  {hex:'#C4956A',nombre:'Marrón claro'},
-  {hex:'#8B4513',nombre:'Marrón'},
-  {hex:'#E8E8E4',nombre:'Crudo'},
-  {hex:'#F5D6A0',nombre:'Amarillo mostaza'},
-  {hex:'#E07A5F',nombre:'Terracota'},
-  {hex:'#C4917C',nombre:'Teja'},
-  {hex:'#D4A8A8',nombre:'Nude'},
-  {hex:'#6B1A2A',nombre:'Granate'},
-  {hex:'#2C2C2C',nombre:'Negro'},
-  {hex:'#888884',nombre:'Gris'},
-  {hex:'#FFFFFF',nombre:'Blanco'},
-  {hex:'#C8A86B',nombre:'Dorado'},
-  {hex:'#C0C0C0',nombre:'Plateado'},
-  {hex:'#E0E0DC',nombre:'Otro'},
-]
 
 const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
 
@@ -48,20 +21,48 @@ function esPremiumOSuperior(evento) {
 
 export default function InvitadaPage() {
   const { slug } = useParams()
+  const t = useTranslations('invitada')
+
+  const COLORES = [
+    {hex:'#F5C6D0',nombre:t('colores.rosapalo')},
+    {hex:'#D4A8D4',nombre:t('colores.lila')},
+    {hex:'#6B3FA0',nombre:t('colores.morado')},
+    {hex:'#D4006A',nombre:t('colores.fucsia')},
+    {hex:'#A8C4E0',nombre:t('colores.azulcielo')},
+    {hex:'#8B9DC3',nombre:t('colores.azulmarino')},
+    {hex:'#A8D4B4',nombre:t('colores.verdementa')},
+    {hex:'#4A7C59',nombre:t('colores.verdebotella')},
+    {hex:'#6B7C3A',nombre:t('colores.verdeoliva')},
+    {hex:'#F5E6C8',nombre:t('colores.beige')},
+    {hex:'#D4B896',nombre:t('colores.camel')},
+    {hex:'#C4956A',nombre:t('colores.marronclaro')},
+    {hex:'#8B4513',nombre:t('colores.marron')},
+    {hex:'#E8E8E4',nombre:t('colores.crudo')},
+    {hex:'#F5D6A0',nombre:t('colores.amarillo')},
+    {hex:'#E07A5F',nombre:t('colores.terracota')},
+    {hex:'#C4917C',nombre:t('colores.teja')},
+    {hex:'#D4A8A8',nombre:t('colores.nude')},
+    {hex:'#6B1A2A',nombre:t('colores.granate')},
+    {hex:'#2C2C2C',nombre:t('colores.negro')},
+    {hex:'#888884',nombre:t('colores.gris')},
+    {hex:'#FFFFFF',nombre:t('colores.blanco')},
+    {hex:'#C8A86B',nombre:t('colores.dorado')},
+    {hex:'#C0C0C0',nombre:t('colores.plateado')},
+    {hex:'#E0E0DC',nombre:t('colores.otro')},
+  ]
+
   const [evento, setEvento] = useState(null)
   const [organizadora, setOrganizadora] = useState(null)
   const [loading, setLoading] = useState(true)
   const [enviado, setEnviado] = useState(false)
   const [error, setError] = useState('')
   const [enviando, setEnviando] = useState(false)
-
   const [modoGestion, setModoGestion] = useState(false)
   const [emailGestion, setEmailGestion] = useState('')
   const [buscandoLooks, setBuscandoLooks] = useState(false)
   const [looksExistentes, setLooksExistentes] = useState(null)
   const [lookEditando, setLookEditando] = useState(null)
   const [eliminando, setEliminando] = useState(null)
-
   const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [colores, setColores] = useState([])
@@ -101,14 +102,11 @@ export default function InvitadaPage() {
   }
 
   function resetForm() {
-    setNombre('')
-    setColores([])
+    setNombre(''); setColores([])
     setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1('')
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
-    setEstado('confirmado')
-    setFoto(null); setFotoPreview(null)
-    setLookEditando(null)
-    setError('')
+    setEstado('confirmado'); setFoto(null); setFotoPreview(null)
+    setLookEditando(null); setError('')
   }
 
   async function enviarEmailAsync(tipo, emailInv, nombreInv) {
@@ -117,28 +115,21 @@ export default function InvitadaPage() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          tipo,
-          emailInvitada: emailInv,
-          nombreInvitada: nombreInv,
+          tipo, emailInvitada: emailInv, nombreInvitada: nombreInv,
           nombreEvento: evento.nombre,
           nombreOrganizadora: organizadora?.nombre || 'la organizadora',
-          marca: marca1,
-          modelo: modelo1,
+          marca: marca1, modelo: modelo1,
           color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
-          organizadoraId: evento.organizadora_id,
-          eventoId: evento.slug,
+          organizadoraId: evento.organizadora_id, eventoId: evento.slug,
         })
       })
-    } catch (e) {
-      console.error('Error enviando email:', e)
-    }
+    } catch (e) { console.error('Error enviando email:', e) }
   }
 
   async function buscarLooks() {
     if (!emailGestion) return
     setBuscandoLooks(true)
-    const { data } = await supabase
-      .from('looks').select('*')
+    const { data } = await supabase.from('looks').select('*')
       .eq('evento_id', evento.id)
       .eq('email_invitada', emailGestion.toLowerCase().trim())
     setLooksExistentes(data || [])
@@ -154,17 +145,12 @@ export default function InvitadaPage() {
 
   function handleEditarLook(look) {
     setLookEditando(look)
-    setNombre(look.nombre_invitada)
-    setEmail(look.email_invitada)
+    setNombre(look.nombre_invitada); setEmail(look.email_invitada)
     setColores([look.color_hex, look.color_hex_2].filter(Boolean))
-    setMarca1(look.marca || '')
-    setModelo1(look.modelo || '')
-    setTipo1(look.tipo || '')
-    setReferencia1(look.referencia || '')
-    setMarca2(look.marca2 || '')
-    setModelo2(look.modelo2 || '')
-    setTipo2(look.tipo2 || '')
-    setReferencia2(look.referencia2 || '')
+    setMarca1(look.marca || ''); setModelo1(look.modelo || '')
+    setTipo1(look.tipo || ''); setReferencia1(look.referencia || '')
+    setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
+    setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || '')
     setEstado(look.estado || 'confirmado')
     setModoGestion(false)
   }
@@ -172,117 +158,76 @@ export default function InvitadaPage() {
   async function handleActualizarLook() {
     setError('')
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
-      setError('Por favor, rellena todos los campos obligatorios marcados con *')
-      return
+      setError(t('errorCampos')); return
     }
     setEnviando(true)
-
-    const { data: looksConflicto } = await supabase
-      .from('looks').select('nombre_invitada, id')
-      .eq('evento_id', evento.id)
-      .eq('color_hex', colores[0])
-      .ilike('marca', marca1.trim())
-      .ilike('modelo', modelo1.trim())
+    const { data: looksConflicto } = await supabase.from('looks').select('nombre_invitada, id')
+      .eq('evento_id', evento.id).eq('color_hex', colores[0])
+      .ilike('marca', marca1.trim()).ilike('modelo', modelo1.trim())
       .neq('id', lookEditando.id)
-
     if (looksConflicto && looksConflicto.length > 0) {
       await supabase.from('conflictos').insert({
-        evento_id: evento.id,
-        nombre_invitada: nombre,
+        evento_id: evento.id, nombre_invitada: nombre,
         email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1,
-        color_hex: colores[0],
+        marca: marca1, modelo: modelo1, color_hex: colores[0],
         nombre_conflicto_con: looksConflicto[0].nombre_invitada
       })
       enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
       setEnviando(false)
-      setError(`Este look ya está registrado por ${looksConflicto[0].nombre_invitada}. Por favor elige otro.`)
+      setError(`${t('errorConflicto')} ${looksConflicto[0].nombre_invitada}. ${t('errorConflictoElige')}`)
       return
     }
-
     await supabase.from('looks').update({
-      nombre_invitada: nombre,
-      color_hex: colores[0], color_hex_2: colores[1] || null,
+      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
-      estado
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, estado
     }).eq('id', lookEditando.id)
-
     const emailGuardado = email.toLowerCase().trim()
     const nombreGuardado = nombre
-
     const lookActualizado = {
-      ...lookEditando,
-      nombre_invitada: nombre,
+      ...lookEditando, nombre_invitada: nombre,
       color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
-      estado
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, estado
     }
-
     setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
-    setEmailGestion(emailGuardado)
-    setEnviando(false)
-    resetForm()
-    setModoGestion(true)
-
+    setEmailGestion(emailGuardado); setEnviando(false); resetForm(); setModoGestion(true)
     enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
 
   async function handleEnviar() {
     setError('')
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
-      setError('Por favor, rellena todos los campos obligatorios marcados con *')
-      return
+      setError(t('errorCampos')); return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) {
-      setError('Por favor, introduce un email válido.')
-      return
-    }
-
-    const { data: existentes } = await supabase
-      .from('looks').select('estado')
-      .eq('evento_id', evento.id)
-      .eq('email_invitada', email.toLowerCase().trim())
-
+    if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
+    const { data: existentes } = await supabase.from('looks').select('estado')
+      .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
     if (existentes && existentes.length > 0) {
       const confirmados = existentes.filter(l => l.estado === 'confirmado').length
       const prereservados = existentes.filter(l => l.estado === 'prereservado').length
-      if (estado === 'confirmado' && confirmados >= 1) {
-        setError('Ya tienes un look confirmado en este evento. Solo se permite 1 look confirmado por persona.')
-        return
-      }
-      if (estado === 'prereservado' && prereservados >= 3) {
-        setError('Ya tienes 3 prerreservas activas en este evento. Ese es el máximo permitido.')
-        return
-      }
+      if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
+      if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
     }
-
-    const { data: looksConflicto } = await supabase
-      .from('looks').select('nombre_invitada, estado')
-      .eq('evento_id', evento.id)
-      .eq('color_hex', colores[0])
-      .ilike('marca', marca1.trim())
-      .ilike('modelo', modelo1.trim())
-
+    const { data: looksConflicto } = await supabase.from('looks').select('nombre_invitada, estado')
+      .eq('evento_id', evento.id).eq('color_hex', colores[0])
+      .ilike('marca', marca1.trim()).ilike('modelo', modelo1.trim())
     if (looksConflicto && looksConflicto.length > 0) {
       const conflicto = looksConflicto[0]
       await supabase.from('conflictos').insert({
-        evento_id: evento.id,
-        nombre_invitada: nombre,
+        evento_id: evento.id, nombre_invitada: nombre,
         email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1,
-        color_hex: colores[0],
+        marca: marca1, modelo: modelo1, color_hex: colores[0],
         nombre_conflicto_con: conflicto.nombre_invitada
       })
       enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`Este look (${marca1}, ${modelo1}, ${COLORES.find(c=>c.hex===colores[0])?.nombre}) ya está registrado por ${conflicto.nombre_invitada}. Por favor elige otro look.`)
+      setError(`${t('errorConflicto')} ${conflicto.nombre_invitada}. ${t('errorConflictoElige')}`)
       return
     }
-
     setEnviando(true)
-
     let foto_url = null
     if (foto) {
       const ext = foto.name.split('.').pop()
@@ -293,46 +238,33 @@ export default function InvitadaPage() {
         foto_url = urlData.publicUrl
       }
     }
-
     const { error: insertError } = await supabase.from('looks').insert({
-      evento_id: evento.id,
-      nombre_invitada: nombre,
+      evento_id: evento.id, nombre_invitada: nombre,
       email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null,
-      estado, foto_url
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, estado, foto_url
     })
-
-    if (insertError) {
-      setEnviando(false)
-      setError('Error al registrar el look. Inténtalo de nuevo.')
-      return
-    }
-
+    if (insertError) { setEnviando(false); setError(t('errorRegistro')); return }
     const emailGuardado = email.toLowerCase().trim()
     const nombreGuardado = nombre
-    setEnviando(false)
-    setEnviado(true)
+    setEnviando(false); setEnviado(true)
     enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
 
-  if (loading) return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>Cargando...</div>
-  )
-  if (!evento) return (
-    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>Evento no encontrado.</div>
-  )
+  if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('cargando')}</div>
+  if (!evento) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('noEncontrado')}</div>
 
   if (enviado) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center'}}>
-      <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>¡Look registrado!</div>
+      <div style={{fontSize:'2.5rem',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>{t('lookRegistrado')}</div>
       <p style={{fontSize:'0.9rem',fontWeight:300,color:'#888884',marginBottom:'2rem',maxWidth:'400px',lineHeight:1.7}}>
-        Tu look ha sido registrado para <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>. Te hemos enviado un email de confirmación.
+        {t('lookRegistradoDesc')} <strong style={{fontWeight:600,color:'#0A0A0A'}}>{evento.nombre}</strong>. {t('lookRegistradoEmail')}
       </p>
       <button onClick={() => { setEnviado(false); resetForm() }}
         style={{fontSize:'0.78rem',fontWeight:500,padding:'0.75rem 2rem',background:'transparent',color:'#0A0A0A',border:'1px solid #0A0A0A',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
-        Registrar otro look
+        {t('registrarOtro')}
       </button>
     </div>
   )
@@ -341,15 +273,14 @@ export default function InvitadaPage() {
   const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.88rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
   const labelStyle = {display:'block',fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',marginBottom:'0.55rem'}
 
-  // Panel izquierdo: Premium usa foto y mensaje propios, el resto foto fija
   const isPremium = esPremiumOSuperior(evento)
   const fotoPanel = isPremium && evento.foto_evento_url ? evento.foto_evento_url : FOTO_FIJA
-  const mensajePanel = isPremium && evento.mensaje_invitada ? evento.mensaje_invitada : 'Registra tu look para que ninguna invitada llegue vestida igual.'
+  const mensajePanel = isPremium && evento.mensaje_invitada ? evento.mensaje_invitada : t('registraLook')
+
+  const tiposData = t.raw('tipos')
 
   return (
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',minHeight:'calc(100vh - 68px)'}}>
-
-      {/* PANEL IZQUIERDO */}
       <div style={{position:'sticky',top:'68px',height:'calc(100vh - 68px)',overflow:'hidden'}}>
         <img src={fotoPanel} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
         <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -359,44 +290,41 @@ export default function InvitadaPage() {
             {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
             {evento.lugar ? ` · ${evento.lugar}` : ''}
           </p>
-          <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.8)',lineHeight:1.8,maxWidth:'380px'}}>
-            {mensajePanel}
-          </p>
+          <p style={{fontSize:'0.85rem',fontWeight:400,color:'rgba(255,255,255,0.8)',lineHeight:1.8,maxWidth:'380px'}}>{mensajePanel}</p>
           {evento.colores_bloqueados && (
             <div style={{marginTop:'1.5rem',padding:'1rem 1.25rem',background:'rgba(196,145,124,0.2)',border:'1px solid rgba(196,145,124,0.4)'}}>
-              <p style={{fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#F07987',marginBottom:'0.3rem'}}>Colores no disponibles</p>
+              <p style={{fontSize:'0.62rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#F07987',marginBottom:'0.3rem'}}>{t('coloresNoDisponibles')}</p>
               <p style={{fontSize:'0.8rem',fontWeight:400,color:'rgba(255,255,255,0.8)'}}>{evento.colores_bloqueados}</p>
             </div>
           )}
         </div>
       </div>
 
-      {/* PANEL DERECHO: FORMULARIO */}
       <div style={{padding:'3rem',background:'#FFFFFF',overflowY:'auto'}}>
         {modoGestion ? (
           <div>
             <button onClick={() => { setModoGestion(false); setLooksExistentes(null); setEmailGestion('') }}
               style={{display:'flex',alignItems:'center',gap:'0.5rem',fontSize:'0.65rem',fontWeight:600,letterSpacing:'0.1em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginBottom:'2rem',padding:0}}>
-              ← Volver
+              ← {t('volver')}
             </button>
-            <h2 style={{fontSize:'1.8rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>Mis looks</h2>
-            <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552',marginBottom:'2rem'}}>Introduce tu email para ver y gestionar tus looks registrados.</p>
+            <h2 style={{fontSize:'1.8rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>{t('misLooks')}</h2>
+            <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552',marginBottom:'2rem'}}>{t('emailParaGestionar')}</p>
             <div style={{display:'flex',gap:'0.75rem',marginBottom:'1.5rem'}}>
               <input type="email" placeholder="tu@email.com" value={emailGestion} onChange={e => setEmailGestion(e.target.value)}
                 style={{...inputStyle,flex:1}} onKeyDown={e => e.key === 'Enter' && buscarLooks()}/>
               <button onClick={buscarLooks} disabled={buscandoLooks}
                 style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:buscandoLooks?0.6:1}}>
-                {buscandoLooks ? 'Buscando...' : 'Buscar'}
+                {buscandoLooks ? t('buscando') : t('buscar')}
               </button>
             </div>
             {looksExistentes !== null && (
               looksExistentes.length === 0 ? (
                 <div style={{padding:'2rem',background:'#F7F7F5',border:'1px solid #E0E0DC',textAlign:'center',fontSize:'0.82rem',color:'#888884'}}>
-                  No hay looks registrados con ese email en este evento.
+                  {t('sinLooks')}
                 </div>
               ) : (
                 <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
-                  {looksExistentes.map((look,i) => (
+                  {looksExistentes.map((look, i) => (
                     <div key={i} style={{padding:'1.25rem',border:'1px solid #E0E0DC',background:'#FFFFFF',borderRadius:'8px'}}>
                       <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'0.75rem'}}>
                         <div style={{display:'flex',alignItems:'center',gap:'0.5rem'}}>
@@ -405,18 +333,18 @@ export default function InvitadaPage() {
                           <span style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{look.marca} · {look.modelo}</span>
                         </div>
                         <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.2rem 0.6rem',borderRadius:'20px',background:look.estado==='confirmado'?'#0A0A0A':'#F5EDE8',color:look.estado==='confirmado'?'#FFFFFF':'#C4917C'}}>
-                          {look.estado}
+                          {look.estado === 'confirmado' ? t('estadoConfirmado') : t('estadoPrereservado')}
                         </span>
                       </div>
                       <div style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'1rem'}}>{look.tipo}</div>
                       <div style={{display:'flex',gap:'0.75rem'}}>
                         <button onClick={() => handleEditarLook(look)}
                           style={{flex:1,padding:'0.6rem',fontSize:'0.72rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
-                          Editar
+                          {t('editar')}
                         </button>
                         <button onClick={() => handleEliminarLook(look.id)} disabled={eliminando === look.id}
                           style={{flex:1,padding:'0.6rem',fontSize:'0.72rem',fontWeight:600,background:'transparent',color:'#F07987',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:eliminando===look.id?0.6:1}}>
-                          {eliminando === look.id ? 'Eliminando...' : 'Eliminar'}
+                          {eliminando === look.id ? t('eliminando') : t('eliminar')}
                         </button>
                       </div>
                     </div>
@@ -430,50 +358,49 @@ export default function InvitadaPage() {
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:'2.5rem'}}>
               <div>
                 <h2 style={{fontSize:'2rem',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>
-                  {lookEditando ? 'Editar look' : 'Tu look'}
+                  {lookEditando ? t('editarLook') : t('tuLook')}
                 </h2>
                 <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552'}}>
-                  {lookEditando ? 'Modifica tu look para ' : 'Registra tu outfit para '}
-                  <strong style={{fontWeight:700}}>{evento.nombre}</strong>
+                  {lookEditando ? t('modificaTuLookPara') : t('registraOutfit')} <strong style={{fontWeight:700}}>{evento.nombre}</strong>
                 </p>
               </div>
               {!lookEditando && (
                 <button onClick={() => setModoGestion(true)}
                   style={{fontSize:'0.65rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',background:'none',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.5rem 1rem',borderRadius:'4px',whiteSpace:'nowrap'}}>
-                  Modificar look
+                  {t('modificarLook')}
                 </button>
               )}
             </div>
 
             {lookEditando && (
               <div style={{padding:'0.75rem 1rem',background:'#F5EDE8',border:'1px solid #F5D6A0',marginBottom:'1.5rem',borderRadius:'4px',fontSize:'0.78rem',fontWeight:400,color:'#C4917C'}}>
-                Estás editando tu look. Los cambios reemplazarán el registro anterior.
+                {t('editandoAviso')}
               </div>
             )}
 
             <div style={{marginBottom:'1.25rem'}}>
-              <label style={labelStyle}>Tu nombre <span style={{color:'#F07987'}}>*</span></label>
-              <input type="text" placeholder="Ej: María García" value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
+              <label style={labelStyle}>{t('tuNombre')} <span style={{color:'#F07987'}}>*</span></label>
+              <input type="text" placeholder={t('nombrePlaceholder')} value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
             </div>
 
             <div style={{marginBottom:'1.25rem'}}>
-              <label style={labelStyle}>Tu email <span style={{color:'#F07987'}}>*</span></label>
-              <input type="email" placeholder="Ej: maria@gmail.com" value={email} onChange={e => setEmail(e.target.value)} style={{...inputStyle,background:lookEditando?'#F7F7F5':'#FFFFFF'}} disabled={!!lookEditando}/>
-              {!lookEditando && <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem'}}>Solo para enviarte la confirmación. No lo verán otras invitadas.</p>}
+              <label style={labelStyle}>{t('tuEmail')} <span style={{color:'#F07987'}}>*</span></label>
+              <input type="email" placeholder={t('emailPlaceholder')} value={email} onChange={e => setEmail(e.target.value)} style={{...inputStyle,background:lookEditando?'#F7F7F5':'#FFFFFF'}} disabled={!!lookEditando}/>
+              {!lookEditando && <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem'}}>{t('emailInfo')}</p>}
             </div>
 
             <div style={{marginBottom:'1.25rem'}}>
-              <label style={{...labelStyle,marginBottom:'0.25rem'}}>Color del look <span style={{color:'#F07987'}}>*</span></label>
-              <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.55rem'}}>Selecciona hasta 2 colores</p>
+              <label style={{...labelStyle,marginBottom:'0.25rem'}}>{t('colorLook')} <span style={{color:'#F07987'}}>*</span></label>
+              <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.55rem'}}>{t('hastaColores')}</p>
               <select onChange={e => { if(e.target.value) toggleColor(e.target.value); e.target.value='' }} style={{...selectStyle,marginBottom:'0.75rem'}}>
-                <option value="">Selecciona un color...</option>
-                {COLORES.filter(c => !colores.includes(c.hex)).map((c,i) => (
+                <option value="">{t('seleccionaColor')}</option>
+                {COLORES.filter(c => !colores.includes(c.hex)).map((c, i) => (
                   <option key={i} value={c.hex}>{c.nombre}</option>
                 ))}
               </select>
               {colores.length > 0 && (
                 <div style={{display:'flex',gap:'0.75rem',flexWrap:'wrap'}}>
-                  {colores.map((hex,i) => (
+                  {colores.map((hex, i) => (
                     <div key={i} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.4rem 0.75rem',border:'1px solid #E0E0DC',background:'#F7F7F5'}}>
                       <div style={{width:'14px',height:'14px',borderRadius:'50%',background:hex,border:'1px solid #E0E0DC',flexShrink:0}}></div>
                       <span style={{fontSize:'0.78rem',fontWeight:400,color:'#0A0A0A'}}>{COLORES.find(c=>c.hex===hex)?.nombre}</span>
@@ -486,71 +413,67 @@ export default function InvitadaPage() {
 
             <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC'}}>
               <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
-                Prenda 1 <span style={{color:'#F07987'}}>*</span>
+                {t('prenda1')} <span style={{color:'#F07987'}}>*</span>
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
                 <div>
-                  <label style={labelStyle}>Marca <span style={{color:'#F07987'}}>*</span></label>
-                  <input type="text" placeholder="Ej: Zara" value={marca1} onChange={e => setMarca1(e.target.value)} style={inputStyle}/>
+                  <label style={labelStyle}>{t('marca')} <span style={{color:'#F07987'}}>*</span></label>
+                  <input type="text" placeholder={t('marcaPlaceholder')} value={marca1} onChange={e => setMarca1(e.target.value)} style={inputStyle}/>
                 </div>
                 <div>
-                  <label style={labelStyle}>Tipo <span style={{color:'#F07987'}}>*</span></label>
+                  <label style={labelStyle}>{t('tipo')} <span style={{color:'#F07987'}}>*</span></label>
                   <select value={tipo1} onChange={e => setTipo1(e.target.value)} style={selectStyle}>
-                    <option value="">Selecciona...</option>
-                    <option>Vestido corto</option><option>Vestido midi</option><option>Vestido largo</option>
-                    <option>Falda</option><option>Pantalón</option><option>Top</option><option>Blusa</option>
-                    <option>Traje</option><option>Conjunto</option><option>Otro</option>
+                    <option value="">{t('selecciona')}</option>
+                    {tiposData.map((tipo, i) => <option key={i}>{tipo}</option>)}
                   </select>
                 </div>
               </div>
               <div style={{marginBottom:'1rem'}}>
-                <label style={labelStyle}>Modelo <span style={{color:'#F07987'}}>*</span></label>
-                <input type="text" placeholder="Nombre del vestido o modelo" value={modelo1} onChange={e => setModelo1(e.target.value)} style={inputStyle}/>
+                <label style={labelStyle}>{t('modelo')} <span style={{color:'#F07987'}}>*</span></label>
+                <input type="text" placeholder={t('modeloPlaceholder')} value={modelo1} onChange={e => setModelo1(e.target.value)} style={inputStyle}/>
               </div>
               <div>
-                <label style={labelStyle}>Referencia o link <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
-                <input type="text" placeholder="URL o referencia del producto" value={referencia1} onChange={e => setReferencia1(e.target.value)} style={inputStyle}/>
+                <label style={labelStyle}>{t('referencia')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>{t('opcional')}</span></label>
+                <input type="text" placeholder={t('referenciaPlaceholder')} value={referencia1} onChange={e => setReferencia1(e.target.value)} style={inputStyle}/>
               </div>
             </div>
 
             <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC'}}>
               <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
-                Prenda 2 <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span>
+                {t('prenda2')}
               </div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1rem'}}>
                 <div>
-                  <label style={labelStyle}>Marca</label>
+                  <label style={labelStyle}>{t('marca')}</label>
                   <input type="text" placeholder="Ej: Mango" value={marca2} onChange={e => setMarca2(e.target.value)} style={inputStyle}/>
                 </div>
                 <div>
-                  <label style={labelStyle}>Tipo</label>
+                  <label style={labelStyle}>{t('tipo')}</label>
                   <select value={tipo2} onChange={e => setTipo2(e.target.value)} style={selectStyle}>
-                    <option value="">Selecciona...</option>
-                    <option>Vestido corto</option><option>Vestido midi</option><option>Vestido largo</option>
-                    <option>Falda</option><option>Pantalón</option><option>Top</option><option>Blusa</option>
-                    <option>Traje</option><option>Conjunto</option><option>Otro</option>
+                    <option value="">{t('selecciona')}</option>
+                    {tiposData.map((tipo, i) => <option key={i}>{tipo}</option>)}
                   </select>
                 </div>
               </div>
               <div style={{marginBottom:'1rem'}}>
-                <label style={labelStyle}>Modelo</label>
-                <input type="text" placeholder="Nombre del vestido o modelo" value={modelo2} onChange={e => setModelo2(e.target.value)} style={inputStyle}/>
+                <label style={labelStyle}>{t('modelo')}</label>
+                <input type="text" placeholder={t('modeloPlaceholder')} value={modelo2} onChange={e => setModelo2(e.target.value)} style={inputStyle}/>
               </div>
               <div>
-                <label style={labelStyle}>Referencia o link</label>
-                <input type="text" placeholder="URL o referencia del producto" value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
+                <label style={labelStyle}>{t('referencia')}</label>
+                <input type="text" placeholder={t('referenciaPlaceholder')} value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
               </div>
             </div>
 
             <div style={{marginBottom:'1.25rem'}}>
-              <label style={labelStyle}>Foto del look <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+              <label style={labelStyle}>{t('foto')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>{t('opcional')}</span></label>
               <div onClick={() => document.getElementById('foto-input').click()}
                 style={{border:'1px dashed #E0E0DC',padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5'}}>
                 {fotoPreview ? (
                   <img src={fotoPreview} alt="Preview" style={{maxHeight:'200px',maxWidth:'100%',objectFit:'contain'}}/>
                 ) : (
                   <div>
-                    <div style={{fontSize:'0.82rem',fontWeight:300,color:'#888884',marginBottom:'0.25rem'}}>Toca para subir una foto de tu look</div>
+                    <div style={{fontSize:'0.82rem',fontWeight:300,color:'#888884',marginBottom:'0.25rem'}}>{t('fotoInfo')}</div>
                     <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>JPG, PNG o WEBP</div>
                   </div>
                 )}
@@ -560,13 +483,13 @@ export default function InvitadaPage() {
             </div>
 
             <div style={{marginBottom:'2rem'}}>
-              <label style={labelStyle}>Estado <span style={{color:'#F07987'}}>*</span></label>
+              <label style={labelStyle}>{t('estado')} <span style={{color:'#F07987'}}>*</span></label>
               <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
-                <strong style={{fontWeight:600,color:'#0A0A0A'}}>Confirmado:</strong> ya tienes el look comprado.<br/>
-                <strong style={{fontWeight:600,color:'#0A0A0A'}}>Prereservado:</strong> lo has visto pero aún no lo has comprado. Máximo 3 prerreservas.
+                <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoConfirmado')}:</strong> {t('estadoConfirmadoDesc')}<br/>
+                <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoPrereservado')}:</strong> {t('estadoPrereservadoDesc')}
               </p>
               <div style={{display:'flex',gap:'1rem'}}>
-                {[{val:'confirmado',label:'Confirmado'},{val:'prereservado',label:'Prereservado'}].map(e => (
+                {[{val:'confirmado',label:t('estadoConfirmado')},{val:'prereservado',label:t('estadoPrereservado')}].map(e => (
                   <button key={e.val} onClick={() => setEstado(e.val)}
                     style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,fontFamily:'Poppins,sans-serif',cursor:'pointer',border:'1px solid',borderColor:estado===e.val?'#0A0A0A':'#E0E0DC',background:estado===e.val?'#0A0A0A':'#FFFFFF',color:estado===e.val?'#FFFFFF':'#888884'}}>
                     {e.label}
@@ -581,12 +504,12 @@ export default function InvitadaPage() {
               {lookEditando && (
                 <button onClick={() => { resetForm(); setModoGestion(true) }}
                   style={{flex:1,padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
-                  Cancelar
+                  {t('cancelar')}
                 </button>
               )}
               <button onClick={lookEditando ? handleActualizarLook : handleEnviar} disabled={enviando}
                 style={{flex:1,padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1,borderRadius:'4px'}}>
-                {enviando ? 'Guardando...' : lookEditando ? 'Guardar cambios →' : 'Registrar mi look →'}
+                {enviando ? t('guardando') : lookEditando ? t('guardarCambios') : t('registrar')}
               </button>
             </div>
           </>
