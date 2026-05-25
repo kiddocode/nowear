@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 const IDIOMAS = [
   { code: 'es', flag: '🇪🇸', label: 'Español' },
@@ -17,13 +18,13 @@ export default function NavbarWrapper({ locale }) {
   const [hoveredNav, setHoveredNav] = useState(null)
   const router = useRouter()
   const pathname = usePathname()
+  const t = useTranslations('nav')
 
   const idiomaActual = IDIOMAS.find(i => i.code === locale) || IDIOMAS[0]
 
   function cambiarIdioma(code) {
     setIdiomaOpen(false)
     const localesPrefix = ['fr','en','pt','de','nl']
-    // Quita el prefijo de locale actual si existe
     let pathSinLocale = pathname
     for (const loc of localesPrefix) {
       if (pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`) {
@@ -31,12 +32,20 @@ export default function NavbarWrapper({ locale }) {
         break
       }
     }
-    // Añade el nuevo prefijo si no es español
     const nuevaRuta = code === 'es' ? pathSinLocale : `/${code}${pathSinLocale === '/' ? '' : pathSinLocale}`
     router.push(nuevaRuta)
   }
 
   const prefijo = locale && locale !== 'es' ? `/${locale}` : ''
+
+  const navLinks = [
+    {label: t('comoFunciona'), href:`${prefijo}/#como`},
+    {label: t('casosDeUso'), href:`${prefijo}/#casos`},
+    {label: t('paquetes'), href:`${prefijo}/#precios`},
+    {label: t('inspiracion'), href:`${prefijo}/#marcas`},
+    {label: t('faq'), href:`${prefijo}/#faq`},
+    {label: t('contacto'), href:`${prefijo}/#contacto`},
+  ]
 
   return (
     <>
@@ -47,14 +56,7 @@ export default function NavbarWrapper({ locale }) {
         </a>
 
         <div className="nav-center" style={{display:'flex',gap:'0.25rem',alignItems:'center'}}>
-          {[
-            {label:'Cómo funciona', href:`${prefijo}/#como`},
-            {label:'Casos de uso', href:`${prefijo}/#casos`},
-            {label:'Paquetes', href:`${prefijo}/#precios`},
-            {label:'Inspiración', href:`${prefijo}/#marcas`},
-            {label:'FAQ', href:`${prefijo}/#faq`},
-            {label:'Contacto', href:`${prefijo}/#contacto`},
-          ].map((item,i) => (
+          {navLinks.map((item,i) => (
             <a key={i} href={item.href}
               onMouseEnter={() => setHoveredNav(i)}
               onMouseLeave={() => setHoveredNav(null)}
@@ -100,13 +102,13 @@ export default function NavbarWrapper({ locale }) {
             style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.65rem 1.1rem',textDecoration:'none',borderRadius:'8px',border:'1px solid transparent',transition:'border-color 0.15s'}}
             onMouseEnter={e => e.currentTarget.style.borderColor='#E0E0DC'}
             onMouseLeave={e => e.currentTarget.style.borderColor='transparent'}>
-            Entrar
+            {t('entrar')}
           </a>
           <a href={`${prefijo}/register`}
             style={{fontSize:'0.82rem',fontWeight:600,padding:'0.65rem 1.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'50px',transition:'background 0.15s'}}
             onMouseEnter={e => e.currentTarget.style.background='#2C2C2C'}
             onMouseLeave={e => e.currentTarget.style.background='#0A0A0A'}>
-            Empezar
+            {t('empezar')}
           </a>
         </div>
 
@@ -120,22 +122,15 @@ export default function NavbarWrapper({ locale }) {
 
       {menuOpen && (
         <div style={{position:'fixed',top:'68px',left:0,right:0,background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:999,padding:'1.5rem'}}>
-          {[
-            {label:'Cómo funciona', href:`${prefijo}/#como`},
-            {label:'Casos de uso', href:`${prefijo}/#casos`},
-            {label:'Paquetes', href:`${prefijo}/#precios`},
-            {label:'Inspiración', href:`${prefijo}/#marcas`},
-            {label:'FAQ', href:`${prefijo}/#faq`},
-            {label:'Contacto', href:`${prefijo}/#contacto`},
-          ].map((item,i) => (
+          {navLinks.map((item,i) => (
             <a key={i} href={item.href} onClick={() => setMenuOpen(false)}
               style={{display:'block',fontSize:'0.88rem',fontWeight:600,color:'#0A0A0A',padding:'0.85rem 0',borderBottom:'1px solid #F0F0EE',textDecoration:'none'}}>
               {item.label}
             </a>
           ))}
           <div style={{display:'flex',flexDirection:'column',gap:'0.75rem',marginTop:'1.25rem'}}>
-            <a href={`${prefijo}/login`} style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.75rem',border:'1px solid #E0E0DC',textAlign:'center',textDecoration:'none',borderRadius:'8px'}}>Entrar</a>
-            <a href={`${prefijo}/register`} style={{fontSize:'0.82rem',fontWeight:600,padding:'0.75rem',background:'#0A0A0A',color:'#FFFFFF',textAlign:'center',textDecoration:'none',borderRadius:'50px'}}>Empezar</a>
+            <a href={`${prefijo}/login`} style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.75rem',border:'1px solid #E0E0DC',textAlign:'center',textDecoration:'none',borderRadius:'8px'}}>{t('entrar')}</a>
+            <a href={`${prefijo}/register`} style={{fontSize:'0.82rem',fontWeight:600,padding:'0.75rem',background:'#0A0A0A',color:'#FFFFFF',textAlign:'center',textDecoration:'none',borderRadius:'50px'}}>{t('empezar')}</a>
           </div>
         </div>
       )}
