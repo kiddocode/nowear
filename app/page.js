@@ -231,8 +231,7 @@ export default function Home() {
             {fase===0 && <span style={{borderRight:'2px solid #0A0A0A',marginLeft:'2px',animation:'blink 0.7s infinite'}}></span>}
           </h1>
           <p style={{fontSize:'0.95rem',fontWeight:300,lineHeight:2,color:'#888884',maxWidth:'420px',marginBottom:'3rem',opacity:fase>=1?1:0,transition:'opacity 0.6s ease'}}>
-            Crea tu evento, comparte el link con tus invitadas<br/>
-            y deja que cada una registre su look.<br/>
+            Crea tu evento, comparte el link con tus invitadas y deja que cada una registre su look.<br/>
             El sistema detecta coincidencias al instante.
           </p>
           <div style={{display:'flex',gap:'1rem',flexWrap:'wrap',opacity:fase>=1?1:0,transition:'opacity 0.6s ease 0.3s'}}>
@@ -298,7 +297,7 @@ export default function Home() {
               <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/video-particular.mp4" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
               <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(10,10,10,0.55) 0%,rgba(10,10,10,0.15) 100%)',display:'flex',alignItems:'flex-end',padding:'2.5rem'}}>
                 <p style={{fontSize:'1.4rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.45}}>
-                  Sin apps.<br/>Sin cuentas.<br/><em style={{color:'#F07987',fontStyle:'normal'}}>Solo el link.</em>
+                  Sin apps<br/>Sin cuentas<br/><em style={{color:'#F07987',fontStyle:'normal'}}>Solo el link</em>
                 </p>
               </div>
             </div>
@@ -327,7 +326,7 @@ export default function Home() {
               <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/video-empresa.mp4" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
               <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(10,10,10,0.65) 0%,rgba(10,10,10,0.2) 100%)',display:'flex',alignItems:'flex-end',padding:'2.5rem'}}>
                 <p style={{fontSize:'1.4rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.45}}>
-                  Soluciones a medida<br/><em style={{color:'#C4917C',fontStyle:'normal'}}>Para cada institución.</em>
+                  Soluciones a medida<br/><em style={{color:'#C4917C',fontStyle:'normal'}}>Para cada institución</em>
                 </p>
               </div>
             </div>
@@ -450,13 +449,12 @@ export default function Home() {
           <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>Paquetes
         </span>
         <h2 style={{fontSize:'clamp(2.5rem,4vw,4.5rem)',fontWeight:100,lineHeight:1.08,letterSpacing:'-0.025em',marginBottom:'1.25rem'}}>
-          Un pago único.<br/><strong style={{fontWeight:700}}>Por evento.</strong>
+          Un pago único<br/><strong style={{fontWeight:700}}>Por evento.</strong>
         </h2>
         <p style={{fontSize:'0.9rem',fontWeight:300,lineHeight:1.9,color:'#888884',maxWidth:'540px',marginBottom:'4rem'}}>
           Sin suscripciones. Sin sorpresas.<br/> 
           Pagas una vez y tienes tu evento activo hasta el día de la celebración.<br/>
-          <span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas.<br/>
-          Ellas llegan seguras, tú disfrutas tranquila.<br/>
+          <span style={{color:'#0A0A0A',fontWeight:400}}>Hazle este regalo a tus invitadas. Ellas llegan seguras, tú disfrutas tranquila.<br/>
           Sin esfuerzo, sin dramas, sin coincidencias.</span>
         </p>
         <div className="pricing-grid" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC'}}>
