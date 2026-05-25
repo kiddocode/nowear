@@ -404,7 +404,9 @@ export default function Home() {
                   alignItems:'flex-start',
                   gap:'1rem',
                   cursor:'default',
+                  gridRow: caso.tipo === 'particular' ? 'span 2' : 'auto',
                 }}>
+                  
                 {/* Icono en círculo */}
                 <div style={{
                   width:'56px',
