@@ -605,5 +605,30 @@
     "colEstado": "Status",
     "mejorarPlan": "Paket upgraden",
     "planLabel": "Paket"
+  },
+  "dashboard": {
+    "titulo": "Meine Events",
+    "subtitulo": "Verwalten Sie Ihre Events und teilen Sie Links mit Ihren Gästen",
+    "nuevoEvento": "+ Neues Event",
+    "eventosActivos": "Aktive Events",
+    "looksRegistrados": "Registrierte Looks",
+    "conflictos": "Konflikte",
+    "bannerEstandarTitulo": "Exportieren Sie die Look-Liste und fügen Sie Personalisierung hinzu.",
+    "bannerEstandarSub": "Ab dem Standard-Paket (19€) verfügbar.",
+    "verPlanes": "Pakete ansehen",
+    "bannerPremiumTitulo": "Passen Sie Foto und Nachricht des Gäste-Links an.",
+    "bannerPremiumSub": "Im Premium-Paket (29€) verfügbar.",
+    "verPremium": "Premium ansehen",
+    "sinFecha": "Kein Datum",
+    "pasado": "Vergangen",
+    "looks": "Looks",
+    "restantes": "Verbleibend",
+    "mejorarPlan": "🔒 Paket upgraden",
+    "mejorarPremium": "🎨 Auf Premium upgraden",
+    "confirmarEliminar": "Möchten Sie dieses Event wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.",
+    "planBasico": "Basic",
+    "planEstandar": "Standard",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise"
   }
 }

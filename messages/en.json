@@ -605,5 +605,30 @@
     "colEstado": "Status",
     "mejorarPlan": "Upgrade plan",
     "planLabel": "Plan"
+  },
+  "dashboard": {
+    "titulo": "My events",
+    "subtitulo": "Manage your events and share links with your guests",
+    "nuevoEvento": "+ New event",
+    "eventosActivos": "Active events",
+    "looksRegistrados": "Registered looks",
+    "conflictos": "Conflicts",
+    "bannerEstandarTitulo": "Export the look list and add customization.",
+    "bannerEstandarSub": "Available from the Standard plan (€19).",
+    "verPlanes": "View plans",
+    "bannerPremiumTitulo": "Customize the photo and message of your guest link.",
+    "bannerPremiumSub": "Available with the Premium plan (€29).",
+    "verPremium": "View Premium",
+    "sinFecha": "No date",
+    "pasado": "Past",
+    "looks": "Looks",
+    "restantes": "Remaining",
+    "mejorarPlan": "🔒 Upgrade plan",
+    "mejorarPremium": "🎨 Upgrade to Premium",
+    "confirmarEliminar": "Are you sure you want to delete this event? This action cannot be undone.",
+    "planBasico": "Basic",
+    "planEstandar": "Standard",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise"
   }
 }

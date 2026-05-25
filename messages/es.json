@@ -605,5 +605,30 @@
     "colEstado": "Estado",
     "mejorarPlan": "Actualizar plan",
     "planLabel": "Plan"
+  },
+  "dashboard": {
+    "titulo": "Mis eventos",
+    "subtitulo": "Gestiona tus eventos y comparte los links con tus invitadas",
+    "nuevoEvento": "+ Nuevo evento",
+    "eventosActivos": "Eventos activos",
+    "looksRegistrados": "Looks registrados",
+    "conflictos": "Conflictos",
+    "bannerEstandarTitulo": "Exporta la lista de looks y añade personalización.",
+    "bannerEstandarSub": "Disponible desde el plan Estándar (19€).",
+    "verPlanes": "Ver planes",
+    "bannerPremiumTitulo": "Personaliza la foto y el mensaje del link de tus invitadas.",
+    "bannerPremiumSub": "Disponible en el plan Premium (29€).",
+    "verPremium": "Ver Premium",
+    "sinFecha": "Sin fecha",
+    "pasado": "Pasado",
+    "looks": "Looks",
+    "restantes": "Restantes",
+    "mejorarPlan": "🔒 Mejorar plan",
+    "mejorarPremium": "🎨 Mejorar a Premium",
+    "confirmarEliminar": "¿Segura que quieres eliminar este evento? Esta acción no se puede deshacer.",
+    "planBasico": "Básico",
+    "planEstandar": "Estándar",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise"
   }
 }

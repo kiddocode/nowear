@@ -605,5 +605,30 @@
     "colEstado": "Statut",
     "mejorarPlan": "Mettre à niveau",
     "planLabel": "Forfait"
+  },
+  "dashboard": {
+    "titulo": "Mes événements",
+    "subtitulo": "Gérez vos événements et partagez les liens avec vos invitées",
+    "nuevoEvento": "+ Nouvel événement",
+    "eventosActivos": "Événements actifs",
+    "looksRegistrados": "Looks enregistrés",
+    "conflictos": "Conflits",
+    "bannerEstandarTitulo": "Exportez la liste des looks et ajoutez une personnalisation.",
+    "bannerEstandarSub": "Disponible à partir du forfait Standard (19€).",
+    "verPlanes": "Voir les forfaits",
+    "bannerPremiumTitulo": "Personnalisez la photo et le message du lien de vos invitées.",
+    "bannerPremiumSub": "Disponible avec le forfait Premium (29€).",
+    "verPremium": "Voir Premium",
+    "sinFecha": "Sans date",
+    "pasado": "Passé",
+    "looks": "Looks",
+    "restantes": "Restants",
+    "mejorarPlan": "🔒 Améliorer le forfait",
+    "mejorarPremium": "🎨 Passer à Premium",
+    "confirmarEliminar": "Êtes-vous sûre de vouloir supprimer cet événement ? Cette action est irréversible.",
+    "planBasico": "Basique",
+    "planEstandar": "Standard",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise"
   }
 }

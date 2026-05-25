@@ -605,5 +605,30 @@
     "colEstado": "Status",
     "mejorarPlan": "Pakket upgraden",
     "planLabel": "Pakket"
+  },
+  "dashboard": {
+    "titulo": "Mijn evenementen",
+    "subtitulo": "Beheer uw evenementen en deel links met uw gasten",
+    "nuevoEvento": "+ Nieuw evenement",
+    "eventosActivos": "Actieve evenementen",
+    "looksRegistrados": "Geregistreerde looks",
+    "conflictos": "Conflicten",
+    "bannerEstandarTitulo": "Exporteer de looklijst en voeg aanpassing toe.",
+    "bannerEstandarSub": "Beschikbaar vanaf het Standaard-pakket (€19).",
+    "verPlanes": "Pakketten bekijken",
+    "bannerPremiumTitulo": "Pas de foto en het bericht van uw gastenlink aan.",
+    "bannerPremiumSub": "Beschikbaar met het Premium-pakket (€29).",
+    "verPremium": "Premium bekijken",
+    "sinFecha": "Geen datum",
+    "pasado": "Voorbij",
+    "looks": "Looks",
+    "restantes": "Resterend",
+    "mejorarPlan": "🔒 Pakket upgraden",
+    "mejorarPremium": "🎨 Upgraden naar Premium",
+    "confirmarEliminar": "Weet u zeker dat u dit evenement wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.",
+    "planBasico": "Basic",
+    "planEstandar": "Standaard",
+    "planPremium": "Premium",
+    "planEnterprise": "Enterprise"
   }
 }
