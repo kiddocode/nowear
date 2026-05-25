@@ -10,7 +10,7 @@ export default function Terminos() {
       {[
         {
           title: '1. Objeto y titular del servicio',
-          body: `Estos Términos de Uso regulan el acceso y uso de la plataforma NOWEAR® (nowear.es), un servicio de coordinación de looks para eventos sociales que permite a las organizadoras evitar que las invitadas coincidan en su vestimenta.\n\nEl servicio es titularidad de María Teresa Navarrete González, con NIF 26748920N, titular de la marca registrada NOWEAR® (expediente OEPM, clases 35 y 42). Contacto: support@nowear.es.`
+          body: `Estos Términos de Uso regulan el acceso y uso de la plataforma NOWEAR® (nowear.es), un servicio de coordinación de looks para eventos sociales que permite a las organizadoras evitar que las invitadas coincidan en su vestimenta.\n\nEl servicio es titularidad de María Teresa Navarrete González, titular de la marca registrada NOWEAR®, con domicilio en Madrid, España. Contacto: support@nowear.es.`
         },
         {
           title: '2. Aceptación de los términos',
@@ -22,7 +22,7 @@ export default function Terminos() {
         },
         {
           title: '4. Planes y pagos',
-          body: `NOWEAR® ofrece los siguientes planes de pago único por evento:\n\n• Plan Básico: 9 € — el registro de looks abre 1 mes antes del evento, hasta 50 invitadas.\n• Plan Estándar: 19 € — el registro abre 3 meses antes, hasta 150 invitadas, incluye exportación de lista.\n• Plan Premium: 29 € — sin límite de tiempo, invitadas ilimitadas, personalización del link de invitada.\n• Plan Enterprise: precio a medida según necesidades.\n\nLos precios indicados son finales. El pago se realiza a través de Stripe de forma segura. Una vez completado el pago, el plan queda activado de forma inmediata.\n\nNo se realizan devoluciones una vez activado el plan, salvo error técnico imputable a NOWEAR®. No es posible hacer downgrade a un plan inferior. Puedes mejorar a un plan superior en cualquier momento pagando únicamente la diferencia entre planes.`
+          body: `NOWEAR® ofrece los siguientes planes de pago único por evento:\n\n• Plan Básico: 9 € — El registro abre 1 mes antes del evento. Ideal para planificación corta.\n• Plan Estándar: 19 € — el registro abre 3 meses antes antes del evento. Tiempo suficiente para todas. Incluye exportación de lista.\n• Plan Premium: 29 € — El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas. Personalización del link de invitada.\n• Plan Enterprise: precio a medida según necesidades.\n\nLos precios indicados son finales. El pago se realiza a través de Stripe de forma segura. Una vez completado el pago, el plan queda activado de forma inmediata.\n\nNo se realizan devoluciones una vez activado el plan. No es posible hacer downgrade a un plan inferior. Puedes mejorar a un plan superior en cualquier momento pagando únicamente la diferencia entre planes.`
         },
         {
           title: '5. Uso permitido del servicio',
@@ -34,26 +34,30 @@ export default function Terminos() {
         },
         {
           title: '7. Marcas de terceros — aviso informativo',
-          body: `Las marcas comerciales de moda y otras empresas que aparecen mencionadas o referenciadas en NOWEAR® (como Zara, Mango, Massimo Dutti u otras) se incluyen exclusivamente con carácter informativo y de referencia para facilitar a las usuarias el registro de sus looks.\n\nNOWEAR® no mantiene ninguna relación comercial, acuerdo de colaboración, patrocinio ni afiliación con dichas marcas. Su mención no implica respaldo, recomendación ni vinculación de ningún tipo entre NOWEAR® y las marcas referenciadas. Todas las marcas mencionadas son propiedad de sus respectivos titulares.`
+          body: `Las marcas comerciales de moda y otras empresas que aparecen mencionadas o referenciadas en NOWEAR® (incluyendo, a título meramente enunciativo, Zara, Mango, Massimo Dutti u otras) se incluyen exclusivamente con carácter informativo y de referencia, con la única finalidad de facilitar a las usuarias el registro de sus looks.\n\nNOWEAR® no mantiene ninguna relación comercial, acuerdo de colaboración, patrocinio ni afiliación con dichas marcas. Su mención no implica respaldo, recomendación ni vinculación de ningún tipo entre NOWEAR® y las marcas referenciadas. Todas las marcas mencionadas son propiedad de sus respectivos titulares y están protegidas por la normativa de propiedad industrial aplicable.`
         },
         {
-          title: '8. Limitación de responsabilidad',
+          title: '8. Menores de edad',
+          body: `El servicio de NOWEAR® no está dirigido a menores de 14 años. Si tienes conocimiento de que un menor ha facilitado datos personales a través de la plataforma, te rogamos que nos lo comuniques a support@nowear.es para proceder a su eliminación.`
+        },
+        {
+          title: '9. Limitación de responsabilidad',
           body: `NOWEAR® no se hace responsable de:\n\n• Coincidencias de looks que ocurran por causas ajenas al uso correcto de la plataforma.\n• Pérdida de datos por causas de fuerza mayor o fallos de proveedores terceros.\n• Daños indirectos o lucro cesante derivados del uso o imposibilidad de uso del servicio.\n\nEl servicio se presta en el estado en que se encuentra. NOWEAR® no garantiza disponibilidad ininterrumpida, aunque se esfuerza por mantener la máxima disponibilidad posible.`
         },
         {
-          title: '9. Cancelación de cuenta',
+          title: '10. Cancelación de cuenta',
           body: `Puedes cancelar tu cuenta en cualquier momento desde el panel de configuración. Los eventos ya creados permanecerán accesibles hasta su fecha de celebración. NOWEAR® se reserva el derecho de suspender o cancelar cuentas que incumplan estos Términos de Uso, sin derecho a reembolso.`
         },
         {
-          title: '10. Modificación de los términos',
+          title: '11. Modificación de los términos',
           body: `NOWEAR® se reserva el derecho de modificar estos Términos de Uso en cualquier momento. Los cambios relevantes se comunicarán por email o mediante aviso en la plataforma con al menos 15 días de antelación. El uso continuado del servicio tras la entrada en vigor de los nuevos términos implica su aceptación.`
         },
         {
-          title: '11. Legislación aplicable y jurisdicción',
+          title: '12. Legislación aplicable y jurisdicción',
           body: `Estos Términos de Uso se rigen por la legislación española. Para cualquier controversia derivada del uso de NOWEAR®, las partes se someten a los juzgados y tribunales del domicilio del usuario, sin perjuicio de lo dispuesto en la normativa de protección de consumidores y usuarios.`
         },
         {
-          title: '12. Contacto',
+          title: '13. Contacto',
           body: `Para cualquier consulta sobre estos términos, escríbenos a support@nowear.es.`
         },
       ].map((s, i) => (
