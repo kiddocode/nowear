@@ -240,7 +240,7 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-img-col" style={{position:'relative',overflow:'hidden'}}>
-          <img src={`${SUPABASE}pexels-ainnnek-251119282-20390920.jpg`} alt="Invitadas de boda" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
+          <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/Video%20Inicio.mov" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center top',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.4) 0%, rgba(10,10,10,0.0) 50%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
             <p style={{fontSize:'1.3rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.4,margin:0,textShadow:'0 2px 12px rgba(0,0,0,0.3)'}}>
               Cada invitada llega<br/>
@@ -288,7 +288,7 @@ export default function Home() {
         {tabComo === 'particulares' && (
           <div className="steps-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',border:'1px solid #E0E0DC'}}>
             <div className="steps-img-col" style={{position:'relative',overflow:'hidden',minHeight:'480px'}}>
-              <img src={`${SUPABASE}samantha-gades-ermkZ9xvhdU-unsplash.jpg`} alt="Invitadas" style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
+              <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/Video%20Como%20Funciona%20Particular%20ok.mp4" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
               <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(10,10,10,0.55) 0%,rgba(10,10,10,0.15) 100%)',display:'flex',alignItems:'flex-end',padding:'2.5rem'}}>
                 <p style={{fontSize:'1.4rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.45}}>
                   Sin apps.<br/>Sin cuentas.<br/><em style={{color:'#F07987',fontStyle:'normal'}}>Solo el link.</em>
@@ -317,7 +317,7 @@ export default function Home() {
         {tabComo === 'empresas' && (
           <div className="steps-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',border:'1px solid #E0E0DC'}}>
             <div className="steps-img-col" style={{position:'relative',overflow:'hidden',minHeight:'480px'}}>
-              <img src={`${SUPABASE}como%20funcion.jpg`} alt="Eventos corporativos" style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
+              <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/Video%20Como%20Funciona%20Empresa.mp4" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',position:'absolute',inset:0}}/>
               <div style={{position:'absolute',inset:0,background:'linear-gradient(135deg,rgba(10,10,10,0.65) 0%,rgba(10,10,10,0.2) 100%)',display:'flex',alignItems:'flex-end',padding:'2.5rem'}}>
                 <p style={{fontSize:'1.4rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.45}}>
                   Soluciones<br/>a medida.<br/><em style={{color:'#C4917C',fontStyle:'normal'}}>Para cada institución.</em>
@@ -369,7 +369,7 @@ export default function Home() {
       <section id="casos" className="section-pad" style={{padding:'7rem 3rem',position:'relative',overflow:'hidden',background:'#0A0A0A'}}>
         {/* Foto de fondo */}
         <div style={{position:'absolute',inset:0,zIndex:0}}>
-          <img src={`${SUPABASE}casos%20de%20uso.jpg`} alt="Casos de uso" style={{width:'100%',height:'100%',objectFit:'cover',opacity:0.25}}/>
+          <video src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/Video%20Casos%20de%20Uso.mp4" autoPlay muted loop playsInline style={{width:'100%',height:'100%',objectFit:'cover',opacity:0.25}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to bottom, rgba(10,10,10,0.6) 0%, rgba(10,10,10,0.85) 100%)'}}></div>
         </div>
 
