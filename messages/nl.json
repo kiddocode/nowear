@@ -460,5 +460,18 @@
     "terminosLink": "algemene voorwaarden",
     "errorPago": "Fout bij het starten van de betaling. Probeer het opnieuw.",
     "errorConexion": "Verbindingsfout met de betalingsserver."
+  },
+  "legal": {
+    "privacidadTitulo": "Privacy-",
+    "privacidadEmphasis": "beleid",
+    "terminosTitulo": "Gebruiks-",
+    "terminosEmphasis": "voorwaarden",
+    "datosTitulo": "Gegevens-",
+    "datosEmphasis": "bescherming",
+    "ultimaActualizacion": "Laatste update: mei 2026",
+    "badge": "Juridisch",
+    "contactoInfo": "Vragen over dit beleid? Schrijf ons op",
+    "contactoInfoDatos": "Om uw rechten uit te oefenen of bij vragen over gegevensbescherming, schrijf ons op",
+    "copyright": "© 2026 NOWEAR®. Alle rechten voorbehouden."
   }
 }

@@ -462,14 +462,6 @@ export default function Home() {
               {label:t('footer.terminos'),href:'/terminos'},
               {label:t('footer.datos'),href:'/datos'},
             ]},
-            {title:t('footer.idioma'),links:[
-              {label:'🇪🇸 Español',href:'#'},
-              {label:'🇫🇷 Français',href:'#'},
-              {label:'🇬🇧 English',href:'#'},
-              {label:'🇵🇹 Português',href:'#'},
-              {label:'🇩🇪 Deutsch',href:'#'},
-              {label:'🇳🇱 Nederlands',href:'#'},
-            ]},
           ].map((col,i)=>(
             <div key={i}>
               <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#BEBEBA',marginBottom:'1.5rem'}}>{col.title}</div>
@@ -478,6 +470,32 @@ export default function Home() {
               ))}
             </div>
           ))}
+          {/* COLUMNA IDIOMA */}
+          <div>
+            <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#BEBEBA',marginBottom:'1.5rem'}}>{t('footer.idioma')}</div>
+            {[
+              {code:'es',flag:'🇪🇸',label:'Español'},
+              {code:'fr',flag:'🇫🇷',label:'Français'},
+              {code:'en',flag:'🇬🇧',label:'English'},
+              {code:'pt',flag:'🇵🇹',label:'Português'},
+              {code:'de',flag:'🇩🇪',label:'Deutsch'},
+              {code:'nl',flag:'🇳🇱',label:'Nederlands'},
+            ].map((idioma,j) => (
+              <button key={j} onClick={() => {
+                const localesPrefix = ['fr','en','pt','de','nl']
+                let path = window.location.pathname
+                for (const loc of localesPrefix) {
+                  if (path === '/' + loc) { path = '/'; break }
+                  if (path.startsWith('/' + loc + '/')) { path = path.slice(loc.length + 1); break }
+                }
+                if (!path) path = '/'
+                const nuevaRuta = idioma.code === 'es' ? path : '/' + idioma.code + (path === '/' ? '' : path)
+                window.location.href = nuevaRuta
+              }} style={{display:'block',fontSize:'0.78rem',fontWeight:300,color:'#888884',marginBottom:'0.65rem',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0,textAlign:'left'}}>
+                {idioma.flag} {idioma.label}
+              </button>
+            ))}
+          </div>
         </div>
         <div style={{borderTop:'1px solid #3A3A38',paddingTop:'2rem',display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:'1rem'}}>
           <span style={{fontSize:'0.65rem',fontWeight:300,color:'#3A3A38'}}>{t('footer.copyright')}</span>

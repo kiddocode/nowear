@@ -460,5 +460,18 @@
     "terminosLink": "terms and conditions",
     "errorPago": "Error initiating payment. Please try again.",
     "errorConexion": "Error connecting to payment server."
+  },
+  "legal": {
+    "privacidadTitulo": "Privacy",
+    "privacidadEmphasis": "Policy",
+    "terminosTitulo": "Terms",
+    "terminosEmphasis": "of Use",
+    "datosTitulo": "Data",
+    "datosEmphasis": "Protection",
+    "ultimaActualizacion": "Last updated: May 2026",
+    "badge": "Legal",
+    "contactoInfo": "Any questions about this policy? Write to us at",
+    "contactoInfoDatos": "To exercise your rights or any data protection query, write to us at",
+    "copyright": "© 2026 NOWEAR®. All rights reserved."
   }
 }

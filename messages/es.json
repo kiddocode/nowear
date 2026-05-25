@@ -460,5 +460,18 @@
     "terminosLink": "términos y condiciones",
     "errorPago": "Error al iniciar el pago. Inténtalo de nuevo.",
     "errorConexion": "Error al conectar con el servidor de pagos."
+  },
+  "legal": {
+    "privacidadTitulo": "Política de",
+    "privacidadEmphasis": "Privacidad",
+    "terminosTitulo": "Términos",
+    "terminosEmphasis": "de Uso",
+    "datosTitulo": "Protección",
+    "datosEmphasis": "de Datos",
+    "ultimaActualizacion": "Última actualización: mayo de 2026",
+    "badge": "Legal",
+    "contactoInfo": "¿Tienes alguna pregunta? Escríbenos a",
+    "contactoInfoDatos": "Para ejercer tus derechos o cualquier consulta sobre protección de datos, escríbenos a",
+    "copyright": "© 2026 NOWEAR®. Todos los derechos reservados."
   }
 }

@@ -460,5 +460,18 @@
     "terminosLink": "conditions générales",
     "errorPago": "Erreur lors de l'initiation du paiement. Veuillez réessayer.",
     "errorConexion": "Erreur de connexion au serveur de paiement."
+  },
+  "legal": {
+    "privacidadTitulo": "Politique de",
+    "privacidadEmphasis": "Confidentialité",
+    "terminosTitulo": "Conditions",
+    "terminosEmphasis": "d'Utilisation",
+    "datosTitulo": "Protection",
+    "datosEmphasis": "des Données",
+    "ultimaActualizacion": "Dernière mise à jour : mai 2026",
+    "badge": "Légal",
+    "contactoInfo": "Une question sur cette politique ? Écrivez-nous à",
+    "contactoInfoDatos": "Pour exercer vos droits ou toute question sur la protection des données, écrivez-nous à",
+    "copyright": "© 2026 NOWEAR®. Tous droits réservés."
   }
 }
