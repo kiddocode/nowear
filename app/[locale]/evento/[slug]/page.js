@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 import ModalPlanes from '@/app/components/ModalPlanes'
@@ -23,7 +23,12 @@ function esEnterprise(evento) { return getPlan(evento) === 'enterprise' }
 export default function EventoDetalle() {
   const { slug } = useParams()
   const router = useRouter()
+  const pathname = usePathname()
   const t = useTranslations('evento')
+
+  const localesPrefix = ['fr','en','pt','de','nl']
+  const locale = localesPrefix.find(loc => pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`) || 'es'
+  const prefijo = locale !== 'es' ? `/${locale}` : ''
 
   const [evento, setEvento] = useState(null)
   const [looks, setLooks] = useState([])
@@ -52,7 +57,7 @@ export default function EventoDetalle() {
   useEffect(() => {
     async function cargar() {
       const { data: ev } = await supabase.from('eventos').select('*').eq('slug', slug).single()
-      if (!ev) { router.push('/dashboard'); return }
+      if (!ev) { router.push(prefijo + '/dashboard'); return }
       setEvento(ev)
       setEditNombre(ev.nombre || '')
       setEditFecha(ev.fecha || '')
@@ -168,20 +173,20 @@ export default function EventoDetalle() {
   if (isEnterprise) tabs.push(t('tabOrganizadores'))
 
   return (
-    <div style={{fontFamily:"'Poppins',sans-serif"}}>
+    <div style={{fontFamily:"'Poppins',sans-serif",paddingBottom:'2rem'}}>
 
       {/* HERO */}
-      <div style={{background:'#0A0A0A',padding:'2.5rem 3rem 3rem',position:'relative',overflow:'hidden'}}>
+      <div className="evento-hero" style={{background:'#0A0A0A',padding:'2.5rem 3rem 3rem',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at top right, rgba(240,121,135,0.07) 0%, transparent 60%)',pointerEvents:'none'}}></div>
-        <button onClick={() => router.push('/dashboard')} style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginBottom:'2rem',padding:0}}>
+        <button onClick={() => router.push(prefijo + '/dashboard')} style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginBottom:'2rem',padding:0}}>
           {t('misEventos')}
         </button>
-        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>
-          <div>
+        <div className="evento-hero-inner" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>
+          <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>
               {evento.tipo} · <span style={{color: PLAN_LABEL_COLORES[planEvento]}}>{t('planLabel')} {evento.plan}</span>
             </div>
-            <h1 style={{fontSize:'clamp(2rem,4vw,3.5rem)',fontWeight:700,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1.05,marginBottom:'0.5rem'}}>{evento.nombre}</h1>
+            <h1 style={{fontSize:'clamp(1.8rem,4vw,3.5rem)',fontWeight:700,color:'#FFFFFF',letterSpacing:'-0.025em',lineHeight:1.05,marginBottom:'0.5rem'}}>{evento.nombre}</h1>
             <p style={{fontSize:'0.82rem',fontWeight:300,color:'#888884'}}>
               {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
               {evento.lugar ? ` · ${evento.lugar}` : ''}
@@ -193,10 +198,10 @@ export default function EventoDetalle() {
               </button>
             )}
           </div>
-          <div style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'280px',borderRadius:'4px',flexShrink:0}}>
+          <div className="evento-hero-link" style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'260px',borderRadius:'4px',flexShrink:0}}>
             <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>{t('linkInvitadas')}</p>
             <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
-              <span style={{fontSize:'0.82rem',fontWeight:500,color:'#0A0A0A'}}>nowear.es/{slug}</span>
+              <span style={{fontSize:'0.78rem',fontWeight:500,color:'#0A0A0A',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>nowear.es/{slug}</span>
               <button onClick={copiarLink} style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:copiado?'#4A6B42':'#F07987',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',flexShrink:0}}>
                 {copiado ? t('copiado') : t('copiar')}
               </button>
@@ -206,9 +211,9 @@ export default function EventoDetalle() {
       </div>
 
       {/* TABS */}
-      <div style={{display:'flex',padding:'0 3rem',borderBottom:'2px solid #E0E0DC',background:'#FFFFFF',position:'sticky',top:'68px',zIndex:100,overflowX:'auto'}}>
+      <div className="evento-tabs" style={{display:'flex',padding:'0 3rem',borderBottom:'2px solid #E0E0DC',background:'#FFFFFF',position:'sticky',top:'68px',zIndex:100,overflowX:'auto'}}>
         {tabs.map((tab,i) => (
-          <button key={i} onClick={() => setTabActiva(i)} style={{padding:'1.1rem 0',marginRight:'2.5rem',fontSize:'0.72rem',fontWeight:tabActiva===i?700:400,color:tabActiva===i?'#0A0A0A':'#888884',cursor:'pointer',background:'none',border:'none',borderBottom:tabActiva===i?'2px solid #0A0A0A':'2px solid transparent',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',marginBottom:'-2px'}}>
+          <button key={i} onClick={() => setTabActiva(i)} style={{padding:'1.1rem 0',marginRight:'2.5rem',fontSize:'0.72rem',fontWeight:tabActiva===i?700:400,color:tabActiva===i?'#0A0A0A':'#888884',cursor:'pointer',background:'none',border:'none',borderBottom:tabActiva===i?'2px solid #0A0A0A':'2px solid transparent',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',marginBottom:'-2px',flexShrink:0}}>
             {tab}
             {i===1&&conflictos.length>0&&<span style={{marginLeft:'0.4rem',fontSize:'0.55rem',fontWeight:700,background:'#F07987',color:'#FFFFFF',padding:'0.1rem 0.4rem',borderRadius:'10px'}}>{conflictos.length}</span>}
             {tab===t('tabPersonalizacion')&&<span style={{marginLeft:'0.4rem',fontSize:'0.5rem',fontWeight:700,background:'#C4917C',color:'#FFFFFF',padding:'0.1rem 0.4rem',borderRadius:'10px'}}>{t('badgePremium')}</span>}
@@ -218,19 +223,19 @@ export default function EventoDetalle() {
       </div>
 
       {/* CONTENIDO */}
-      <div style={{padding:'2.5rem 3rem'}}>
+      <div className="evento-contenido" style={{padding:'2.5rem 3rem'}}>
 
         {/* STATS */}
-        <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1.5rem',marginBottom:'2.5rem'}}>
+        <div className="evento-stats" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1.5rem',marginBottom:'2.5rem'}}>
           {[
             {n: looks.length.toString(), l: t('statLooks'), color:'#0A0A0A'},
             {n: confirmados.toString(), l: t('statConfirmados'), color:'#0A0A0A'},
             {n: prereservados.toString(), l: t('statPrereservados'), color:'#C4917C'},
             {n: diasRestantes(evento.fecha).toString(), l: t('statDias'), color:'#0A0A0A'},
           ].map((s,i) => (
-            <div key={i} style={{background:'#FFFFFF',borderRadius:'16px',padding:'1.75rem 2rem',boxShadow:'0 2px 16px rgba(0,0,0,0.06)',border:'1px solid #F0F0EE',display:'flex',flexDirection:'column',gap:'0.5rem'}}>
-              <div style={{fontSize:'2.5rem',fontWeight:700,color:s.color,lineHeight:1,letterSpacing:'-0.03em'}}>{s.n}</div>
-              <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884'}}>{s.l}</div>
+            <div key={i} style={{background:'#FFFFFF',borderRadius:'16px',padding:'1.5rem',boxShadow:'0 2px 16px rgba(0,0,0,0.06)',border:'1px solid #F0F0EE'}}>
+              <div style={{fontSize:'clamp(1.8rem,4vw,2.5rem)',fontWeight:700,color:s.color,lineHeight:1,letterSpacing:'-0.03em'}}>{s.n}</div>
+              <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginTop:'0.4rem'}}>{s.l}</div>
             </div>
           ))}
         </div>
@@ -238,7 +243,7 @@ export default function EventoDetalle() {
         {/* TAB LOOKS */}
         {tabActiva === 0 && (
           <>
-            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1.5rem'}}>
+            <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:'1.5rem',gap:'1rem',flexWrap:'wrap'}}>
               <span style={{fontSize:'0.82rem',fontWeight:400,color:'#888884'}}>
                 <strong style={{color:'#0A0A0A',fontWeight:700}}>{looks.length}</strong> {t('tabLooks').toLowerCase()}
               </span>
@@ -258,7 +263,7 @@ export default function EventoDetalle() {
 
             {!canExport && (
               <div style={{marginBottom:'1.5rem',padding:'0.9rem 1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:'0.75rem',flexWrap:'wrap'}}>
-                <div style={{display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                <div style={{display:'flex',alignItems:'center',gap:'0.75rem',flex:1}}>
                   <span style={{fontSize:'1rem'}}>📊</span>
                   <span style={{fontSize:'0.78rem',fontWeight:400,color:'#0A0A0A'}}>{t('exportarBanner')}</span>
                 </div>
@@ -269,35 +274,35 @@ export default function EventoDetalle() {
             )}
 
             {looks.length === 0 ? (
-              <div style={{textAlign:'center',padding:'5rem',color:'#888884',fontSize:'0.78rem',fontWeight:300,border:'1px dashed #E0E0DC',background:'#F7F7F5',lineHeight:2}}>
+              <div style={{textAlign:'center',padding:'4rem 2rem',color:'#888884',fontSize:'0.78rem',fontWeight:300,border:'1px dashed #E0E0DC',background:'#F7F7F5',lineHeight:2,borderRadius:'8px'}}>
                 {t('sinLooks')}<br/>
                 <span style={{fontSize:'0.72rem',color:'#BEBEBA'}}>{t('sinLooksSub')}</span>
               </div>
             ) : (
-              <div style={{border:'1px solid #E0E0DC',overflowX:'auto',borderRadius:'8px'}}>
-                <table style={{width:'100%',borderCollapse:'collapse',minWidth:'600px'}}>
+              <div className="evento-tabla-wrap" style={{border:'1px solid #E0E0DC',overflowX:'auto',borderRadius:'8px'}}>
+                <table style={{width:'100%',borderCollapse:'collapse',minWidth:'500px'}}>
                   <thead>
                     <tr style={{background:'#F7F7F5'}}>
                       {[t('colColor'),t('colNombre'),t('colMarca'),t('colModelo'),t('colTipo'),t('colEstado')].map((h,i) => (
-                        <th key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',textAlign:'left',padding:'0.9rem 1.25rem',borderBottom:'1px solid #E0E0DC'}}>{h}</th>
+                        <th key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',textAlign:'left',padding:'0.9rem 1rem',borderBottom:'1px solid #E0E0DC'}}>{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {looks.map((row,i) => (
                       <tr key={i} style={{borderBottom:'1px solid #E0E0DC',background:i%2===0?'#FFFFFF':'#FAFAFA'}}>
-                        <td style={{padding:'1rem 1.25rem'}}>
+                        <td style={{padding:'0.9rem 1rem'}}>
                           <div style={{display:'flex',gap:'4px',alignItems:'center'}}>
-                            <span style={{width:'22px',height:'22px',borderRadius:'50%',background:row.color_hex||'#E0E0DC',border:'1px solid rgba(0,0,0,0.08)',display:'inline-block',boxShadow:'0 1px 4px rgba(0,0,0,0.15)'}}></span>
-                            {row.color_hex_2&&<span style={{width:'22px',height:'22px',borderRadius:'50%',background:row.color_hex_2,border:'1px solid rgba(0,0,0,0.08)',display:'inline-block',boxShadow:'0 1px 4px rgba(0,0,0,0.15)'}}></span>}
+                            <span style={{width:'20px',height:'20px',borderRadius:'50%',background:row.color_hex||'#E0E0DC',border:'1px solid rgba(0,0,0,0.08)',display:'inline-block'}}></span>
+                            {row.color_hex_2&&<span style={{width:'20px',height:'20px',borderRadius:'50%',background:row.color_hex_2,border:'1px solid rgba(0,0,0,0.08)',display:'inline-block'}}></span>}
                           </div>
                         </td>
-                        <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{row.nombre_invitada}</td>
-                        <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.marca||'—'}</td>
-                        <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.modelo||'—'}</td>
-                        <td style={{padding:'1rem 1.25rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>{row.tipo||'—'}</td>
-                        <td style={{padding:'1rem 1.25rem'}}>
-                          <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.3rem 0.75rem',borderRadius:'20px',background:row.estado==='confirmado'?'#0A0A0A':'#F5EDE8',color:row.estado==='confirmado'?'#FFFFFF':'#C4917C'}}>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{row.nombre_invitada}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.marca||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.modelo||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>{row.tipo||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem'}}>
+                          <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.3rem 0.65rem',borderRadius:'20px',background:row.estado==='confirmado'?'#0A0A0A':'#F5EDE8',color:row.estado==='confirmado'?'#FFFFFF':'#C4917C'}}>
                             {row.estado}
                           </span>
                         </td>
@@ -313,40 +318,42 @@ export default function EventoDetalle() {
         {/* TAB CONFLICTOS */}
         {tabActiva === 1 && (
           conflictos.length === 0 ? (
-            <div style={{textAlign:'center',padding:'5rem',color:'#888884',fontSize:'0.78rem',fontWeight:300,border:'1px dashed #E0E0DC',background:'#F7F7F5'}}>
+            <div style={{textAlign:'center',padding:'4rem 2rem',color:'#888884',fontSize:'0.78rem',fontWeight:300,border:'1px dashed #E0E0DC',background:'#F7F7F5',borderRadius:'8px'}}>
               {t('sinConflictos')}
             </div>
           ) : (
             <div style={{border:'1px solid #E0E0DC',borderRadius:'8px',overflow:'hidden'}}>
-              <div style={{background:'#FFF0F1',padding:'1rem 1.5rem',borderBottom:'1px solid #F07987',display:'flex',alignItems:'center',gap:'0.75rem'}}>
+              <div className="evento-conflictos-header" style={{background:'#FFF0F1',padding:'1rem 1.5rem',borderBottom:'1px solid #F07987',display:'flex',alignItems:'center',gap:'0.75rem'}}>
                 <span style={{fontSize:'0.75rem',fontWeight:700,color:'#F07987'}}>{conflictos.length} {t('tabConflictos').toLowerCase()}</span>
               </div>
-              <table style={{width:'100%',borderCollapse:'collapse'}}>
-                <thead>
-                  <tr style={{background:'#F7F7F5'}}>
-                    {[t('colInvitada'),t('colEmail'),t('colMarca'),t('colModelo'),t('colColor'),t('colPor'),t('colFecha')].map((h,i) => (
-                      <th key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',textAlign:'left',padding:'0.9rem 1.25rem',borderBottom:'1px solid #E0E0DC'}}>{h}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {conflictos.map((c,i) => (
-                    <tr key={i} style={{borderBottom:'1px solid #E0E0DC',background:i%2===0?'#FFFFFF':'#FAFAFA'}}>
-                      <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{c.nombre_invitada}</td>
-                      <td style={{padding:'1rem 1.25rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>{c.email_invitada||'—'}</td>
-                      <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{c.marca||'—'}</td>
-                      <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{c.modelo||'—'}</td>
-                      <td style={{padding:'1rem 1.25rem'}}>
-                        <span style={{width:'22px',height:'22px',borderRadius:'50%',background:c.color_hex||'#E0E0DC',border:'1px solid rgba(0,0,0,0.08)',display:'inline-block'}}></span>
-                      </td>
-                      <td style={{padding:'1rem 1.25rem',fontSize:'0.82rem',fontWeight:600,color:'#F07987'}}>{c.nombre_conflicto_con||'—'}</td>
-                      <td style={{padding:'1rem 1.25rem',fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>
-                        {c.created_at ? new Date(c.created_at).toLocaleDateString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—'}
-                      </td>
+              <div className="evento-tabla-wrap" style={{overflowX:'auto'}}>
+                <table style={{width:'100%',borderCollapse:'collapse',minWidth:'500px'}}>
+                  <thead>
+                    <tr style={{background:'#F7F7F5'}}>
+                      {[t('colInvitada'),t('colEmail'),t('colMarca'),t('colModelo'),t('colColor'),t('colPor'),t('colFecha')].map((h,i) => (
+                        <th key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',textAlign:'left',padding:'0.9rem 1rem',borderBottom:'1px solid #E0E0DC'}}>{h}</th>
+                      ))}
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {conflictos.map((c,i) => (
+                      <tr key={i} style={{borderBottom:'1px solid #E0E0DC',background:i%2===0?'#FFFFFF':'#FAFAFA'}}>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{c.nombre_invitada}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>{c.email_invitada||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',color:'#0A0A0A'}}>{c.marca||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',color:'#0A0A0A'}}>{c.modelo||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem'}}>
+                          <span style={{width:'20px',height:'20px',borderRadius:'50%',background:c.color_hex||'#E0E0DC',border:'1px solid rgba(0,0,0,0.08)',display:'inline-block'}}></span>
+                        </td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:600,color:'#F07987'}}>{c.nombre_conflicto_con||'—'}</td>
+                        <td style={{padding:'0.9rem 1rem',fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>
+                          {c.created_at ? new Date(c.created_at).toLocaleDateString('es-ES',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : '—'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )
         )}
@@ -362,14 +369,14 @@ export default function EventoDetalle() {
 
         {/* TAB AJUSTES */}
         {tabActiva === 3 && (
-          <div style={{maxWidth:'520px'}}>
+          <div className="evento-ajustes" style={{maxWidth:'520px'}}>
             <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>{t('ajustesTitulo')}</h2>
             <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>{t('ajustesSubtitulo')}</p>
             <div style={{marginBottom:'1.25rem'}}>
               <label style={labelStyle}>{t('ajustesNombre')}</label>
               <input type="text" value={editNombre} onChange={e=>setEditNombre(e.target.value)} style={inputStyle}/>
             </div>
-            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.25rem'}}>
+            <div className="evento-ajustes-grid" style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'1rem',marginBottom:'1.25rem'}}>
               <div>
                 <label style={labelStyle}>{t('ajustesFecha')}</label>
                 <input type="date" value={editFecha} onChange={e=>setEditFecha(e.target.value)} style={inputStyle}/>
@@ -392,7 +399,7 @@ export default function EventoDetalle() {
 
         {/* TAB PERSONALIZACIÓN */}
         {isPremium && tabs.indexOf(t('tabPersonalizacion')) === tabActiva && (
-          <div style={{maxWidth:'600px'}}>
+          <div className="evento-person" style={{maxWidth:'600px'}}>
             <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>{t('personTitulo')}</h2>
             <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>{t('personSubtitulo')}</p>
             <div style={{marginBottom:'1.75rem'}}>
@@ -444,10 +451,10 @@ export default function EventoDetalle() {
 
         {/* TAB ORGANIZADORES */}
         {isEnterprise && tabs.indexOf(t('tabOrganizadores')) === tabActiva && (
-          <div style={{maxWidth:'560px'}}>
+          <div className="evento-org" style={{maxWidth:'560px'}}>
             <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>{t('orgTitulo')}</h2>
             <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>{t('orgSubtitulo')}</p>
-            <div style={{display:'flex',gap:'0.75rem',marginBottom:'1.5rem'}}>
+            <div className="evento-org-row" style={{display:'flex',gap:'0.75rem',marginBottom:'1.5rem'}}>
               <input type="email" placeholder={t('orgPlaceholder')} value={emailNuevoOrg} onChange={e => setEmailNuevoOrg(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAñadirOrganizador()} style={{...inputStyle, flex:1}}/>
               <button onClick={handleAñadirOrganizador} disabled={añadiendoOrg} style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:añadiendoOrg?0.6:1,borderRadius:'4px'}}>
                 {añadiendoOrg ? t('orgAnandiendo') : t('orgAnadir')}
