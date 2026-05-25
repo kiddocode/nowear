@@ -177,7 +177,7 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
             <div style={{fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.15em',textTransform:'uppercase',background:'#0A0A0A',color:'#FFFFFF',padding:'0.22rem 0.65rem',display:'inline-block',marginBottom:'0.5rem'}}>Enterprise</div>
             <div style={{fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A',marginBottom:'0.25rem'}}>Solución personalizada para empresas y eventos recurrentes.</div>
             <div style={{display:'flex',flexDirection:'column',gap:'0.2rem',marginTop:'0.5rem'}}>
-              {['Múltiples eventos','Cuenta de empresa','Tarifa anual','Desarrollo ad-hoc','Soporte dedicado'].map((f,i) => (
+              {['Formulario a medida','Paquetes recurrentes','Multi-organizador','Soporte dedicado'].map((f,i) => (
                 <div key={i} style={{fontSize:'0.72rem',fontWeight:300,color:'#555552',display:'flex',alignItems:'center',gap:'0.4rem'}}>
                   <span style={{color:'#C4917C',fontWeight:700}}>✓</span> {f}
                 </div>
