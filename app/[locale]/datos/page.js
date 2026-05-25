@@ -14,15 +14,15 @@ export default function Datos() {
         },
         {
           title: '2. Responsable del tratamiento',
-          body: `Responsable: María Teresa Navarrete González\nNIF: 26748920N\nMarca registrada: NOWEAR® (OEPM, clases 35 y 42)\nEmail de contacto: support@nowear.es`
+          body: `Responsable: María Teresa Navarrete González\nTitular de la marca: NOWEAR®\nDomicilio: Madrid, España\nEmail de contacto: support@nowear.es`
         },
         {
           title: '3. Categorías de datos tratados',
-          body: `NOWEAR® trata las siguientes categorías de datos personales:\n\n• Datos identificativos: nombre y dirección de correo electrónico de organizadoras e invitadas.\n• Datos de acceso: credenciales de autenticación almacenadas de forma cifrada a través de Supabase Auth.\n• Datos del evento: información sobre los eventos creados, looks registrados (marca, modelo, color, foto opcional) y posibles coincidencias detectadas.\n• Datos de navegación: dirección IP, tipo de navegador, páginas visitadas y duración de la sesión.\n\nNOWEAR® no trata categorías especiales de datos en el sentido del artículo 9 del RGPD (datos de salud, origen racial o étnico, creencias religiosas, datos biométricos, etc.).`
+          body: `NOWEAR® trata las siguientes categorías de datos personales:\n\n• Datos identificativos: nombre y dirección de correo electrónico de organizadoras e invitadas.\n• Datos de acceso: credenciales de autenticación almacenadas de forma cifrada a través de Supabase Auth.\n• Datos del evento: información sobre los eventos creados, looks registrados (marca, modelo, color, foto opcional) y posibles coincidencias detectadas. Estos datos son visibles únicamente para la organizadora del evento y, cuando sea necesario por razones técnicas o de soporte, para el equipo de NOWEAR®. Las invitadas no tienen acceso a los looks de otras participantes.\n• Datos de navegación: dirección IP, tipo de navegador, páginas visitadas y duración de la sesión.\n\nNOWEAR® no trata categorías especiales de datos en el sentido del artículo 9 del RGPD.`
         },
         {
           title: '4. Finalidades y bases jurídicas',
-          body: `• Prestación del servicio de coordinación de looks: ejecución del contrato (art. 6.1.b RGPD).\n• Gestión de pagos a través de Stripe: ejecución del contrato (art. 6.1.b RGPD).\n• Envío de emails transaccionales (confirmaciones, alertas): ejecución del contrato (art. 6.1.b RGPD).\n• Mejora y análisis del servicio: interés legítimo (art. 6.1.f RGPD).\n• Cumplimiento de obligaciones fiscales y legales: obligación legal (art. 6.1.c RGPD).`
+          body: `• Prestación del servicio de coordinación de looks: ejecución del contrato (art. 6.1.b RGPD).\n• Gestión de pagos a través de Stripe: ejecución del contrato (art. 6.1.b RGPD).\n• Envío de emails transaccionales (confirmaciones, alertas): ejecución del contrato (art. 6.1.b RGPD).\n• Mejora y análisis del servicio: interés legítimo (art. 6.1.f RGPD).\n• Cumplimiento de obligaciones fiscales y legales: obligación legal (art. 6.1.c RGPD).\n\nNOWEAR® no enviará comunicaciones comerciales o promocionales sin el consentimiento previo del usuario, salvo en los casos permitidos por la normativa aplicable.`
         },
         {
           title: '5. Plazo de conservación',
@@ -30,23 +30,27 @@ export default function Datos() {
         },
         {
           title: '6. Encargados del tratamiento',
-          body: `NOWEAR® utiliza los siguientes proveedores que actúan como encargados del tratamiento bajo sus instrucciones y con las garantías exigidas por el RGPD:\n\n• Supabase (Supabase Inc., EE.UU.): base de datos, autenticación y almacenamiento de archivos. Transferencia amparada en cláusulas contractuales tipo.\n• Stripe (Stripe, Inc., EE.UU.): procesamiento de pagos. Certificado PCI DSS nivel 1. Transferencia amparada en cláusulas contractuales tipo.\n• Vercel (Vercel Inc., EE.UU.): infraestructura de hosting y CDN. Transferencia amparada en cláusulas contractuales tipo.\n• Resend (Resend Inc.): envío de emails transaccionales.`
+          body: `NOWEAR® utiliza los siguientes proveedores que actúan como encargados del tratamiento bajo sus instrucciones y con las garantías exigidas por el RGPD:\n\n• Supabase (Supabase Inc., EE.UU.): base de datos, autenticación y almacenamiento de archivos.\n• Stripe (Stripe, Inc., EE.UU.): procesamiento de pagos. Certificado PCI DSS nivel 1.\n• Vercel (Vercel Inc., EE.UU.): infraestructura de hosting y CDN.\n• Resend (Resend Inc.): envío de emails transaccionales.`
         },
         {
           title: '7. Transferencias internacionales',
-          body: `Algunos proveedores procesan datos fuera del Espacio Económico Europeo (EEE). En todos los casos, estas transferencias se realizan con las garantías adecuadas exigidas por el RGPD: cláusulas contractuales tipo aprobadas por la Comisión Europea o decisiones de adecuación vigentes.`
+          body: `Algunos de los proveedores utilizados por NOWEAR® pueden tratar datos fuera del Espacio Económico Europeo, especialmente en Estados Unidos. En dichos casos, NOWEAR® adopta las garantías adecuadas exigidas por el RGPD para proteger los datos personales, incluyendo la firma de cláusulas contractuales tipo aprobadas por la Comisión Europea cuando resulte necesario.`
         },
         {
-          title: '8. Derechos de los interesados',
-          body: `Conforme al RGPD, puedes ejercer los siguientes derechos enviando un email a support@nowear.es con el asunto "Ejercicio de derechos RGPD" e indicando el derecho que deseas ejercer:\n\n• Derecho de acceso (art. 15 RGPD): obtener confirmación de si tratamos tus datos y acceder a ellos.\n• Derecho de rectificación (art. 16 RGPD): corregir datos inexactos o incompletos.\n• Derecho de supresión (art. 17 RGPD): solicitar la eliminación de tus datos cuando ya no sean necesarios para la finalidad para la que fueron recabados.\n• Derecho a la limitación del tratamiento (art. 18 RGPD): solicitar que restrinjamos el tratamiento en determinadas circunstancias.\n• Derecho a la portabilidad (art. 20 RGPD): recibir tus datos en formato estructurado, de uso común y lectura mecánica.\n• Derecho de oposición (art. 21 RGPD): oponerte al tratamiento basado en interés legítimo.\n\nRespondemos a todas las solicitudes en un plazo máximo de 30 días.\n\nTienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es) si consideras que el tratamiento de tus datos personales no es conforme a la normativa vigente.`
+          title: '8. Menores de edad',
+          body: `El servicio de NOWEAR® no está dirigido a menores de 14 años. NOWEAR® no recopila conscientemente datos personales de menores. Si detectamos que se han proporcionado datos personales de un menor sin autorización válida, procederemos a su eliminación lo antes posible. Si tienes conocimiento de que un menor ha facilitado datos personales, te rogamos que nos lo comuniques a support@nowear.es.`
         },
         {
-          title: '9. Medidas de seguridad',
+          title: '9. Derechos de los interesados',
+          body: `Conforme al RGPD, puedes ejercer los siguientes derechos enviando un email a support@nowear.es con el asunto "Ejercicio de derechos RGPD":\n\n• Derecho de acceso (art. 15 RGPD): obtener confirmación de si tratamos tus datos y acceder a ellos.\n• Derecho de rectificación (art. 16 RGPD): corregir datos inexactos o incompletos.\n• Derecho de supresión (art. 17 RGPD): solicitar la eliminación de tus datos cuando ya no sean necesarios.\n• Derecho a la limitación del tratamiento (art. 18 RGPD): solicitar que restrinjamos el tratamiento en determinadas circunstancias.\n• Derecho a la portabilidad (art. 20 RGPD): recibir tus datos en formato estructurado, de uso común y lectura mecánica.\n• Derecho de oposición (art. 21 RGPD): oponerte al tratamiento basado en interés legítimo.\n\nRespondemos a todas las solicitudes en un plazo máximo de 30 días. También tienes derecho a presentar una reclamación ante la Agencia Española de Protección de Datos (www.aepd.es).`
+        },
+        {
+          title: '10. Medidas de seguridad',
           body: `NOWEAR® aplica las siguientes medidas técnicas y organizativas para proteger los datos personales:\n\n• Cifrado de contraseñas mediante bcrypt a través de Supabase Auth.\n• Conexiones cifradas con TLS 1.2/1.3 (HTTPS) en todas las comunicaciones.\n• Control de acceso basado en roles (RLS — Row Level Security) en la base de datos.\n• Acceso a datos de producción restringido a la titular del servicio.\n• Copias de seguridad periódicas gestionadas por Supabase.`
         },
         {
-          title: '10. Delegado de Protección de Datos',
-          body: `NOWEAR® no está obligada a designar un Delegado de Protección de Datos conforme al artículo 37 del RGPD, al tratarse de una persona física que no realiza tratamiento de datos a gran escala ni trata categorías especiales de datos de forma sistemática.\n\nPara cualquier consulta relacionada con la protección de datos, puedes contactar directamente con la responsable del tratamiento en support@nowear.es.`
+          title: '11. Delegado de Protección de Datos',
+          body: `NOWEAR® no está obligada a designar un Delegado de Protección de Datos conforme al artículo 37 del RGPD. Para cualquier consulta relacionada con la protección de datos, puedes contactar directamente en support@nowear.es.`
         },
       ].map((s, i) => (
         <div key={i} style={{marginBottom:'2.5rem'}}>
