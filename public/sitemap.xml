@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- ESPAÑOL (sin prefijo) -->
+  <url>
+    <loc>https://nowear.es</loc>
+    <xhtml:link rel="alternate" hreflang="es" href="https://nowear.es"/>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://nowear.es/fr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://nowear.es/en"/>
+    <xhtml:link rel="alternate" hreflang="pt" href="https://nowear.es/pt"/>
+    <xhtml:link rel="alternate" hreflang="de" href="https://nowear.es/de"/>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://nowear.es/nl"/>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url><loc>https://nowear.es/login</loc><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://nowear.es/register</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://nowear.es/privacidad</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://nowear.es/terminos</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://nowear.es/datos</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
+  <!-- FRANCÉS -->
+  <url><loc>https://nowear.es/fr</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://nowear.es/fr/register</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- INGLÉS -->
+  <url><loc>https://nowear.es/en</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://nowear.es/en/register</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- PORTUGUÉS -->
+  <url><loc>https://nowear.es/pt</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://nowear.es/pt/register</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- ALEMÁN -->
+  <url><loc>https://nowear.es/de</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://nowear.es/de/register</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- NEERLANDÉS -->
+  <url><loc>https://nowear.es/nl</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://nowear.es/nl/register</loc><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+</urlset>
