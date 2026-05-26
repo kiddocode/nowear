@@ -77,6 +77,7 @@ export default function InvitadaPage() {
   const [modelo2, setModelo2] = useState('')
   const [tipo2, setTipo2] = useState('')
   const [referencia2, setReferencia2] = useState('')
+  const [pedirReferencia, setPedirReferencia] = useState(false)
 
   useEffect(() => {
     async function cargar() {
@@ -102,7 +103,7 @@ export default function InvitadaPage() {
     setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1('')
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
-    setLookEditando(null); setError('')
+    setLookEditando(null); setError(''); setPedirReferencia(false)
   }
 
   async function enviarEmailAsync(tipo, emailInv, nombreInv) {
@@ -146,26 +147,79 @@ export default function InvitadaPage() {
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
     setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || '')
     setEstado(look.estado || 'confirmado')
+    setPedirReferencia(false)
     setModoGestion(false)
+  }
+
+  // Comprueba si hay sospecha o conflicto real con la lógica correcta:
+  // Las 4 variables principales deben coincidir: marca + tipo + modelo + color
+  // Si coinciden pero sin referencia → pedir referencia (sospecha)
+  // Si coinciden con referencia igual → conflicto real → email
+  // Si tipo diferente → no hay conflicto
+  async function comprobarConflicto(excludeId = null) {
+    if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
+
+    let query = supabase.from('looks').select('id, nombre_invitada, referencia')
+      .eq('evento_id', evento.id)
+      .eq('color_hex', colores[0])
+      .ilike('marca', marca1.trim())
+      .ilike('tipo', tipo1.trim())
+      .ilike('modelo', modelo1.trim())
+
+    if (excludeId) query = query.neq('id', excludeId)
+
+    const { data: candidatos } = await query
+
+    if (!candidatos || candidatos.length === 0) return { tipo: 'ninguno' }
+
+    // Hay coincidencia en las 4 variables principales
+    // Si la invitada actual no tiene referencia, pedir referencia
+    if (!referencia1.trim()) {
+      return { tipo: 'pedir_referencia', candidatos }
+    }
+
+    // Si tiene referencia, comparar con los candidatos que también tienen referencia
+    const conflictoReal = candidatos.find(c =>
+      c.referencia && c.referencia.trim().toLowerCase() === referencia1.trim().toLowerCase()
+    )
+
+    if (conflictoReal) {
+      return { tipo: 'conflicto_real', candidato: conflictoReal }
+    }
+
+    // Candidatos sin referencia: también pedir referencia para resolver
+    const sinReferencia = candidatos.filter(c => !c.referencia || !c.referencia.trim())
+    if (sinReferencia.length > 0) {
+      return { tipo: 'pedir_referencia', candidatos: sinReferencia }
+    }
+
+    // Todas las referencias son diferentes → no hay conflicto
+    return { tipo: 'ninguno' }
   }
 
   async function handleActualizarLook() {
     setError('')
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) { setError(t('errorCampos')); return }
-    setEnviando(true)
-    const { data: looksConflicto } = await supabase.from('looks').select('nombre_invitada, id')
-      .eq('evento_id', evento.id).eq('color_hex', colores[0])
-      .ilike('marca', marca1.trim()).ilike('modelo', modelo1.trim()).neq('id', lookEditando.id)
-    if (looksConflicto && looksConflicto.length > 0) {
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: looksConflicto[0].nombre_invitada
-      })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setEnviando(false)
-      setError(`${t('errorConflicto')} ${looksConflicto[0].nombre_invitada}. ${t('errorConflictoElige')}`)
+
+    const resultado = await comprobarConflicto(lookEditando.id)
+
+    if (resultado.tipo === 'pedir_referencia') {
+      setPedirReferencia(true)
+      setError(t('errorPedirReferencia') || 'Hay una posible coincidencia. Por favor añade la referencia o link del producto para confirmar si es el mismo.')
       return
     }
+
+    if (resultado.tipo === 'conflicto_real') {
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
+      })
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
+      return
+    }
+
+    setEnviando(true)
     await supabase.from('looks').update({
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
@@ -185,6 +239,7 @@ export default function InvitadaPage() {
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) { setError(t('errorCampos')); return }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
+
     const { data: existentes } = await supabase.from('looks').select('estado')
       .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
     if (existentes && existentes.length > 0) {
@@ -193,18 +248,25 @@ export default function InvitadaPage() {
       if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
       if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
     }
-    const { data: looksConflicto } = await supabase.from('looks').select('nombre_invitada, estado')
-      .eq('evento_id', evento.id).eq('color_hex', colores[0]).ilike('marca', marca1.trim()).ilike('modelo', modelo1.trim())
-    if (looksConflicto && looksConflicto.length > 0) {
-      const conflicto = looksConflicto[0]
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: conflicto.nombre_invitada
-      })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`${t('errorConflicto')} ${conflicto.nombre_invitada}. ${t('errorConflictoElige')}`)
+
+    const resultado = await comprobarConflicto()
+
+    if (resultado.tipo === 'pedir_referencia') {
+      setPedirReferencia(true)
+      setError(t('errorPedirReferencia') || 'Hay una posible coincidencia con otra invitada. Por favor añade la referencia o link del producto para confirmar si es el mismo.')
       return
     }
+
+    if (resultado.tipo === 'conflicto_real') {
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
+      })
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
+      return
+    }
+
     setEnviando(true)
     let foto_url = null
     if (foto) {
@@ -447,11 +509,11 @@ export default function InvitadaPage() {
                 <div className="prenda-grid">
                   <div>
                     <label style={labelStyle}>{t('marca')} <span style={{color:'#F07987'}}>*</span></label>
-                    <input type="text" placeholder={t('marcaPlaceholder')} value={marca1} onChange={e => setMarca1(e.target.value)} style={inputStyle}/>
+                    <input type="text" placeholder={t('marcaPlaceholder')} value={marca1} onChange={e => { setMarca1(e.target.value); setPedirReferencia(false) }} style={inputStyle}/>
                   </div>
                   <div>
                     <label style={labelStyle}>{t('tipo')} <span style={{color:'#F07987'}}>*</span></label>
-                    <select value={tipo1} onChange={e => setTipo1(e.target.value)} style={selectStyle}>
+                    <select value={tipo1} onChange={e => { setTipo1(e.target.value); setPedirReferencia(false) }} style={selectStyle}>
                       <option value="">{t('selecciona')}</option>
                       {tiposData.map((tipo, i) => <option key={i}>{tipo}</option>)}
                     </select>
@@ -459,11 +521,28 @@ export default function InvitadaPage() {
                 </div>
                 <div style={{marginBottom:'1rem'}}>
                   <label style={labelStyle}>{t('modelo')} <span style={{color:'#F07987'}}>*</span></label>
-                  <input type="text" placeholder={t('modeloPlaceholder')} value={modelo1} onChange={e => setModelo1(e.target.value)} style={inputStyle}/>
+                  <input type="text" placeholder={t('modeloPlaceholder')} value={modelo1} onChange={e => { setModelo1(e.target.value); setPedirReferencia(false) }} style={inputStyle}/>
                 </div>
                 <div>
-                  <label style={labelStyle}>{t('referencia')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>{t('opcional')}</span></label>
-                  <input type="text" placeholder={t('referenciaPlaceholder')} value={referencia1} onChange={e => setReferencia1(e.target.value)} style={inputStyle}/>
+                  <label style={labelStyle}>
+                    {t('referencia')}
+                    {pedirReferencia
+                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaObligatoria') || '* requerida para confirmar'}</span>
+                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
+                    }
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={pedirReferencia ? (t('referenciaPlaceholderObligatoria') || 'Añade el link o referencia del producto') : t('referenciaPlaceholder')}
+                    value={referencia1}
+                    onChange={e => setReferencia1(e.target.value)}
+                    style={{...inputStyle, borderColor: pedirReferencia ? '#F07987' : '#E0E0DC'}}
+                  />
+                  {pedirReferencia && (
+                    <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.4rem',lineHeight:1.5}}>
+                      {t('referenciaInfo') || 'Hay una posible coincidencia con otro look. Añade la referencia o link para confirmar si es exactamente el mismo producto.'}
+                    </p>
+                  )}
                 </div>
               </div>
 
