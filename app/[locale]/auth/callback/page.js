@@ -11,20 +11,45 @@ export default function AuthCallback() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [listo, setListo] = useState(false)
-  const [sesionLista, setSesionLista] = useState(false)
+  const [tipo, setTipo] = useState(null) // 'recovery' | 'other' | null
 
   const localesPrefix = ['fr','en','pt','de','nl']
   const locale = localesPrefix.find(loc => pathname.startsWith(`/${loc}/`) || pathname === `/${loc}`) || 'es'
   const prefijo = locale !== 'es' ? `/${locale}` : ''
 
   useEffect(() => {
-    // Supabase maneja el token del hash automáticamente
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'PASSWORD_RECOVERY') {
-        setSesionLista(true)
-      }
-    })
-    return () => subscription.unsubscribe()
+    // Leer el hash de la URL manualmente
+    const hash = window.location.hash
+    const params = new URLSearchParams(hash.replace('#', ''))
+    const type = params.get('type')
+    const accessToken = params.get('access_token')
+    const refreshToken = params.get('refresh_token')
+
+    if (type === 'recovery' && accessToken) {
+      // Establecer la sesión con el token del hash
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken || '',
+      }).then(({ error }) => {
+        if (error) {
+          setError('El enlace ha expirado. Solicita uno nuevo.')
+          setTipo('error')
+        } else {
+          setTipo('recovery')
+        }
+      })
+    } else if (accessToken) {
+      // Otro tipo de callback (login con Google etc), redirigir al dashboard
+      supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken || '',
+      }).then(() => {
+        router.push(prefijo + '/dashboard')
+      })
+    } else {
+      // Sin token, redirigir al login
+      router.push(prefijo + '/login')
+    }
   }, [])
 
   async function handleCambiar() {
@@ -45,6 +70,22 @@ export default function AuthCallback() {
       <div>
         <div style={{fontSize:'1.8rem',fontWeight:200,color:'#0A0A0A',marginBottom:'0.5rem'}}>Contraseña actualizada</div>
         <p style={{fontSize:'0.82rem',fontWeight:300,color:'#888884'}}>Redirigiendo al dashboard...</p>
+      </div>
+    </div>
+  )
+
+  if (!tipo) return (
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>
+      Verificando enlace...
+    </div>
+  )
+
+  if (tipo === 'error') return (
+    <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center'}}>
+      <div>
+        <div style={{fontSize:'1.4rem',fontWeight:300,color:'#0A0A0A',marginBottom:'0.5rem'}}>Enlace expirado</div>
+        <p style={{fontSize:'0.82rem',fontWeight:300,color:'#888884',marginBottom:'1.5rem'}}>Solicita un nuevo enlace de recuperación.</p>
+        <a href={prefijo + '/login'} style={{fontSize:'0.78rem',fontWeight:500,color:'#F07987',textDecoration:'underline'}}>Volver al login</a>
       </div>
     </div>
   )
