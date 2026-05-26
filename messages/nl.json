@@ -240,7 +240,14 @@
     "o": "of",
     "google": "Doorgaan met Google",
     "sinCuenta": "Nog geen account?",
-    "crearCuenta": "Gratis account aanmaken"
+    "crearCuenta": "Gratis account aanmaken",
+    "olvidaste": "Wachtwoord vergeten?",
+    "enviandoReset": "Verzenden...",
+    "enviarReset": "Herstelkoppeling verzenden",
+    "resetEnviado": "We hebben een herstelkoppeling naar uw e-mail gestuurd.",
+    "volver": "← Terug naar inloggen",
+    "resetTitulo": "Wachtwoord herstellen",
+    "resetSub": "Voer uw e-mail in en we sturen u een koppeling."
   },
   "register": {
     "tituloVisual": "Jouw evenement,",

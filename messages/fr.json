@@ -240,7 +240,14 @@
     "o": "ou",
     "google": "Continuer avec Google",
     "sinCuenta": "Pas encore de compte ?",
-    "crearCuenta": "Créer un compte gratuit"
+    "crearCuenta": "Créer un compte gratuit",
+    "olvidaste": "Mot de passe oublié ?",
+    "enviandoReset": "Envoi...",
+    "enviarReset": "Envoyer le lien de récupération",
+    "resetEnviado": "Nous vous avons envoyé un lien à votre email pour réinitialiser le mot de passe.",
+    "volver": "← Retour à la connexion",
+    "resetTitulo": "Récupérer le mot de passe",
+    "resetSub": "Entrez votre email et nous vous envoyons un lien."
   },
   "register": {
     "tituloVisual": "Votre événement,",

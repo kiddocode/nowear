@@ -240,7 +240,14 @@
     "o": "o",
     "google": "Continuar con Google",
     "sinCuenta": "¿No tienes cuenta?",
-    "crearCuenta": "Crear cuenta gratis"
+    "crearCuenta": "Crear cuenta gratis",
+    "olvidaste": "¿Olvidaste tu contraseña?",
+    "enviandoReset": "Enviando...",
+    "enviarReset": "Enviar enlace de recuperación",
+    "resetEnviado": "Te hemos enviado un enlace a tu email para restablecer la contraseña.",
+    "volver": "← Volver al inicio de sesión",
+    "resetTitulo": "Recuperar contraseña",
+    "resetSub": "Introduce tu email y te enviamos un enlace."
   },
   "register": {
     "tituloVisual": "Tu evento,",

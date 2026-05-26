@@ -240,7 +240,14 @@
     "o": "oder",
     "google": "Mit Google fortfahren",
     "sinCuenta": "Noch kein Konto?",
-    "crearCuenta": "Kostenloses Konto erstellen"
+    "crearCuenta": "Kostenloses Konto erstellen",
+    "olvidaste": "Passwort vergessen?",
+    "enviandoReset": "Senden...",
+    "enviarReset": "Wiederherstellungslink senden",
+    "resetEnviado": "Wir haben Ihnen einen Link an Ihre E-Mail gesendet, um das Passwort zurückzusetzen.",
+    "volver": "← Zurück zur Anmeldung",
+    "resetTitulo": "Passwort zurücksetzen",
+    "resetSub": "Geben Sie Ihre E-Mail ein und wir senden Ihnen einen Link."
   },
   "register": {
     "tituloVisual": "Ihr Event,",
