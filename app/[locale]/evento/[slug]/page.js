@@ -176,7 +176,7 @@ export default function EventoDetalle() {
     <div style={{fontFamily:"'Poppins',sans-serif",paddingBottom:'2rem'}}>
 
       {/* HERO */}
-      <div className="evento-hero-link" style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'260px',borderRadius:'4px',flexShrink:0}}>
+      <div className="evento-hero" style={{background:'#0A0A0A',padding:'2.5rem 3rem 3rem',position:'relative',overflow:'hidden'}}>
         <div style={{position:'absolute',inset:0,background:'radial-gradient(ellipse at top right, rgba(240,121,135,0.07) 0%, transparent 60%)',pointerEvents:'none'}}></div>
         <button onClick={() => router.push(prefijo + '/dashboard')} style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginBottom:'2rem',padding:0}}>
           {t('misEventos')}
@@ -206,21 +206,22 @@ export default function EventoDetalle() {
                 {copiado ? t('copiado') : t('copiar')}
               </button>
             </div>
-            
           </div>
         </div>
       </div>
+
+      {/* BANNER MÓVIL PREMIUM - link visible sin scroll */}
       {isPremium && (
-  <div className="evento-premium-link-mobile" style={{display:'none',padding:'1rem 1.25rem',background:'#F5EDE8',borderBottom:'1px solid #F0D8CC'}}>
-    <p style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>Personalizar link</p>
-    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
-      <span style={{fontSize:'0.78rem',fontWeight:500,color:'#0A0A0A'}}>nowear.es/{slug}</span>
-      <button onClick={copiarLink} style={{fontSize:'0.65rem',fontWeight:700,color:copiado?'#4A6B42':'#C4917C',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap'}}>
-        {copiado ? t('copiado') : t('copiar')}
-      </button>
-    </div>
-  </div>
-)}
+        <div className="evento-premium-link-mobile" style={{display:'none',padding:'1rem 1.25rem',background:'#F5EDE8',borderBottom:'1px solid #F0D8CC'}}>
+          <p style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>{t('linkInvitadas')}</p>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
+            <span style={{fontSize:'0.78rem',fontWeight:500,color:'#0A0A0A'}}>nowear.es/{slug}</span>
+            <button onClick={copiarLink} style={{fontSize:'0.65rem',fontWeight:700,color:copiado?'#4A6B42':'#C4917C',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap'}}>
+              {copiado ? t('copiado') : t('copiar')}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* TABS */}
       <div className="evento-tabs" style={{display:'flex',padding:'0 3rem',borderBottom:'2px solid #E0E0DC',background:'#FFFFFF',position:'sticky',top:'68px',zIndex:100,overflowX:'auto'}}>
@@ -238,7 +239,7 @@ export default function EventoDetalle() {
       <div className="evento-contenido" style={{padding:'2.5rem 3rem'}}>
 
         {/* STATS */}
-        <div className="evento-stats" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1.5rem',marginBottom:'2.5rem',overflowX:'auto'}}>
+        <div className="evento-stats" style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1.5rem',marginBottom:'2.5rem'}}>
           {[
             {n: looks.length.toString(), l: t('statLooks'), color:'#0A0A0A'},
             {n: confirmados.toString(), l: t('statConfirmados'), color:'#0A0A0A'},
@@ -264,7 +265,7 @@ export default function EventoDetalle() {
                   {t('exportar')}
                 </button>
               ) : (
-                <div style={{display:'inline-flex',alignItems:'center',gap:'0.75rem'}}>
+                <div style={{display:'inline-flex',alignItems:'center',gap:'0.75rem',flexWrap:'wrap'}}>
                   <button disabled style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.65rem 1.5rem',background:'#E0E0DC',color:'#BEBEBA',border:'none',cursor:'not-allowed',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
                     {t('exportarBloqueado')}
                   </button>
