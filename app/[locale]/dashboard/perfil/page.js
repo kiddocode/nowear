@@ -68,9 +68,9 @@ export default function Perfil() {
   if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>...</div>
 
   return (
-    <div style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
-      <Sidebar activo="/dashboard/perfil" />
-      <main style={{padding:'3rem',maxWidth:'680px'}}>
+    <div className="cuenta-grid" style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
+      <div className="cuenta-sidebar"><Sidebar activo="/dashboard/perfil" /></div>
+      <main className="cuenta-main" style={{padding:'3rem',paddingBottom:'6rem',maxWidth:'680px'}}>
         <div style={{marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
           <h1 style={{fontSize:'2.2rem',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>{t('titulo')}</h1>
           <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>{t('subtitulo')}</p>

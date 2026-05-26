@@ -123,12 +123,29 @@ export default function NuevoEvento() {
           .nuevo-fecha-grid { grid-template-columns: 1fr; }
           .nuevo-planes-grid { grid-template-columns: 1fr; margin: 1rem; }
           .nuevo-planes-footer { padding: 1rem; }
+          .nuevo-sidebar-wrap { display: block; }
+          
+@media (max-width: 1024px) {
+  .nuevo-outer { grid-template-columns: 1fr !important; }
+  .nuevo-sidebar-wrap { display: none !important; }
+  .nuevo-main { grid-template-columns: 1fr !important; padding-bottom: 5rem !important; }
+  .nuevo-img { display: none !important; }
+  .nuevo-form { padding: 1.5rem !important; border-right: none !important; }
+  .nuevo-planes-grid { grid-template-columns: repeat(2,1fr) !important; margin: 1rem !important; }
+  .nuevo-planes-header { padding: 1.5rem !important; }
+  .nuevo-planes-footer { padding: 1rem 1.5rem !important; flex-direction: column !important; align-items: stretch !important; }
+  .nuevo-planes-modal { border-radius: 12px !important; }
+}
+@media (max-width: 600px) {
+  .nuevo-planes-grid { grid-template-columns: 1fr !important; }
+  .nuevo-fecha-grid { grid-template-columns: 1fr !important; }
+}
         }
       `}</style>
 
-      <div className="nuevo-outer">
-        <Sidebar activo="/dashboard/nuevo" />
-        <main className="nuevo-main">
+      <div className="nuevo-outer" style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
+  <div className="nuevo-sidebar-wrap"><Sidebar activo="/dashboard/nuevo" /></div>
+  <main className="nuevo-main">
           <div className="nuevo-form">
             <div style={{marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
               <h1 style={{fontSize:'clamp(1.6rem,4vw,2.2rem)',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>{t('titulo')}</h1>

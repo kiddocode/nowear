@@ -116,20 +116,24 @@ export default function Dashboard() {
       <div className="dashboard-sidebar"><Sidebar activo="/dashboard" /></div>
 
       {/* BARRA MÓVIL */}
-      <div className="dashboard-mobile-nav" style={{display:'none',position:'fixed',bottom:0,left:0,right:0,zIndex:200,background:'#FFFFFF',borderTop:'1px solid #E0E0DC',padding:'0.75rem 1.5rem',justifyContent:'space-between',alignItems:'center'}}>
-        <a href={prefijo + '/dashboard'} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.25rem',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#0A0A0A',textDecoration:'none'}}>
-          <span style={{fontSize:'1.1rem'}}>📋</span>{ts('misEventos')}
-        </a>
-        <a href={prefijo + '/dashboard/nuevo'} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.25rem',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',textDecoration:'none'}}>
-          <span style={{fontSize:'1.1rem'}}>➕</span>{ts('nuevoEvento')}
-        </a>
-        <a href={prefijo + '/dashboard/perfil'} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.25rem',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',textDecoration:'none'}}>
-          <span style={{fontSize:'1.1rem'}}>👤</span>{ts('perfil')}
-        </a>
-        <button onClick={() => setMenuMobileOpen(!menuMobileOpen)} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.25rem',fontSize:'0.55rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
-          <span style={{fontSize:'1.1rem'}}>☰</span>{ts('cuenta')}
-        </button>
-      </div>
+<div className="dashboard-mobile-nav" style={{display:'none',position:'fixed',bottom:0,left:0,right:0,zIndex:200,background:'#FFFFFF',borderTop:'1px solid #E0E0DC',padding:'0.6rem 0',justifyContent:'space-around',alignItems:'center'}}>
+  <a href={prefijo + '/dashboard'} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.2rem',fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#0A0A0A',textDecoration:'none',flex:1,justifyContent:'center'}}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 16 11 18 15 14"/></svg>
+    {ts('misEventos')}
+  </a>
+  <a href={prefijo + '/dashboard/nuevo'} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.2rem',fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',textDecoration:'none',flex:1,justifyContent:'center'}}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+    {ts('nuevoEvento')}
+  </a>
+  <a href={prefijo + '/dashboard/perfil'} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.2rem',fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',textDecoration:'none',flex:1,justifyContent:'center'}}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    {ts('perfil')}
+  </a>
+  <button onClick={() => setMenuMobileOpen(!menuMobileOpen)} style={{display:'flex',flexDirection:'column',alignItems:'center',gap:'0.2rem',fontSize:'0.52rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',flex:1,justifyContent:'center',alignItems:'center'}}>
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    {ts('cuenta')}
+  </button>
+</div>
 
       {/* MENU MÓVIL DESPLEGABLE */}
       {menuMobileOpen && (
