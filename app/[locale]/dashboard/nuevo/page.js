@@ -98,8 +98,10 @@ export default function NuevoEvento() {
     <>
       <style>{`
         .nuevo-outer { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 68px); }
+        .nuevo-sidebar-wrap { display: block; }
         .nuevo-main { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 68px); }
         .nuevo-img { position: relative; overflow: hidden; }
+        .nuevo-img-mobile { display: none; width: 100%; height: 180px; overflow: hidden; position: relative; flex-shrink: 0; }
         .nuevo-form { padding: 3rem; border-right: 1px solid #E0E0DC; overflow-y: auto; }
         .nuevo-fecha-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.25rem; }
         .nuevo-planes-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: #E0E0DC; margin: 2rem 3rem; }
@@ -109,43 +111,42 @@ export default function NuevoEvento() {
 
         @media (max-width: 1024px) {
           .nuevo-outer { grid-template-columns: 1fr; }
-          .nuevo-outer > aside { display: none; }
-          .nuevo-main { grid-template-columns: 1fr; }
+          .nuevo-sidebar-wrap { display: none; }
+          .nuevo-main { grid-template-columns: 1fr; min-height: unset; }
           .nuevo-img { display: none; }
-          .nuevo-form { padding: 2rem; border-right: none; }
+          .nuevo-img-mobile { display: block; }
+          .nuevo-form { padding: 2rem; border-right: none; padding-bottom: 5rem; }
           .nuevo-planes-grid { grid-template-columns: repeat(2,1fr); margin: 1.5rem; }
           .nuevo-planes-header { padding: 1.5rem; }
           .nuevo-planes-footer { padding: 1rem 1.5rem 1.5rem; flex-direction: column; align-items: stretch; }
+          .nuevo-planes-modal { border-radius: 12px; max-height: 95vh; }
         }
 
         @media (max-width: 768px) {
-          .nuevo-form { padding: 1.5rem; }
+          .nuevo-form { padding: 1.5rem; padding-bottom: 5rem; }
           .nuevo-fecha-grid { grid-template-columns: 1fr; }
           .nuevo-planes-grid { grid-template-columns: 1fr; margin: 1rem; }
           .nuevo-planes-footer { padding: 1rem; }
-          .nuevo-sidebar-wrap { display: block; }
-          
-@media (max-width: 1024px) {
-  .nuevo-outer { grid-template-columns: 1fr !important; }
-  .nuevo-sidebar-wrap { display: none !important; }
-  .nuevo-main { grid-template-columns: 1fr !important; padding-bottom: 5rem !important; }
-  .nuevo-img { display: none !important; }
-  .nuevo-form { padding: 1.5rem !important; border-right: none !important; }
-  .nuevo-planes-grid { grid-template-columns: repeat(2,1fr) !important; margin: 1rem !important; }
-  .nuevo-planes-header { padding: 1.5rem !important; }
-  .nuevo-planes-footer { padding: 1rem 1.5rem !important; flex-direction: column !important; align-items: stretch !important; }
-  .nuevo-planes-modal { border-radius: 12px !important; }
-}
-@media (max-width: 600px) {
-  .nuevo-planes-grid { grid-template-columns: 1fr !important; }
-  .nuevo-fecha-grid { grid-template-columns: 1fr !important; }
-}
+          .nuevo-img-mobile { height: 160px; }
         }
       `}</style>
 
-      <div className="nuevo-outer" style={{display:'grid',gridTemplateColumns:'220px 1fr',minHeight:'calc(100vh - 68px)'}}>
-  <div className="nuevo-sidebar-wrap"><Sidebar activo="/dashboard/nuevo" /></div>
-  <main className="nuevo-main">
+      <div className="nuevo-outer">
+        <div className="nuevo-sidebar-wrap"><Sidebar activo="/dashboard/nuevo" /></div>
+        <main className="nuevo-main">
+
+          {/* IMAGEN CABECERA MÓVIL */}
+          <div className="nuevo-img-mobile">
+            <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=80" alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',objectPosition:'center 40%',display:'block'}}/>
+            <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(10,10,10,0.65) 0%,rgba(10,10,10,0.1) 60%)'}}></div>
+            <div style={{position:'absolute',bottom:'1rem',left:'1.5rem',right:'1.5rem'}}>
+              <p style={{fontSize:'1.2rem',fontWeight:700,color:'#FFFFFF',lineHeight:1.2,letterSpacing:'-0.01em'}}>
+                {t('tagline')}<br/><em style={{fontStyle:'italic',color:'#F07987'}}>{t('taglineEmphasis')}</em>
+              </p>
+            </div>
+          </div>
+
+          {/* FORMULARIO */}
           <div className="nuevo-form">
             <div style={{marginBottom:'2.5rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
               <h1 style={{fontSize:'clamp(1.6rem,4vw,2.2rem)',fontWeight:200,color:'#0A0A0A',letterSpacing:'-0.025em',lineHeight:1,marginBottom:'0.35rem'}}>{t('titulo')}</h1>
@@ -207,6 +208,7 @@ export default function NuevoEvento() {
             </button>
           </div>
 
+          {/* IMAGEN LATERAL DESKTOP */}
           <div className="nuevo-img">
             <img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?w=900&q=80" alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
             <div style={{position:'absolute',inset:0,background:'linear-gradient(to top,rgba(10,10,10,0.75) 0%,rgba(10,10,10,0.1) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
