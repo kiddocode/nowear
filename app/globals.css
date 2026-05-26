@@ -3,6 +3,10 @@ body {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+input, select, textarea, button {
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
 :root {
   --black: #0A0A0A;
   --white: #FFFFFF;
@@ -230,6 +234,7 @@ a { color: inherit; text-decoration: none; }
     height: 200px;
   }
 }
+
 /* ─── CUENTA PAGES MÓVIL ────────────────────────────────────── */
 @media (max-width: 1024px) {
   .cuenta-grid { grid-template-columns: 1fr !important; }
@@ -247,6 +252,11 @@ a { color: inherit; text-decoration: none; }
   .planes-grid-inner { grid-template-columns: 1fr !important; }
   .planes-modal-inner { padding: 1.25rem !important; max-height: 92vh !important; }
 }
-@media (max-width: 768px) {
+
+/* ─── EVENTO PREMIUM LINK MÓVIL ─────────────────────────────── */
+.evento-premium-link-mobile { display: none; }
+.evento-tab-personalizacion { display: block; }
+@media (max-width: 1024px) {
   .evento-premium-link-mobile { display: block !important; }
+  .evento-tab-personalizacion { display: none !important; }
 }
