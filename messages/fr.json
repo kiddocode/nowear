@@ -1,6 +1,6 @@
 {
   "hero": {
-    "badge": "Mariages · Communions · Baptêmes · Événements",
+    "badge": "LE LOOK COORDONNE POUR TOUT EVENEMENT",
     "titulo": "Que personne n'arrive\nhabillée pareil.",
     "subtitulo": "Enregistrez vos looks, détectez les conflits, profitez sereinement.",
     "cta": "Créer mon événement",
@@ -46,7 +46,7 @@
     "casos": [
       {
         "titulo": "Événements particuliers",
-        "desc": "Mariages, communions, baptêmes, fiançailles, anniversaires..."
+        "desc": "Mariages, communions, baptemes, fiances, remises de diplomes, baby showers, confirmations, anniversaires, fetes avec dress code..."
       },
       {
         "titulo": "Galas et prix",
@@ -206,7 +206,7 @@
     "soporte": "Support",
     "idioma": "Langue",
     "comoFunciona": "Comment ça marche",
-    "casosDeUso": "Cas d'usage",
+    "casosDeUso": "Pour qui",
     "paquetes": "Forfaits",
     "inspiracion": "Inspiration",
     "preguntasFrecuentes": "Questions fréquentes",
@@ -219,7 +219,7 @@
   },
   "nav": {
     "comoFunciona": "Comment ça marche",
-    "casosDeUso": "Cas d'usage",
+    "casosDeUso": "Pour qui",
     "paquetes": "Forfaits",
     "inspiracion": "Inspiration",
     "faq": "FAQ",

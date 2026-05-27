@@ -1,6 +1,6 @@
 {
   "hero": {
-    "badge": "Bruiloften · Communies · Dopen · Evenementen",
+    "badge": "DE GECOORDINEERDE LOOK BIJ ELK EVENEMENT",
     "titulo": "Zodat niemand hetzelfde\ngekleed aankomt.",
     "subtitulo": "Registreer looks, detecteer conflicten, geniet zorgeloos.",
     "cta": "Mijn evenement aanmaken",
@@ -46,7 +46,7 @@
     "casos": [
       {
         "titulo": "Privé-evenementen",
-        "desc": "Bruiloften, communies, dopen, verlovingen, verjaardagen..."
+        "desc": "Bruiloften, communies, dopen, verlovingen, diploma-uitreikingen, babyshowers, vormsels, verjaardagen, feesten met dresscode..."
       },
       {
         "titulo": "Galas en prijsuitreikingen",
@@ -206,7 +206,7 @@
     "soporte": "Ondersteuning",
     "idioma": "Taal",
     "comoFunciona": "Hoe het werkt",
-    "casosDeUso": "Gebruiksgevallen",
+    "casosDeUso": "Voor wie",
     "paquetes": "Pakketten",
     "inspiracion": "Inspiratie",
     "preguntasFrecuentes": "Veelgestelde vragen",
@@ -219,7 +219,7 @@
   },
   "nav": {
     "comoFunciona": "Hoe het werkt",
-    "casosDeUso": "Gebruiksgevallen",
+    "casosDeUso": "Voor wie",
     "paquetes": "Pakketten",
     "inspiracion": "Inspiratie",
     "faq": "FAQ",

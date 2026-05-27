@@ -1,6 +1,6 @@
 {
   "hero": {
-    "badge": "Hochzeiten · Kommunionen · Taufen · Events",
+    "badge": "DER KOORDINIERTE LOOK BEI JEDEM EVENT",
     "titulo": "Dass niemand gleich\ngekleidet ankommt.",
     "subtitulo": "Looks registrieren, Konflikte erkennen, entspannt genießen.",
     "cta": "Mein Event erstellen",
@@ -46,7 +46,7 @@
     "casos": [
       {
         "titulo": "Private Events",
-        "desc": "Hochzeiten, Kommunionen, Taufen, Verlobungen, Geburtstage..."
+        "desc": "Hochzeiten, Kommunionen, Taufen, Verlobungen, Abschlussfeiern, Babypartys, Konfirmationen, Geburtstage, Partys mit Dresscode..."
       },
       {
         "titulo": "Galas und Preisverleihungen",
@@ -206,7 +206,7 @@
     "soporte": "Support",
     "idioma": "Sprache",
     "comoFunciona": "So funktioniert es",
-    "casosDeUso": "Anwendungsfälle",
+    "casosDeUso": "Fuer wen",
     "paquetes": "Pakete",
     "inspiracion": "Inspiration",
     "preguntasFrecuentes": "Häufige Fragen",
@@ -219,7 +219,7 @@
   },
   "nav": {
     "comoFunciona": "So funktioniert es",
-    "casosDeUso": "Anwendungsfälle",
+    "casosDeUso": "Fuer wen",
     "paquetes": "Pakete",
     "inspiracion": "Inspiration",
     "faq": "FAQ",

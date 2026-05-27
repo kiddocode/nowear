@@ -1,6 +1,6 @@
 {
   "hero": {
-    "badge": "Bodas · Comuniones · Bautizos · Eventos",
+    "badge": "EL LOOK COORDINADO EN CUALQUIER EVENTO",
     "titulo": "Que nadie llegue\nvestida igual.",
     "subtitulo": "Registra looks, detecta coincidencias, disfruta tranquila.",
     "cta": "Crear mi evento",
@@ -46,7 +46,7 @@
     "casos": [
       {
         "titulo": "Eventos particulares",
-        "desc": "Bodas, comuniones, bautizos, pedidas, cumpleaños..."
+        "desc": "Bodas, comuniones, bautizos, pedidas, graduaciones, baby showers, confirmaciones, quinceañeras, cumpleaños, cenas de Nochevieja, fiestas con dress code..."
       },
       {
         "titulo": "Galas y premios",
@@ -206,7 +206,7 @@
     "soporte": "Soporte",
     "idioma": "Idioma",
     "comoFunciona": "Cómo funciona",
-    "casosDeUso": "Casos de uso",
+    "casosDeUso": "Para quien",
     "paquetes": "Paquetes",
     "inspiracion": "Inspiración",
     "preguntasFrecuentes": "Preguntas frecuentes",
@@ -219,7 +219,7 @@
   },
   "nav": {
     "comoFunciona": "Cómo funciona",
-    "casosDeUso": "Casos de uso",
+    "casosDeUso": "Para quien",
     "paquetes": "Paquetes",
     "inspiracion": "Inspiración",
     "faq": "FAQ",

@@ -1,6 +1,6 @@
 {
   "hero": {
-    "badge": "Weddings · Communions · Baptisms · Events",
+    "badge": "THE COORDINATED LOOK AT ANY EVENT",
     "titulo": "No one shows up\nwearing the same.",
     "subtitulo": "Register looks, detect conflicts, enjoy in peace.",
     "cta": "Create my event",
@@ -46,7 +46,7 @@
     "casos": [
       {
         "titulo": "Private events",
-        "desc": "Weddings, communions, baptisms, engagements, birthdays..."
+        "desc": "Weddings, communions, baptisms, engagements, graduations, baby showers, confirmations, quinceañeras, birthdays, dress code parties..."
       },
       {
         "titulo": "Galas and awards",
@@ -206,7 +206,7 @@
     "soporte": "Support",
     "idioma": "Language",
     "comoFunciona": "How it works",
-    "casosDeUso": "Use cases",
+    "casosDeUso": "For who",
     "paquetes": "Packages",
     "inspiracion": "Inspiration",
     "preguntasFrecuentes": "FAQ",
@@ -219,7 +219,7 @@
   },
   "nav": {
     "comoFunciona": "How it works",
-    "casosDeUso": "Use cases",
+    "casosDeUso": "For who",
     "paquetes": "Packages",
     "inspiracion": "Inspiration",
     "faq": "FAQ",
