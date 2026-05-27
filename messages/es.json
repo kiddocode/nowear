@@ -367,7 +367,11 @@
       "otro": "Otro"
     },
     "errorLookOrganizadora": "Este look ya está reservado para la organizadora. Por favor elige otro.",
-    "errorSimilarOrganizadora": "Tu look es muy similar al de la organizadora. Añade la referencia para confirmar."
+    "errorSimilarOrganizadora": "Tu look es muy similar al de la organizadora. Añade la referencia para confirmar.",
+    "errorPedirReferencia": "Hay una posible coincidencia con otra invitada. Añade la referencia o link del producto para confirmar si es el mismo.",
+    "referenciaObligatoria": "* requerida para confirmar",
+    "referenciaPlaceholderObligatoria": "Añade el link o referencia del producto",
+    "referenciaInfo": "Añade la referencia o link para confirmar si es exactamente el mismo producto que otra invitada."
   },
   "sidebar": {
     "principal": "Principal",

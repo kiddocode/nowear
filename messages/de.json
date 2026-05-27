@@ -367,7 +367,11 @@
       "otro": "Sonstiges"
     },
     "errorLookOrganizadora": "Dieser Look ist für die Organisatorin reserviert. Bitte wählen Sie einen anderen.",
-    "errorSimilarOrganizadora": "Ihr Look ist sehr ähnlich dem der Organisatorin. Fügen Sie die Referenz hinzu."
+    "errorSimilarOrganizadora": "Ihr Look ist sehr ähnlich dem der Organisatorin. Fügen Sie die Referenz hinzu.",
+    "errorPedirReferencia": "Es gibt eine mögliche Übereinstimmung mit einer anderen Gästin. Fügen Sie die Referenz oder den Link hinzu.",
+    "referenciaObligatoria": "* erforderlich zur Bestätigung",
+    "referenciaPlaceholderObligatoria": "Link oder Referenz des Produkts hinzufügen",
+    "referenciaInfo": "Fügen Sie die Referenz hinzu um zu bestätigen ob es dasselbe Produkt ist."
   },
   "sidebar": {
     "principal": "Hauptmenü",

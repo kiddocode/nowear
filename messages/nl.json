@@ -367,7 +367,11 @@
       "otro": "Overig"
     },
     "errorLookOrganizadora": "Deze look is gereserveerd voor de organisatrice. Kies een andere look.",
-    "errorSimilarOrganizadora": "Jouw look lijkt sterk op die van de organisatrice. Voeg de referentie toe."
+    "errorSimilarOrganizadora": "Jouw look lijkt sterk op die van de organisatrice. Voeg de referentie toe.",
+    "errorPedirReferencia": "Er is een mogelijke overeenkomst met een andere gaste. Voeg de referentie of link toe om te bevestigen.",
+    "referenciaObligatoria": "* vereist voor bevestiging",
+    "referenciaPlaceholderObligatoria": "Voeg de link of referentie van het product toe",
+    "referenciaInfo": "Voeg de referentie of link toe om te bevestigen of het hetzelfde product is."
   },
   "sidebar": {
     "principal": "Hoofdmenu",
