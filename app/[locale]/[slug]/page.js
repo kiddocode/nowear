@@ -19,6 +19,14 @@ function esPremiumOSuperior(evento) {
   return ['premium','enterprise'].includes(getPlan(evento))
 }
 
+function normalizar(texto) {
+  if (!texto) return ''
+  return texto.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9]/g, '')
+    .trim()
+}
+
 export default function InvitadaPage() {
   const { slug } = useParams()
   const t = useTranslations('invitada')
@@ -151,20 +159,15 @@ export default function InvitadaPage() {
     setModoGestion(false)
   }
 
-  // Comprueba si hay sospecha o conflicto real con la lógica correcta:
-  // Las 4 variables principales deben coincidir: marca + tipo + modelo + color
-  // Si coinciden pero sin referencia → pedir referencia (sospecha)
-  // Si coinciden con referencia igual → conflicto real → email
-  // Si tipo diferente → no hay conflicto
- async function comprobarConflicto(excludeId = null) {
+  async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
 
     // 1. COMPROBAR CONTRA LOOK BLOQUEADO DE LA ORGANIZADORA
     if (evento.look_bloqueado_marca1) {
       const colorCoincide = colores[0] === evento.look_bloqueado_color
-      const marcaCoincide = marca1.trim().toLowerCase() === (evento.look_bloqueado_marca1 || '').trim().toLowerCase()
+      const marcaCoincide = normalizar(marca1) === normalizar(evento.look_bloqueado_marca1)
       const tipoCoincide = tipo1.trim().toLowerCase() === (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
-      const modeloCoincide = modelo1.trim().toLowerCase() === (evento.look_bloqueado_modelo1 || '').trim().toLowerCase()
+      const modeloCoincide = normalizar(modelo1) === normalizar(evento.look_bloqueado_modelo1)
 
       if (colorCoincide && marcaCoincide && tipoCoincide && modeloCoincide) {
         if (evento.look_bloqueado_referencia1 && referencia1.trim()) {
@@ -179,13 +182,13 @@ export default function InvitadaPage() {
       }
     }
 
-    // 2. COMPROBAR CONTRA OTRAS INVITADAS
+    // 2. COMPROBAR CONTRA OTRAS INVITADAS (usando campos normalizados)
     let query = supabase.from('looks').select('id, nombre_invitada, referencia')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
-      .ilike('marca', marca1.trim())
+      .eq('marca_normalizada', normalizar(marca1))
       .ilike('tipo', tipo1.trim())
-      .ilike('modelo', modelo1.trim())
+      .eq('modelo_normalizado', normalizar(modelo1))
 
     if (excludeId) query = query.neq('id', excludeId)
 
@@ -250,6 +253,7 @@ export default function InvitadaPage() {
     await supabase.from('looks').update({
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, estado
     }).eq('id', lookEditando.id)
@@ -320,64 +324,7 @@ export default function InvitadaPage() {
       evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, estado, foto_url
-    })
-    if (insertError) { setEnviando(false); setError(t('errorRegistro')); return }
-    const emailGuardado = email.toLowerCase().trim()
-    const nombreGuardado = nombre
-    setEnviando(false); setEnviado(true)
-    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
-  }
-
-  async function handleEnviar() {
-    setError('')
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) { setError(t('errorCampos')); return }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
-
-    const { data: existentes } = await supabase.from('looks').select('estado')
-      .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
-    if (existentes && existentes.length > 0) {
-      const confirmados = existentes.filter(l => l.estado === 'confirmado').length
-      const prereservados = existentes.filter(l => l.estado === 'prereservado').length
-      if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
-      if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
-    }
-
-    const resultado = await comprobarConflicto()
-
-    if (resultado.tipo === 'pedir_referencia') {
-      setPedirReferencia(true)
-      setError(t('errorPedirReferencia') || 'Hay una posible coincidencia con otra invitada. Por favor añade la referencia o link del producto para confirmar si es el mismo.')
-      return
-    }
-
-    if (resultado.tipo === 'conflicto_real') {
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
-      })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
-      return
-    }
-
-    setEnviando(true)
-    let foto_url = null
-    if (foto) {
-      const ext = foto.name.split('.').pop()
-      const fileName = `${evento.id}-${Date.now()}.${ext}`
-      const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, foto, { contentType: foto.type })
-      if (uploadData) {
-        const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
-        foto_url = urlData.publicUrl
-      }
-    }
-    const { error: insertError } = await supabase.from('looks').insert({
-      evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-      color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, estado, foto_url
     })
@@ -445,7 +392,6 @@ export default function InvitadaPage() {
 
       <div className="invitada-layout">
 
-        {/* PANEL LATERAL DESKTOP */}
         <div className="invitada-panel">
           <img src={fotoPanel} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -465,7 +411,6 @@ export default function InvitadaPage() {
           </div>
         </div>
 
-        {/* BANNER MÓVIL */}
         <div className="invitada-panel-mobile">
           <img src={fotoPanel} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.3) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'1.25rem 1.5rem'}}>
@@ -478,7 +423,6 @@ export default function InvitadaPage() {
           </div>
         </div>
 
-        {/* FORMULARIO */}
         <div className="invitada-form-col">
           {modoGestion ? (
             <div>
@@ -597,7 +541,6 @@ export default function InvitadaPage() {
                 )}
               </div>
 
-              {/* PRENDA 1 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
                   {t('prenda1')} <span style={{color:'#F07987'}}>*</span>
@@ -642,7 +585,6 @@ export default function InvitadaPage() {
                 </div>
               </div>
 
-              {/* PRENDA 2 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
                   {t('prenda2')}
