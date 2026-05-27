@@ -86,6 +86,8 @@ export default function InvitadaPage() {
   const [tipo2, setTipo2] = useState('')
   const [referencia2, setReferencia2] = useState('')
   const [pedirReferencia, setPedirReferencia] = useState(false)
+  const [avisoMismoModelo, setAvisoMismoModelo] = useState(null) // { nombre_invitada, color_hex }
+  const [pendienteEnvio, setPendienteEnvio] = useState(null) // 'enviar' | 'actualizar'
 
   useEffect(() => {
     async function cargar() {
@@ -112,6 +114,7 @@ export default function InvitadaPage() {
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
     setLookEditando(null); setError(''); setPedirReferencia(false)
+    setAvisoMismoModelo(null); setPendienteEnvio(null)
   }
 
   async function enviarEmailAsync(tipo, emailInv, nombreInv) {
@@ -155,14 +158,14 @@ export default function InvitadaPage() {
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
     setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || '')
     setEstado(look.estado || 'confirmado')
-    setPedirReferencia(false)
+    setPedirReferencia(false); setAvisoMismoModelo(null); setPendienteEnvio(null)
     setModoGestion(false)
   }
 
   async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
 
-    // 1. COMPROBAR CONTRA LOOK BLOQUEADO DE LA ORGANIZADORA
+    // 1. LOOK BLOQUEADO DE LA ORGANIZADORA
     if (evento.look_bloqueado_marca1) {
       const colorCoincide = colores[0] === evento.look_bloqueado_color
       const marcaCoincide = normalizar(marca1) === normalizar(evento.look_bloqueado_marca1)
@@ -182,7 +185,7 @@ export default function InvitadaPage() {
       }
     }
 
-    // 2. COMPROBAR CONTRA OTRAS INVITADAS (usando campos normalizados)
+    // 2. CONFLICTO CON OTRAS INVITADAS (mismo color + marca + tipo + modelo)
     let query = supabase.from('looks').select('id, nombre_invitada, referencia')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
@@ -194,121 +197,42 @@ export default function InvitadaPage() {
 
     const { data: candidatos } = await query
 
-    if (!candidatos || candidatos.length === 0) return { tipo: 'ninguno' }
-
-    if (!referencia1.trim()) {
-      return { tipo: 'pedir_referencia', candidatos }
+    if (candidatos && candidatos.length > 0) {
+      if (!referencia1.trim()) {
+        return { tipo: 'pedir_referencia', candidatos }
+      }
+      const conflictoReal = candidatos.find(c =>
+        c.referencia && c.referencia.trim().toLowerCase() === referencia1.trim().toLowerCase()
+      )
+      if (conflictoReal) {
+        return { tipo: 'conflicto_real', candidato: conflictoReal }
+      }
+      const sinReferencia = candidatos.filter(c => !c.referencia || !c.referencia.trim())
+      if (sinReferencia.length > 0) {
+        return { tipo: 'pedir_referencia', candidatos: sinReferencia }
+      }
     }
 
-    const conflictoReal = candidatos.find(c =>
-      c.referencia && c.referencia.trim().toLowerCase() === referencia1.trim().toLowerCase()
-    )
+    // 3. MISMO MODELO DISTINTO COLOR (aviso suave)
+    let queryMismoModelo = supabase.from('looks').select('id, nombre_invitada, color_hex')
+      .eq('evento_id', evento.id)
+      .eq('marca_normalizada', normalizar(marca1))
+      .ilike('tipo', tipo1.trim())
+      .eq('modelo_normalizado', normalizar(modelo1))
+      .neq('color_hex', colores[0])
 
-    if (conflictoReal) {
-      return { tipo: 'conflicto_real', candidato: conflictoReal }
-    }
+    if (excludeId) queryMismoModelo = queryMismoModelo.neq('id', excludeId)
 
-    const sinReferencia = candidatos.filter(c => !c.referencia || !c.referencia.trim())
-    if (sinReferencia.length > 0) {
-      return { tipo: 'pedir_referencia', candidatos: sinReferencia }
+    const { data: mismoModelo } = await queryMismoModelo
+
+    if (mismoModelo && mismoModelo.length > 0) {
+      return { tipo: 'mismo_modelo_otro_color', candidato: mismoModelo[0] }
     }
 
     return { tipo: 'ninguno' }
   }
 
-  async function handleActualizarLook() {
-    setError('')
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) { setError(t('errorCampos')); return }
-
-    const resultado = await comprobarConflicto(lookEditando.id)
-
-    if (resultado.tipo === 'bloqueado_organizadora') {
-      setError(t('errorLookOrganizadora'))
-      return
-    }
-
-    if (resultado.tipo === 'pedir_referencia_organizadora') {
-      setPedirReferencia(true)
-      setError(t('errorSimilarOrganizadora'))
-      return
-    }
-
-    if (resultado.tipo === 'pedir_referencia') {
-      setPedirReferencia(true)
-      setError(t('errorPedirReferencia') || 'Hay una posible coincidencia. Por favor añade la referencia o link del producto para confirmar si es el mismo.')
-      return
-    }
-
-    if (resultado.tipo === 'conflicto_real') {
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
-      })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
-      return
-    }
-
-    setEnviando(true)
-    await supabase.from('looks').update({
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
-      marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, estado
-    }).eq('id', lookEditando.id)
-    const emailGuardado = email.toLowerCase().trim()
-    const nombreGuardado = nombre
-    const lookActualizado = { ...lookEditando, nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null, marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null, estado }
-    setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
-    setEmailGestion(emailGuardado); setEnviando(false); resetForm(); setModoGestion(true)
-    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
-  }
-
-  async function handleEnviar() {
-    setError('')
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) { setError(t('errorCampos')); return }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-    if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
-
-    const { data: existentes } = await supabase.from('looks').select('estado')
-      .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
-    if (existentes && existentes.length > 0) {
-      const confirmados = existentes.filter(l => l.estado === 'confirmado').length
-      const prereservados = existentes.filter(l => l.estado === 'prereservado').length
-      if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
-      if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
-    }
-
-    const resultado = await comprobarConflicto()
-
-    if (resultado.tipo === 'bloqueado_organizadora') {
-      setError(t('errorLookOrganizadora'))
-      return
-    }
-
-    if (resultado.tipo === 'pedir_referencia_organizadora') {
-      setPedirReferencia(true)
-      setError(t('errorSimilarOrganizadora'))
-      return
-    }
-
-    if (resultado.tipo === 'pedir_referencia') {
-      setPedirReferencia(true)
-      setError(t('errorPedirReferencia') || 'Hay una posible coincidencia con otra invitada. Por favor añade la referencia o link del producto para confirmar si es el mismo.')
-      return
-    }
-
-    if (resultado.tipo === 'conflicto_real') {
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
-      })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
-      return
-    }
-
+  async function guardarLook() {
     setEnviando(true)
     let foto_url = null
     if (foto) {
@@ -333,6 +257,95 @@ export default function InvitadaPage() {
     const nombreGuardado = nombre
     setEnviando(false); setEnviado(true)
     enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
+  }
+
+  async function actualizarLook() {
+    setEnviando(true)
+    await supabase.from('looks').update({
+      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, estado
+    }).eq('id', lookEditando.id)
+    const emailGuardado = email.toLowerCase().trim()
+    const nombreGuardado = nombre
+    const lookActualizado = { ...lookEditando, nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null, marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null, estado }
+    setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
+    setEmailGestion(emailGuardado); setEnviando(false); resetForm(); setModoGestion(true)
+    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
+  }
+
+  async function handleActualizarLook() {
+    setError(''); setAvisoMismoModelo(null)
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) { setError(t('errorCampos')); return }
+
+    const resultado = await comprobarConflicto(lookEditando.id)
+
+    if (resultado.tipo === 'bloqueado_organizadora') { setError(t('errorLookOrganizadora')); return }
+    if (resultado.tipo === 'pedir_referencia_organizadora') { setPedirReferencia(true); setError(t('errorSimilarOrganizadora')); return }
+    if (resultado.tipo === 'pedir_referencia') { setPedirReferencia(true); setError(t('errorPedirReferencia') || 'Hay una posible coincidencia. Añade la referencia para confirmar.'); return }
+    if (resultado.tipo === 'conflicto_real') {
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
+      })
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
+      return
+    }
+    if (resultado.tipo === 'mismo_modelo_otro_color') {
+      setAvisoMismoModelo(resultado.candidato)
+      setPendienteEnvio('actualizar')
+      return
+    }
+
+    await actualizarLook()
+  }
+
+  async function handleEnviar() {
+    setError(''); setAvisoMismoModelo(null)
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) { setError(t('errorCampos')); return }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
+
+    const { data: existentes } = await supabase.from('looks').select('estado')
+      .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
+    if (existentes && existentes.length > 0) {
+      const confirmados = existentes.filter(l => l.estado === 'confirmado').length
+      const prereservados = existentes.filter(l => l.estado === 'prereservado').length
+      if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
+      if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
+    }
+
+    const resultado = await comprobarConflicto()
+
+    if (resultado.tipo === 'bloqueado_organizadora') { setError(t('errorLookOrganizadora')); return }
+    if (resultado.tipo === 'pedir_referencia_organizadora') { setPedirReferencia(true); setError(t('errorSimilarOrganizadora')); return }
+    if (resultado.tipo === 'pedir_referencia') { setPedirReferencia(true); setError(t('errorPedirReferencia') || 'Hay una posible coincidencia. Añade la referencia para confirmar.'); return }
+    if (resultado.tipo === 'conflicto_real') {
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
+      })
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
+      return
+    }
+    if (resultado.tipo === 'mismo_modelo_otro_color') {
+      setAvisoMismoModelo(resultado.candidato)
+      setPendienteEnvio('enviar')
+      return
+    }
+
+    await guardarLook()
+  }
+
+  async function handleConfirmarAvisoMismoModelo() {
+    setAvisoMismoModelo(null)
+    if (pendienteEnvio === 'enviar') await guardarLook()
+    else if (pendienteEnvio === 'actualizar') await actualizarLook()
+    setPendienteEnvio(null)
   }
 
   if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('cargando')}</div>
@@ -389,6 +402,34 @@ export default function InvitadaPage() {
           .gestion-row input { width: 100%; }
         }
       `}</style>
+
+      {/* MODAL AVISO MISMO MODELO DISTINTO COLOR */}
+      {avisoMismoModelo && (
+        <div style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.6)',zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
+          <div style={{background:'#FFFFFF',borderRadius:'12px',padding:'2rem',maxWidth:'420px',width:'100%',boxShadow:'0 8px 32px rgba(0,0,0,0.2)'}}>
+            <div style={{fontSize:'1.75rem',marginBottom:'0.75rem',textAlign:'center'}}>👀</div>
+            <h3 style={{fontSize:'1rem',fontWeight:700,color:'#0A0A0A',marginBottom:'0.5rem',textAlign:'center'}}>
+              {t('avisoMismoModeloTitulo') || 'Mismo modelo, distinto color'}
+            </h3>
+            <p style={{fontSize:'0.82rem',fontWeight:300,color:'#555552',lineHeight:1.7,marginBottom:'1.5rem',textAlign:'center'}}>
+              {t('avisoMismoModeloDesc') || `Otra invitada lleva el mismo modelo en otro color. ¿Segura que quieres continuar?`}
+            </p>
+            <div style={{display:'flex',gap:'0.75rem'}}>
+              <button
+                onClick={() => { setAvisoMismoModelo(null); setPendienteEnvio(null) }}
+                style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px'}}>
+                {t('avisoMismoModeloCambiar') || 'Cambiar look'}
+              </button>
+              <button
+                onClick={handleConfirmarAvisoMismoModelo}
+                disabled={enviando}
+                style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:enviando?0.6:1}}>
+                {enviando ? t('guardando') : (t('avisoMismoModeloConfirmar') || 'Sí, continuar')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="invitada-layout">
 
@@ -579,7 +620,7 @@ export default function InvitadaPage() {
                   />
                   {pedirReferencia && (
                     <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.4rem',lineHeight:1.5}}>
-                      {t('referenciaInfo') || 'Hay una posible coincidencia con otro look. Añade la referencia o link para confirmar si es exactamente el mismo producto.'}
+                      {t('referenciaInfo') || 'Hay una posible coincidencia. Añade la referencia para confirmar si es el mismo producto.'}
                     </p>
                   )}
                 </div>
