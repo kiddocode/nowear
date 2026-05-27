@@ -539,7 +539,21 @@
     "efSoporte": "Dedizierter Support",
     "contactar": "Kontaktieren →",
     "errorEvento": "Fehler beim Erstellen des Events. Bitte versuchen Sie es erneut.",
-    "errorPago": "Zahlungsfehler. Bitte versuchen Sie es erneut."
+    "errorPago": "Zahlungsfehler. Bitte versuchen Sie es erneut.",
+    "lookBloqueadoPregunta": "Haben Sie Ihren Look bereits ausgewählt?",
+    "lookBloqueadoInfo": "Keine Gästin kann denselben Look registrieren wie Sie.",
+    "colorLook": "Look-Farbe",
+    "seleccionaColor": "Farbe auswählen...",
+    "prenda1": "Kleidungsstück 1",
+    "marca": "Marke",
+    "tipo": "Typ",
+    "selecciona": "Auswählen...",
+    "modelo": "Modell",
+    "modeloPlaceholder": "Name des Kleides oder Modells",
+    "referencia": "Referenz oder Link",
+    "referenciaPlaceholder": "URL oder Produktreferenz",
+    "prenda2": "Zweites Kleidungsstück (optional)",
+    "miPanel": "Mein Bereich"
   },
   "evento": {
     "misEventos": "← Meine Events",

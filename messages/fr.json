@@ -539,7 +539,21 @@
     "efSoporte": "Support dédié",
     "contactar": "Contacter →",
     "errorEvento": "Erreur lors de la création. Veuillez réessayer.",
-    "errorPago": "Erreur de paiement. Veuillez réessayer."
+    "errorPago": "Erreur de paiement. Veuillez réessayer.",
+    "lookBloqueadoPregunta": "Avez-vous déjà choisi votre look ?",
+    "lookBloqueadoInfo": "Aucune invitée ne pourra enregistrer le même look que vous.",
+    "colorLook": "Couleur du look",
+    "seleccionaColor": "Sélectionnez une couleur...",
+    "prenda1": "Vêtement 1",
+    "marca": "Marque",
+    "tipo": "Type",
+    "selecciona": "Sélectionner...",
+    "modelo": "Modèle",
+    "modeloPlaceholder": "Nom de la robe ou du modèle",
+    "referencia": "Référence ou lien",
+    "referenciaPlaceholder": "URL ou référence du produit",
+    "prenda2": "Deuxième vêtement (optionnel)",
+    "miPanel": "Mon espace"
   },
   "evento": {
     "misEventos": "← Mes événements",

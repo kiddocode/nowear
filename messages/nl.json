@@ -539,7 +539,21 @@
     "efSoporte": "Dedicated ondersteuning",
     "contactar": "Contact →",
     "errorEvento": "Fout bij aanmaken evenement. Probeer opnieuw.",
-    "errorPago": "Betalingsfout. Probeer opnieuw."
+    "errorPago": "Betalingsfout. Probeer opnieuw.",
+    "lookBloqueadoPregunta": "Heb je je look al gekozen?",
+    "lookBloqueadoInfo": "Geen gaste kan dezelfde look registreren als jij.",
+    "colorLook": "Look kleur",
+    "seleccionaColor": "Selecteer een kleur...",
+    "prenda1": "Kledingstuk 1",
+    "marca": "Merk",
+    "tipo": "Type",
+    "selecciona": "Selecteren...",
+    "modelo": "Model",
+    "modeloPlaceholder": "Naam van de jurk of het model",
+    "referencia": "Referentie of link",
+    "referenciaPlaceholder": "URL of productreferentie",
+    "prenda2": "Tweede kledingstuk (optioneel)",
+    "miPanel": "Mijn dashboard"
   },
   "evento": {
     "misEventos": "← Mijn evenementen",

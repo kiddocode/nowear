@@ -539,7 +539,21 @@
     "efSoporte": "Dedicated support",
     "contactar": "Contact →",
     "errorEvento": "Error creating event. Please try again.",
-    "errorPago": "Payment error. Please try again."
+    "errorPago": "Payment error. Please try again.",
+    "lookBloqueadoPregunta": "Do you already have your look chosen?",
+    "lookBloqueadoInfo": "No guest will be able to register the same look as you.",
+    "colorLook": "Look color",
+    "seleccionaColor": "Select a color...",
+    "prenda1": "Garment 1",
+    "marca": "Brand",
+    "tipo": "Type",
+    "selecciona": "Select...",
+    "modelo": "Model",
+    "modeloPlaceholder": "Name of the dress or model",
+    "referencia": "Reference or link",
+    "referenciaPlaceholder": "URL or product reference",
+    "prenda2": "Second garment (optional)",
+    "miPanel": "My dashboard"
   },
   "evento": {
     "misEventos": "← My events",

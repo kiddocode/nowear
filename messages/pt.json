@@ -539,7 +539,21 @@
     "efSoporte": "Suporte dedicado",
     "contactar": "Contactar →",
     "errorEvento": "Erro ao criar o evento. Tenta novamente.",
-    "errorPago": "Erro no pagamento. Tenta novamente."
+    "errorPago": "Erro no pagamento. Tenta novamente.",
+    "lookBloqueadoPregunta": "Já tens o teu look escolhido?",
+    "lookBloqueadoInfo": "Nenhuma convidada poderá registar o mesmo look que tu.",
+    "colorLook": "Cor do look",
+    "seleccionaColor": "Seleciona uma cor...",
+    "prenda1": "Peça 1",
+    "marca": "Marca",
+    "tipo": "Tipo",
+    "selecciona": "Selecionar...",
+    "modelo": "Modelo",
+    "modeloPlaceholder": "Nome do vestido ou modelo",
+    "referencia": "Referência ou link",
+    "referenciaPlaceholder": "URL ou referência do produto",
+    "prenda2": "Segunda peça (opcional)",
+    "miPanel": "Meu painel"
   },
   "evento": {
     "misEventos": "← Os meus eventos",
