@@ -225,7 +225,8 @@
     "faq": "FAQ",
     "contacto": "Contact",
     "entrar": "Inloggen",
-    "empezar": "Aan de slag"
+    "empezar": "Aan de slag",
+    "miPanel": "Mijn dashboard"
   },
   "login": {
     "bienvenida": "Welkom",

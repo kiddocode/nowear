@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
+import { supabase } from '@/lib/supabase'
 
 const IDIOMAS = [
   { code: 'es', flag: '🇪🇸', label: 'Español' },
@@ -16,11 +17,29 @@ export default function NavbarWrapper({ locale }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const [idiomaOpen, setIdiomaOpen] = useState(false)
   const [hoveredNav, setHoveredNav] = useState(null)
+  const [user, setUser] = useState(null)
+  const [checkingAuth, setCheckingAuth] = useState(true)
   const pathname = usePathname()
+  const router = useRouter()
   const t = useTranslations('nav')
   const dropdownRef = useRef(null)
 
   const idiomaActual = IDIOMAS.find(i => i.code === locale) || IDIOMAS[0]
+  const prefijo = locale && locale !== 'es' ? `/${locale}` : ''
+
+  useEffect(() => {
+    async function checkUser() {
+      const { data: { user } } = await supabase.auth.getUser()
+      setUser(user)
+      setCheckingAuth(false)
+    }
+    checkUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+    })
+    return () => subscription.unsubscribe()
+  }, [])
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -47,7 +66,11 @@ export default function NavbarWrapper({ locale }) {
     window.location.href = nuevaRuta
   }
 
-  const prefijo = locale && locale !== 'es' ? `/${locale}` : ''
+  async function handleLogout() {
+    await supabase.auth.signOut()
+    setUser(null)
+    router.push(prefijo + '/')
+  }
 
   const navLinks = [
     { label: t('comoFunciona'), href: `${prefijo}/#como` },
@@ -62,7 +85,7 @@ export default function NavbarWrapper({ locale }) {
     <>
       <nav style={{position:'fixed',top:0,left:0,right:0,height:'68px',display:'flex',alignItems:'center',justifyContent:'space-between',padding:'0 3rem',background:'#FFFFFF',borderBottom:'1px solid #E0E0DC',zIndex:1000}}>
 
-        <a href="/" style={{textDecoration:'none',flexShrink:0}}>
+        <a href={prefijo + '/'} style={{textDecoration:'none',flexShrink:0}}>
           <img src="https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/nowear_logo_transparent.png" alt="NOWEAR" style={{height:'36px',display:'block'}}/>
         </a>
 
@@ -102,18 +125,33 @@ export default function NavbarWrapper({ locale }) {
             )}
           </div>
 
-          <a href={`${prefijo}/login`}
-            style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.65rem 1.1rem',textDecoration:'none',borderRadius:'8px',border:'1px solid transparent',transition:'border-color 0.15s'}}
-            onMouseEnter={e => e.currentTarget.style.borderColor='#E0E0DC'}
-            onMouseLeave={e => e.currentTarget.style.borderColor='transparent'}>
-            {t('entrar')}
-          </a>
-          <a href={`${prefijo}/register`}
-            style={{fontSize:'0.82rem',fontWeight:600,padding:'0.65rem 1.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'50px',transition:'background 0.15s'}}
-            onMouseEnter={e => e.currentTarget.style.background='#2C2C2C'}
-            onMouseLeave={e => e.currentTarget.style.background='#0A0A0A'}>
-            {t('empezar')}
-          </a>
+          {!checkingAuth && (
+            user ? (
+              <>
+                <a href={`${prefijo}/dashboard`}
+                  style={{fontSize:'0.82rem',fontWeight:600,padding:'0.65rem 1.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'50px',transition:'background 0.15s'}}
+                  onMouseEnter={e => e.currentTarget.style.background='#2C2C2C'}
+                  onMouseLeave={e => e.currentTarget.style.background='#0A0A0A'}>
+                  {t('miPanel') || 'Mi panel'}
+                </a>
+              </>
+            ) : (
+              <>
+                <a href={`${prefijo}/login`}
+                  style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.65rem 1.1rem',textDecoration:'none',borderRadius:'8px',border:'1px solid transparent',transition:'border-color 0.15s'}}
+                  onMouseEnter={e => e.currentTarget.style.borderColor='#E0E0DC'}
+                  onMouseLeave={e => e.currentTarget.style.borderColor='transparent'}>
+                  {t('entrar')}
+                </a>
+                <a href={`${prefijo}/register`}
+                  style={{fontSize:'0.82rem',fontWeight:600,padding:'0.65rem 1.5rem',background:'#0A0A0A',color:'#FFFFFF',textDecoration:'none',borderRadius:'50px',transition:'background 0.15s'}}
+                  onMouseEnter={e => e.currentTarget.style.background='#2C2C2C'}
+                  onMouseLeave={e => e.currentTarget.style.background='#0A0A0A'}>
+                  {t('empezar')}
+                </a>
+              </>
+            )
+          )}
         </div>
 
         <button className="nav-hamburger" onClick={() => setMenuOpen(!menuOpen)}
@@ -133,11 +171,20 @@ export default function NavbarWrapper({ locale }) {
             </a>
           ))}
           <div style={{display:'flex',flexDirection:'column',gap:'0.75rem',marginTop:'1.25rem'}}>
-            <a href={`${prefijo}/login`} style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.75rem',border:'1px solid #E0E0DC',textAlign:'center',textDecoration:'none',borderRadius:'8px'}}>{t('entrar')}</a>
-            <a href={`${prefijo}/register`} style={{fontSize:'0.82rem',fontWeight:600,padding:'0.75rem',background:'#0A0A0A',color:'#FFFFFF',textAlign:'center',textDecoration:'none',borderRadius:'50px'}}>{t('empezar')}</a>
+            {user ? (
+              <>
+                <a href={`${prefijo}/dashboard`} style={{fontSize:'0.82rem',fontWeight:600,padding:'0.75rem',background:'#0A0A0A',color:'#FFFFFF',textAlign:'center',textDecoration:'none',borderRadius:'50px'}}>
+                  {t('miPanel') || 'Mi panel'}
+                </a>
+              </>
+            ) : (
+              <>
+                <a href={`${prefijo}/login`} style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',padding:'0.75rem',border:'1px solid #E0E0DC',textAlign:'center',textDecoration:'none',borderRadius:'8px'}}>{t('entrar')}</a>
+                <a href={`${prefijo}/register`} style={{fontSize:'0.82rem',fontWeight:600,padding:'0.75rem',background:'#0A0A0A',color:'#FFFFFF',textAlign:'center',textDecoration:'none',borderRadius:'50px'}}>{t('empezar')}</a>
+              </>
+            )}
           </div>
 
-          {/* Selector idioma en móvil */}
           <div style={{marginTop:'1.25rem',borderTop:'1px solid #F0F0EE',paddingTop:'1.25rem',display:'flex',flexWrap:'wrap',gap:'0.5rem'}}>
             {IDIOMAS.map((idioma, i) => (
               <button key={i} onClick={() => cambiarIdioma(idioma.code)}
