@@ -156,9 +156,30 @@ export default function InvitadaPage() {
   // Si coinciden pero sin referencia → pedir referencia (sospecha)
   // Si coinciden con referencia igual → conflicto real → email
   // Si tipo diferente → no hay conflicto
-  async function comprobarConflicto(excludeId = null) {
+ async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
 
+    // 1. COMPROBAR CONTRA LOOK BLOQUEADO DE LA ORGANIZADORA
+    if (evento.look_bloqueado_marca1) {
+      const colorCoincide = colores[0] === evento.look_bloqueado_color
+      const marcaCoincide = marca1.trim().toLowerCase() === (evento.look_bloqueado_marca1 || '').trim().toLowerCase()
+      const tipoCoincide = tipo1.trim().toLowerCase() === (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
+      const modeloCoincide = modelo1.trim().toLowerCase() === (evento.look_bloqueado_modelo1 || '').trim().toLowerCase()
+
+      if (colorCoincide && marcaCoincide && tipoCoincide && modeloCoincide) {
+        if (evento.look_bloqueado_referencia1 && referencia1.trim()) {
+          if (referencia1.trim().toLowerCase() === evento.look_bloqueado_referencia1.trim().toLowerCase()) {
+            return { tipo: 'bloqueado_organizadora' }
+          }
+        } else if (!evento.look_bloqueado_referencia1) {
+          return { tipo: 'bloqueado_organizadora' }
+        } else {
+          return { tipo: 'pedir_referencia_organizadora' }
+        }
+      }
+    }
+
+    // 2. COMPROBAR CONTRA OTRAS INVITADAS
     let query = supabase.from('looks').select('id, nombre_invitada, referencia')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
@@ -172,13 +193,10 @@ export default function InvitadaPage() {
 
     if (!candidatos || candidatos.length === 0) return { tipo: 'ninguno' }
 
-    // Hay coincidencia en las 4 variables principales
-    // Si la invitada actual no tiene referencia, pedir referencia
     if (!referencia1.trim()) {
       return { tipo: 'pedir_referencia', candidatos }
     }
 
-    // Si tiene referencia, comparar con los candidatos que también tienen referencia
     const conflictoReal = candidatos.find(c =>
       c.referencia && c.referencia.trim().toLowerCase() === referencia1.trim().toLowerCase()
     )
@@ -187,13 +205,11 @@ export default function InvitadaPage() {
       return { tipo: 'conflicto_real', candidato: conflictoReal }
     }
 
-    // Candidatos sin referencia: también pedir referencia para resolver
     const sinReferencia = candidatos.filter(c => !c.referencia || !c.referencia.trim())
     if (sinReferencia.length > 0) {
       return { tipo: 'pedir_referencia', candidatos: sinReferencia }
     }
 
-    // Todas las referencias son diferentes → no hay conflicto
     return { tipo: 'ninguno' }
   }
 
@@ -202,6 +218,17 @@ export default function InvitadaPage() {
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) { setError(t('errorCampos')); return }
 
     const resultado = await comprobarConflicto(lookEditando.id)
+
+    if (resultado.tipo === 'bloqueado_organizadora') {
+      setError(t('errorLookOrganizadora'))
+      return
+    }
+
+    if (resultado.tipo === 'pedir_referencia_organizadora') {
+      setPedirReferencia(true)
+      setError(t('errorSimilarOrganizadora'))
+      return
+    }
 
     if (resultado.tipo === 'pedir_referencia') {
       setPedirReferencia(true)
@@ -231,6 +258,75 @@ export default function InvitadaPage() {
     const lookActualizado = { ...lookEditando, nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null, marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null, estado }
     setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
     setEmailGestion(emailGuardado); setEnviando(false); resetForm(); setModoGestion(true)
+    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
+  }
+
+  async function handleEnviar() {
+    setError('')
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) { setError(t('errorCampos')); return }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
+
+    const { data: existentes } = await supabase.from('looks').select('estado')
+      .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
+    if (existentes && existentes.length > 0) {
+      const confirmados = existentes.filter(l => l.estado === 'confirmado').length
+      const prereservados = existentes.filter(l => l.estado === 'prereservado').length
+      if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
+      if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
+    }
+
+    const resultado = await comprobarConflicto()
+
+    if (resultado.tipo === 'bloqueado_organizadora') {
+      setError(t('errorLookOrganizadora'))
+      return
+    }
+
+    if (resultado.tipo === 'pedir_referencia_organizadora') {
+      setPedirReferencia(true)
+      setError(t('errorSimilarOrganizadora'))
+      return
+    }
+
+    if (resultado.tipo === 'pedir_referencia') {
+      setPedirReferencia(true)
+      setError(t('errorPedirReferencia') || 'Hay una posible coincidencia con otra invitada. Por favor añade la referencia o link del producto para confirmar si es el mismo.')
+      return
+    }
+
+    if (resultado.tipo === 'conflicto_real') {
+      await supabase.from('conflictos').insert({
+        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
+      })
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
+      return
+    }
+
+    setEnviando(true)
+    let foto_url = null
+    if (foto) {
+      const ext = foto.name.split('.').pop()
+      const fileName = `${evento.id}-${Date.now()}.${ext}`
+      const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, foto, { contentType: foto.type })
+      if (uploadData) {
+        const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
+        foto_url = urlData.publicUrl
+      }
+    }
+    const { error: insertError } = await supabase.from('looks').insert({
+      evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+      color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, estado, foto_url
+    })
+    if (insertError) { setEnviando(false); setError(t('errorRegistro')); return }
+    const emailGuardado = email.toLowerCase().trim()
+    const nombreGuardado = nombre
+    setEnviando(false); setEnviado(true)
     enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
 
