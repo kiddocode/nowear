@@ -375,7 +375,20 @@
     "avisoMismoModeloTitulo": "Gleiches Modell, andere Farbe",
     "avisoMismoModeloDesc": "Eine andere Gaestin traegt dasselbe Modell in einer anderen Farbe. Moechten Sie wirklich fortfahren?",
     "avisoMismoModeloCambiar": "Look aendern",
-    "avisoMismoModeloConfirmar": "Ja, weiter"
+    "avisoMismoModeloConfirmar": "Ja, weiter",
+    "modalConflictoTitulo": "Look bereits registriert",
+    "modalConflictoDesc": "Eine andere Gaestin hat diesen Look bereits vor Ihnen registriert. Nur die Erste behaelt den Look.",
+    "modalBloqueadoTitulo": "Look reserviert",
+    "modalBloqueadoDesc": "Dieser Look ist fuer die Organisatorin der Veranstaltung reserviert.",
+    "modalMismoModeloTitulo": "Gleiches Modell, andere Farbe",
+    "modalMismoModeloDesc": "Eine andere Gaestin traegt dasselbe Modell in einer anderen Farbe. Dieser Look ist nicht verfuegbar.",
+    "modalPedirReferenciaTitulo": "Moegliche Uebereinstimmung",
+    "modalPedirReferenciaDesc": "Eine andere Gaestin hat einen sehr aehnlichen Look. Fuegen Sie die Referenz hinzu um zu bestaetigen.",
+    "modalMaxConfirmadosTitulo": "Look bereits bestaetigt",
+    "modalMaxPrereservasTitulo": "Maximum an Vorbestellungen erreicht",
+    "modalEntendido": "Verstanden",
+    "modalElegirOtro": "Anderen Look waehlen",
+    "modalAnadirReferencia": "Verstanden, Referenz hinzufuegen"
   },
   "sidebar": {
     "principal": "Hauptmenü",

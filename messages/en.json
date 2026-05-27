@@ -375,7 +375,20 @@
     "avisoMismoModeloTitulo": "Same model, different color",
     "avisoMismoModeloDesc": "Another guest is wearing the same model in a different color. Are you sure you want to continue?",
     "avisoMismoModeloCambiar": "Change look",
-    "avisoMismoModeloConfirmar": "Yes, continue"
+    "avisoMismoModeloConfirmar": "Yes, continue",
+    "modalConflictoTitulo": "Look already registered",
+    "modalConflictoDesc": "Another guest already registered this look before you. Only the first to register keeps the look.",
+    "modalBloqueadoTitulo": "Reserved look",
+    "modalBloqueadoDesc": "This look is reserved for the event organizer.",
+    "modalMismoModeloTitulo": "Same model, different color",
+    "modalMismoModeloDesc": "Another guest is wearing the same model in a different color. To avoid conflicts, this look is not available.",
+    "modalPedirReferenciaTitulo": "Possible match",
+    "modalPedirReferenciaDesc": "Another guest has a very similar look. Add the product reference or link to confirm if it is exactly the same.",
+    "modalMaxConfirmadosTitulo": "Look already confirmed",
+    "modalMaxPrereservasTitulo": "Maximum pre-reservations reached",
+    "modalEntendido": "Got it",
+    "modalElegirOtro": "Choose another look",
+    "modalAnadirReferencia": "Got it, adding reference"
   },
   "sidebar": {
     "principal": "Main",

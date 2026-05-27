@@ -375,7 +375,20 @@
     "avisoMismoModeloTitulo": "Mismo modelo, distinto color",
     "avisoMismoModeloDesc": "Otra invitada lleva el mismo modelo en otro color. ¿Segura que quieres continuar?",
     "avisoMismoModeloCambiar": "Cambiar look",
-    "avisoMismoModeloConfirmar": "Sí, continuar"
+    "avisoMismoModeloConfirmar": "Sí, continuar",
+    "modalConflictoTitulo": "Look ya registrado",
+    "modalConflictoDesc": "Otra invitada ya registró este look antes que tú. Solo la primera en registrar tiene el look reservado.",
+    "modalBloqueadoTitulo": "Look reservado",
+    "modalBloqueadoDesc": "Este look está reservado para la organizadora del evento.",
+    "modalMismoModeloTitulo": "Mismo modelo, distinto color",
+    "modalMismoModeloDesc": "Otra invitada lleva el mismo modelo en otro color. Para evitar coincidencias, este look no está disponible.",
+    "modalPedirReferenciaTitulo": "Posible coincidencia",
+    "modalPedirReferenciaDesc": "Otra invitada lleva un look muy similar. Añade la referencia o link del producto para confirmar si es exactamente el mismo.",
+    "modalMaxConfirmadosTitulo": "Look ya confirmado",
+    "modalMaxPrereservasTitulo": "Máximo de prerreservas",
+    "modalEntendido": "Entendido",
+    "modalElegirOtro": "Elegir otro look",
+    "modalAnadirReferencia": "Entendido, añado la referencia"
   },
   "sidebar": {
     "principal": "Principal",

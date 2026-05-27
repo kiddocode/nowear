@@ -27,7 +27,6 @@ function normalizar(texto) {
     .trim()
 }
 
-// Modal de aviso reutilizable
 function AvisoModal({ icono, titulo, desc, onConfirmar, onCancelar, textoConfirmar, textoCancelar, enviando, colorConfirmar }) {
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.6)',zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
@@ -111,11 +110,7 @@ export default function InvitadaPage() {
   const [tipo2, setTipo2] = useState('')
   const [referencia2, setReferencia2] = useState('')
   const [pedirReferencia, setPedirReferencia] = useState(false)
-
-  // Estado del modal de aviso
   const [modal, setModal] = useState(null)
-  // { icono, titulo, desc, textoConfirmar, textoCancelar, onConfirmar, onCancelar, colorConfirmar, pendienteAccion }
-  const [pendienteEnvio, setPendienteEnvio] = useState(null)
 
   useEffect(() => {
     async function cargar() {
@@ -142,17 +137,10 @@ export default function InvitadaPage() {
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
     setLookEditando(null); setError(''); setPedirReferencia(false)
-    setModal(null); setPendienteEnvio(null)
-  }
-
-  function mostrarModal(config) {
-    setModal(config)
-  }
-
-  function cerrarModal() {
     setModal(null)
-    setPendienteEnvio(null)
   }
+
+  function cerrarModal() { setModal(null) }
 
   async function enviarEmailAsync(tipo, emailInv, nombreInv) {
     try {
@@ -195,7 +183,7 @@ export default function InvitadaPage() {
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
     setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || '')
     setEstado(look.estado || 'confirmado')
-    setPedirReferencia(false); setModal(null); setPendienteEnvio(null)
+    setPedirReferencia(false); setModal(null)
     setModoGestion(false)
   }
 
@@ -241,7 +229,7 @@ export default function InvitadaPage() {
       if (sinReferencia.length > 0) return { tipo: 'pedir_referencia', candidatos: sinReferencia }
     }
 
-    // 3. MISMO MODELO DISTINTO COLOR
+    // 3. MISMO MODELO DISTINTO COLOR (bloqueado)
     let queryMismoModelo = supabase.from('looks').select('id, nombre_invitada, color_hex')
       .eq('evento_id', evento.id)
       .eq('marca_normalizada', normalizar(marca1))
@@ -251,7 +239,7 @@ export default function InvitadaPage() {
     if (excludeId) queryMismoModelo = queryMismoModelo.neq('id', excludeId)
     const { data: mismoModelo } = await queryMismoModelo
     if (mismoModelo && mismoModelo.length > 0) {
-      return { tipo: 'mismo_modelo_otro_color', candidato: mismoModelo[0] }
+      return { tipo: 'mismo_modelo_otro_color' }
     }
 
     return { tipo: 'ninguno' }
@@ -277,7 +265,11 @@ export default function InvitadaPage() {
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, estado, foto_url
     })
-    if (insertError) { setEnviando(false); mostrarModal({ icono:'❌', titulo: t('errorRegistro'), desc: t('errorRegistro'), textoConfirmar:'OK', onConfirmar: cerrarModal }); return }
+    if (insertError) {
+      setEnviando(false)
+      setModal({ icono:'❌', titulo: t('errorRegistro'), desc: t('errorRegistro'), textoConfirmar:'OK', onConfirmar: cerrarModal })
+      return
+    }
     const emailGuardado = email.toLowerCase().trim()
     const nombreGuardado = nombre
     setEnviando(false); setEnviado(true)
@@ -305,11 +297,11 @@ export default function InvitadaPage() {
     const resultado = await comprobarConflicto(excludeId)
 
     if (resultado.tipo === 'bloqueado_organizadora') {
-      mostrarModal({
+      setModal({
         icono: '🚫',
-        titulo: t('errorLookOrganizadora'),
-        desc: t('errorLookOrganizadora'),
-        textoConfirmar: 'Entendido',
+        titulo: t('modalBloqueadoTitulo'),
+        desc: t('modalBloqueadoDesc'),
+        textoConfirmar: t('modalEntendido'),
         onConfirmar: cerrarModal
       })
       return
@@ -317,11 +309,11 @@ export default function InvitadaPage() {
 
     if (resultado.tipo === 'pedir_referencia_organizadora') {
       setPedirReferencia(true)
-      mostrarModal({
+      setModal({
         icono: '🔍',
-        titulo: 'Confirma tu look',
-        desc: t('errorSimilarOrganizadora') || 'Tu look es muy similar al de la organizadora. Añade la referencia o link para confirmar si es el mismo.',
-        textoConfirmar: 'Entendido, añado la referencia',
+        titulo: t('modalPedirReferenciaTitulo'),
+        desc: t('modalPedirReferenciaDesc'),
+        textoConfirmar: t('modalAnadirReferencia'),
         onConfirmar: cerrarModal
       })
       return
@@ -329,11 +321,11 @@ export default function InvitadaPage() {
 
     if (resultado.tipo === 'pedir_referencia') {
       setPedirReferencia(true)
-      mostrarModal({
+      setModal({
         icono: '🔍',
-        titulo: 'Posible coincidencia',
-        desc: t('errorPedirReferencia') || 'Hay una posible coincidencia con otra invitada. Añade la referencia o link del producto para confirmar si es el mismo.',
-        textoConfirmar: 'Entendido, añado la referencia',
+        titulo: t('modalPedirReferenciaTitulo'),
+        desc: t('modalPedirReferenciaDesc'),
+        textoConfirmar: t('modalAnadirReferencia'),
         onConfirmar: cerrarModal
       })
       return
@@ -345,11 +337,11 @@ export default function InvitadaPage() {
         marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
       })
       enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      mostrarModal({
+      setModal({
         icono: '⚠️',
-        titulo: 'Look ya registrado',
-        desc: `${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`,
-        textoConfirmar: 'Elegir otro look',
+        titulo: t('modalConflictoTitulo'),
+        desc: t('modalConflictoDesc'),
+        textoConfirmar: t('modalElegirOtro'),
         onConfirmar: cerrarModal,
         colorConfirmar: '#F07987'
       })
@@ -357,23 +349,17 @@ export default function InvitadaPage() {
     }
 
     if (resultado.tipo === 'mismo_modelo_otro_color') {
-      mostrarModal({
-        icono: '👀',
-        titulo: t('avisoMismoModeloTitulo') || 'Mismo modelo, distinto color',
-        desc: t('avisoMismoModeloDesc') || 'Otra invitada lleva el mismo modelo en otro color. ¿Segura que quieres continuar?',
-        textoConfirmar: t('avisoMismoModeloConfirmar') || 'Sí, continuar',
-        textoCancelar: t('avisoMismoModeloCambiar') || 'Cambiar look',
-        onConfirmar: async () => {
-          cerrarModal()
-          if (accion === 'enviar') await guardarLook()
-          else await actualizarLook()
-        },
-        onCancelar: cerrarModal
+      setModal({
+        icono: '👗',
+        titulo: t('modalMismoModeloTitulo'),
+        desc: t('modalMismoModeloDesc'),
+        textoConfirmar: t('modalElegirOtro'),
+        onConfirmar: cerrarModal,
+        colorConfirmar: '#F07987'
       })
       return
     }
 
-    // Sin conflicto
     if (accion === 'enviar') await guardarLook()
     else await actualizarLook()
   }
@@ -400,21 +386,21 @@ export default function InvitadaPage() {
       const confirmados = existentes.filter(l => l.estado === 'confirmado').length
       const prereservados = existentes.filter(l => l.estado === 'prereservado').length
       if (estado === 'confirmado' && confirmados >= 1) {
-        mostrarModal({
+        setModal({
           icono: 'ℹ️',
-          titulo: 'Look ya confirmado',
+          titulo: t('modalMaxConfirmadosTitulo'),
           desc: t('errorMaxConfirmados'),
-          textoConfirmar: 'Entendido',
+          textoConfirmar: t('modalEntendido'),
           onConfirmar: cerrarModal
         })
         return
       }
       if (estado === 'prereservado' && prereservados >= 3) {
-        mostrarModal({
+        setModal({
           icono: 'ℹ️',
-          titulo: 'Máximo de prerreservas',
+          titulo: t('modalMaxPrereservasTitulo'),
           desc: t('errorMaxPrereservas'),
-          textoConfirmar: 'Entendido',
+          textoConfirmar: t('modalEntendido'),
           onConfirmar: cerrarModal
         })
         return
@@ -477,7 +463,6 @@ export default function InvitadaPage() {
         }
       `}</style>
 
-      {/* MODAL */}
       {modal && (
         <AvisoModal
           icono={modal.icono}

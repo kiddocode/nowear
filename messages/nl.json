@@ -375,7 +375,20 @@
     "avisoMismoModeloTitulo": "Zelfde model, andere kleur",
     "avisoMismoModeloDesc": "Een andere gaste draagt hetzelfde model in een andere kleur. Weet je zeker dat je wilt doorgaan?",
     "avisoMismoModeloCambiar": "Look wijzigen",
-    "avisoMismoModeloConfirmar": "Ja, doorgaan"
+    "avisoMismoModeloConfirmar": "Ja, doorgaan",
+    "modalConflictoTitulo": "Look al geregistreerd",
+    "modalConflictoDesc": "Een andere gaste heeft deze look al eerder geregistreerd. Alleen de eerste behoudt de look.",
+    "modalBloqueadoTitulo": "Look gereserveerd",
+    "modalBloqueadoDesc": "Deze look is gereserveerd voor de organisatrice van het evenement.",
+    "modalMismoModeloTitulo": "Zelfde model, andere kleur",
+    "modalMismoModeloDesc": "Een andere gaste draagt hetzelfde model in een andere kleur. Om conflicten te vermijden is deze look niet beschikbaar.",
+    "modalPedirReferenciaTitulo": "Mogelijke overeenkomst",
+    "modalPedirReferenciaDesc": "Een andere gaste heeft een zeer vergelijkbare look. Voeg de referentie toe om te bevestigen of het hetzelfde product is.",
+    "modalMaxConfirmadosTitulo": "Look al bevestigd",
+    "modalMaxPrereservasTitulo": "Maximum voorbestellingen bereikt",
+    "modalEntendido": "Begrepen",
+    "modalElegirOtro": "Andere look kiezen",
+    "modalAnadirReferencia": "Begrepen, referentie toevoegen"
   },
   "sidebar": {
     "principal": "Hoofdmenu",
