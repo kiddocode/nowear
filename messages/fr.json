@@ -365,7 +365,9 @@
       "dorado": "Doré",
       "plateado": "Argenté",
       "otro": "Autre"
-    }
+    },
+    "errorLookOrganizadora": "Ce look est réservé pour l'organisatrice. Veuillez en choisir un autre.",
+    "errorSimilarOrganizadora": "Votre look est très similaire à celui de l'organisatrice. Ajoutez la référence pour confirmer."
   },
   "sidebar": {
     "principal": "Principal",

@@ -365,7 +365,9 @@
       "dorado": "Dourado",
       "plateado": "Prateado",
       "otro": "Outro"
-    }
+    },
+    "errorLookOrganizadora": "Este look está reservado para a organizadora. Por favor escolhe outro.",
+    "errorSimilarOrganizadora": "O teu look é muito similar ao da organizadora. Adiciona a referência para confirmar."
   },
   "sidebar": {
     "principal": "Principal",

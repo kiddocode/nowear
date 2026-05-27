@@ -365,7 +365,9 @@
       "dorado": "Goud",
       "plateado": "Zilver",
       "otro": "Overig"
-    }
+    },
+    "errorLookOrganizadora": "Deze look is gereserveerd voor de organisatrice. Kies een andere look.",
+    "errorSimilarOrganizadora": "Jouw look lijkt sterk op die van de organisatrice. Voeg de referentie toe."
   },
   "sidebar": {
     "principal": "Hoofdmenu",
