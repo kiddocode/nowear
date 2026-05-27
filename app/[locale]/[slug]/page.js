@@ -27,6 +27,31 @@ function normalizar(texto) {
     .trim()
 }
 
+// Modal de aviso reutilizable
+function AvisoModal({ icono, titulo, desc, onConfirmar, onCancelar, textoConfirmar, textoCancelar, enviando, colorConfirmar }) {
+  return (
+    <div style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.6)',zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
+      <div style={{background:'#FFFFFF',borderRadius:'12px',padding:'2rem',maxWidth:'420px',width:'100%',boxShadow:'0 8px 32px rgba(0,0,0,0.2)'}}>
+        {icono && <div style={{fontSize:'1.75rem',marginBottom:'0.75rem',textAlign:'center'}}>{icono}</div>}
+        <h3 style={{fontSize:'1rem',fontWeight:700,color:'#0A0A0A',marginBottom:'0.5rem',textAlign:'center'}}>{titulo}</h3>
+        <p style={{fontSize:'0.82rem',fontWeight:300,color:'#555552',lineHeight:1.7,marginBottom:'1.5rem',textAlign:'center'}}>{desc}</p>
+        <div style={{display:'flex',gap:'0.75rem'}}>
+          {onCancelar && (
+            <button onClick={onCancelar}
+              style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px'}}>
+              {textoCancelar || 'Cancelar'}
+            </button>
+          )}
+          <button onClick={onConfirmar} disabled={enviando}
+            style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:colorConfirmar||'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:enviando?0.6:1}}>
+            {enviando ? '...' : (textoConfirmar || 'Aceptar')}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function InvitadaPage() {
   const { slug } = useParams()
   const t = useTranslations('invitada')
@@ -86,8 +111,11 @@ export default function InvitadaPage() {
   const [tipo2, setTipo2] = useState('')
   const [referencia2, setReferencia2] = useState('')
   const [pedirReferencia, setPedirReferencia] = useState(false)
-  const [avisoMismoModelo, setAvisoMismoModelo] = useState(null) // { nombre_invitada, color_hex }
-  const [pendienteEnvio, setPendienteEnvio] = useState(null) // 'enviar' | 'actualizar'
+
+  // Estado del modal de aviso
+  const [modal, setModal] = useState(null)
+  // { icono, titulo, desc, textoConfirmar, textoCancelar, onConfirmar, onCancelar, colorConfirmar, pendienteAccion }
+  const [pendienteEnvio, setPendienteEnvio] = useState(null)
 
   useEffect(() => {
     async function cargar() {
@@ -114,7 +142,16 @@ export default function InvitadaPage() {
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
     setLookEditando(null); setError(''); setPedirReferencia(false)
-    setAvisoMismoModelo(null); setPendienteEnvio(null)
+    setModal(null); setPendienteEnvio(null)
+  }
+
+  function mostrarModal(config) {
+    setModal(config)
+  }
+
+  function cerrarModal() {
+    setModal(null)
+    setPendienteEnvio(null)
   }
 
   async function enviarEmailAsync(tipo, emailInv, nombreInv) {
@@ -158,7 +195,7 @@ export default function InvitadaPage() {
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
     setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || '')
     setEstado(look.estado || 'confirmado')
-    setPedirReferencia(false); setAvisoMismoModelo(null); setPendienteEnvio(null)
+    setPedirReferencia(false); setModal(null); setPendienteEnvio(null)
     setModoGestion(false)
   }
 
@@ -171,7 +208,6 @@ export default function InvitadaPage() {
       const marcaCoincide = normalizar(marca1) === normalizar(evento.look_bloqueado_marca1)
       const tipoCoincide = tipo1.trim().toLowerCase() === (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
       const modeloCoincide = normalizar(modelo1) === normalizar(evento.look_bloqueado_modelo1)
-
       if (colorCoincide && marcaCoincide && tipoCoincide && modeloCoincide) {
         if (evento.look_bloqueado_referencia1 && referencia1.trim()) {
           if (referencia1.trim().toLowerCase() === evento.look_bloqueado_referencia1.trim().toLowerCase()) {
@@ -185,46 +221,35 @@ export default function InvitadaPage() {
       }
     }
 
-    // 2. CONFLICTO CON OTRAS INVITADAS (mismo color + marca + tipo + modelo)
+    // 2. CONFLICTO CON OTRAS INVITADAS
     let query = supabase.from('looks').select('id, nombre_invitada, referencia')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
       .eq('marca_normalizada', normalizar(marca1))
       .ilike('tipo', tipo1.trim())
       .eq('modelo_normalizado', normalizar(modelo1))
-
     if (excludeId) query = query.neq('id', excludeId)
-
     const { data: candidatos } = await query
 
     if (candidatos && candidatos.length > 0) {
-      if (!referencia1.trim()) {
-        return { tipo: 'pedir_referencia', candidatos }
-      }
+      if (!referencia1.trim()) return { tipo: 'pedir_referencia', candidatos }
       const conflictoReal = candidatos.find(c =>
         c.referencia && c.referencia.trim().toLowerCase() === referencia1.trim().toLowerCase()
       )
-      if (conflictoReal) {
-        return { tipo: 'conflicto_real', candidato: conflictoReal }
-      }
+      if (conflictoReal) return { tipo: 'conflicto_real', candidato: conflictoReal }
       const sinReferencia = candidatos.filter(c => !c.referencia || !c.referencia.trim())
-      if (sinReferencia.length > 0) {
-        return { tipo: 'pedir_referencia', candidatos: sinReferencia }
-      }
+      if (sinReferencia.length > 0) return { tipo: 'pedir_referencia', candidatos: sinReferencia }
     }
 
-    // 3. MISMO MODELO DISTINTO COLOR (aviso suave)
+    // 3. MISMO MODELO DISTINTO COLOR
     let queryMismoModelo = supabase.from('looks').select('id, nombre_invitada, color_hex')
       .eq('evento_id', evento.id)
       .eq('marca_normalizada', normalizar(marca1))
       .ilike('tipo', tipo1.trim())
       .eq('modelo_normalizado', normalizar(modelo1))
       .neq('color_hex', colores[0])
-
     if (excludeId) queryMismoModelo = queryMismoModelo.neq('id', excludeId)
-
     const { data: mismoModelo } = await queryMismoModelo
-
     if (mismoModelo && mismoModelo.length > 0) {
       return { tipo: 'mismo_modelo_otro_color', candidato: mismoModelo[0] }
     }
@@ -252,7 +277,7 @@ export default function InvitadaPage() {
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, estado, foto_url
     })
-    if (insertError) { setEnviando(false); setError(t('errorRegistro')); return }
+    if (insertError) { setEnviando(false); mostrarModal({ icono:'❌', titulo: t('errorRegistro'), desc: t('errorRegistro'), textoConfirmar:'OK', onConfirmar: cerrarModal }); return }
     const emailGuardado = email.toLowerCase().trim()
     const nombreGuardado = nombre
     setEnviando(false); setEnviado(true)
@@ -276,36 +301,96 @@ export default function InvitadaPage() {
     enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
 
-  async function handleActualizarLook() {
-    setError(''); setAvisoMismoModelo(null)
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) { setError(t('errorCampos')); return }
+  async function procesarConflicto(excludeId, accion) {
+    const resultado = await comprobarConflicto(excludeId)
 
-    const resultado = await comprobarConflicto(lookEditando.id)
+    if (resultado.tipo === 'bloqueado_organizadora') {
+      mostrarModal({
+        icono: '🚫',
+        titulo: t('errorLookOrganizadora'),
+        desc: t('errorLookOrganizadora'),
+        textoConfirmar: 'Entendido',
+        onConfirmar: cerrarModal
+      })
+      return
+    }
 
-    if (resultado.tipo === 'bloqueado_organizadora') { setError(t('errorLookOrganizadora')); return }
-    if (resultado.tipo === 'pedir_referencia_organizadora') { setPedirReferencia(true); setError(t('errorSimilarOrganizadora')); return }
-    if (resultado.tipo === 'pedir_referencia') { setPedirReferencia(true); setError(t('errorPedirReferencia') || 'Hay una posible coincidencia. Añade la referencia para confirmar.'); return }
+    if (resultado.tipo === 'pedir_referencia_organizadora') {
+      setPedirReferencia(true)
+      mostrarModal({
+        icono: '🔍',
+        titulo: 'Confirma tu look',
+        desc: t('errorSimilarOrganizadora') || 'Tu look es muy similar al de la organizadora. Añade la referencia o link para confirmar si es el mismo.',
+        textoConfirmar: 'Entendido, añado la referencia',
+        onConfirmar: cerrarModal
+      })
+      return
+    }
+
+    if (resultado.tipo === 'pedir_referencia') {
+      setPedirReferencia(true)
+      mostrarModal({
+        icono: '🔍',
+        titulo: 'Posible coincidencia',
+        desc: t('errorPedirReferencia') || 'Hay una posible coincidencia con otra invitada. Añade la referencia o link del producto para confirmar si es el mismo.',
+        textoConfirmar: 'Entendido, añado la referencia',
+        onConfirmar: cerrarModal
+      })
+      return
+    }
+
     if (resultado.tipo === 'conflicto_real') {
       await supabase.from('conflictos').insert({
         evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
         marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
       })
       enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
-      return
-    }
-    if (resultado.tipo === 'mismo_modelo_otro_color') {
-      setAvisoMismoModelo(resultado.candidato)
-      setPendienteEnvio('actualizar')
+      mostrarModal({
+        icono: '⚠️',
+        titulo: 'Look ya registrado',
+        desc: `${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`,
+        textoConfirmar: 'Elegir otro look',
+        onConfirmar: cerrarModal,
+        colorConfirmar: '#F07987'
+      })
       return
     }
 
-    await actualizarLook()
+    if (resultado.tipo === 'mismo_modelo_otro_color') {
+      mostrarModal({
+        icono: '👀',
+        titulo: t('avisoMismoModeloTitulo') || 'Mismo modelo, distinto color',
+        desc: t('avisoMismoModeloDesc') || 'Otra invitada lleva el mismo modelo en otro color. ¿Segura que quieres continuar?',
+        textoConfirmar: t('avisoMismoModeloConfirmar') || 'Sí, continuar',
+        textoCancelar: t('avisoMismoModeloCambiar') || 'Cambiar look',
+        onConfirmar: async () => {
+          cerrarModal()
+          if (accion === 'enviar') await guardarLook()
+          else await actualizarLook()
+        },
+        onCancelar: cerrarModal
+      })
+      return
+    }
+
+    // Sin conflicto
+    if (accion === 'enviar') await guardarLook()
+    else await actualizarLook()
+  }
+
+  async function handleActualizarLook() {
+    setError('')
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
+      setError(t('errorCampos')); return
+    }
+    await procesarConflicto(lookEditando.id, 'actualizar')
   }
 
   async function handleEnviar() {
-    setError(''); setAvisoMismoModelo(null)
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) { setError(t('errorCampos')); return }
+    setError('')
+    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
+      setError(t('errorCampos')); return
+    }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
 
@@ -314,38 +399,29 @@ export default function InvitadaPage() {
     if (existentes && existentes.length > 0) {
       const confirmados = existentes.filter(l => l.estado === 'confirmado').length
       const prereservados = existentes.filter(l => l.estado === 'prereservado').length
-      if (estado === 'confirmado' && confirmados >= 1) { setError(t('errorMaxConfirmados')); return }
-      if (estado === 'prereservado' && prereservados >= 3) { setError(t('errorMaxPrereservas')); return }
+      if (estado === 'confirmado' && confirmados >= 1) {
+        mostrarModal({
+          icono: 'ℹ️',
+          titulo: 'Look ya confirmado',
+          desc: t('errorMaxConfirmados'),
+          textoConfirmar: 'Entendido',
+          onConfirmar: cerrarModal
+        })
+        return
+      }
+      if (estado === 'prereservado' && prereservados >= 3) {
+        mostrarModal({
+          icono: 'ℹ️',
+          titulo: 'Máximo de prerreservas',
+          desc: t('errorMaxPrereservas'),
+          textoConfirmar: 'Entendido',
+          onConfirmar: cerrarModal
+        })
+        return
+      }
     }
 
-    const resultado = await comprobarConflicto()
-
-    if (resultado.tipo === 'bloqueado_organizadora') { setError(t('errorLookOrganizadora')); return }
-    if (resultado.tipo === 'pedir_referencia_organizadora') { setPedirReferencia(true); setError(t('errorSimilarOrganizadora')); return }
-    if (resultado.tipo === 'pedir_referencia') { setPedirReferencia(true); setError(t('errorPedirReferencia') || 'Hay una posible coincidencia. Añade la referencia para confirmar.'); return }
-    if (resultado.tipo === 'conflicto_real') {
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
-      })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
-      setError(`${t('errorConflicto')} ${resultado.candidato.nombre_invitada}. ${t('errorConflictoElige')}`)
-      return
-    }
-    if (resultado.tipo === 'mismo_modelo_otro_color') {
-      setAvisoMismoModelo(resultado.candidato)
-      setPendienteEnvio('enviar')
-      return
-    }
-
-    await guardarLook()
-  }
-
-  async function handleConfirmarAvisoMismoModelo() {
-    setAvisoMismoModelo(null)
-    if (pendienteEnvio === 'enviar') await guardarLook()
-    else if (pendienteEnvio === 'actualizar') await actualizarLook()
-    setPendienteEnvio(null)
+    await procesarConflicto(null, 'enviar')
   }
 
   if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('cargando')}</div>
@@ -383,14 +459,12 @@ export default function InvitadaPage() {
         .prenda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
         .estado-grid { display: flex; gap: 1rem; }
         .gestion-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
-
         @media (max-width: 1024px) {
           .invitada-layout { grid-template-columns: 1fr; }
           .invitada-panel { display: none; }
           .invitada-panel-mobile { display: block; position: relative; height: 220px; overflow: hidden; }
           .invitada-form-col { padding: 2rem; }
         }
-
         @media (max-width: 768px) {
           .invitada-layout { grid-template-columns: 1fr; }
           .invitada-panel { display: none; }
@@ -403,32 +477,19 @@ export default function InvitadaPage() {
         }
       `}</style>
 
-      {/* MODAL AVISO MISMO MODELO DISTINTO COLOR */}
-      {avisoMismoModelo && (
-        <div style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.6)',zIndex:2000,display:'flex',alignItems:'center',justifyContent:'center',padding:'1.5rem'}}>
-          <div style={{background:'#FFFFFF',borderRadius:'12px',padding:'2rem',maxWidth:'420px',width:'100%',boxShadow:'0 8px 32px rgba(0,0,0,0.2)'}}>
-            <div style={{fontSize:'1.75rem',marginBottom:'0.75rem',textAlign:'center'}}>👀</div>
-            <h3 style={{fontSize:'1rem',fontWeight:700,color:'#0A0A0A',marginBottom:'0.5rem',textAlign:'center'}}>
-              {t('avisoMismoModeloTitulo') || 'Mismo modelo, distinto color'}
-            </h3>
-            <p style={{fontSize:'0.82rem',fontWeight:300,color:'#555552',lineHeight:1.7,marginBottom:'1.5rem',textAlign:'center'}}>
-              {t('avisoMismoModeloDesc') || `Otra invitada lleva el mismo modelo en otro color. ¿Segura que quieres continuar?`}
-            </p>
-            <div style={{display:'flex',gap:'0.75rem'}}>
-              <button
-                onClick={() => { setAvisoMismoModelo(null); setPendienteEnvio(null) }}
-                style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px'}}>
-                {t('avisoMismoModeloCambiar') || 'Cambiar look'}
-              </button>
-              <button
-                onClick={handleConfirmarAvisoMismoModelo}
-                disabled={enviando}
-                style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:enviando?0.6:1}}>
-                {enviando ? t('guardando') : (t('avisoMismoModeloConfirmar') || 'Sí, continuar')}
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* MODAL */}
+      {modal && (
+        <AvisoModal
+          icono={modal.icono}
+          titulo={modal.titulo}
+          desc={modal.desc}
+          textoConfirmar={modal.textoConfirmar}
+          textoCancelar={modal.textoCancelar}
+          onConfirmar={modal.onConfirmar}
+          onCancelar={modal.onCancelar}
+          enviando={enviando}
+          colorConfirmar={modal.colorConfirmar}
+        />
       )}
 
       <div className="invitada-layout">
@@ -620,7 +681,7 @@ export default function InvitadaPage() {
                   />
                   {pedirReferencia && (
                     <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.4rem',lineHeight:1.5}}>
-                      {t('referenciaInfo') || 'Hay una posible coincidencia. Añade la referencia para confirmar si es el mismo producto.'}
+                      {t('referenciaInfo') || 'Añade la referencia o link para confirmar si es exactamente el mismo producto.'}
                     </p>
                   )}
                 </div>
@@ -686,7 +747,11 @@ export default function InvitadaPage() {
                 </div>
               </div>
 
-              {error && <p style={{fontSize:'0.82rem',fontWeight:600,color:'#F07987',marginBottom:'1rem',padding:'0.75rem',background:'#FFF0F1',border:'1px solid #F07987',borderRadius:'4px'}}>{error}</p>}
+              {error && (
+                <div style={{marginBottom:'1rem',padding:'1rem 1.25rem',background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'8px',boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
+                  <p style={{fontSize:'0.82rem',fontWeight:500,color:'#0A0A0A',margin:0}}>{error}</p>
+                </div>
+              )}
 
               <div style={{display:'flex',gap:'0.75rem'}}>
                 {lookEditando && (

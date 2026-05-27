@@ -371,7 +371,11 @@
     "errorPedirReferencia": "Es gibt eine mögliche Übereinstimmung mit einer anderen Gästin. Fügen Sie die Referenz oder den Link hinzu.",
     "referenciaObligatoria": "* erforderlich zur Bestätigung",
     "referenciaPlaceholderObligatoria": "Link oder Referenz des Produkts hinzufügen",
-    "referenciaInfo": "Fügen Sie die Referenz hinzu um zu bestätigen ob es dasselbe Produkt ist."
+    "referenciaInfo": "Fügen Sie die Referenz hinzu um zu bestätigen ob es dasselbe Produkt ist.",
+    "avisoMismoModeloTitulo": "Gleiches Modell, andere Farbe",
+    "avisoMismoModeloDesc": "Eine andere Gaestin traegt dasselbe Modell in einer anderen Farbe. Moechten Sie wirklich fortfahren?",
+    "avisoMismoModeloCambiar": "Look aendern",
+    "avisoMismoModeloConfirmar": "Ja, weiter"
   },
   "sidebar": {
     "principal": "Hauptmenü",

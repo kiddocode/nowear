@@ -371,7 +371,11 @@
     "errorPedirReferencia": "Il y a une possible correspondance avec une autre invitée. Ajoutez la référence ou le lien du produit pour confirmer.",
     "referenciaObligatoria": "* requise pour confirmer",
     "referenciaPlaceholderObligatoria": "Ajoutez le lien ou la référence du produit",
-    "referenciaInfo": "Ajoutez la référence ou le lien pour confirmer si c'est exactement le même produit."
+    "referenciaInfo": "Ajoutez la référence ou le lien pour confirmer si c'est exactement le même produit.",
+    "avisoMismoModeloTitulo": "Même modèle, couleur différente",
+    "avisoMismoModeloDesc": "Une autre invitée porte le même modèle dans une autre couleur. Êtes-vous sûre de vouloir continuer?",
+    "avisoMismoModeloCambiar": "Changer de look",
+    "avisoMismoModeloConfirmar": "Oui, continuer"
   },
   "sidebar": {
     "principal": "Principal",

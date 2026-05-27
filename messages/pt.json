@@ -371,7 +371,11 @@
     "errorPedirReferencia": "Há uma possível coincidência com outra convidada. Adiciona a referência ou link do produto para confirmar.",
     "referenciaObligatoria": "* necessária para confirmar",
     "referenciaPlaceholderObligatoria": "Adiciona o link ou referência do produto",
-    "referenciaInfo": "Adiciona a referência ou link para confirmar se é exatamente o mesmo produto."
+    "referenciaInfo": "Adiciona a referência ou link para confirmar se é exatamente o mesmo produto.",
+    "avisoMismoModeloTitulo": "Mesmo modelo, cor diferente",
+    "avisoMismoModeloDesc": "Outra convidada usa o mesmo modelo noutra cor. Tens a certeza que queres continuar?",
+    "avisoMismoModeloCambiar": "Mudar look",
+    "avisoMismoModeloConfirmar": "Sim, continuar"
   },
   "sidebar": {
     "principal": "Principal",

@@ -371,7 +371,11 @@
     "errorPedirReferencia": "Er is een mogelijke overeenkomst met een andere gaste. Voeg de referentie of link toe om te bevestigen.",
     "referenciaObligatoria": "* vereist voor bevestiging",
     "referenciaPlaceholderObligatoria": "Voeg de link of referentie van het product toe",
-    "referenciaInfo": "Voeg de referentie of link toe om te bevestigen of het hetzelfde product is."
+    "referenciaInfo": "Voeg de referentie of link toe om te bevestigen of het hetzelfde product is.",
+    "avisoMismoModeloTitulo": "Zelfde model, andere kleur",
+    "avisoMismoModeloDesc": "Een andere gaste draagt hetzelfde model in een andere kleur. Weet je zeker dat je wilt doorgaan?",
+    "avisoMismoModeloCambiar": "Look wijzigen",
+    "avisoMismoModeloConfirmar": "Ja, doorgaan"
   },
   "sidebar": {
     "principal": "Hoofdmenu",
