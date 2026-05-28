@@ -166,28 +166,52 @@
     "masPreguntas": "More questions?",
     "preguntas": [
       {
-        "q": "Do my guests need to sign up?",
-        "a": "No. Your guests access directly through the link you send them. They don't need to create an account or download any app."
+        "q": "What types of events is NOWEAR for?",
+        "a": "NOWEAR works for any event where outfits matter: weddings, communions, christenings, engagements, graduations, baby showers, confirmations, birthdays, galas, award ceremonies, red carpets, premieres, corporate events with dress code, company dinners, institutional protocol events, fashion showrooms, VIP client events, private fashion shows, dress code restaurants and much more."
       },
       {
-        "q": "What happens if two guests want to wear the same thing?",
-        "a": "The system immediately alerts the second guest when she tries to register an already-taken look. No one has more rights than another, only whoever registered first."
+        "q": "How do I prevent two guests from wearing the same dress at my wedding or event?",
+        "a": "Create your event on nowear.es, share the link with your guests and let the system do the work. Each guest registers their brand, model and color. If someone tries to register an already-taken look, they get an instant alert. No awkward conversations, no drama, no surprises on the day."
+      },
+      {
+        "q": "Do my guests need to sign up or download an app?",
+        "a": "No. Your guests access directly through the link you send them via WhatsApp, email or your wedding website. No account needed, no app to download. Just the link."
+      },
+      {
+        "q": "What happens if two guests want to wear the same look?",
+        "a": "The system instantly alerts the second guest when she tries to register an already-taken look. No one has more rights than another, only whoever registered first. If two guests register the same model in different colors, they also get a warning."
+      },
+      {
+        "q": "Can I block my own look as the organizer?",
+        "a": "Yes. When creating your event you can register your own look so no guest can register the same one. You can also block specific colors: white for the bride, bridesmaids color, or any color you want to reserve."
       },
       {
         "q": "What is a look pre-reservation?",
-        "a": "It means you've seen a look but haven't bought it yet. No one else can register that same look while your pre-reservation is active."
+        "a": "It means you've seen a look but haven't bought it yet. No one else can register that same look while your pre-reservation is active. You can have up to 3 active pre-reservations at once."
       },
       {
-        "q": "Does it work for events other than weddings?",
-        "a": "Yes. NOWEAR works for any event where attire matters: weddings, communions, baptisms, engagements, birthdays, galas, award ceremonies, corporate events, institutional protocol acts and much more."
-      },
-      {
-        "q": "Can I block specific colors?",
-        "a": "Yes. When creating your event you can define blocked colors: white for the bride, or a special family member's color."
+        "q": "Does it work for corporate events, galas or institutional protocol?",
+        "a": "Yes. NOWEAR has specific solutions for businesses and institutions: custom form with your brand image, recurring packages by season or volume, multi-organizer for team management, and dedicated support. Write to us at support@nowear.es for a custom proposal."
       },
       {
         "q": "How does payment work?",
-        "a": "For individuals it's a one-time payment per event. We accept card, Apple Pay and Google Pay. No subscriptions or surprises. For businesses, we offer custom packages. Write to us at support@nowear.es."
+        "a": "For individuals it's a one-time payment per event from €9. No subscriptions or surprises. We accept card, Apple Pay and Google Pay. For businesses we offer custom packages. Write to us at support@nowear.es."
+      },
+      {
+        "q": "How much does it cost to coordinate guest looks at my wedding or event?",
+        "a": "NOWEAR starts from 9€ per event, a one-time payment with no subscriptions. Basic plan (9€) opens registration 1 month before, Standard (19€) 3 months before, and Premium (29€) with no time limit and customization included."
+      },
+      {
+        "q": "What happens if a guest does not register her look?",
+        "a": "The system can only detect conflicts between registered looks. If a guest does not register her look, she risks matching with another guest who did. We recommend sharing the link with all guests as early as possible."
+      },
+      {
+        "q": "Can I use NOWEAR for a communion, christening, graduation or any other event?",
+        "a": "Yes, absolutely. NOWEAR is designed for any event where outfits matter: weddings, communions, christenings, graduations, engagements, baby showers, confirmations, birthdays, galas, award ceremonies, corporate events and much more."
+      },
+      {
+        "q": "How do I share the NOWEAR link with my guests?",
+        "a": "Once you create your event on nowear.es, you get a unique link. Share it via WhatsApp, your wedding website, email or digital invitations. Guests access directly without signing up or downloading anything."
       }
     ]
   },

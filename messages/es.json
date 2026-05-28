@@ -166,28 +166,52 @@
     "masPreguntas": "¿Más preguntas?",
     "preguntas": [
       {
-        "q": "¿Necesitan registrarse mis invitadas?",
-        "a": "No. Tus invitadas entran directamente a través del link que les mandas. No tienen que crearse ninguna cuenta ni descargar ninguna app."
+        "q": "¿Para qué tipo de eventos sirve NOWEAR?",
+        "a": "NOWEAR funciona para cualquier evento donde el outfit importa: bodas, comuniones, bautizos, pedidas de mano, graduaciones, baby showers, confirmaciones, cumpleaños, galas, entregas de premios, alfombras rojas, estrenos, eventos corporativos con dress code, cenas de empresa, team buildings, eventos de protocolo institucional, showrooms de moda, eventos VIP para clientas, desfiles privados, restaurantes con dress code y mucho más. Si hay invitadas y hay outfit, NOWEAR es para ti."
       },
       {
-        "q": "¿Qué pasa si dos invitadas quieren llevar lo mismo?",
-        "a": "El sistema avisa a la segunda invitada al instante cuando intenta registrar un look que ya está cogido. Nadie tiene más derecho que nadie, solo quien registró antes."
+        "q": "¿Cómo evito que dos invitadas lleven el mismo vestido en mi boda o evento?",
+        "a": "Crea tu evento en nowear.es, comparte el link con tus invitadas y deja que el sistema trabaje. Cada invitada registra su marca, modelo y color. Si alguien intenta registrar un look que ya está reservado, recibe un aviso inmediato. Sin conversaciones incómodas, sin dramas, sin sorpresas el día del evento."
+      },
+      {
+        "q": "¿Necesitan registrarse mis invitadas o descargar alguna app?",
+        "a": "No. Tus invitadas entran directamente a través del link que les mandas por WhatsApp, email o en tu web de boda. No tienen que crearse ninguna cuenta ni descargar ninguna app. Solo el link."
+      },
+      {
+        "q": "¿Qué pasa si dos invitadas quieren llevar el mismo look?",
+        "a": "El sistema avisa a la segunda invitada al instante cuando intenta registrar un look ya reservado. Nadie tiene más derecho que nadie, solo quien registró antes. Además, si dos invitadas llevan el mismo modelo en distinto color, también se avisa para evitar coincidencias."
+      },
+      {
+        "q": "¿Puedo bloquear mi propio look como organizadora?",
+        "a": "Sí. Al crear tu evento puedes registrar tu propio look para que ninguna invitada pueda registrar el mismo. También puedes bloquear colores específicos: blanco para la novia, el color de las damas de honor, o cualquier color que quieras reservar."
       },
       {
         "q": "¿Qué es la prerreserva de looks?",
-        "a": "Significa que has visto un look pero todavía no lo has comprado. Nadie más puede registrar ese mismo look mientras tengas tu prerreserva activa."
+        "a": "Significa que has visto un look pero todavía no lo has comprado. Nadie más puede registrar ese mismo look mientras tu prerreserva esté activa. Puedes tener hasta 3 prerreservas activas a la vez."
       },
       {
-        "q": "¿Funciona para otros eventos además de bodas?",
-        "a": "Sí. NOWEAR funciona para cualquier evento donde la vestimenta importa: bodas, comuniones, bautizos, pedidas, cumpleaños, galas, entregas de premios, eventos corporativos, actos de protocolo institucional y mucho más."
-      },
-      {
-        "q": "¿Puedo bloquear colores específicos?",
-        "a": "Sí. Al crear tu evento puedes definir colores bloqueados: blanco para la novia, o el color de algún familiar especial."
+        "q": "¿Funciona para eventos de empresa, galas o protocolo institucional?",
+        "a": "Sí. NOWEAR tiene soluciones específicas para empresas e instituciones: formulario a medida con tu imagen de marca, paquetes recurrentes por temporada o volumen, multi-organizador para que varios miembros del equipo gestionen el mismo evento, y soporte dedicado. Escríbenos a support@nowear.es para una propuesta personalizada."
       },
       {
         "q": "¿Cómo funciona el pago?",
-        "a": "Para particulares es un pago único por evento. Aceptamos tarjeta, Apple Pay y Google Pay. Sin suscripciones ni sorpresas. Para empresas e instituciones ofrecemos paquetes a medida según volumen y necesidades. Escríbenos a support@nowear.es."
+        "a": "Para particulares es un pago único por evento desde 9€. Sin suscripciones ni sorpresas. Aceptamos tarjeta, Apple Pay y Google Pay. Para empresas e instituciones ofrecemos paquetes a medida. Escríbenos a support@nowear.es."
+      },
+      {
+        "q": "¿Cuánto cuesta coordinar los looks de las invitadas de mi boda o evento?",
+        "a": "NOWEAR cuesta desde 9€ por evento, un pago único sin suscripciones. El plan Básico (9€) abre el registro 1 mes antes, el Estándar (19€) 3 meses antes, y el Premium (29€) sin límite de tiempo con personalización incluida. Para empresas e instituciones con múltiples eventos ofrecemos paquetes a medida."
+      },
+      {
+        "q": "¿Qué pasa si una invitada no registra su look?",
+        "a": "El sistema solo puede detectar coincidencias entre los looks registrados. Si una invitada no registra su look, corre el riesgo de coincidir con otra que sí lo haya registrado. Por eso recomendamos compartir el link con todas las invitadas lo antes posible."
+      },
+      {
+        "q": "¿Puedo usar NOWEAR para una comunión, bautizo, graduación o cualquier otro evento?",
+        "a": "Sí, absolutamente. NOWEAR está diseñado para cualquier evento donde el outfit importa: bodas, comuniones, bautizos, graduaciones, pedidas de mano, baby showers, confirmaciones, cumpleaños, galas, entregas de premios, eventos corporativos, cenas de empresa y mucho más."
+      },
+      {
+        "q": "¿Cómo comparto el link de NOWEAR con mis invitadas?",
+        "a": "Una vez creado tu evento en nowear.es, recibes un link único. Puedes compartirlo por WhatsApp, incluirlo en tu web de boda, mandarlo por email o añadirlo a las invitaciones digitales. Tus invitadas entran directamente sin registrarse ni descargar nada."
       }
     ]
   },

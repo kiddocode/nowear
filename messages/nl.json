@@ -166,28 +166,52 @@
     "masPreguntas": "Meer vragen?",
     "preguntas": [
       {
-        "q": "Moeten mijn gasten zich registreren?",
-        "a": "Nee. Je gasten gaan rechtstreeks via de link die je hen stuurt. Ze hoeven geen account aan te maken of een app te downloaden."
+        "q": "Voor welk type evenementen is NOWEAR geschikt?",
+        "a": "NOWEAR werkt voor elk evenement waar outfits belangrijk zijn: bruiloften, communies, dopen, verlovingen, diploma-uitreikingen, babyshowers, vormsels, verjaardagen, gala's, prijsuitreikingen, rode lopers, premières, bedrijfsevenementen met dresscode, bedrijfsdineers, institutionele protocolevenementen, mode showrooms, VIP-klantevenementen en veel meer."
       },
       {
-        "q": "Wat gebeurt er als twee gasten hetzelfde willen dragen?",
+        "q": "Hoe voorkom ik dat twee gasten dezelfde jurk dragen op mijn bruiloft?",
+        "a": "Maak je evenement aan op nowear.es, deel de link met je gasten en laat het systeem het werk doen. Elke gaste registreert haar merk, model en kleur. Als iemand een al gereserveerde look probeert te registreren, krijgt ze direct een waarschuwing."
+      },
+      {
+        "q": "Moeten mijn gasten zich registreren of een app downloaden?",
+        "a": "Nee. Je gasten gaan rechtstreeks via de link die je hen stuurt via WhatsApp, e-mail of op je trouwwebsite. Geen account, geen app. Alleen de link."
+      },
+      {
+        "q": "Wat gebeurt er als twee gasten dezelfde look willen dragen?",
         "a": "Het systeem waarschuwt de tweede gaste onmiddellijk wanneer ze een al gereserveerde look probeert te registreren. Niemand heeft meer rechten dan een ander, alleen wie het eerst registreerde."
       },
       {
-        "q": "Wat is een look-voorbehouding?",
-        "a": "Dat betekent dat je een look hebt gezien maar nog niet gekocht. Niemand anders kan diezelfde look registreren zolang jouw voorbehouding actief is."
+        "q": "Kan ik mijn eigen look blokkeren als organisatrice?",
+        "a": "Ja. Bij het aanmaken van je evenement kun je je eigen look registreren zodat geen gaste hetzelfde kan registreren. Je kunt ook specifieke kleuren blokkeren: wit voor de bruid, kleur van de bruidsmeisjes, etc."
       },
       {
-        "q": "Werkt het voor andere evenementen dan bruiloften?",
-        "a": "Ja. NOWEAR werkt voor elk evenement waar kleding ertoe doet: bruiloften, communies, dopen, verlovingen, verjaardagen, galas, prijsuitreikingen, bedrijfsevenementen en veel meer."
+        "q": "Wat is een look-voorbestelling?",
+        "a": "Het betekent dat je een look hebt gezien maar nog niet gekocht. Niemand anders kan diezelfde look registreren zolang jouw voorbestelling actief is. Je kunt tot 3 actieve voorbestellingen hebben."
       },
       {
-        "q": "Kan ik specifieke kleuren blokkeren?",
-        "a": "Ja. Bij het aanmaken van je evenement kun je geblokkeerde kleuren definiëren: wit voor de bruid, of de kleur van een speciaal familielid."
+        "q": "Werkt het voor bedrijfsevenementen, gala's of institutioneel protocol?",
+        "a": "Ja. NOWEAR heeft specifieke oplossingen voor bedrijven en instellingen: aangepast formulier, terugkerende pakketten, multi-organisator en dedicated ondersteuning. Schrijf ons op support@nowear.es."
       },
       {
         "q": "Hoe werkt de betaling?",
-        "a": "Voor particulieren is het een eenmalige betaling per evenement. We accepteren kaart, Apple Pay en Google Pay. Geen abonnement of verrassingen. Voor bedrijven bieden we pakketten op maat. Schrijf ons op support@nowear.es."
+        "a": "Voor particulieren is het een eenmalige betaling per evenement vanaf €9. Zonder abonnement. We accepteren kaart, Apple Pay en Google Pay. Voor bedrijven bieden we maatwerkapakketten aan. Schrijf ons op support@nowear.es."
+      },
+      {
+        "q": "Hoeveel kost het coördineren van looks op mijn bruiloft?",
+        "a": "NOWEAR begint vanaf 9€ per evenement, eenmalige betaling zonder abonnement. Basis (9€) opent 1 maand van tevoren, Standaard (19€) 3 maanden, Premium (29€) zonder tijdslimiet met aanpassing."
+      },
+      {
+        "q": "Wat gebeurt er als een gaste haar look niet registreert?",
+        "a": "Het systeem detecteert alleen conflicten tussen geregistreerde looks. Als een gaste niet registreert loopt ze het risico overeen te komen. Deel de link zo vroeg mogelijk."
+      },
+      {
+        "q": "Kan ik NOWEAR gebruiken voor communie, doop of diploma-uitreiking?",
+        "a": "Ja. NOWEAR werkt voor elk evenement waar outfits belangrijk zijn: bruiloften, communies, dopen, diploma-uitreikingen, babyshowers, galas, bedrijfsevenementen en veel meer."
+      },
+      {
+        "q": "Hoe deel ik de NOWEAR-link met mijn gasten?",
+        "a": "Na aanmaken op nowear.es ontvang je een unieke link te delen via WhatsApp, e-mail, trouwwebsite of digitale uitnodigingen. Gasten gaan direct zonder registratie."
       }
     ]
   },

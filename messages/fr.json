@@ -166,28 +166,52 @@
     "masPreguntas": "Plus de questions ?",
     "preguntas": [
       {
-        "q": "Mes invitées doivent-elles s'inscrire ?",
-        "a": "Non. Vos invitées accèdent directement via le lien que vous leur envoyez. Elles n'ont pas besoin de créer un compte ni de télécharger une application."
+        "q": "Pour quel type d'événements fonctionne NOWEAR ?",
+        "a": "NOWEAR fonctionne pour tout événement où la tenue vestimentaire compte : mariages, communions, baptêmes, fiançailles, remises de diplômes, baby showers, confirmations, anniversaires, galas, remises de prix, tapis rouges, avant-premières, événements d'entreprise avec dress code, dîners d'entreprise, événements de protocole institutionnel, showrooms de mode, événements VIP et bien plus."
       },
       {
-        "q": "Que se passe-t-il si deux invitées veulent porter la même chose ?",
+        "q": "Comment éviter que deux invitées portent la même robe à mon mariage ?",
+        "a": "Créez votre événement sur nowear.es, partagez le lien avec vos invitées et laissez le système travailler. Chaque invitée enregistre sa marque, son modèle et sa couleur. Si quelqu'un tente d'enregistrer un look déjà réservé, elle reçoit une alerte immédiate."
+      },
+      {
+        "q": "Mes invitées doivent-elles s'inscrire ou télécharger une application ?",
+        "a": "Non. Vos invitées accèdent directement via le lien que vous leur envoyez par WhatsApp, email ou sur votre site de mariage. Pas de compte, pas d'application. Juste le lien."
+      },
+      {
+        "q": "Que se passe-t-il si deux invitées veulent porter le même look ?",
         "a": "Le système alerte immédiatement la deuxième invitée lorsqu'elle tente d'enregistrer un look déjà pris. Personne n'a plus de droits que l'autre, seulement celle qui a enregistré en premier."
       },
       {
+        "q": "Puis-je bloquer mon propre look en tant qu'organisatrice ?",
+        "a": "Oui. En créant votre événement vous pouvez enregistrer votre propre look pour qu'aucune invitée ne puisse enregistrer le même. Vous pouvez aussi bloquer des couleurs spécifiques : blanc pour la mariée, couleur des demoiselles d'honneur, etc."
+      },
+      {
         "q": "Qu'est-ce que la pré-réservation de looks ?",
-        "a": "Cela signifie que vous avez vu un look mais ne l'avez pas encore acheté. Personne d'autre ne peut enregistrer ce même look tant que votre pré-réservation est active."
+        "a": "Cela signifie que vous avez vu un look mais ne l'avez pas encore acheté. Personne d'autre ne peut enregistrer ce même look tant que votre pré-réservation est active. Vous pouvez avoir jusqu'à 3 pré-réservations actives."
       },
       {
-        "q": "Fonctionne-t-il pour d'autres événements que les mariages ?",
-        "a": "Oui. NOWEAR fonctionne pour tout événement où la tenue vestimentaire compte : mariages, communions, baptêmes, fiançailles, anniversaires, galas, remises de prix, événements corporatifs et bien plus."
-      },
-      {
-        "q": "Puis-je bloquer des couleurs spécifiques ?",
-        "a": "Oui. En créant votre événement, vous pouvez définir des couleurs bloquées : le blanc pour la mariée, ou la couleur d'un membre de la famille spécial."
+        "q": "Fonctionne-t-il pour les événements d'entreprise, galas ou protocole institutionnel ?",
+        "a": "Oui. NOWEAR propose des solutions spécifiques pour les entreprises et institutions : formulaire sur mesure, forfaits récurrents, multi-organisateur et support dédié. Écrivez-nous à support@nowear.es."
       },
       {
         "q": "Comment fonctionne le paiement ?",
-        "a": "Pour les particuliers, c'est un paiement unique par événement. Nous acceptons les cartes, Apple Pay et Google Pay. Sans abonnement ni surprises. Pour les entreprises, nous proposons des forfaits sur mesure. Écrivez-nous à support@nowear.es."
+        "a": "Pour les particuliers c'est un paiement unique par événement à partir de 9€. Sans abonnement. Nous acceptons carte, Apple Pay et Google Pay. Pour les entreprises nous proposons des forfaits sur mesure. Écrivez-nous à support@nowear.es."
+      },
+      {
+        "q": "Combien coûte la coordination des tenues des invitées ?",
+        "a": "NOWEAR commence à 9€ par événement, un paiement unique sans abonnement. Basique (9€) ouvre 1 mois avant, Standard (19€) 3 mois avant, Premium (29€) sans limite de temps avec personnalisation."
+      },
+      {
+        "q": "Que se passe-t-il si une invitée ne enregistre pas sa tenue ?",
+        "a": "Le système détecte uniquement les conflits entre looks enregistrés. Si une invitée ne enregistre pas, elle risque de correspondre avec une autre. Partagez le lien le plus tôt possible."
+      },
+      {
+        "q": "Puis-je utiliser NOWEAR pour une communion, baptême ou remise de diplôme ?",
+        "a": "Oui. NOWEAR fonctionne pour tout événement où la tenue compte: mariages, communions, baptêmes, remises de diplômes, baby showers, galas, événements entreprise et bien plus."
+      },
+      {
+        "q": "Comment partager le lien NOWEAR avec mes invitées ?",
+        "a": "Après création sur nowear.es vous recevez un lien unique à partager par WhatsApp, email, site de mariage ou invitations digitales. Les invitées accèdent directement sans inscription."
       }
     ]
   },
