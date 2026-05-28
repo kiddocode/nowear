@@ -167,6 +167,11 @@ export default function Home() {
         .casos-grid > :nth-child(9) { grid-column: 4; }
         .casos-grid > :nth-child(10) { grid-column: 5; }
         .casos-grid > :nth-child(11) { grid-column: 6; }
+        .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+        @media (max-width: 768px) {
+          .faq-grid { grid-template-columns: 1fr; gap: 2rem; }
+          .faq-sticky { position: relative !important; top: 0 !important; }
+        }
       `}</style>
 
       {/* CÓMO FUNCIONA */}
@@ -396,8 +401,8 @@ export default function Home() {
 
       {/* FAQ */}
       <section id="faq" className="section-pad" style={{padding:'7rem 3rem',background:'#F7F7F5'}}>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'5rem',alignItems:'start'}}>
-          <div style={{position:'sticky',top:'100px'}}>
+        <div className="faq-grid">
+          <div className="faq-sticky" style={{position:'sticky',top:'100px'}}>
             <span style={{display:'flex',alignItems:'center',gap:'0.6rem',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#F07987',marginBottom:'1.75rem'}}>
               <span style={{width:'24px',height:'1px',background:'#F07987'}}></span>{t('faq.badge')}
             </span>
