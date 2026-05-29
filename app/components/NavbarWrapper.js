@@ -11,6 +11,7 @@ const IDIOMAS = [
   { code: 'pt', flag: '🇵🇹', label: 'Português' },
   { code: 'de', flag: '🇩🇪', label: 'Deutsch' },
   { code: 'nl', flag: '🇳🇱', label: 'Nederlands' },
+  { code: 'it', flag: '🇮🇹', label: 'Italiano' },
 ]
 
 export default function NavbarWrapper({ locale }) {
@@ -53,7 +54,7 @@ export default function NavbarWrapper({ locale }) {
 
   function cambiarIdioma(code) {
     setIdiomaOpen(false)
-    const localesPrefix = ['fr', 'en', 'pt', 'de', 'nl']
+    const localesPrefix = ['fr', 'en', 'pt', 'de', 'nl', 'it']
     let pathSinLocale = pathname
     for (const loc of localesPrefix) {
       if (pathname === `/${loc}`) { pathSinLocale = '/'; break }

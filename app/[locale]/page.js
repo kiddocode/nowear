@@ -496,6 +496,7 @@ export default function Home() {
               {code:'pt',flag:'🇵🇹',label:'Português'},
               {code:'de',flag:'🇩🇪',label:'Deutsch'},
               {code:'nl',flag:'🇳🇱',label:'Nederlands'},
+              {code:'it',flag:'🇮🇹',label:'Italiano'},
             ].map((idioma,j) => (
               <button key={j} onClick={() => {
                 const localesPrefix = ['fr','en','pt','de','nl']

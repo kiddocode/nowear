@@ -31,6 +31,11 @@ const META = {
     description: 'Die Plattform damit Hochzeitsgäste nicht dasselbe Kleid tragen. Registrieren Sie Ihr Outfit, erkennen Sie Überschneidungen und genießen Sie entspannt. Ab 9€.',
     keywords: 'nowear, no wear, nowear app, Hochzeitsgäste gleiches Kleid, gleiches Outfit Hochzeit vermeiden, zwei Gäste gleiches Kleid Hochzeit, Looks koordinieren Hochzeit, Hochzeit App Gäste, Plattform Hochzeit Outfits, Look registrieren Hochzeit, Hochzeit Outfit Konflikt, Kleid Hochzeitsgast, Hochzeit Look Koordinierung, Event Outfit Koordinierung, Dresscode Hochzeit App, Look Reservierung Hochzeit, Kommunion Outfit Koordinierung, Taufe Outfit Koordinierung',
   },
+  it: {
+    title: 'NOWEAR — Nessuna ospite arriva vestita uguale',
+    description: 'La piattaforma perché nessuna ospite di un matrimonio, comunione o battesimo indossi lo stesso vestito. Registra il tuo look, rileva i conflitti. Da 9€.',
+    keywords: 'nowear, ospiti matrimonio stesso vestito, evitare stesso outfit matrimonio, coordinare look matrimonio, app ospiti matrimonio, look sposa ospite, vestito ospite matrimonio italia',
+  },
   nl: {
     title: 'NOWEAR — Zodat niemand hetzelfde draagt op jouw event',
     description: 'Het platform zodat bruiloftsgasten niet dezelfde jurk dragen. Registreer je look, detecteer conflicten en geniet zorgeloos. Vanaf €9 per evenement.',
@@ -65,6 +70,7 @@ export default async function LocaleLayout({children, params}) {
         <link rel="alternate" hrefLang="pt" href="https://nowear.es/pt"/>
         <link rel="alternate" hrefLang="de" href="https://nowear.es/de"/>
         <link rel="alternate" hrefLang="nl" href="https://nowear.es/nl"/>
+        <link rel="alternate" hrefLang="it" href="https://nowear.es/it"/>
         <link rel="alternate" hrefLang="x-default" href="https://nowear.es"/>
 
         {/* OPEN GRAPH */}
@@ -106,7 +112,7 @@ export default async function LocaleLayout({children, params}) {
             { "@type": "Offer", "price": "19", "priceCurrency": "EUR", "name": "Plan Estándar" },
             { "@type": "Offer", "price": "29", "priceCurrency": "EUR", "name": "Plan Premium" },
           ],
-          "inLanguage": ["es","fr","en","pt","de","nl"],
+          "inLanguage": ["es","fr","en","pt","de","nl","it"],
           "sameAs": ["https://www.instagram.com/nowearapp"],
         })}}/>
 
