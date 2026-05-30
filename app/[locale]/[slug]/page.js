@@ -692,48 +692,48 @@ export default function InvitadaPage() {
                     onChange={e => { setModelo1(e.target.value); setPedirReferencia(false) }}
                     style={inputStyle}
                   />
-                  <p style={notaStyle}>Escribe el nombre exacto del modelo tal como aparece en la tienda. Ej: "Vestido Zara lencero tirantes" o "Vestido LEJA".</p>
+                  <p style={notaStyle}>{t('modeloNota')}</p>
                 </div>
 
                 {/* REFERENCIA */}
                 <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>
-                    Referencia de la prenda
+                    {t('referenciaCodigoLabel')}
                     {pedirReferencia
-                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* requerida</span>
-                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span>
+                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaRequerida')}</span>
+                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
                     }
                   </label>
                   <input
                     type="text"
-                    placeholder="Ej: 123456789"
+                    placeholder={t('referenciaCodigoPlaceholder')}
                     value={referencia1}
                     onChange={e => setReferencia1(e.target.value)}
                     style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}
                   />
-                  <p style={notaStyle}>El código de referencia de la prenda. Lo encuentras en la web de la tienda o en la etiqueta del producto.</p>
+                  <p style={notaStyle}>{t('referenciaCodigoNota')}</p>
                 </div>
 
                 {/* LINK */}
                 <div>
                   <label style={labelStyle}>
-                    Link de la tienda
+                    {t('referenciaLinkLabel')}
                     {pedirReferencia
-                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* requerido</span>
-                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span>
+                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaLinkRequerido')}</span>
+                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
                     }
                   </label>
                   <input
                     type="url"
-                    placeholder="https://www.zara.com/es/es/vestido-..."
+                    placeholder={t('referenciaLinkPlaceholder')}
                     value={link1}
                     onChange={e => setLink1(e.target.value)}
                     style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}
                   />
-                  <p style={notaStyle}>El enlace directo al producto en la web de la tienda.</p>
+                  <p style={notaStyle}>{t('referenciaLinkNota')}</p>
                   {pedirReferencia && (
                     <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.5rem',lineHeight:1.5}}>
-                      {t('referenciaInfo') || 'Añade la referencia o el link para confirmar si es exactamente el mismo producto.'}
+                      {t('referenciaInfo') || t('errorPedirReferencia')}
                     </p>
                   )}
                 </div>
@@ -760,17 +760,17 @@ export default function InvitadaPage() {
                 <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>{t('modelo')}</label>
                   <input type="text" placeholder={t('modeloPlaceholder')} value={modelo2} onChange={e => setModelo2(e.target.value)} style={inputStyle}/>
-                  <p style={notaStyle}>Escribe el nombre exacto del modelo tal como aparece en la tienda.</p>
+                  <p style={notaStyle}>{t('modeloNota')}</p>
                 </div>
                 <div style={{marginBottom:'0.75rem'}}>
-                  <label style={labelStyle}>Referencia de la prenda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span></label>
-                  <input type="text" placeholder="Ej: 123456789" value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
-                  <p style={notaStyle}>El código de referencia de la prenda.</p>
+                  <label style={labelStyle}>{t('referenciaCodigoLabel')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span></label>
+                  <input type="text" placeholder={t('referenciaCodigoPlaceholder')} value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
+                  <p style={notaStyle}>{t('referenciaCodigoNota')}</p>
                 </div>
                 <div>
-                  <label style={labelStyle}>Link de la tienda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span></label>
-                  <input type="url" placeholder="https://www.mango.com/es/..." value={link2} onChange={e => setLink2(e.target.value)} style={inputStyle}/>
-                  <p style={notaStyle}>El enlace directo al producto en la web de la tienda.</p>
+                  <label style={labelStyle}>{t('referenciaLinkLabel')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span></label>
+                  <input type="url" placeholder={t('referenciaLinkPlaceholder')} value={link2} onChange={e => setLink2(e.target.value)} style={inputStyle}/>
+                  <p style={notaStyle}>{t('referenciaLinkNota')}</p>
                 </div>
               </div>
 
