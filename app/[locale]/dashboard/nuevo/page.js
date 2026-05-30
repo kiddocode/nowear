@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
@@ -62,13 +62,22 @@ export default function NuevoEvento() {
   const [lookBloqueadoModelo2, setLookBloqueadoModelo2] = useState('')
   const [lookBloqueadoReferencia2, setLookBloqueadoReferencia2] = useState('')
 
+  // FIX: teclado móvil tapa inputs
+  useEffect(() => {
+    const handler = (e) => {
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 350)
+    }
+    document.addEventListener('focusin', handler)
+    return () => document.removeEventListener('focusin', handler)
+  }, [])
+
   const planesData = tp.raw('planes')
 
   const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
   const labelStyle = {display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}
   const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
-
-  const tiposData = t.raw ? (typeof t.raw === 'function' ? [] : []) : []
 
   function validarFechaPlan(fecha, planId) {
     if (!fecha || planId === 'premium') return { ok: true }
@@ -153,14 +162,14 @@ export default function NuevoEvento() {
           .nuevo-main { grid-template-columns: 1fr; min-height: unset; }
           .nuevo-img { display: none; }
           .nuevo-img-mobile { display: block; }
-          .nuevo-form { padding: 2rem; border-right: none; padding-bottom: 5rem; }
+          .nuevo-form { padding: 2rem; border-right: none; padding-bottom: 8rem; }
           .nuevo-planes-grid { grid-template-columns: repeat(2,1fr); margin: 1.5rem; }
           .nuevo-planes-header { padding: 1.5rem; }
           .nuevo-planes-footer { padding: 1rem 1.5rem 1.5rem; flex-direction: column; align-items: stretch; }
           .nuevo-planes-modal { border-radius: 12px; max-height: 95vh; }
         }
         @media (max-width: 768px) {
-          .nuevo-form { padding: 1.5rem; padding-bottom: 5rem; }
+          .nuevo-form { padding: 1.5rem; padding-bottom: 8rem; }
           .nuevo-fecha-grid { grid-template-columns: 1fr; }
           .nuevo-prenda-grid { grid-template-columns: 1fr; }
           .nuevo-planes-grid { grid-template-columns: 1fr; margin: 1rem; }
