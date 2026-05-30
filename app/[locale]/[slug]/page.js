@@ -105,12 +105,25 @@ export default function InvitadaPage() {
   const [modelo1, setModelo1] = useState('')
   const [tipo1, setTipo1] = useState('')
   const [referencia1, setReferencia1] = useState('')
+  const [link1, setLink1] = useState('')
   const [marca2, setMarca2] = useState('')
   const [modelo2, setModelo2] = useState('')
   const [tipo2, setTipo2] = useState('')
   const [referencia2, setReferencia2] = useState('')
+  const [link2, setLink2] = useState('')
   const [pedirReferencia, setPedirReferencia] = useState(false)
   const [modal, setModal] = useState(null)
+
+  // Fix teclado móvil
+  useEffect(() => {
+    const handler = (e) => {
+      setTimeout(() => {
+        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 350)
+    }
+    document.addEventListener('focusin', handler)
+    return () => document.removeEventListener('focusin', handler)
+  }, [])
 
   useEffect(() => {
     async function cargar() {
@@ -133,8 +146,8 @@ export default function InvitadaPage() {
 
   function resetForm() {
     setNombre(''); setColores([])
-    setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1('')
-    setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2('')
+    setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setLink1('')
+    setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setLink2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
     setLookEditando(null); setError(''); setPedirReferencia(false)
     setModal(null)
@@ -179,16 +192,23 @@ export default function InvitadaPage() {
     setNombre(look.nombre_invitada); setEmail(look.email_invitada)
     setColores([look.color_hex, look.color_hex_2].filter(Boolean))
     setMarca1(look.marca || ''); setModelo1(look.modelo || '')
-    setTipo1(look.tipo || ''); setReferencia1(look.referencia || '')
+    setTipo1(look.tipo || ''); setReferencia1(look.referencia || ''); setLink1(look.link || '')
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
-    setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || '')
+    setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || ''); setLink2(look.link2 || '')
     setEstado(look.estado || 'confirmado')
     setPedirReferencia(false); setModal(null)
     setModoGestion(false)
   }
 
+  // La detección de conflicto usa referencia O link para desambiguar
+  function tieneIdentificador(val) {
+    return val && val.trim().length > 0
+  }
+
   async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
+
+    const identificador1 = referencia1.trim() || link1.trim()
 
     // 1. LOOK BLOQUEADO DE LA ORGANIZADORA
     if (evento.look_bloqueado_marca1) {
@@ -197,11 +217,12 @@ export default function InvitadaPage() {
       const tipoCoincide = tipo1.trim().toLowerCase() === (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
       const modeloCoincide = normalizar(modelo1) === normalizar(evento.look_bloqueado_modelo1)
       if (colorCoincide && marcaCoincide && tipoCoincide && modeloCoincide) {
-        if (evento.look_bloqueado_referencia1 && referencia1.trim()) {
-          if (referencia1.trim().toLowerCase() === evento.look_bloqueado_referencia1.trim().toLowerCase()) {
+        const refOrg = evento.look_bloqueado_referencia1
+        if (refOrg && tieneIdentificador(identificador1)) {
+          if (identificador1.toLowerCase() === refOrg.trim().toLowerCase()) {
             return { tipo: 'bloqueado_organizadora' }
           }
-        } else if (!evento.look_bloqueado_referencia1) {
+        } else if (!refOrg) {
           return { tipo: 'bloqueado_organizadora' }
         } else {
           return { tipo: 'pedir_referencia_organizadora' }
@@ -210,7 +231,7 @@ export default function InvitadaPage() {
     }
 
     // 2. CONFLICTO CON OTRAS INVITADAS
-    let query = supabase.from('looks').select('id, nombre_invitada, referencia')
+    let query = supabase.from('looks').select('id, nombre_invitada, referencia, link')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
       .eq('marca_normalizada', normalizar(marca1))
@@ -220,16 +241,17 @@ export default function InvitadaPage() {
     const { data: candidatos } = await query
 
     if (candidatos && candidatos.length > 0) {
-      if (!referencia1.trim()) return { tipo: 'pedir_referencia', candidatos }
-      const conflictoReal = candidatos.find(c =>
-        c.referencia && c.referencia.trim().toLowerCase() === referencia1.trim().toLowerCase()
-      )
+      if (!tieneIdentificador(identificador1)) return { tipo: 'pedir_referencia', candidatos }
+      const conflictoReal = candidatos.find(c => {
+        const idCandidato = (c.referencia || '').trim() || (c.link || '').trim()
+        return idCandidato && idCandidato.toLowerCase() === identificador1.toLowerCase()
+      })
       if (conflictoReal) return { tipo: 'conflicto_real', candidato: conflictoReal }
-      const sinReferencia = candidatos.filter(c => !c.referencia || !c.referencia.trim())
-      if (sinReferencia.length > 0) return { tipo: 'pedir_referencia', candidatos: sinReferencia }
+      const sinIdentificador = candidatos.filter(c => !tieneIdentificador((c.referencia || '') + (c.link || '')))
+      if (sinIdentificador.length > 0) return { tipo: 'pedir_referencia', candidatos: sinIdentificador }
     }
 
-    // 3. MISMO MODELO DISTINTO COLOR (bloqueado)
+    // 3. MISMO MODELO DISTINTO COLOR
     let queryMismoModelo = supabase.from('looks').select('id, nombre_invitada, color_hex')
       .eq('evento_id', evento.id)
       .eq('marca_normalizada', normalizar(marca1))
@@ -260,10 +282,14 @@ export default function InvitadaPage() {
     const { error: insertError } = await supabase.from('looks').insert({
       evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
+      referencia: referencia1 || null,
+      link: link1 || null,
       marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, estado, foto_url
+      referencia2: referencia2 || null,
+      link2: link2 || null,
+      estado, foto_url
     })
     if (insertError) {
       setEnviando(false)
@@ -280,14 +306,24 @@ export default function InvitadaPage() {
     setEnviando(true)
     await supabase.from('looks').update({
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
+      referencia: referencia1 || null,
+      link: link1 || null,
       marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, estado
+      referencia2: referencia2 || null,
+      link2: link2 || null,
+      estado
     }).eq('id', lookEditando.id)
     const emailGuardado = email.toLowerCase().trim()
     const nombreGuardado = nombre
-    const lookActualizado = { ...lookEditando, nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null, marca: marca1, modelo: modelo1, tipo: tipo1, referencia: referencia1 || null, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, referencia2: referencia2 || null, estado }
+    const lookActualizado = {
+      ...lookEditando, nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
+      referencia: referencia1 || null, link: link1 || null,
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, link2: link2 || null, estado
+    }
     setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
     setEmailGestion(emailGuardado); setEnviando(false); resetForm(); setModoGestion(true)
     enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
@@ -429,6 +465,7 @@ export default function InvitadaPage() {
   const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.88rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
   const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.88rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
   const labelStyle = {display:'block',fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',marginBottom:'0.55rem'}
+  const notaStyle = {fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.35rem',lineHeight:1.5}
 
   const isPremium = esPremiumOSuperior(evento)
   const fotoPanel = isPremium && evento.foto_evento_url ? evento.foto_evento_url : FOTO_FIJA
@@ -441,7 +478,7 @@ export default function InvitadaPage() {
         .invitada-layout { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 68px); }
         .invitada-panel { position: sticky; top: 68px; height: calc(100vh - 68px); overflow: hidden; }
         .invitada-panel-mobile { display: none; }
-        .invitada-form-col { padding: 3rem; background: #FFFFFF; overflow-y: auto; }
+        .invitada-form-col { padding: 3rem; background: #FFFFFF; overflow-y: auto; padding-bottom: 5rem; }
         .prenda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
         .estado-grid { display: flex; gap: 1rem; }
         .gestion-row { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; }
@@ -449,13 +486,13 @@ export default function InvitadaPage() {
           .invitada-layout { grid-template-columns: 1fr; }
           .invitada-panel { display: none; }
           .invitada-panel-mobile { display: block; position: relative; height: 220px; overflow: hidden; }
-          .invitada-form-col { padding: 2rem; }
+          .invitada-form-col { padding: 2rem; padding-bottom: 6rem; }
         }
         @media (max-width: 768px) {
           .invitada-layout { grid-template-columns: 1fr; }
           .invitada-panel { display: none; }
           .invitada-panel-mobile { display: block; height: 180px; }
-          .invitada-form-col { padding: 1.5rem; }
+          .invitada-form-col { padding: 1.5rem; padding-bottom: 6rem; }
           .prenda-grid { grid-template-columns: 1fr; }
           .estado-grid { flex-direction: column; }
           .gestion-row { flex-direction: column; }
@@ -603,7 +640,7 @@ export default function InvitadaPage() {
               <div style={{marginBottom:'1.25rem'}}>
                 <label style={labelStyle}>{t('tuEmail')} <span style={{color:'#F07987'}}>*</span></label>
                 <input type="email" placeholder={t('emailPlaceholder')} value={email} onChange={e => setEmail(e.target.value)} style={{...inputStyle,background:lookEditando?'#F7F7F5':'#FFFFFF'}} disabled={!!lookEditando}/>
-                {!lookEditando && <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem'}}>{t('emailInfo')}</p>}
+                {!lookEditando && <p style={notaStyle}>{t('emailInfo')}</p>}
               </div>
 
               <div style={{marginBottom:'1.25rem'}}>
@@ -628,6 +665,7 @@ export default function InvitadaPage() {
                 )}
               </div>
 
+              {/* PRENDA 1 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
                   {t('prenda1')} <span style={{color:'#F07987'}}>*</span>
@@ -647,31 +685,61 @@ export default function InvitadaPage() {
                 </div>
                 <div style={{marginBottom:'1rem'}}>
                   <label style={labelStyle}>{t('modelo')} <span style={{color:'#F07987'}}>*</span></label>
-                  <input type="text" placeholder={t('modeloPlaceholder')} value={modelo1} onChange={e => { setModelo1(e.target.value); setPedirReferencia(false) }} style={inputStyle}/>
+                  <input
+                    type="text"
+                    placeholder={t('modeloPlaceholder')}
+                    value={modelo1}
+                    onChange={e => { setModelo1(e.target.value); setPedirReferencia(false) }}
+                    style={inputStyle}
+                  />
+                  <p style={notaStyle}>Escribe el nombre exacto del modelo tal como aparece en la tienda. Ej: "Vestido Zara lencero tirantes" o "Vestido LEJA".</p>
                 </div>
-                <div>
+
+                {/* REFERENCIA */}
+                <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>
-                    {t('referencia')}
+                    Referencia de la prenda
                     {pedirReferencia
-                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaObligatoria') || '* requerida para confirmar'}</span>
-                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
+                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* requerida</span>
+                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span>
                     }
                   </label>
                   <input
                     type="text"
-                    placeholder={pedirReferencia ? (t('referenciaPlaceholderObligatoria') || 'Añade el link o referencia del producto') : t('referenciaPlaceholder')}
+                    placeholder="Ej: 123456789"
                     value={referencia1}
                     onChange={e => setReferencia1(e.target.value)}
-                    style={{...inputStyle, borderColor: pedirReferencia ? '#F07987' : '#E0E0DC'}}
+                    style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}
                   />
+                  <p style={notaStyle}>El código de referencia de la prenda. Lo encuentras en la web de la tienda o en la etiqueta del producto.</p>
+                </div>
+
+                {/* LINK */}
+                <div>
+                  <label style={labelStyle}>
+                    Link de la tienda
+                    {pedirReferencia
+                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* requerido</span>
+                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span>
+                    }
+                  </label>
+                  <input
+                    type="url"
+                    placeholder="https://www.zara.com/es/es/vestido-..."
+                    value={link1}
+                    onChange={e => setLink1(e.target.value)}
+                    style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}
+                  />
+                  <p style={notaStyle}>El enlace directo al producto en la web de la tienda.</p>
                   {pedirReferencia && (
-                    <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.4rem',lineHeight:1.5}}>
-                      {t('referenciaInfo') || 'Añade la referencia o link para confirmar si es exactamente el mismo producto.'}
+                    <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.5rem',lineHeight:1.5}}>
+                      {t('referenciaInfo') || 'Añade la referencia o el link para confirmar si es exactamente el mismo producto.'}
                     </p>
                   )}
                 </div>
               </div>
 
+              {/* PRENDA 2 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
                   {t('prenda2')}
@@ -689,13 +757,20 @@ export default function InvitadaPage() {
                     </select>
                   </div>
                 </div>
-                <div style={{marginBottom:'1rem'}}>
+                <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>{t('modelo')}</label>
                   <input type="text" placeholder={t('modeloPlaceholder')} value={modelo2} onChange={e => setModelo2(e.target.value)} style={inputStyle}/>
+                  <p style={notaStyle}>Escribe el nombre exacto del modelo tal como aparece en la tienda.</p>
+                </div>
+                <div style={{marginBottom:'0.75rem'}}>
+                  <label style={labelStyle}>Referencia de la prenda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span></label>
+                  <input type="text" placeholder="Ej: 123456789" value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
+                  <p style={notaStyle}>El código de referencia de la prenda.</p>
                 </div>
                 <div>
-                  <label style={labelStyle}>{t('referencia')}</label>
-                  <input type="text" placeholder={t('referenciaPlaceholder')} value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
+                  <label style={labelStyle}>Link de la tienda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional</span></label>
+                  <input type="url" placeholder="https://www.mango.com/es/..." value={link2} onChange={e => setLink2(e.target.value)} style={inputStyle}/>
+                  <p style={notaStyle}>El enlace directo al producto en la web de la tienda.</p>
                 </div>
               </div>
 
