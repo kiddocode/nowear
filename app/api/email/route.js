@@ -288,6 +288,23 @@ export async function POST(req) {
       }
     }
 
+    // ─── CUENTA PENDIENTE ELIMINACION ────────────────────────────
+    if (tipo === 'cuenta_pendiente_eliminacion') {
+      const { cancelUrl, fechaEliminacion } = body
+      await resend.emails.send({
+        from: 'NOWEAR <support@nowear.es>',
+        to: emailInvitada,
+        subject: `Tu cuenta será eliminada el ${fechaEliminacion}`,
+        html: emailBase(`
+          ${h1('Solicitud de eliminación recibida')}
+          ${subtitulo(`Cuenta: <strong>${emailInvitada}</strong>`)}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu solicitud. Tu cuenta y todos tus datos se eliminarán definitivamente el <strong>${fechaEliminacion}</strong>. Si cambias de opinión, tienes 30 días para cancelarlo.`, 'warn')}
+          ${btn('Cancelar eliminación', cancelUrl)}
+          ${parrafo('Si no solicitaste esto, cancela el proceso inmediatamente desde el enlace de arriba.')}
+        `)
+      })
+    }
+
     return Response.json({ ok: true })
   } catch (error) {
     return Response.json({ ok: false, error: error.message }, { status: 500 })
