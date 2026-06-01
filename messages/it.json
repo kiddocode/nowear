@@ -468,7 +468,16 @@
     "eliminarCuenta": "Elimina il mio account",
     "eliminando": "Eliminazione...",
     "confirmar1": "Sei sicura di voler eliminare il tuo account? Questa azione è irreversibile.",
-    "confirmar2": "Ultima conferma: eliminare l'account definitivamente?"
+    "confirmar2": "Ultima conferma: eliminare l'account definitivamente?",
+    "cuentaPendienteEliminacion": "Account in attesa di eliminazione",
+    "cuentaPendienteDesc": "Il tuo account verrà eliminato definitivamente il {fecha}. Se cambi idea, annulla il processo ora.",
+    "cancelarEliminacion": "Annulla eliminazione",
+    "cancelando": "Annullamento...",
+    "eliminacionCancelada": "Eliminazione annullata. Il tuo account è ancora attivo.",
+    "yasolicitada": "Hai già richiesto l'eliminazione del tuo account. Verrà eliminato il {fecha}.",
+    "confirmarEmail": "Conferma la tua email per continuare",
+    "emailNoCoincide": "L'email non corrisponde al tuo account.",
+    "procesando": "Elaborazione..."
   },
   "facturacion": {
     "titulo": "Fatturazione",

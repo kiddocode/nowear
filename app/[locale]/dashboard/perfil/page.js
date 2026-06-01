@@ -48,7 +48,7 @@ export default function Perfil() {
   async function handleSolicitarEliminacion() {
     setErrorEliminar('')
     if (emailConfirm.toLowerCase().trim() !== user.email.toLowerCase().trim()) {
-      setErrorEliminar('El email no coincide con tu cuenta.'); return
+      setErrorEliminar(t('emailNoCoincide')); return
     }
     setEliminando(true)
     const fechaEliminacion = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
@@ -102,7 +102,7 @@ export default function Perfil() {
     await supabase.from('eventos').update({ activo: true }).eq('organizadora_id', user.id)
     setProfile(prev => ({ ...prev, pending_deletion_at: null }))
     setCancelando(false)
-    setMensaje('Eliminación cancelada. Tu cuenta sigue activa.')
+    setMensaje(t('eliminacionCancelada'))
     setTimeout(() => setMensaje(''), 4000)
   }
 
@@ -138,7 +138,7 @@ export default function Perfil() {
               Tu cuenta y todos tus eventos se eliminarán definitivamente el <strong>{new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'})}</strong>. Tienes 30 días para cancelarlo.
             </p>
             <div style={{marginBottom:'1.25rem'}}>
-              <label style={labelStyle}>Confirma tu email para continuar</label>
+              <label style={labelStyle}>{t('confirmarEmail')}</label>
               <input type="email" placeholder={user?.email} value={emailConfirm} onChange={e => setEmailConfirm(e.target.value)}
                 style={{...inputStyle, borderColor: errorEliminar ? '#F07987' : '#E0E0DC'}}/>
               {errorEliminar && <p style={{fontSize:'0.72rem',color:'#F07987',marginTop:'0.35rem'}}>{errorEliminar}</p>}
@@ -150,7 +150,7 @@ export default function Perfil() {
               </button>
               <button onClick={handleSolicitarEliminacion} disabled={eliminando}
                 style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'#F07987',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:eliminando?0.6:1}}>
-                {eliminando ? 'Procesando...' : 'Eliminar mi cuenta'}
+                {eliminando ? t('procesando') : 'Eliminar mi cuenta'}
               </button>
             </div>
           </div>
@@ -167,13 +167,13 @@ export default function Perfil() {
 
           {pendienteEliminacion && (
             <div style={{marginBottom:'2rem',padding:'1.25rem',background:'#FFF0F1',border:'1px solid #F07987',borderRadius:'8px'}}>
-              <p style={{fontSize:'0.82rem',fontWeight:600,color:'#F07987',marginBottom:'0.35rem'}}>Cuenta pendiente de eliminación</p>
+              <p style={{fontSize:'0.82rem',fontWeight:600,color:'#F07987',marginBottom:'0.35rem'}}>{t('cuentaPendienteEliminacion')}</p>
               <p style={{fontSize:'0.75rem',fontWeight:300,color:'#555552',lineHeight:1.7,marginBottom:'1rem'}}>
-                Tu cuenta se eliminará definitivamente el <strong>{fechaEliminacionStr}</strong>. Si cambias de opinión, cancela el proceso ahora.
+                {t('cuentaPendienteDesc').replace('{fecha}', fechaEliminacionStr)}
               </p>
               <button onClick={handleCancelarEliminacion} disabled={cancelando}
                 style={{padding:'0.65rem 1.5rem',fontSize:'0.75rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:cancelando?0.6:1}}>
-                {cancelando ? 'Cancelando...' : 'Cancelar eliminación'}
+                {cancelando ? t('cancelando') : t('cancelarEliminacion')}
               </button>
             </div>
           )}
@@ -233,7 +233,7 @@ export default function Perfil() {
               </button>
             ) : (
               <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>
-                Ya has solicitado la eliminación de tu cuenta. Se eliminará el <strong>{fechaEliminacionStr}</strong>.
+                {t('yasolicitada').replace('{fecha}', fechaEliminacionStr)}
               </p>
             )}
           </div>

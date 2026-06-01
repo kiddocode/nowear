@@ -468,7 +468,16 @@
     "eliminarCuenta": "Mein Konto löschen",
     "eliminando": "Löschen...",
     "confirmar1": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten? Diese Aktion ist unwiderruflich.",
-    "confirmar2": "Letzte Bestätigung: Konto dauerhaft löschen?"
+    "confirmar2": "Letzte Bestätigung: Konto dauerhaft löschen?",
+    "cuentaPendienteEliminacion": "Konto zur Löschung vorgemerkt",
+    "cuentaPendienteDesc": "Dein Konto wird am {fecha} endgültig gelöscht. Wenn du es dir anders überlegst, brich den Vorgang jetzt ab.",
+    "cancelarEliminacion": "Löschung abbrechen",
+    "cancelando": "Wird abgebrochen...",
+    "eliminacionCancelada": "Löschung abgebrochen. Dein Konto ist weiterhin aktiv.",
+    "yasolicitada": "Du hast bereits die Löschung deines Kontos beantragt. Es wird am {fecha} gelöscht.",
+    "confirmarEmail": "Bestätige deine E-Mail um fortzufahren",
+    "emailNoCoincide": "Die E-Mail stimmt nicht mit deinem Konto überein.",
+    "procesando": "Wird verarbeitet..."
   },
   "facturacion": {
     "titulo": "Abrechnung",

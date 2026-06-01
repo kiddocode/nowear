@@ -468,7 +468,16 @@
     "eliminarCuenta": "Delete my account",
     "eliminando": "Deleting...",
     "confirmar1": "Are you sure you want to delete your account? This action is irreversible.",
-    "confirmar2": "Final confirmation: delete account permanently?"
+    "confirmar2": "Final confirmation: delete account permanently?",
+    "cuentaPendienteEliminacion": "Account pending deletion",
+    "cuentaPendienteDesc": "Your account will be permanently deleted on {fecha}. If you change your mind, cancel the process now.",
+    "cancelarEliminacion": "Cancel deletion",
+    "cancelando": "Cancelling...",
+    "eliminacionCancelada": "Deletion cancelled. Your account is still active.",
+    "yasolicitada": "You have already requested account deletion. It will be deleted on {fecha}.",
+    "confirmarEmail": "Confirm your email to continue",
+    "emailNoCoincide": "The email does not match your account.",
+    "procesando": "Processing..."
   },
   "facturacion": {
     "titulo": "Billing",

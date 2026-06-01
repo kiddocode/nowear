@@ -468,7 +468,16 @@
     "eliminarCuenta": "Mijn account verwijderen",
     "eliminando": "Verwijderen...",
     "confirmar1": "Weet u zeker dat u uw account wilt verwijderen? Deze actie is onomkeerbaar.",
-    "confirmar2": "Laatste bevestiging: account permanent verwijderen?"
+    "confirmar2": "Laatste bevestiging: account permanent verwijderen?",
+    "cuentaPendienteEliminacion": "Account wacht op verwijdering",
+    "cuentaPendienteDesc": "Je account wordt op {fecha} definitief verwijderd. Als je van gedachten verandert, annuleer dan het proces nu.",
+    "cancelarEliminacion": "Verwijdering annuleren",
+    "cancelando": "Annuleren...",
+    "eliminacionCancelada": "Verwijdering geannuleerd. Je account is nog steeds actief.",
+    "yasolicitada": "Je hebt al om verwijdering van je account verzocht. Het wordt verwijderd op {fecha}.",
+    "confirmarEmail": "Bevestig je e-mail om door te gaan",
+    "emailNoCoincide": "Het e-mailadres komt niet overeen met je account.",
+    "procesando": "Verwerken..."
   },
   "facturacion": {
     "titulo": "Facturering",
