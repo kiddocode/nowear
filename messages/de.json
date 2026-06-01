@@ -365,6 +365,8 @@
       "Bluse",
       "Anzug",
       "Set",
+      "Jumpsuit",
+      "Overall",
       "Sonstiges"
     ],
     "colores": {
@@ -560,7 +562,11 @@
     "comunion": "Kommunion",
     "pedida": "Verlobung",
     "cumpleanos": "Geburtstag",
-    "cenaEmpresa": "Firmenessen",
+    "graduacion": "Abschlussfeier",
+    "babyShower": "Baby Shower",
+    "graduacion": "Abschlussfeier",
+    "babyShower": "Baby Shower",
+    "cenaEmpresa": "Dinner mit Dresscode",
     "otro": "Sonstiges",
     "nombreEvento": "Event-Name",
     "nombrePlaceholder": "Z.B.: Hochzeit von Anna & Karl",

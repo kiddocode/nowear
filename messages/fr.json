@@ -365,6 +365,8 @@
       "Chemisier",
       "Costume",
       "Ensemble",
+      "Jumpsuit",
+      "Combinaison",
       "Autre"
     ],
     "colores": {
@@ -560,7 +562,11 @@
     "comunion": "Communion",
     "pedida": "Demande en mariage",
     "cumpleanos": "Anniversaire",
-    "cenaEmpresa": "Dîner d'entreprise",
+    "graduacion": "Remise de diplômes",
+    "babyShower": "Baby Shower",
+    "graduacion": "Remise de diplômes",
+    "babyShower": "Baby Shower",
+    "cenaEmpresa": "Dîner avec dress code",
     "otro": "Autre",
     "nombreEvento": "Nom de l'événement",
     "nombrePlaceholder": "Ex : Mariage de Marie & Jean",

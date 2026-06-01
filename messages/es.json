@@ -365,6 +365,8 @@
       "Blusa",
       "Traje",
       "Conjunto",
+      "Mono",
+      "Jumpsuit",
       "Otro"
     ],
     "colores": {
@@ -560,7 +562,9 @@
     "comunion": "Comunión",
     "pedida": "Pedida de mano",
     "cumpleanos": "Cumpleaños",
-    "cenaEmpresa": "Cena de empresa",
+    "graduacion": "Graduación",
+    "babyShower": "Baby Shower",
+    "cenaEmpresa": "Cena con dress code",
     "otro": "Otro",
     "nombreEvento": "Nombre del evento",
     "nombrePlaceholder": "Ej: Boda de Ana & Carlos",

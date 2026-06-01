@@ -167,7 +167,7 @@ export default function NuevoEvento() {
     if (data.url) { window.location.href = data.url } else { setError(t('errorPago')); setShowPlanes(false) }
   }
 
-  const TIPOS_PRENDA = ['Vestido corto','Vestido midi','Vestido largo','Traje','Conjunto','Falda','Pantalón','Top','Blusa','Mono','Otra']
+  const TIPOS_PRENDA = ['Vestido corto','Vestido midi','Vestido largo','Traje','Conjunto','Falda','Pantalón','Top','Blusa','Mono','Jumpsuit','Otro']
 
   return (
     <>
@@ -232,7 +232,7 @@ export default function NuevoEvento() {
                 <option value="">{t('seleccionaTipo')}</option>
                 <option>{t('boda')}</option><option>{t('bautizo')}</option><option>{t('comunion')}</option>
                 <option>{t('pedida')}</option><option>{t('cumpleanos')}</option>
-                <option>{t('cenaEmpresa')}</option><option>{t('otro')}</option>
+                <option>{t('graduacion')}</option><option>{t('babyShower')}</option><option>{t('cenaEmpresa')}</option><option>{t('otro')}</option>
               </select>
             </div>
 

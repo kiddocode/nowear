@@ -365,6 +365,8 @@
       "Blouse",
       "Suit",
       "Set",
+      "Jumpsuit",
+      "Mono",
       "Other"
     ],
     "colores": {
@@ -560,7 +562,11 @@
     "comunion": "Communion",
     "pedida": "Engagement",
     "cumpleanos": "Birthday",
-    "cenaEmpresa": "Company dinner",
+    "graduacion": "Graduation",
+    "babyShower": "Baby Shower",
+    "graduacion": "Graduation",
+    "babyShower": "Baby Shower",
+    "cenaEmpresa": "Dinner with dress code",
     "otro": "Other",
     "nombreEvento": "Event name",
     "nombrePlaceholder": "E.g.: Anna & Charles Wedding",

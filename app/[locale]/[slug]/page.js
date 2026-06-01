@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 
 const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
-const PRENDAS_COMPLETAS = ['Vestido corto', 'Vestido midi', 'Vestido largo']
+const PRENDAS_COMPLETAS = ['Vestido corto', 'Vestido midi', 'Vestido largo', 'Mono', 'Jumpsuit']
 
 function normalizarStrict(texto) {
   if (!texto) return ''

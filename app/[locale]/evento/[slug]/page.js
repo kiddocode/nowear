@@ -44,7 +44,7 @@ const COLORES_LISTA = [
   {hex:'#FFFFFF',nombre:'Blanco'},{hex:'#C8A86B',nombre:'Dorado'},{hex:'#C0C0C0',nombre:'Plateado'},
   {hex:'#E0E0DC',nombre:'Otro'},
 ]
-const TIPOS_PRENDA = ['Vestido corto','Vestido midi','Vestido largo','Traje','Conjunto','Falda','Pantalón','Top','Blusa','Mono','Otra']
+const TIPOS_PRENDA = ['Vestido corto','Vestido midi','Vestido largo','Traje','Conjunto','Falda','Pantalón','Top','Blusa','Mono','Jumpsuit','Otro']
 
 export default function EventoDetalle() {
   const { slug } = useParams()

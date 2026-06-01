@@ -365,6 +365,8 @@
       "Blouse",
       "Pak",
       "Set",
+      "Jumpsuit",
+      "Overall",
       "Overig"
     ],
     "colores": {
@@ -560,7 +562,11 @@
     "comunion": "Communie",
     "pedida": "Verloving",
     "cumpleanos": "Verjaardag",
-    "cenaEmpresa": "Bedrijfsdiner",
+    "graduacion": "Afstuderen",
+    "babyShower": "Baby Shower",
+    "graduacion": "Afstuderen",
+    "babyShower": "Baby Shower",
+    "cenaEmpresa": "Diner met dresscode",
     "otro": "Anders",
     "nombreEvento": "Naam evenement",
     "nombrePlaceholder": "Bijv.: Bruiloft van Anna & Karel",
