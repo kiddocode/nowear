@@ -400,6 +400,7 @@ export default function InvitadaPage() {
       .eq('evento_id', evento.id)
       .eq('marca_normalizada', marcaNorm)
       .neq('email_invitada', email.toLowerCase().trim())
+      .in('estado', ['confirmado', 'prereservado'])
 
     if (!todos || todos.length === 0) return { tipo: 'ninguno' }
     const candidatos = excludeId ? todos.filter(c => c.id !== excludeId) : todos
