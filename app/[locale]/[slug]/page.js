@@ -1,19 +1,18 @@
 'use client'
 import { useState, useEffect } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useSearchParams } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 
 const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
 const PRENDAS_COMPLETAS = ['Vestido corto', 'Vestido midi', 'Vestido largo']
 
-// Grupos de colores similares - solo informativos, no bloquean
 const COLORES_SIMILARES = [
-  ['#F5C6D0', '#D4A8A8'],           // rosa palo + nude
-  ['#A8C4E0', '#8B9DC3'],           // azul cielo + azul marino
-  ['#F5E6C8', '#D4B896', '#E8E8E4', '#FFFFFF'], // beige + camel + crudo + blanco
-  ['#888884', '#C0C0C0'],           // gris + plateado
-  ['#C4917C', '#E07A5F', '#C4956A'], // teja + terracota + marrón claro
+  ['#F5C6D0', '#D4A8A8'],
+  ['#A8C4E0', '#8B9DC3'],
+  ['#F5E6C8', '#D4B896', '#E8E8E4', '#FFFFFF'],
+  ['#888884', '#C0C0C0'],
+  ['#C4917C', '#E07A5F', '#C4956A'],
 ]
 
 function getPlan(evento) {
@@ -29,14 +28,6 @@ function esPremiumOSuperior(evento) {
   return ['premium','enterprise'].includes(getPlan(evento))
 }
 
-function normalizar(texto) {
-  if (!texto) return ''
-  return texto.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .replace(/[^a-z0-9\s]/g, '')
-    .trim()
-}
-
 function normalizarStrict(texto) {
   if (!texto) return ''
   return texto.toLowerCase()
@@ -45,73 +36,81 @@ function normalizarStrict(texto) {
     .trim()
 }
 
-// Extrae el path base de una URL sin query params ni fragmentos
+function normalizar(texto) {
+  if (!texto) return ''
+  return texto.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim()
+}
+
+// Extrae hostname + pathname sin query params
 function normalizarUrl(url) {
-  if (!url) return ''
+  if (!url || !url.trim()) return ''
   try {
-    const u = new URL(url.startsWith('http') ? url : 'https://' + url)
-    // Quitar parámetros de variante de color/talla comunes
+    const raw = url.trim().startsWith('http') ? url.trim() : 'https://' + url.trim()
+    const u = new URL(raw)
     return (u.hostname + u.pathname).toLowerCase().replace(/\/$/, '')
   } catch {
-    // Si no es una URL válida, normalizar como texto
-    return url.toLowerCase().replace(/[?#].*$/, '').trim()
+    return url.toLowerCase().split('?')[0].split('#')[0].trim()
   }
 }
 
-// Extrae código de producto de una URL (secuencia numérica larga)
+// Extrae código numérico largo de producto de una URL
 function extraerCodigoProducto(url) {
   if (!url) return null
-  const match = url.match(/[p\-_](\d{7,})/i) || url.match(/(\d{7,})/)
+  const match = url.match(/[p\-_](\d{6,})/i) || url.match(/(\d{8,})/)
   return match ? match[1] : null
 }
 
-// Similitud entre dos strings: porcentaje de palabras de A que están en B
+// % palabras de A que están en B
 function similitudPalabras(a, b) {
   if (!a || !b) return 0
-  const palabrasA = normalizar(a).split(/\s+/).filter(p => p.length > 2)
-  const palabrasB = normalizar(b).split(/\s+/).filter(p => p.length > 2)
-  if (palabrasA.length === 0) return 0
-  const coincidencias = palabrasA.filter(p => palabrasB.includes(p)).length
-  return coincidencias / palabrasA.length
+  const pa = normalizar(a).split(/\s+/).filter(p => p.length > 2)
+  const pb = normalizar(b).split(/\s+/).filter(p => p.length > 2)
+  if (pa.length === 0) return 0
+  return pa.filter(p => pb.includes(p)).length / pa.length
 }
 
-function coloresSonSimilares(hex1, hex2) {
-  return COLORES_SIMILARES.some(grupo => grupo.includes(hex1) && grupo.includes(hex2))
-}
-
-function tieneIdentificador(ref, link) {
+function tieneId(ref, link) {
   return (ref && ref.trim().length > 0) || (link && link.trim().length > 0)
 }
 
-function identificadoresCoinciden(ref1, link1, ref2, link2) {
-  const norm = s => normalizarStrict(s || '')
+// Compara dos pares de identificadores
+// Devuelve: 'exacto' | 'mismo_producto' | 'parcial' | 'distinto'
+function compararIds(ref1, link1, ref2, link2) {
+  const n = s => normalizarStrict(s || '')
 
-  // Comparar referencias exactas
-  if (ref1 && ref2 && norm(ref1) === norm(ref2)) return 'exacto'
+  // Referencias exactas
+  if (ref1 && ref2 && n(ref1) === n(ref2) && n(ref1).length > 0) return 'exacto'
 
-  // Comparar URLs normalizadas
   if (link1 && link2) {
     const url1 = normalizarUrl(link1)
     const url2 = normalizarUrl(link2)
+
+    // URLs exactas (sin query)
     if (url1 && url2 && url1 === url2) return 'exacto'
 
-    // Comparar códigos de producto en URL
+    // Mismo código de producto en URL
     const cod1 = extraerCodigoProducto(link1)
     const cod2 = extraerCodigoProducto(link2)
-    if (cod1 && cod2 && cod1 === cod2) return 'exacto'
+    if (cod1 && cod2 && cod1 === cod2) return 'mismo_producto'
 
-    // Coincidencia parcial de URL (mismos primeros segmentos)
+    // Path muy similar (mismo producto distinta variante)
     if (url1 && url2) {
-      const seg1 = url1.split('/').filter(Boolean)
-      const seg2 = url2.split('/').filter(Boolean)
-      const comunes = seg1.filter((s, i) => seg2[i] === s).length
-      if (comunes >= 3 && comunes >= Math.min(seg1.length, seg2.length) * 0.7) return 'parcial'
+      const s1 = url1.split('/').filter(Boolean)
+      const s2 = url2.split('/').filter(Boolean)
+      if (s1.length >= 2 && s2.length >= 2) {
+        const comunes = s1.filter((s, i) => s2[i] === s).length
+        const minLen = Math.min(s1.length, s2.length)
+        if (comunes >= 3 && comunes / minLen >= 0.75) return 'mismo_producto'
+      }
     }
   }
 
-  // Referencia vs código en URL
-  if (ref1 && link2 && link2.includes(norm(ref1))) return 'parcial'
-  if (ref2 && link1 && link1.includes(norm(ref2))) return 'parcial'
+  // Referencia aparece dentro de URL
+  if (ref1 && link2 && link2.includes(n(ref1)) && n(ref1).length >= 6) return 'parcial'
+  if (ref2 && link1 && link1.includes(n(ref2)) && n(ref2).length >= 6) return 'parcial'
 
   return 'distinto'
 }
@@ -140,6 +139,7 @@ function AvisoModal({ icono, titulo, desc, onConfirmar, onCancelar, textoConfirm
 
 export default function InvitadaPage() {
   const { slug } = useParams()
+  const searchParams = useSearchParams()
   const t = useTranslations('invitada')
 
   const COLORES = [
@@ -200,6 +200,8 @@ export default function InvitadaPage() {
   const [referencia2, setReferencia2] = useState('')
   const [link2, setLink2] = useState('')
   const [pedirReferencia, setPedirReferencia] = useState(false)
+  const [tokenValidacion, setTokenValidacion] = useState(null)
+  const [modoFotoCandidata, setModoFotoCandidata] = useState(false)
   const [modal, setModal] = useState(null)
 
   const requierePrenda2 = tipo1 && !PRENDAS_COMPLETAS.includes(tipo1)
@@ -211,6 +213,42 @@ export default function InvitadaPage() {
     document.addEventListener('focusin', handler)
     return () => document.removeEventListener('focusin', handler)
   }, [])
+
+  // Detectar token en URL para modo foto candidata
+  useEffect(() => {
+    const token = searchParams?.get('token')
+    if (token) {
+      setTokenValidacion(token)
+      setModoFotoCandidata(true)
+      setPedirFoto(true)
+    }
+  }, [searchParams])
+
+  // Subir foto como candidata (Ana) cuando viene del email
+  async function handleSubirFotoCandidata() {
+    if (!foto) return
+    setEnviando(true)
+    const ext = foto.name.split('.').pop()
+    const fileName = `validacion-${tokenValidacion}-${Date.now()}.${ext}`
+    const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, foto, { contentType: foto.type })
+    if (!uploadData) { setEnviando(false); setError('Error al subir la foto. Inténtalo de nuevo.'); return }
+    const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
+    const fotoUrl = urlData.publicUrl
+
+    const res = await fetch('/api/validar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token: tokenValidacion, fotoUrl })
+    })
+    const data = await res.json()
+    setEnviando(false)
+    if (data.ok) {
+      setModoFotoCandidata(false)
+      setEnviado(true)
+    } else {
+      setError('Error al enviar la foto. Inténtalo de nuevo.')
+    }
+  }
 
   useEffect(() => {
     async function cargar() {
@@ -227,7 +265,7 @@ export default function InvitadaPage() {
   }, [slug])
 
   function toggleColor(hex) {
-    if (colores.includes(hex)) { setColores(colores.filter(c => c !== hex)) }
+    if (colores.includes(hex)) setColores(colores.filter(c => c !== hex))
     else { if (colores.length >= 2) return; setColores([...colores, hex]) }
   }
 
@@ -296,7 +334,7 @@ export default function InvitadaPage() {
     const modeloNorm = normalizarStrict(modelo1)
     const tipoNorm = tipo1.trim().toLowerCase()
     const colorHex = colores[0]
-    const tengoId = tieneIdentificador(referencia1, link1)
+    const yoTengoId = tieneId(referencia1, link1)
 
     // ── 1. LOOK BLOQUEADO ORGANIZADORA ──────────────────────────────
     if (evento.look_bloqueado_marca1) {
@@ -304,79 +342,81 @@ export default function InvitadaPage() {
       const modeloOrg = normalizarStrict(evento.look_bloqueado_modelo1)
       const tipoOrg = (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
       const colorOrg = evento.look_bloqueado_color
+      const refOrg = evento.look_bloqueado_referencia1 || ''
 
       const marcaOk = marcaNorm === marcaOrg
       const tipoOk = tipoNorm === tipoOrg
-      const modeloOk = modeloNorm === modeloOrg
-      const colorOk = colorHex === colorOrg
+      const modeloExacto = modeloNorm === modeloOrg
       const modeloSimilar = similitudPalabras(modelo1, evento.look_bloqueado_modelo1) >= 0.6
+      const colorOk = colorHex === colorOrg
 
-      if (marcaOk && tipoOk && (modeloOk || modeloSimilar)) {
-        if (!colorOk) return { tipo: 'bloqueado_directo' } // mismo modelo distinto color
-        const refOrg = evento.look_bloqueado_referencia1
-        if (!refOrg && !tengoId) return { tipo: 'bloqueado_directo' }
-        if (refOrg && tengoId) {
-          const coincide = identificadoresCoinciden(referencia1, link1, refOrg, null)
-          if (coincide === 'exacto') return { tipo: 'bloqueado_directo' }
-          if (coincide === 'parcial') return { tipo: 'pedir_foto' }
+      if (marcaOk && tipoOk && (modeloExacto || modeloSimilar)) {
+        if (!colorOk) return { tipo: 'bloqueo_mismo_modelo_otro_color', esOrganizadora: true }
+        if (!refOrg && !yoTengoId) return { tipo: 'bloqueo_directo', esOrganizadora: true }
+        if (!refOrg && yoTengoId) return { tipo: 'bloqueo_directo', esOrganizadora: true }
+        if (refOrg && !yoTengoId) return { tipo: 'pedir_referencia' }
+        if (refOrg && yoTengoId) {
+          const cmp = compararIds(referencia1, link1, refOrg, null)
+          if (cmp === 'exacto' || cmp === 'mismo_producto') return { tipo: 'bloqueo_directo', esOrganizadora: true }
           return { tipo: 'pedir_foto' }
         }
-        return { tipo: 'pedir_referencia' }
       }
     }
 
-    // ── 2. BUSCAR CANDIDATOS EN LA BD ───────────────────────────────
-    // Traemos todos los looks del evento con misma marca normalizada
-    const { data: candidatosMarca } = await supabase
+    // ── 2. BUSCAR CANDIDATOS ────────────────────────────────────────
+    const { data: todos } = await supabase
       .from('looks')
       .select('id, nombre_invitada, email_invitada, color_hex, marca, modelo, tipo, referencia, link, foto_url, marca_normalizada, modelo_normalizado')
       .eq('evento_id', evento.id)
       .eq('marca_normalizada', marcaNorm)
       .neq('email_invitada', email.toLowerCase().trim())
 
-    if (!candidatosMarca || candidatosMarca.length === 0) return { tipo: 'ninguno' }
-
-    const candidatos = excludeId ? candidatosMarca.filter(c => c.id !== excludeId) : candidatosMarca
+    if (!todos || todos.length === 0) return { tipo: 'ninguno' }
+    const candidatos = excludeId ? todos.filter(c => c.id !== excludeId) : todos
     if (candidatos.length === 0) return { tipo: 'ninguno' }
 
     for (const c of candidatos) {
-      const cMarca = normalizarStrict(c.marca)
       const cModelo = normalizarStrict(c.modelo)
       const cTipo = (c.tipo || '').trim().toLowerCase()
       const cColor = c.color_hex
-      const cTieneId = tieneIdentificador(c.referencia, c.link)
+      const cTieneId = tieneId(c.referencia, c.link)
 
-      const marcaOk = marcaNorm === cMarca
       const tipoOk = tipoNorm === cTipo
       const modeloExacto = modeloNorm === cModelo
       const modeloSimilar = similitudPalabras(modelo1, c.modelo) >= 0.6
       const colorOk = colorHex === cColor
 
-      if (!marcaOk) continue
-
-      // MISMO MODELO (exacto o similar) DISTINTO COLOR → BLOQUEO
+      // Mismo modelo (exacto o similar) distinto color → BLOQUEO
       if ((modeloExacto || modeloSimilar) && tipoOk && !colorOk) {
         return { tipo: 'bloqueo_mismo_modelo_otro_color', candidato: c }
       }
 
-      // COINCIDENCIA EXACTA: color + marca + tipo + modelo
+      // Color + tipo + modelo exactos
       if (colorOk && tipoOk && modeloExacto) {
-        if (!tengoId && !cTieneId) return { tipo: 'bloqueo_directo', candidato: c }
-        if (tengoId && cTieneId) {
-          const coincide = identificadoresCoinciden(referencia1, link1, c.referencia, c.link)
-          if (coincide === 'exacto') return { tipo: 'bloqueo_directo', candidato: c }
-          if (coincide === 'parcial') return { tipo: 'pedir_foto', candidato: c }
+        if (!yoTengoId && !cTieneId) return { tipo: 'bloqueo_directo', candidato: c }
+        if (yoTengoId && cTieneId) {
+          const cmp = compararIds(referencia1, link1, c.referencia, c.link)
+          if (cmp === 'exacto') return { tipo: 'bloqueo_directo', candidato: c }
+          if (cmp === 'mismo_producto') return { tipo: 'pedir_foto', candidato: c }
+          if (cmp === 'parcial') return { tipo: 'pedir_foto', candidato: c }
           return { tipo: 'pedir_foto', candidato: c }
         }
-        return { tipo: 'pedir_referencia', candidato: c }
+        // Una tiene id y la otra no → no podemos comparar → pedir foto
+        if (yoTengoId && !cTieneId) return { tipo: 'pedir_foto', candidato: c }
+        if (!yoTengoId && cTieneId) return { tipo: 'pedir_referencia', candidato: c }
       }
 
-      // COLOR + MARCA + TIPO coinciden, modelo similar (60%+) pero no exacto
+      // Color + tipo coinciden, modelo similar pero no exacto
       if (colorOk && tipoOk && !modeloExacto && modeloSimilar) {
-        return { tipo: 'pedir_referencia', candidato: c }
+        if (!yoTengoId) return { tipo: 'pedir_referencia', candidato: c }
+        if (!cTieneId) return { tipo: 'pedir_foto', candidato: c }
+        const cmp = compararIds(referencia1, link1, c.referencia, c.link)
+        if (cmp === 'exacto') return { tipo: 'bloqueo_directo', candidato: c }
+        if (cmp === 'mismo_producto') return { tipo: 'pedir_foto', candidato: c }
+        return { tipo: 'pedir_foto', candidato: c }
       }
 
-      // COLOR + MARCA + MODELO exactos, tipo distinto
+      // Color + modelo exactos, tipo distinto
       if (colorOk && modeloExacto && !tipoOk) {
         return { tipo: 'pedir_referencia', candidato: c }
       }
@@ -444,7 +484,7 @@ export default function InvitadaPage() {
     const resultado = await comprobarConflicto(excludeId)
     const candidato = resultado.candidato
 
-    if (resultado.tipo === 'bloqueado_directo' || resultado.tipo === 'bloqueo_directo') {
+    if (resultado.tipo === 'bloqueo_directo') {
       if (candidato) {
         await supabase.from('conflictos').insert({
           evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
@@ -456,11 +496,12 @@ export default function InvitadaPage() {
         })
       }
       setModal({
-        icono: '🚫',
-        titulo: t('modalBloqueadoTitulo') || 'Look no disponible',
-        desc: t('modalBloqueadoDesc') || 'Este look ya está registrado por otra invitada.',
-        textoConfirmar: t('modalEntendido') || 'Entendido',
-        onConfirmar: cerrarModal
+        icono: '⚠️',
+        titulo: t('modalConflictoTitulo') || 'Look ya registrado',
+        desc: t('modalConflictoDesc') || 'Otra invitada ya registró este look antes que tú. Solo la primera en registrar tiene el look reservado.',
+        textoConfirmar: t('modalElegirOtro') || 'Elegir otro look',
+        onConfirmar: cerrarModal,
+        colorConfirmar: '#F07987'
       })
       return
     }
@@ -520,20 +561,38 @@ export default function InvitadaPage() {
         }).select().single()
 
         if (validacion) {
-          enviarEmailAsync('ambiguedad_foto', email.toLowerCase().trim(), nombre, {
-            fotoUrl: foto_url,
-            lookId: lookInsertado.id,
-            candidatoId: candidato?.id,
-            nombreCandidata: candidato?.nombre_invitada || '',
-            emailCandidata: candidato?.email_invitada || '',
-            marcaCandidata: candidato?.marca || '',
-            modeloCandidata: candidato?.modelo || '',
-            colorCandidata: colorCandidato,
-            fotoCandidataUrl: candidato?.foto_url || null,
-            token: validacion.token,
-          })
-        }
+          const candidataTieneFoto = !!candidato?.foto_url
+          const candidataNoTieneId = !tieneId(candidato?.referencia, candidato?.link)
 
+          if (candidataNoTieneId && !candidataTieneFoto) {
+            // Ana no tiene identificador ni foto: pedirle foto a Ana
+            // Marcar validación como esperando foto candidata
+            await supabase.from('validaciones').update({ esperando_foto_candidata: true }).eq('id', validacion.id)
+
+            enviarEmailAsync('pedir_foto_candidata', candidato?.email_invitada || '', candidato?.nombre_invitada || '', {
+              emailInvitada: candidato?.email_invitada || '',
+              nombreInvitada: candidato?.nombre_invitada || '',
+              marcaCandidata: candidato?.marca || '',
+              modeloCandidata: candidato?.modelo || '',
+              colorCandidata: colorCandidato,
+              token: validacion.token,
+            })
+          } else {
+            // Ana tiene foto o identificador: enviar directo a organizadora para validar
+            enviarEmailAsync('ambiguedad_foto', email.toLowerCase().trim(), nombre, {
+              fotoUrl: foto_url,
+              lookId: lookInsertado.id,
+              candidatoId: candidato?.id,
+              nombreCandidata: candidato?.nombre_invitada || '',
+              emailCandidata: candidato?.email_invitada || '',
+              marcaCandidata: candidato?.marca || '',
+              modeloCandidata: candidato?.modelo || '',
+              colorCandidata: colorCandidato,
+              fotoCandidataUrl: candidato?.foto_url || null,
+              token: validacion.token,
+            })
+          }
+        }
         setEnviando(false)
         setEnviado(true)
         return
@@ -609,6 +668,38 @@ export default function InvitadaPage() {
   if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('cargando')}</div>
   if (!evento) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('noEncontrado')}</div>
 
+  // MODO FOTO CANDIDATA: Ana viene desde el email para subir su foto
+  if (modoFotoCandidata) return (
+    <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',maxWidth:'480px',margin:'0 auto'}}>
+      <div style={{fontSize:'2rem',marginBottom:'1rem',textAlign:'center'}}>📸</div>
+      <h2 style={{fontSize:'1.5rem',fontWeight:300,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.5rem',textAlign:'center'}}>Sube tu foto</h2>
+      <p style={{fontSize:'0.85rem',fontWeight:300,color:'#888884',lineHeight:1.7,marginBottom:'2rem',textAlign:'center'}}>
+        Otra invitada tiene un look muy similar al tuyo. Sube una foto para que la organizadora pueda verificar que son distintos.
+      </p>
+      <div style={{width:'100%',marginBottom:'1.5rem'}}>
+        <div onClick={() => document.getElementById('foto-candidata-input').click()}
+          style={{border:`1px dashed ${!foto ? '#F07987' : '#E0E0DC'}`,padding:'2rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5',borderRadius:'8px',width:'100%',boxSizing:'border-box'}}>
+          {fotoPreview ? (
+            <img src={fotoPreview} alt="Preview" style={{maxHeight:'250px',maxWidth:'100%',objectFit:'contain'}}/>
+          ) : (
+            <div>
+              <div style={{fontSize:'2rem',marginBottom:'0.5rem'}}>📷</div>
+              <div style={{fontSize:'0.85rem',fontWeight:400,color:'#F07987',marginBottom:'0.25rem'}}>Toca para subir tu foto</div>
+              <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>JPG, PNG o WEBP</div>
+            </div>
+          )}
+        </div>
+        <input id="foto-candidata-input" type="file" accept="image/*" style={{display:'none'}}
+          onChange={e => { const file=e.target.files[0]; if(file){ setFoto(file); setFotoPreview(URL.createObjectURL(file)) } }}/>
+      </div>
+      {error && <p style={{fontSize:'0.78rem',color:'#F07987',marginBottom:'1rem',textAlign:'center'}}>{error}</p>}
+      <button onClick={handleSubirFotoCandidata} disabled={!foto || enviando}
+        style={{width:'100%',padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:foto?'#0A0A0A':'#E0E0DC',color:foto?'#FFFFFF':'#888884',border:'none',cursor:foto?'pointer':'not-allowed',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:enviando?0.6:1}}>
+        {enviando ? 'Enviando...' : 'Enviar mi foto'}
+      </button>
+    </div>
+  )
+
   if (enviado) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center'}}>
       <div style={{fontSize:'clamp(1.8rem,5vw,2.5rem)',fontWeight:100,color:'#0A0A0A',letterSpacing:'-0.03em',marginBottom:'0.5rem'}}>{t('lookRegistrado')}</div>
@@ -663,7 +754,6 @@ export default function InvitadaPage() {
       {modal && <AvisoModal icono={modal.icono} titulo={modal.titulo} desc={modal.desc} textoConfirmar={modal.textoConfirmar} textoCancelar={modal.textoCancelar} onConfirmar={modal.onConfirmar} onCancelar={modal.onCancelar} enviando={enviando} colorConfirmar={modal.colorConfirmar}/>}
 
       <div className="invitada-layout">
-
         <div className="invitada-panel">
           <img src={fotoPanel} alt="Evento" style={{width:'100%',height:'100%',objectFit:'cover',display:'block'}}/>
           <div style={{position:'absolute',inset:0,background:'linear-gradient(to top, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.2) 60%)',display:'flex',flexDirection:'column',justifyContent:'flex-end',padding:'3rem'}}>
@@ -903,9 +993,7 @@ export default function InvitadaPage() {
                 </label>
                 {pedirFoto && (
                   <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
-                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>
-                      {t('modalPedirFotoDesc')}
-                    </p>
+                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>{t('modalPedirFotoDesc')}</p>
                   </div>
                 )}
                 <div onClick={() => document.getElementById('foto-input').click()}
