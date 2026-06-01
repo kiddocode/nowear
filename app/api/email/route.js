@@ -11,57 +11,107 @@ const supabaseAdmin = createClient(
 const LOGO = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/No%20Wear.png'
 
 function emailBase(contenido) {
-  return `
-    <div style="font-family:'Helvetica Neue',Arial,sans-serif;background:#F7F7F5;padding:40px 20px;min-height:100vh">
-      <div style="max-width:520px;margin:0 auto">
-        <div style="background:#0A0A0A;padding:28px 32px;margin-bottom:0">
-          <img src="${LOGO}" alt="NOWEAR" style="height:32px;display:block"/>
-        </div>
-        <div style="background:#FFFFFF;padding:40px 32px;border:1px solid #E0E0DC;border-top:none">
+  return `<!DOCTYPE html>
+<html lang="es">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/></head>
+<body style="margin:0;padding:0;background:#F7F7F5;font-family:'Helvetica Neue',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;padding:32px 16px;">
+    <tr><td align="center">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
+        <!-- HEADER -->
+        <tr><td style="background:#0A0A0A;padding:20px 28px;">
+          <img src="${LOGO}" alt="NOWEAR" style="height:28px;display:block;"/>
+        </td></tr>
+        <!-- BODY -->
+        <tr><td style="background:#FFFFFF;padding:36px 28px;border:1px solid #E0E0DC;border-top:none;">
           ${contenido}
-        </div>
-        <div style="padding:24px 32px;text-align:center">
-          <p style="font-size:11px;color:#BEBEBA;margin:0">NOWEAR · No two looks alike · <a href="https://nowear.es" style="color:#BEBEBA;text-decoration:none">nowear.es</a></p>
-        </div>
-      </div>
-    </div>
-  `
+        </td></tr>
+        <!-- FOOTER -->
+        <tr><td style="padding:20px 28px;text-align:center;">
+          <p style="font-size:11px;color:#BEBEBA;margin:0;font-family:'Helvetica Neue',Arial,sans-serif;">
+            NOWEAR &middot; No two looks alike &middot; 
+            <a href="https://nowear.es" style="color:#BEBEBA;text-decoration:none;">nowear.es</a>
+          </p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`
 }
 
 function lookCard(marca, modelo, color, fotoUrl) {
   return `
-    <div style="background:#F7F7F5;border:1px solid #E0E0DC;padding:20px 24px;margin-bottom:8px">
-      ${fotoUrl ? `<img src="${fotoUrl}" alt="Look" style="width:100%;max-height:200px;object-fit:cover;display:block;margin-bottom:16px"/>` : ''}
-      <p style="font-size:15px;font-weight:600;color:#0A0A0A;margin:0 0 4px">${marca} · ${modelo}</p>
-      <p style="font-size:13px;color:#888884;margin:0">${color}</p>
-    </div>
-  `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E0E0DC;margin-bottom:8px;">
+      <tr><td style="padding:16px 20px;">
+        ${fotoUrl ? `<img src="${fotoUrl}" alt="Look" style="width:100%;max-height:180px;object-fit:cover;display:block;margin-bottom:12px;"/>` : ''}
+        <p style="font-size:14px;font-weight:700;color:#0A0A0A;margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;">${marca} &middot; ${modelo}</p>
+        <p style="font-size:12px;color:#888884;margin:0;font-family:'Helvetica Neue',Arial,sans-serif;">${color}</p>
+      </td></tr>
+    </table>`
+}
+
+function btnPrimary(texto, href) {
+  return `
+    <table cellpadding="0" cellspacing="0" border="0" style="margin-top:24px;">
+      <tr><td style="background:#0A0A0A;border-radius:4px;">
+        <a href="${href}" style="display:inline-block;padding:12px 24px;font-size:13px;font-weight:600;color:#FFFFFF;text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</a>
+      </td></tr>
+    </table>`
+}
+
+function h1(texto) {
+  return `<h1 style="font-size:24px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</h1>`
+}
+
+function subtitulo(texto) {
+  return `<p style="font-size:13px;color:#888884;margin:0 0 28px;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>`
+}
+
+function parrafo(texto) {
+  return `<p style="font-size:13px;color:#555552;line-height:1.7;margin:20px 0 0;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>`
+}
+
+function alerta(texto, tipo) {
+  const colores = {
+    error: { bg:'#FFF0F1', border:'#F07987', text:'#0A0A0A' },
+    ok:    { bg:'#F0FFF4', border:'#C4E8C4', text:'#2D6A2D' },
+    warn:  { bg:'#FFF8F0', border:'#F5D6A0', text:'#0A0A0A' },
+  }
+  const c = colores[tipo] || colores.warn
+  return `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin-bottom:20px;">
+      <tr><td style="background:${c.bg};border-left:3px solid ${c.border};padding:14px 18px;">
+        <p style="font-size:13px;color:${c.text};line-height:1.7;margin:0;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>
+      </td></tr>
+    </table>`
 }
 
 export async function POST(req) {
   const {
     tipo, emailInvitada, nombreInvitada, nombreEvento, nombreOrganizadora,
     marca, modelo, color, eventoId, organizadoraId,
-    // Para ambigüedad con foto
     fotoUrl, lookId, candidatoId, nombreCandidata, emailCandidata,
     marcaCandidata, modeloCandidata, colorCandidata, fotoCandidataUrl,
     token,
-    // Para aviso a primera invitada
     emailPrimera, nombrePrimera,
+    fechaEvento,
   } = await req.json()
 
   try {
     let emailOrganizadora = null
-    let notifLook = true
     let notifConflicto = true
 
     if (organizadoraId) {
       const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(organizadoraId)
       emailOrganizadora = authUser?.user?.email || null
-      const { data: prof } = await supabaseAdmin.from('profiles').select('notif_look, notif_conflicto').eq('id', organizadoraId).single()
-      notifLook = prof?.notif_look ?? true
+      const { data: prof } = await supabaseAdmin.from('profiles').select('notif_conflicto').eq('id', organizadoraId).single()
       notifConflicto = prof?.notif_conflicto ?? true
     }
+
+    const eventoUrl = `https://nowear.es/${eventoId}`
+    const fechaStr = fechaEvento ? new Date(fechaEvento).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}) : ''
+    const eventoSubtitulo = fechaStr ? `Para <strong>${nombreEvento}</strong> &middot; ${fechaStr}` : `Para <strong>${nombreEvento}</strong>`
 
     // ─── CONFIRMACION ───────────────────────────────────────────────
     if (tipo === 'confirmacion') {
@@ -70,30 +120,14 @@ export async function POST(req) {
         to: emailInvitada,
         subject: `Tu look está registrado · ${nombreEvento}`,
         html: emailBase(`
-          <h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;margin:0 0 8px">Look registrado</h1>
-          <p style="font-size:14px;color:#888884;margin:0 0 32px">Para <strong style="color:#0A0A0A">${nombreEvento}</strong></p>
+          ${h1('Look registrado')}
+          ${subtitulo(eventoSubtitulo)}
           ${lookCard(marca, modelo, color, null)}
-          <p style="font-size:14px;color:#555552;line-height:1.8;margin-top:24px">Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente. Si necesitas hacer algún cambio, vuelve al link del evento.</p>
+          ${parrafo(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente.`)}
+          ${parrafo(`Si necesitas hacer algún cambio, vuelve al enlace del evento:`)}
+          ${btnPrimary('Ver mi look →', eventoUrl)}
         `)
       })
-
-      if (emailOrganizadora && notifLook) {
-        await resend.emails.send({
-          from: 'NOWEAR <support@nowear.es>',
-          to: emailOrganizadora,
-          subject: `Nueva invitada registrada · ${nombreEvento}`,
-          html: emailBase(`
-            <h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;margin:0 0 8px">Nueva invitada</h1>
-            <p style="font-size:14px;color:#888884;margin:0 0 32px">En <strong style="color:#0A0A0A">${nombreEvento}</strong></p>
-            <p style="font-size:13px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#888884;margin:0 0 8px">Invitada</p>
-            <p style="font-size:16px;font-weight:600;color:#0A0A0A;margin:0 0 20px">${nombreInvitada}</p>
-            ${lookCard(marca, modelo, color, null)}
-            <div style="margin-top:28px">
-              <a href="https://nowear.es/evento/${eventoId}" style="display:inline-block;padding:12px 24px;background:#0A0A0A;color:#FFFFFF;text-decoration:none;font-size:13px;font-weight:500;border-radius:4px">Ver mi evento</a>
-            </div>
-          `)
-        })
-      }
     }
 
     // ─── CONFLICTO INVITADA ─────────────────────────────────────────
@@ -103,12 +137,11 @@ export async function POST(req) {
         to: emailInvitada,
         subject: `Tu look no está disponible · ${nombreEvento}`,
         html: emailBase(`
-          <h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;margin:0 0 8px">Look no disponible</h1>
-          <p style="font-size:14px;color:#888884;margin:0 0 32px">Para <strong style="color:#0A0A0A">${nombreEvento}</strong></p>
-          <div style="background:#FFF0F1;border-left:3px solid #F07987;padding:20px 24px;margin-bottom:24px">
-            <p style="font-size:14px;color:#0A0A0A;line-height:1.8;margin:0">Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar (<strong>${marca}, ${modelo}</strong>) ya está reservado por otra invitada.</p>
-          </div>
-          <p style="font-size:14px;color:#555552;line-height:1.8">Vuelve al link del evento y elige otro look.</p>
+          ${h1('Look no disponible')}
+          ${subtitulo(eventoSubtitulo)}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar (<strong>${marca}, ${modelo}</strong>) ya está reservado por otra invitada.`, 'error')}
+          ${parrafo('Vuelve al enlace del evento y elige otro look.')}
+          ${btnPrimary('Elegir otro look →', eventoUrl)}
         `)
       })
 
@@ -118,30 +151,23 @@ export async function POST(req) {
           to: emailOrganizadora,
           subject: `Conflicto detectado · ${nombreEvento}`,
           html: emailBase(`
-            <h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;margin:0 0 8px">Conflicto detectado</h1>
-            <p style="font-size:14px;color:#888884;margin:0 0 32px">En <strong style="color:#0A0A0A">${nombreEvento}</strong></p>
-            <div style="background:#FFF0F1;border-left:3px solid #F07987;padding:20px 24px;margin-bottom:24px">
-              <p style="font-size:14px;color:#0A0A0A;line-height:1.8;margin:0"><strong>${nombreInvitada}</strong> intentó registrar <strong>${marca}, ${modelo}</strong> pero ya estaba reservado por otra invitada.</p>
-            </div>
-            <div style="margin-top:28px">
-              <a href="https://nowear.es/evento/${eventoId}" style="display:inline-block;padding:12px 24px;background:#0A0A0A;color:#FFFFFF;text-decoration:none;font-size:13px;font-weight:500;border-radius:4px">Ver mi evento</a>
-            </div>
+            ${h1('Conflicto detectado')}
+            ${subtitulo(eventoSubtitulo)}
+            ${alerta(`<strong>${nombreInvitada}</strong> intentó registrar <strong>${marca}, ${modelo}</strong> pero ya estaba reservado por <strong>${nombrePrimera || 'otra invitada'}</strong>.`, 'error')}
+            ${btnPrimary('Ver mi evento →', `https://nowear.es/evento/${eventoId}`)}
           `)
         })
       }
 
-      // Aviso a la primera invitada que registró el look
       if (emailPrimera && nombrePrimera) {
         await resend.emails.send({
           from: 'NOWEAR <support@nowear.es>',
           to: emailPrimera,
-          subject: `Alguien ha intentado registrar tu mismo look · ${nombreEvento}`,
+          subject: `Tu look sigue siendo único · ${nombreEvento}`,
           html: emailBase(`
-            <h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;margin:0 0 8px">Tu look sigue siendo único</h1>
-            <p style="font-size:14px;color:#888884;margin:0 0 32px">Para <strong style="color:#0A0A0A">${nombreEvento}</strong></p>
-            <div style="background:#F0FFF4;border:1px solid #C4E8C4;padding:20px 24px;margin-bottom:24px">
-              <p style="font-size:14px;color:#2D6A2D;line-height:1.8;margin:0">Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú (<strong>${marca}, ${modelo}</strong>), pero el sistema lo ha bloqueado. Tu look sigue siendo exclusivo.</p>
-            </div>
+            ${h1('Tu look sigue siendo único')}
+            ${subtitulo(eventoSubtitulo)}
+            ${alerta(`Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú (<strong>${marca}, ${modelo}</strong>), pero el sistema lo ha bloqueado. Tu look sigue siendo exclusivo.`, 'ok')}
           `)
         })
       }
@@ -156,23 +182,26 @@ export async function POST(req) {
         await resend.emails.send({
           from: 'NOWEAR <support@nowear.es>',
           to: emailOrganizadora,
-          subject: `Necesitas validar un look · ${nombreEvento}`,
+          subject: `Validación pendiente · ${nombreEvento}`,
           html: emailBase(`
-            <h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;margin:0 0 8px">Validación pendiente</h1>
-            <p style="font-size:14px;color:#888884;margin:0 0 24px">En <strong style="color:#0A0A0A">${nombreEvento}</strong></p>
-            <p style="font-size:14px;color:#555552;line-height:1.8;margin:0 0 28px">Hay una posible coincidencia entre dos looks. Revisa las fotos y decide si son el mismo producto.</p>
-
-            <p style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:0 0 8px">Look nuevo · ${nombreInvitada}</p>
+            ${h1('Validación pendiente')}
+            ${subtitulo(eventoSubtitulo)}
+            ${alerta('Hay una posible coincidencia entre dos looks. Revisa las fotos y decide si son el mismo producto.', 'warn')}
+            <p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:20px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look nuevo · ${nombreInvitada}</p>
             ${lookCard(marca, modelo, color, fotoUrl)}
-
-            <p style="font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:16px 0 8px">Look registrado · ${nombreCandidata}</p>
+            <p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:16px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look registrado · ${nombreCandidata}</p>
             ${lookCard(marcaCandidata, modeloCandidata, colorCandidata, fotoCandidataUrl)}
-
-            <div style="margin-top:32px;display:flex;gap:12px">
-              <a href="${urlAprobar}" style="display:inline-block;padding:14px 28px;background:#0A0A0A;color:#FFFFFF;text-decoration:none;font-size:13px;font-weight:600;border-radius:4px;margin-right:12px">Aprobar look</a>
-              <a href="${urlRechazar}" style="display:inline-block;padding:14px 28px;background:#FFFFFF;color:#F07987;text-decoration:none;font-size:13px;font-weight:600;border-radius:4px;border:1px solid #F07987">Rechazar look</a>
-            </div>
-            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;line-height:1.6">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
+            <table cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;">
+              <tr>
+                <td style="background:#0A0A0A;border-radius:4px;padding-right:12px;">
+                  <a href="${urlAprobar}" style="display:inline-block;padding:12px 24px;font-size:13px;font-weight:600;color:#FFFFFF;text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;">Aprobar look</a>
+                </td>
+                <td style="background:#FFFFFF;border-radius:4px;border:1px solid #F07987;">
+                  <a href="${urlRechazar}" style="display:inline-block;padding:12px 24px;font-size:13px;font-weight:600;color:#F07987;text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;">Rechazar look</a>
+                </td>
+              </tr>
+            </table>
+            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;line-height:1.6;font-family:'Helvetica Neue',Arial,sans-serif;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
           `)
         })
       }

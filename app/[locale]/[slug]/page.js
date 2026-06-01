@@ -7,6 +7,15 @@ import { supabase } from '@/lib/supabase'
 const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
 const PRENDAS_COMPLETAS = ['Vestido corto', 'Vestido midi', 'Vestido largo']
 
+// Grupos de colores similares - solo informativos, no bloquean
+const COLORES_SIMILARES = [
+  ['#F5C6D0', '#D4A8A8'],           // rosa palo + nude
+  ['#A8C4E0', '#8B9DC3'],           // azul cielo + azul marino
+  ['#F5E6C8', '#D4B896', '#E8E8E4', '#FFFFFF'], // beige + camel + crudo + blanco
+  ['#888884', '#C0C0C0'],           // gris + plateado
+  ['#C4917C', '#E07A5F', '#C4956A'], // teja + terracota + marrón claro
+]
+
 function getPlan(evento) {
   if (!evento) return 'basico'
   const p = (evento.plan || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
@@ -24,8 +33,87 @@ function normalizar(texto) {
   if (!texto) return ''
   return texto.toLowerCase()
     .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s]/g, '')
+    .trim()
+}
+
+function normalizarStrict(texto) {
+  if (!texto) return ''
+  return texto.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     .replace(/[^a-z0-9]/g, '')
     .trim()
+}
+
+// Extrae el path base de una URL sin query params ni fragmentos
+function normalizarUrl(url) {
+  if (!url) return ''
+  try {
+    const u = new URL(url.startsWith('http') ? url : 'https://' + url)
+    // Quitar parámetros de variante de color/talla comunes
+    return (u.hostname + u.pathname).toLowerCase().replace(/\/$/, '')
+  } catch {
+    // Si no es una URL válida, normalizar como texto
+    return url.toLowerCase().replace(/[?#].*$/, '').trim()
+  }
+}
+
+// Extrae código de producto de una URL (secuencia numérica larga)
+function extraerCodigoProducto(url) {
+  if (!url) return null
+  const match = url.match(/[p\-_](\d{7,})/i) || url.match(/(\d{7,})/)
+  return match ? match[1] : null
+}
+
+// Similitud entre dos strings: porcentaje de palabras de A que están en B
+function similitudPalabras(a, b) {
+  if (!a || !b) return 0
+  const palabrasA = normalizar(a).split(/\s+/).filter(p => p.length > 2)
+  const palabrasB = normalizar(b).split(/\s+/).filter(p => p.length > 2)
+  if (palabrasA.length === 0) return 0
+  const coincidencias = palabrasA.filter(p => palabrasB.includes(p)).length
+  return coincidencias / palabrasA.length
+}
+
+function coloresSonSimilares(hex1, hex2) {
+  return COLORES_SIMILARES.some(grupo => grupo.includes(hex1) && grupo.includes(hex2))
+}
+
+function tieneIdentificador(ref, link) {
+  return (ref && ref.trim().length > 0) || (link && link.trim().length > 0)
+}
+
+function identificadoresCoinciden(ref1, link1, ref2, link2) {
+  const norm = s => normalizarStrict(s || '')
+
+  // Comparar referencias exactas
+  if (ref1 && ref2 && norm(ref1) === norm(ref2)) return 'exacto'
+
+  // Comparar URLs normalizadas
+  if (link1 && link2) {
+    const url1 = normalizarUrl(link1)
+    const url2 = normalizarUrl(link2)
+    if (url1 && url2 && url1 === url2) return 'exacto'
+
+    // Comparar códigos de producto en URL
+    const cod1 = extraerCodigoProducto(link1)
+    const cod2 = extraerCodigoProducto(link2)
+    if (cod1 && cod2 && cod1 === cod2) return 'exacto'
+
+    // Coincidencia parcial de URL (mismos primeros segmentos)
+    if (url1 && url2) {
+      const seg1 = url1.split('/').filter(Boolean)
+      const seg2 = url2.split('/').filter(Boolean)
+      const comunes = seg1.filter((s, i) => seg2[i] === s).length
+      if (comunes >= 3 && comunes >= Math.min(seg1.length, seg2.length) * 0.7) return 'parcial'
+    }
+  }
+
+  // Referencia vs código en URL
+  if (ref1 && link2 && link2.includes(norm(ref1))) return 'parcial'
+  if (ref2 && link1 && link1.includes(norm(ref2))) return 'parcial'
+
+  return 'distinto'
 }
 
 function AvisoModal({ icono, titulo, desc, onConfirmar, onCancelar, textoConfirmar, textoCancelar, enviando, colorConfirmar }) {
@@ -37,13 +125,11 @@ function AvisoModal({ icono, titulo, desc, onConfirmar, onCancelar, textoConfirm
         <p style={{fontSize:'0.82rem',fontWeight:300,color:'#555552',lineHeight:1.7,marginBottom:'1.5rem',textAlign:'center'}}>{desc}</p>
         <div style={{display:'flex',gap:'0.75rem'}}>
           {onCancelar && (
-            <button onClick={onCancelar}
-              style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px'}}>
+            <button onClick={onCancelar} style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px'}}>
               {textoCancelar || 'Cancelar'}
             </button>
           )}
-          <button onClick={onConfirmar} disabled={enviando}
-            style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:colorConfirmar||'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:enviando?0.6:1}}>
+          <button onClick={onConfirmar} disabled={enviando} style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,background:colorConfirmar||'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'6px',opacity:enviando?0.6:1}}>
             {enviando ? '...' : (textoConfirmar || 'Aceptar')}
           </button>
         </div>
@@ -116,15 +202,11 @@ export default function InvitadaPage() {
   const [pedirReferencia, setPedirReferencia] = useState(false)
   const [modal, setModal] = useState(null)
 
-  // Prenda 2 obligatoria si prenda 1 no es vestido completo
   const requierePrenda2 = tipo1 && !PRENDAS_COMPLETAS.includes(tipo1)
 
-  // Fix teclado móvil
   useEffect(() => {
     const handler = (e) => {
-      setTimeout(() => {
-        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 350)
+      setTimeout(() => { e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 350)
     }
     document.addEventListener('focusin', handler)
     return () => document.removeEventListener('focusin', handler)
@@ -167,6 +249,7 @@ export default function InvitadaPage() {
         body: JSON.stringify({
           tipo, emailInvitada: emailInv, nombreInvitada: nombreInv,
           nombreEvento: evento.nombre,
+          fechaEvento: evento.fecha,
           nombreOrganizadora: organizadora?.nombre || 'la organizadora',
           marca: marca1, modelo: modelo1,
           color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
@@ -206,73 +289,97 @@ export default function InvitadaPage() {
     setModoGestion(false)
   }
 
-  function tieneIdentificador(val) {
-    return val && val.trim().length > 0
-  }
-
   async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
 
-    const identificador1 = referencia1.trim() || link1.trim()
+    const marcaNorm = normalizarStrict(marca1)
+    const modeloNorm = normalizarStrict(modelo1)
+    const tipoNorm = tipo1.trim().toLowerCase()
+    const colorHex = colores[0]
+    const tengoId = tieneIdentificador(referencia1, link1)
 
-    // 1. LOOK BLOQUEADO DE LA ORGANIZADORA
+    // ── 1. LOOK BLOQUEADO ORGANIZADORA ──────────────────────────────
     if (evento.look_bloqueado_marca1) {
-      const colorCoincide = colores[0] === evento.look_bloqueado_color
-      const marcaCoincide = normalizar(marca1) === normalizar(evento.look_bloqueado_marca1)
-      const tipoCoincide = tipo1.trim().toLowerCase() === (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
-      const modeloCoincide = normalizar(modelo1) === normalizar(evento.look_bloqueado_modelo1)
-      if (colorCoincide && marcaCoincide && tipoCoincide && modeloCoincide) {
+      const marcaOrg = normalizarStrict(evento.look_bloqueado_marca1)
+      const modeloOrg = normalizarStrict(evento.look_bloqueado_modelo1)
+      const tipoOrg = (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
+      const colorOrg = evento.look_bloqueado_color
+
+      const marcaOk = marcaNorm === marcaOrg
+      const tipoOk = tipoNorm === tipoOrg
+      const modeloOk = modeloNorm === modeloOrg
+      const colorOk = colorHex === colorOrg
+      const modeloSimilar = similitudPalabras(modelo1, evento.look_bloqueado_modelo1) >= 0.6
+
+      if (marcaOk && tipoOk && (modeloOk || modeloSimilar)) {
+        if (!colorOk) return { tipo: 'bloqueado_directo' } // mismo modelo distinto color
         const refOrg = evento.look_bloqueado_referencia1
-        if (refOrg && tieneIdentificador(identificador1)) {
-          if (identificador1.toLowerCase() === refOrg.trim().toLowerCase()) {
-            return { tipo: 'bloqueado_organizadora' }
-          }
-        } else if (!refOrg) {
-          return { tipo: 'bloqueado_organizadora' }
-        } else {
-          return { tipo: 'pedir_referencia_organizadora' }
+        if (!refOrg && !tengoId) return { tipo: 'bloqueado_directo' }
+        if (refOrg && tengoId) {
+          const coincide = identificadoresCoinciden(referencia1, link1, refOrg, null)
+          if (coincide === 'exacto') return { tipo: 'bloqueado_directo' }
+          if (coincide === 'parcial') return { tipo: 'pedir_foto' }
+          return { tipo: 'pedir_foto' }
         }
+        return { tipo: 'pedir_referencia' }
       }
     }
 
-    // 2. CONFLICTO CON OTRAS INVITADAS
-    let query = supabase.from('looks').select('id, nombre_invitada, email_invitada, referencia, link, foto_url, color_hex, marca, modelo')
+    // ── 2. BUSCAR CANDIDATOS EN LA BD ───────────────────────────────
+    // Traemos todos los looks del evento con misma marca normalizada
+    const { data: candidatosMarca } = await supabase
+      .from('looks')
+      .select('id, nombre_invitada, email_invitada, color_hex, marca, modelo, tipo, referencia, link, foto_url, marca_normalizada, modelo_normalizado')
       .eq('evento_id', evento.id)
-      .eq('color_hex', colores[0])
-      .eq('marca_normalizada', normalizar(marca1))
-      .ilike('tipo', tipo1.trim())
-      .eq('modelo_normalizado', normalizar(modelo1))
-    if (excludeId) query = query.neq('id', excludeId)
-    const { data: candidatos } = await query
+      .eq('marca_normalizada', marcaNorm)
+      .neq('email_invitada', email.toLowerCase().trim())
 
-    if (candidatos && candidatos.length > 0) {
-      if (!tieneIdentificador(identificador1)) return { tipo: 'pedir_referencia', candidatos }
+    if (!candidatosMarca || candidatosMarca.length === 0) return { tipo: 'ninguno' }
 
-      const conflictoReal = candidatos.find(c => {
-        const idCandidato = (c.referencia || '').trim() || (c.link || '').trim()
-        return idCandidato && idCandidato.toLowerCase() === identificador1.toLowerCase()
-      })
-      if (conflictoReal) return { tipo: 'conflicto_real', candidato: conflictoReal }
+    const candidatos = excludeId ? candidatosMarca.filter(c => c.id !== excludeId) : candidatosMarca
+    if (candidatos.length === 0) return { tipo: 'ninguno' }
 
-      // Ambos tienen identificador pero distinto: ambiguedad, pedir foto
-      const sinIdentificador = candidatos.filter(c => !tieneIdentificador((c.referencia || '') + (c.link || '')))
-      if (sinIdentificador.length > 0) return { tipo: 'pedir_referencia', candidatos: sinIdentificador }
+    for (const c of candidatos) {
+      const cMarca = normalizarStrict(c.marca)
+      const cModelo = normalizarStrict(c.modelo)
+      const cTipo = (c.tipo || '').trim().toLowerCase()
+      const cColor = c.color_hex
+      const cTieneId = tieneIdentificador(c.referencia, c.link)
 
-      // Todos tienen identificador distinto: posible ambigüedad visual, pedir foto
-      return { tipo: 'ambiguedad_foto', candidatos }
-    }
+      const marcaOk = marcaNorm === cMarca
+      const tipoOk = tipoNorm === cTipo
+      const modeloExacto = modeloNorm === cModelo
+      const modeloSimilar = similitudPalabras(modelo1, c.modelo) >= 0.6
+      const colorOk = colorHex === cColor
 
-    // 3. MISMO MODELO DISTINTO COLOR
-    let queryMismoModelo = supabase.from('looks').select('id, nombre_invitada, color_hex')
-      .eq('evento_id', evento.id)
-      .eq('marca_normalizada', normalizar(marca1))
-      .ilike('tipo', tipo1.trim())
-      .eq('modelo_normalizado', normalizar(modelo1))
-      .neq('color_hex', colores[0])
-    if (excludeId) queryMismoModelo = queryMismoModelo.neq('id', excludeId)
-    const { data: mismoModelo } = await queryMismoModelo
-    if (mismoModelo && mismoModelo.length > 0) {
-      return { tipo: 'mismo_modelo_otro_color' }
+      if (!marcaOk) continue
+
+      // MISMO MODELO (exacto o similar) DISTINTO COLOR → BLOQUEO
+      if ((modeloExacto || modeloSimilar) && tipoOk && !colorOk) {
+        return { tipo: 'bloqueo_mismo_modelo_otro_color', candidato: c }
+      }
+
+      // COINCIDENCIA EXACTA: color + marca + tipo + modelo
+      if (colorOk && tipoOk && modeloExacto) {
+        if (!tengoId && !cTieneId) return { tipo: 'bloqueo_directo', candidato: c }
+        if (tengoId && cTieneId) {
+          const coincide = identificadoresCoinciden(referencia1, link1, c.referencia, c.link)
+          if (coincide === 'exacto') return { tipo: 'bloqueo_directo', candidato: c }
+          if (coincide === 'parcial') return { tipo: 'pedir_foto', candidato: c }
+          return { tipo: 'pedir_foto', candidato: c }
+        }
+        return { tipo: 'pedir_referencia', candidato: c }
+      }
+
+      // COLOR + MARCA + TIPO coinciden, modelo similar (60%+) pero no exacto
+      if (colorOk && tipoOk && !modeloExacto && modeloSimilar) {
+        return { tipo: 'pedir_referencia', candidato: c }
+      }
+
+      // COLOR + MARCA + MODELO exactos, tipo distinto
+      if (colorOk && modeloExacto && !tipoOk) {
+        return { tipo: 'pedir_referencia', candidato: c }
+      }
     }
 
     return { tipo: 'ninguno' }
@@ -296,12 +403,10 @@ export default function InvitadaPage() {
       evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
-      referencia: referencia1 || null,
-      link: link1 || null,
-      marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
+      referencia: referencia1 || null, link: link1 || null,
+      marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null,
-      link2: link2 || null,
+      referencia2: referencia2 || null, link2: link2 || null,
       estado, foto_url
     }).select().single()
 
@@ -318,16 +423,12 @@ export default function InvitadaPage() {
     await supabase.from('looks').update({
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
-      referencia: referencia1 || null,
-      link: link1 || null,
-      marca_normalizada: normalizar(marca1), modelo_normalizado: normalizar(modelo1),
+      referencia: referencia1 || null, link: link1 || null,
+      marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null,
-      link2: link2 || null,
-      estado
+      referencia2: referencia2 || null, link2: link2 || null, estado
     }).eq('id', lookEditando.id)
     const emailGuardado = email.toLowerCase().trim()
-    const nombreGuardado = nombre
     const lookActualizado = {
       ...lookEditando, nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
@@ -337,70 +438,98 @@ export default function InvitadaPage() {
     }
     setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
     setEmailGestion(emailGuardado); setEnviando(false); resetForm(); setModoGestion(true)
-    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
   }
 
   async function procesarConflicto(excludeId, accion) {
     const resultado = await comprobarConflicto(excludeId)
+    const candidato = resultado.candidato
 
-    if (resultado.tipo === 'bloqueado_organizadora') {
+    if (resultado.tipo === 'bloqueado_directo' || resultado.tipo === 'bloqueo_directo') {
+      if (candidato) {
+        await supabase.from('conflictos').insert({
+          evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+          marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
+        })
+        enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
+          emailPrimera: candidato.email_invitada,
+          nombrePrimera: candidato.nombre_invitada,
+        })
+      }
       setModal({
         icono: '🚫',
-        titulo: t('modalBloqueadoTitulo'),
-        desc: t('modalBloqueadoDesc'),
-        textoConfirmar: t('modalEntendido'),
+        titulo: t('modalBloqueadoTitulo') || 'Look no disponible',
+        desc: t('modalBloqueadoDesc') || 'Este look ya está registrado por otra invitada.',
+        textoConfirmar: t('modalEntendido') || 'Entendido',
         onConfirmar: cerrarModal
       })
       return
     }
 
-    if (resultado.tipo === 'pedir_referencia_organizadora' || resultado.tipo === 'pedir_referencia') {
+    if (resultado.tipo === 'bloqueo_mismo_modelo_otro_color') {
+      if (candidato) {
+        await supabase.from('conflictos').insert({
+          evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+          marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
+        })
+        enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
+          emailPrimera: candidato.email_invitada,
+          nombrePrimera: candidato.nombre_invitada,
+        })
+      }
+      setModal({
+        icono: '👗',
+        titulo: t('modalMismoModeloTitulo') || 'Mismo modelo, distinto color',
+        desc: t('modalMismoModeloDesc') || 'Otra invitada lleva el mismo modelo en otro color. Para evitar coincidencias, este look no está disponible.',
+        textoConfirmar: t('modalElegirOtro') || 'Elegir otro look',
+        onConfirmar: cerrarModal,
+        colorConfirmar: '#F07987'
+      })
+      return
+    }
+
+    if (resultado.tipo === 'pedir_referencia') {
       setPedirReferencia(true)
       setModal({
         icono: '🔍',
-        titulo: t('modalPedirReferenciaTitulo'),
-        desc: t('modalPedirReferenciaDesc'),
-        textoConfirmar: t('modalAnadirReferencia'),
+        titulo: t('modalPedirReferenciaTitulo') || 'Posible coincidencia',
+        desc: t('modalPedirReferenciaDesc') || 'Otra invitada lleva un look muy similar. Añade la referencia o link del producto para confirmar si es exactamente el mismo.',
+        textoConfirmar: t('modalAnadirReferencia') || 'Entendido, añado la referencia',
         onConfirmar: cerrarModal
       })
       return
     }
 
-    if (resultado.tipo === 'ambiguedad_foto') {
-      // Si ya tiene foto, crear validación y avisar organizadora
+    if (resultado.tipo === 'pedir_foto') {
       if (foto) {
         const foto_url = await subirFoto()
         const lookInsertado = await guardarLook(foto_url)
         if (!lookInsertado) return
 
-        const candidato = resultado.candidatos[0]
         const colorNombre = COLORES.find(c => c.hex === colores[0])?.nombre || colores[0]
-        const colorCandidato = COLORES.find(c => c.hex === candidato.color_hex)?.nombre || candidato.color_hex
+        const colorCandidato = candidato ? (COLORES.find(c => c.hex === candidato.color_hex)?.nombre || candidato.color_hex) : ''
 
-        // Crear registro de validación
         const { data: validacion } = await supabase.from('validaciones').insert({
           evento_id: evento.id,
           look_id: lookInsertado.id,
-          candidato_id: candidato.id,
+          candidato_id: candidato?.id || null,
           nombre_invitada: nombre,
           email_invitada: email.toLowerCase().trim(),
-          nombre_candidata: candidato.nombre_invitada,
-          email_candidata: candidato.email_invitada,
+          nombre_candidata: candidato?.nombre_invitada || '',
+          email_candidata: candidato?.email_invitada || '',
           foto_url: foto_url,
         }).select().single()
 
         if (validacion) {
-          // Email a organizadora con botones aprobar/rechazar
           enviarEmailAsync('ambiguedad_foto', email.toLowerCase().trim(), nombre, {
             fotoUrl: foto_url,
             lookId: lookInsertado.id,
-            candidatoId: candidato.id,
-            nombreCandidata: candidato.nombre_invitada,
-            emailCandidata: candidato.email_invitada,
-            marcaCandidata: candidato.marca,
-            modeloCandidata: candidato.modelo,
+            candidatoId: candidato?.id,
+            nombreCandidata: candidato?.nombre_invitada || '',
+            emailCandidata: candidato?.email_invitada || '',
+            marcaCandidata: candidato?.marca || '',
+            modeloCandidata: candidato?.modelo || '',
             colorCandidata: colorCandidato,
-            fotoCandidataUrl: candidato.foto_url || null,
+            fotoCandidataUrl: candidato?.foto_url || null,
             token: validacion.token,
           })
         }
@@ -410,7 +539,6 @@ export default function InvitadaPage() {
         return
       }
 
-      // Si no tiene foto, pedirla
       setPedirFoto(true)
       setModal({
         icono: '📸',
@@ -422,40 +550,7 @@ export default function InvitadaPage() {
       return
     }
 
-    if (resultado.tipo === 'conflicto_real') {
-      await supabase.from('conflictos').insert({
-        evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-        marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
-      })
-      // Aviso a la invitada que intenta registrar
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
-        emailPrimera: resultado.candidato.email_invitada,
-        nombrePrimera: resultado.candidato.nombre_invitada,
-      })
-      setModal({
-        icono: '⚠️',
-        titulo: t('modalConflictoTitulo'),
-        desc: t('modalConflictoDesc'),
-        textoConfirmar: t('modalElegirOtro'),
-        onConfirmar: cerrarModal,
-        colorConfirmar: '#F07987'
-      })
-      return
-    }
-
-    if (resultado.tipo === 'mismo_modelo_otro_color') {
-      setModal({
-        icono: '👗',
-        titulo: t('modalMismoModeloTitulo'),
-        desc: t('modalMismoModeloDesc'),
-        textoConfirmar: t('modalElegirOtro'),
-        onConfirmar: cerrarModal,
-        colorConfirmar: '#F07987'
-      })
-      return
-    }
-
-    // Sin conflicto: guardar normalmente
+    // Sin conflicto
     if (accion === 'enviar') {
       const foto_url = foto ? await subirFoto() : null
       const lookInsertado = await guardarLook(foto_url)
@@ -508,7 +603,6 @@ export default function InvitadaPage() {
         return
       }
     }
-
     await procesarConflicto(null, 'enviar')
   }
 
@@ -566,19 +660,7 @@ export default function InvitadaPage() {
         }
       `}</style>
 
-      {modal && (
-        <AvisoModal
-          icono={modal.icono}
-          titulo={modal.titulo}
-          desc={modal.desc}
-          textoConfirmar={modal.textoConfirmar}
-          textoCancelar={modal.textoCancelar}
-          onConfirmar={modal.onConfirmar}
-          onCancelar={modal.onCancelar}
-          enviando={enviando}
-          colorConfirmar={modal.colorConfirmar}
-        />
-      )}
+      {modal && <AvisoModal icono={modal.icono} titulo={modal.titulo} desc={modal.desc} textoConfirmar={modal.textoConfirmar} textoCancelar={modal.textoCancelar} onConfirmar={modal.onConfirmar} onCancelar={modal.onCancelar} enviando={enviando} colorConfirmar={modal.colorConfirmar}/>}
 
       <div className="invitada-layout">
 
@@ -623,18 +705,14 @@ export default function InvitadaPage() {
               <h2 style={{fontSize:'clamp(1.4rem,4vw,1.8rem)',fontWeight:700,color:'#0A0A0A',letterSpacing:'-0.02em',marginBottom:'0.4rem'}}>{t('misLooks')}</h2>
               <p style={{fontSize:'0.85rem',fontWeight:400,color:'#555552',marginBottom:'2rem'}}>{t('emailParaGestionar')}</p>
               <div className="gestion-row">
-                <input type="email" placeholder="tu@email.com" value={emailGestion} onChange={e => setEmailGestion(e.target.value)}
-                  style={{...inputStyle,flex:1}} onKeyDown={e => e.key === 'Enter' && buscarLooks()}/>
-                <button onClick={buscarLooks} disabled={buscandoLooks}
-                  style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:buscandoLooks?0.6:1,borderRadius:'4px'}}>
+                <input type="email" placeholder="tu@email.com" value={emailGestion} onChange={e => setEmailGestion(e.target.value)} style={{...inputStyle,flex:1}} onKeyDown={e => e.key === 'Enter' && buscarLooks()}/>
+                <button onClick={buscarLooks} disabled={buscandoLooks} style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:buscandoLooks?0.6:1,borderRadius:'4px'}}>
                   {buscandoLooks ? t('buscando') : t('buscar')}
                 </button>
               </div>
               {looksExistentes !== null && (
                 looksExistentes.length === 0 ? (
-                  <div style={{padding:'2rem',background:'#F7F7F5',border:'1px solid #E0E0DC',textAlign:'center',fontSize:'0.82rem',color:'#888884',borderRadius:'8px'}}>
-                    {t('sinLooks')}
-                  </div>
+                  <div style={{padding:'2rem',background:'#F7F7F5',border:'1px solid #E0E0DC',textAlign:'center',fontSize:'0.82rem',color:'#888884',borderRadius:'8px'}}>{t('sinLooks')}</div>
                 ) : (
                   <div style={{display:'flex',flexDirection:'column',gap:'1rem'}}>
                     {looksExistentes.map((look, i) => (
@@ -651,12 +729,8 @@ export default function InvitadaPage() {
                         </div>
                         <div style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'1rem'}}>{look.tipo}</div>
                         <div style={{display:'flex',gap:'0.75rem'}}>
-                          <button onClick={() => handleEditarLook(look)}
-                            style={{flex:1,padding:'0.6rem',fontSize:'0.72rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
-                            {t('editar')}
-                          </button>
-                          <button onClick={() => handleEliminarLook(look.id)} disabled={eliminando === look.id}
-                            style={{flex:1,padding:'0.6rem',fontSize:'0.72rem',fontWeight:600,background:'transparent',color:'#F07987',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:eliminando===look.id?0.6:1}}>
+                          <button onClick={() => handleEditarLook(look)} style={{flex:1,padding:'0.6rem',fontSize:'0.72rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>{t('editar')}</button>
+                          <button onClick={() => handleEliminarLook(look.id)} disabled={eliminando === look.id} style={{flex:1,padding:'0.6rem',fontSize:'0.72rem',fontWeight:600,background:'transparent',color:'#F07987',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:eliminando===look.id?0.6:1}}>
                             {eliminando === look.id ? t('eliminando') : t('eliminar')}
                           </button>
                         </div>
@@ -678,8 +752,7 @@ export default function InvitadaPage() {
                   </p>
                 </div>
                 {!lookEditando && (
-                  <button onClick={() => setModoGestion(true)}
-                    style={{fontSize:'0.65rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',background:'none',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.5rem 1rem',borderRadius:'4px',whiteSpace:'nowrap',flexShrink:0}}>
+                  <button onClick={() => setModoGestion(true)} style={{fontSize:'0.65rem',fontWeight:600,letterSpacing:'0.08em',textTransform:'uppercase',color:'#888884',background:'none',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.5rem 1rem',borderRadius:'4px',whiteSpace:'nowrap',flexShrink:0}}>
                     {t('modificarLook')}
                   </button>
                 )}
@@ -757,10 +830,8 @@ export default function InvitadaPage() {
                 <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>
                     {t('referenciaCodigoLabel')}
-                    {pedirReferencia
-                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaRequerida')}</span>
-                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
-                    }
+                    {pedirReferencia ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaRequerida')}</span>
+                    : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                   </label>
                   <input type="text" placeholder={t('referenciaCodigoPlaceholder')} value={referencia1} onChange={e => setReferencia1(e.target.value)}
                     style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}/>
@@ -769,17 +840,15 @@ export default function InvitadaPage() {
                 <div>
                   <label style={labelStyle}>
                     {t('referenciaLinkLabel')}
-                    {pedirReferencia
-                      ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaLinkRequerido')}</span>
-                      : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
-                    }
+                    {pedirReferencia ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaLinkRequerido')}</span>
+                    : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                   </label>
                   <input type="url" placeholder={t('referenciaLinkPlaceholder')} value={link1} onChange={e => setLink1(e.target.value)}
                     style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}/>
                   <p style={notaStyle}>{t('referenciaLinkNota')}</p>
                   {pedirReferencia && (
                     <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.5rem',lineHeight:1.5}}>
-                      {t('referenciaInfo') || t('errorPedirReferencia')}
+                      {t('errorPedirReferencia')}
                     </p>
                   )}
                 </div>
@@ -787,14 +856,12 @@ export default function InvitadaPage() {
 
               {/* PRENDA 2 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:`1px solid ${requierePrenda2 ? '#F07987' : '#E0E0DC'}`,borderRadius:'4px'}}>
-                <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color: requierePrenda2 ? '#0A0A0A' : '#888884',marginBottom:'0.5rem'}}>
+                <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:requierePrenda2?'#0A0A0A':'#888884',marginBottom:'0.5rem'}}>
                   {t('prenda2')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}
                 </div>
-                <p style={{fontSize:'0.65rem',fontWeight:300,color: requierePrenda2 ? '#F07987' : '#BEBEBA',marginBottom:'1.25rem',lineHeight:1.5}}>
-                  {requierePrenda2
-                    ? (t('prenda2ObligatoriaDesc') || 'Tu prenda principal no es un vestido. Añade la segunda pieza del look.')
-                    : (t('prenda2OpcionaDesc') || 'Para looks de dos piezas: falda + top, pantalón + blusa, etc.')
-                  }
+                <p style={{fontSize:'0.65rem',fontWeight:300,color:requierePrenda2?'#F07987':'#BEBEBA',marginBottom:'1.25rem',lineHeight:1.5}}>
+                  {requierePrenda2 ? (t('prenda2ObligatoriaDesc') || 'Tu prenda principal no es un vestido completo. Añade la segunda pieza del look.')
+                  : (t('prenda2OpcionaDesc') || 'Para looks de dos piezas: falda + top, pantalón + blusa, etc.')}
                 </p>
                 <div className="prenda-grid">
                   <div>
@@ -820,12 +887,10 @@ export default function InvitadaPage() {
                 <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>{t('referenciaCodigoLabel')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span></label>
                   <input type="text" placeholder={t('referenciaCodigoPlaceholder')} value={referencia2} onChange={e => setReferencia2(e.target.value)} style={inputStyle}/>
-                  <p style={notaStyle}>{t('referenciaCodigoNota')}</p>
                 </div>
                 <div>
                   <label style={labelStyle}>{t('referenciaLinkLabel')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span></label>
                   <input type="url" placeholder={t('referenciaLinkPlaceholder')} value={link2} onChange={e => setLink2(e.target.value)} style={inputStyle}/>
-                  <p style={notaStyle}>{t('referenciaLinkNota')}</p>
                 </div>
               </div>
 
@@ -833,15 +898,13 @@ export default function InvitadaPage() {
               <div style={{marginBottom:'1.25rem'}}>
                 <label style={labelStyle}>
                   {t('foto')}
-                  {pedirFoto
-                    ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida') || 'requerida'}</span>
-                    : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
-                  }
+                  {pedirFoto ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida')}</span>
+                  : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                 </label>
                 {pedirFoto && (
                   <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
                     <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>
-                      {t('modalPedirFotoDesc') || 'Hay una posible coincidencia con otra invitada. Sube una foto de tu look para que la organizadora pueda validarlo.'}
+                      {t('modalPedirFotoDesc')}
                     </p>
                   </div>
                 )}
@@ -851,7 +914,7 @@ export default function InvitadaPage() {
                     <img src={fotoPreview} alt="Preview" style={{maxHeight:'200px',maxWidth:'100%',objectFit:'contain'}}/>
                   ) : (
                     <div>
-                      <div style={{fontSize:'0.82rem',fontWeight:300,color: pedirFoto ? '#F07987' : '#888884',marginBottom:'0.25rem'}}>{t('fotoInfo')}</div>
+                      <div style={{fontSize:'0.82rem',fontWeight:300,color:pedirFoto?'#F07987':'#888884',marginBottom:'0.25rem'}}>{t('fotoInfo')}</div>
                       <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>JPG, PNG o WEBP</div>
                     </div>
                   )}
