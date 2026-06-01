@@ -4,30 +4,25 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 const ADMIN_EMAIL = 'mnavarretegon@gmail.com'
 const LOGO = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/No%20Wear.png'
 
-// Supabase llama a este endpoint con un JWT firmado
-// Verificamos que viene de Supabase con el secret
 export async function POST(req) {
   try {
     const body = await req.json()
 
-    // El payload de Supabase Auth Hook tiene esta estructura:
-    // { type: 'signup', event: { user: { id, email, created_at, app_metadata, user_metadata } } }
-    const user = body?.user || body?.event?.user || body?.record
+    const user = body?.user || body?.event?.user || body?.record || (body?.email ? body : null)
 
     if (!user) {
       return Response.json({ ok: false, error: 'No user data' }, { status: 400 })
     }
 
     const email = user.email || 'Sin email'
-    const nombre = user.user_metadata?.full_name || user.raw_user_meta_data?.full_name || user.user_metadata?.name || 'Sin nombre'
-    const proveedor = user.app_metadata?.provider || user.raw_app_meta_data?.provider || 'email'
-    const fechaStr = user.created_at ? new Date(user.created_at).toLocaleString('es-ES', {
-      day: 'numeric', month: 'long', year: 'numeric',
-      hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid'
-    }) : new Date().toLocaleString('es-ES', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Madrid' })
+    const nombre = user.user_metadata?.full_name || user.raw_user_meta_data?.full_name || user.nombre || user.user_metadata?.name || 'Sin nombre'
+    const proveedor = user.app_metadata?.provider || user.raw_app_meta_data?.provider || user.proveedor || 'email'
+    const fechaStr = user.created_at
+      ? new Date(user.created_at).toLocaleString('es-ES', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Madrid' })
+      : new Date().toLocaleString('es-ES', { day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit', timeZone:'Europe/Madrid' })
 
     const proveedorLabel = proveedor === 'google' ? '🔵 Google' : '📧 Email'
-    const supabaseUrl = `https://supabase.com/dashboard/project/qhuatexjyxbunotvghjh/auth/users`
+    const supabaseUrl = 'https://supabase.com/dashboard/project/qhuatexjyxbunotvghjh/auth/users'
 
     await resend.emails.send({
       from: 'NOWEAR <support@nowear.es>',
