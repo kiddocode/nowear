@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 
 const FOTO_FIJA = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/pexels-pavel-danilyuk-6405676.jpg'
+const PRENDAS_COMPLETAS = ['Vestido corto', 'Vestido midi', 'Vestido largo']
 
 function getPlan(evento) {
   if (!evento) return 'basico'
@@ -101,6 +102,7 @@ export default function InvitadaPage() {
   const [estado, setEstado] = useState('confirmado')
   const [foto, setFoto] = useState(null)
   const [fotoPreview, setFotoPreview] = useState(null)
+  const [pedirFoto, setPedirFoto] = useState(false)
   const [marca1, setMarca1] = useState('')
   const [modelo1, setModelo1] = useState('')
   const [tipo1, setTipo1] = useState('')
@@ -113,6 +115,9 @@ export default function InvitadaPage() {
   const [link2, setLink2] = useState('')
   const [pedirReferencia, setPedirReferencia] = useState(false)
   const [modal, setModal] = useState(null)
+
+  // Prenda 2 obligatoria si prenda 1 no es vestido completo
+  const requierePrenda2 = tipo1 && !PRENDAS_COMPLETAS.includes(tipo1)
 
   // Fix teclado móvil
   useEffect(() => {
@@ -149,13 +154,13 @@ export default function InvitadaPage() {
     setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setLink1('')
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setLink2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
-    setLookEditando(null); setError(''); setPedirReferencia(false)
+    setLookEditando(null); setError(''); setPedirReferencia(false); setPedirFoto(false)
     setModal(null)
   }
 
   function cerrarModal() { setModal(null) }
 
-  async function enviarEmailAsync(tipo, emailInv, nombreInv) {
+  async function enviarEmailAsync(tipo, emailInv, nombreInv, extra = {}) {
     try {
       fetch('/api/email', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
@@ -166,6 +171,7 @@ export default function InvitadaPage() {
           marca: marca1, modelo: modelo1,
           color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
           organizadoraId: evento.organizadora_id, eventoId: evento.slug,
+          ...extra
         })
       })
     } catch (e) { console.error('Error enviando email:', e) }
@@ -196,11 +202,10 @@ export default function InvitadaPage() {
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
     setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || ''); setLink2(look.link2 || '')
     setEstado(look.estado || 'confirmado')
-    setPedirReferencia(false); setModal(null)
+    setPedirReferencia(false); setPedirFoto(false); setModal(null)
     setModoGestion(false)
   }
 
-  // La detección de conflicto usa referencia O link para desambiguar
   function tieneIdentificador(val) {
     return val && val.trim().length > 0
   }
@@ -231,7 +236,7 @@ export default function InvitadaPage() {
     }
 
     // 2. CONFLICTO CON OTRAS INVITADAS
-    let query = supabase.from('looks').select('id, nombre_invitada, referencia, link')
+    let query = supabase.from('looks').select('id, nombre_invitada, email_invitada, referencia, link, foto_url, color_hex, marca, modelo')
       .eq('evento_id', evento.id)
       .eq('color_hex', colores[0])
       .eq('marca_normalizada', normalizar(marca1))
@@ -242,13 +247,19 @@ export default function InvitadaPage() {
 
     if (candidatos && candidatos.length > 0) {
       if (!tieneIdentificador(identificador1)) return { tipo: 'pedir_referencia', candidatos }
+
       const conflictoReal = candidatos.find(c => {
         const idCandidato = (c.referencia || '').trim() || (c.link || '').trim()
         return idCandidato && idCandidato.toLowerCase() === identificador1.toLowerCase()
       })
       if (conflictoReal) return { tipo: 'conflicto_real', candidato: conflictoReal }
+
+      // Ambos tienen identificador pero distinto: ambiguedad, pedir foto
       const sinIdentificador = candidatos.filter(c => !tieneIdentificador((c.referencia || '') + (c.link || '')))
       if (sinIdentificador.length > 0) return { tipo: 'pedir_referencia', candidatos: sinIdentificador }
+
+      // Todos tienen identificador distinto: posible ambigüedad visual, pedir foto
+      return { tipo: 'ambiguedad_foto', candidatos }
     }
 
     // 3. MISMO MODELO DISTINTO COLOR
@@ -267,19 +278,21 @@ export default function InvitadaPage() {
     return { tipo: 'ninguno' }
   }
 
-  async function guardarLook() {
-    setEnviando(true)
-    let foto_url = null
-    if (foto) {
-      const ext = foto.name.split('.').pop()
-      const fileName = `${evento.id}-${Date.now()}.${ext}`
-      const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, foto, { contentType: foto.type })
-      if (uploadData) {
-        const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
-        foto_url = urlData.publicUrl
-      }
+  async function subirFoto() {
+    if (!foto) return null
+    const ext = foto.name.split('.').pop()
+    const fileName = `${evento.id}-${Date.now()}.${ext}`
+    const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, foto, { contentType: foto.type })
+    if (uploadData) {
+      const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
+      return urlData.publicUrl
     }
-    const { error: insertError } = await supabase.from('looks').insert({
+    return null
+  }
+
+  async function guardarLook(foto_url = null) {
+    setEnviando(true)
+    const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
       evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
@@ -290,16 +303,14 @@ export default function InvitadaPage() {
       referencia2: referencia2 || null,
       link2: link2 || null,
       estado, foto_url
-    })
+    }).select().single()
+
     if (insertError) {
       setEnviando(false)
       setModal({ icono:'❌', titulo: t('errorRegistro'), desc: t('errorRegistro'), textoConfirmar:'OK', onConfirmar: cerrarModal })
-      return
+      return null
     }
-    const emailGuardado = email.toLowerCase().trim()
-    const nombreGuardado = nombre
-    setEnviando(false); setEnviado(true)
-    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado)
+    return lookInsertado
   }
 
   async function actualizarLook() {
@@ -343,7 +354,7 @@ export default function InvitadaPage() {
       return
     }
 
-    if (resultado.tipo === 'pedir_referencia_organizadora') {
+    if (resultado.tipo === 'pedir_referencia_organizadora' || resultado.tipo === 'pedir_referencia') {
       setPedirReferencia(true)
       setModal({
         icono: '🔍',
@@ -355,13 +366,57 @@ export default function InvitadaPage() {
       return
     }
 
-    if (resultado.tipo === 'pedir_referencia') {
-      setPedirReferencia(true)
+    if (resultado.tipo === 'ambiguedad_foto') {
+      // Si ya tiene foto, crear validación y avisar organizadora
+      if (foto) {
+        const foto_url = await subirFoto()
+        const lookInsertado = await guardarLook(foto_url)
+        if (!lookInsertado) return
+
+        const candidato = resultado.candidatos[0]
+        const colorNombre = COLORES.find(c => c.hex === colores[0])?.nombre || colores[0]
+        const colorCandidato = COLORES.find(c => c.hex === candidato.color_hex)?.nombre || candidato.color_hex
+
+        // Crear registro de validación
+        const { data: validacion } = await supabase.from('validaciones').insert({
+          evento_id: evento.id,
+          look_id: lookInsertado.id,
+          candidato_id: candidato.id,
+          nombre_invitada: nombre,
+          email_invitada: email.toLowerCase().trim(),
+          nombre_candidata: candidato.nombre_invitada,
+          email_candidata: candidato.email_invitada,
+          foto_url: foto_url,
+        }).select().single()
+
+        if (validacion) {
+          // Email a organizadora con botones aprobar/rechazar
+          enviarEmailAsync('ambiguedad_foto', email.toLowerCase().trim(), nombre, {
+            fotoUrl: foto_url,
+            lookId: lookInsertado.id,
+            candidatoId: candidato.id,
+            nombreCandidata: candidato.nombre_invitada,
+            emailCandidata: candidato.email_invitada,
+            marcaCandidata: candidato.marca,
+            modeloCandidata: candidato.modelo,
+            colorCandidata: colorCandidato,
+            fotoCandidataUrl: candidato.foto_url || null,
+            token: validacion.token,
+          })
+        }
+
+        setEnviando(false)
+        setEnviado(true)
+        return
+      }
+
+      // Si no tiene foto, pedirla
+      setPedirFoto(true)
       setModal({
-        icono: '🔍',
-        titulo: t('modalPedirReferenciaTitulo'),
-        desc: t('modalPedirReferenciaDesc'),
-        textoConfirmar: t('modalAnadirReferencia'),
+        icono: '📸',
+        titulo: t('modalPedirFotoTitulo') || 'Necesitamos una foto',
+        desc: t('modalPedirFotoDesc') || 'Hay una posible coincidencia con otra invitada. Sube una foto de tu look para que la organizadora pueda validarlo.',
+        textoConfirmar: t('modalAnadirFoto') || 'Añadir foto',
         onConfirmar: cerrarModal
       })
       return
@@ -372,7 +427,11 @@ export default function InvitadaPage() {
         evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
         marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: resultado.candidato.nombre_invitada
       })
-      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre)
+      // Aviso a la invitada que intenta registrar
+      enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
+        emailPrimera: resultado.candidato.email_invitada,
+        nombrePrimera: resultado.candidato.nombre_invitada,
+      })
       setModal({
         icono: '⚠️',
         titulo: t('modalConflictoTitulo'),
@@ -396,14 +455,27 @@ export default function InvitadaPage() {
       return
     }
 
-    if (accion === 'enviar') await guardarLook()
-    else await actualizarLook()
+    // Sin conflicto: guardar normalmente
+    if (accion === 'enviar') {
+      const foto_url = foto ? await subirFoto() : null
+      const lookInsertado = await guardarLook(foto_url)
+      if (lookInsertado) {
+        setEnviando(false)
+        setEnviado(true)
+        enviarEmailAsync('confirmacion', email.toLowerCase().trim(), nombre)
+      }
+    } else {
+      await actualizarLook()
+    }
   }
 
   async function handleActualizarLook() {
     setError('')
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
       setError(t('errorCampos')); return
+    }
+    if (requierePrenda2 && (!marca2 || !tipo2 || !modelo2)) {
+      setError(t('errorPrenda2') || 'Tu look es de dos piezas. Por favor completa los datos de la segunda prenda.'); return
     }
     await procesarConflicto(lookEditando.id, 'actualizar')
   }
@@ -412,6 +484,12 @@ export default function InvitadaPage() {
     setError('')
     if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
       setError(t('errorCampos')); return
+    }
+    if (requierePrenda2 && (!marca2 || !tipo2 || !modelo2)) {
+      setError(t('errorPrenda2') || 'Tu look es de dos piezas. Por favor completa los datos de la segunda prenda.'); return
+    }
+    if (pedirFoto && !foto) {
+      setError(t('errorFotoRequerida') || 'Por favor sube una foto de tu look para continuar.'); return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
@@ -422,23 +500,11 @@ export default function InvitadaPage() {
       const confirmados = existentes.filter(l => l.estado === 'confirmado').length
       const prereservados = existentes.filter(l => l.estado === 'prereservado').length
       if (estado === 'confirmado' && confirmados >= 1) {
-        setModal({
-          icono: 'ℹ️',
-          titulo: t('modalMaxConfirmadosTitulo'),
-          desc: t('errorMaxConfirmados'),
-          textoConfirmar: t('modalEntendido'),
-          onConfirmar: cerrarModal
-        })
+        setModal({ icono:'ℹ️', titulo: t('modalMaxConfirmadosTitulo'), desc: t('errorMaxConfirmados'), textoConfirmar: t('modalEntendido'), onConfirmar: cerrarModal })
         return
       }
       if (estado === 'prereservado' && prereservados >= 3) {
-        setModal({
-          icono: 'ℹ️',
-          titulo: t('modalMaxPrereservasTitulo'),
-          desc: t('errorMaxPrereservas'),
-          textoConfirmar: t('modalEntendido'),
-          onConfirmar: cerrarModal
-        })
+        setModal({ icono:'ℹ️', titulo: t('modalMaxPrereservasTitulo'), desc: t('errorMaxPrereservas'), textoConfirmar: t('modalEntendido'), onConfirmar: cerrarModal })
         return
       }
     }
@@ -685,17 +751,9 @@ export default function InvitadaPage() {
                 </div>
                 <div style={{marginBottom:'1rem'}}>
                   <label style={labelStyle}>{t('modelo')} <span style={{color:'#F07987'}}>*</span></label>
-                  <input
-                    type="text"
-                    placeholder={t('modeloPlaceholder')}
-                    value={modelo1}
-                    onChange={e => { setModelo1(e.target.value); setPedirReferencia(false) }}
-                    style={inputStyle}
-                  />
+                  <input type="text" placeholder={t('modeloPlaceholder')} value={modelo1} onChange={e => { setModelo1(e.target.value); setPedirReferencia(false) }} style={inputStyle}/>
                   <p style={notaStyle}>{t('modeloNota')}</p>
                 </div>
-
-                {/* REFERENCIA */}
                 <div style={{marginBottom:'0.75rem'}}>
                   <label style={labelStyle}>
                     {t('referenciaCodigoLabel')}
@@ -704,17 +762,10 @@ export default function InvitadaPage() {
                       : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
                     }
                   </label>
-                  <input
-                    type="text"
-                    placeholder={t('referenciaCodigoPlaceholder')}
-                    value={referencia1}
-                    onChange={e => setReferencia1(e.target.value)}
-                    style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}
-                  />
+                  <input type="text" placeholder={t('referenciaCodigoPlaceholder')} value={referencia1} onChange={e => setReferencia1(e.target.value)}
+                    style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}/>
                   <p style={notaStyle}>{t('referenciaCodigoNota')}</p>
                 </div>
-
-                {/* LINK */}
                 <div>
                   <label style={labelStyle}>
                     {t('referenciaLinkLabel')}
@@ -723,13 +774,8 @@ export default function InvitadaPage() {
                       : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
                     }
                   </label>
-                  <input
-                    type="url"
-                    placeholder={t('referenciaLinkPlaceholder')}
-                    value={link1}
-                    onChange={e => setLink1(e.target.value)}
-                    style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}
-                  />
+                  <input type="url" placeholder={t('referenciaLinkPlaceholder')} value={link1} onChange={e => setLink1(e.target.value)}
+                    style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}/>
                   <p style={notaStyle}>{t('referenciaLinkNota')}</p>
                   {pedirReferencia && (
                     <p style={{fontSize:'0.72rem',fontWeight:400,color:'#C4917C',marginTop:'0.5rem',lineHeight:1.5}}>
@@ -740,26 +786,35 @@ export default function InvitadaPage() {
               </div>
 
               {/* PRENDA 2 */}
-              <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
-                <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1.25rem'}}>
-                  {t('prenda2')}
+              <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:`1px solid ${requierePrenda2 ? '#F07987' : '#E0E0DC'}`,borderRadius:'4px'}}>
+                <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color: requierePrenda2 ? '#0A0A0A' : '#888884',marginBottom:'0.5rem'}}>
+                  {t('prenda2')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}
                 </div>
+                <p style={{fontSize:'0.65rem',fontWeight:300,color: requierePrenda2 ? '#F07987' : '#BEBEBA',marginBottom:'1.25rem',lineHeight:1.5}}>
+                  {requierePrenda2
+                    ? (t('prenda2ObligatoriaDesc') || 'Tu prenda principal no es un vestido. Añade la segunda pieza del look.')
+                    : (t('prenda2OpcionaDesc') || 'Para looks de dos piezas: falda + top, pantalón + blusa, etc.')
+                  }
+                </p>
                 <div className="prenda-grid">
                   <div>
-                    <label style={labelStyle}>{t('marca')}</label>
-                    <input type="text" placeholder="Ej: Mango" value={marca2} onChange={e => setMarca2(e.target.value)} style={inputStyle}/>
+                    <label style={labelStyle}>{t('marca')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}</label>
+                    <input type="text" placeholder="Ej: Mango" value={marca2} onChange={e => setMarca2(e.target.value)}
+                      style={{...inputStyle, borderColor: requierePrenda2 && !marca2 ? '#F07987' : '#E0E0DC'}}/>
                   </div>
                   <div>
-                    <label style={labelStyle}>{t('tipo')}</label>
-                    <select value={tipo2} onChange={e => setTipo2(e.target.value)} style={selectStyle}>
+                    <label style={labelStyle}>{t('tipo')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}</label>
+                    <select value={tipo2} onChange={e => setTipo2(e.target.value)}
+                      style={{...selectStyle, borderColor: requierePrenda2 && !tipo2 ? '#F07987' : '#E0E0DC'}}>
                       <option value="">{t('selecciona')}</option>
                       {tiposData.map((tipo, i) => <option key={i}>{tipo}</option>)}
                     </select>
                   </div>
                 </div>
                 <div style={{marginBottom:'0.75rem'}}>
-                  <label style={labelStyle}>{t('modelo')}</label>
-                  <input type="text" placeholder={t('modeloPlaceholder')} value={modelo2} onChange={e => setModelo2(e.target.value)} style={inputStyle}/>
+                  <label style={labelStyle}>{t('modelo')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}</label>
+                  <input type="text" placeholder={t('modeloPlaceholder')} value={modelo2} onChange={e => setModelo2(e.target.value)}
+                    style={{...inputStyle, borderColor: requierePrenda2 && !modelo2 ? '#F07987' : '#E0E0DC'}}/>
                   <p style={notaStyle}>{t('modeloNota')}</p>
                 </div>
                 <div style={{marginBottom:'0.75rem'}}>
@@ -774,15 +829,29 @@ export default function InvitadaPage() {
                 </div>
               </div>
 
+              {/* FOTO */}
               <div style={{marginBottom:'1.25rem'}}>
-                <label style={labelStyle}>{t('foto')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>{t('opcional')}</span></label>
+                <label style={labelStyle}>
+                  {t('foto')}
+                  {pedirFoto
+                    ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida') || 'requerida'}</span>
+                    : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>
+                  }
+                </label>
+                {pedirFoto && (
+                  <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
+                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>
+                      {t('modalPedirFotoDesc') || 'Hay una posible coincidencia con otra invitada. Sube una foto de tu look para que la organizadora pueda validarlo.'}
+                    </p>
+                  </div>
+                )}
                 <div onClick={() => document.getElementById('foto-input').click()}
-                  style={{border:'1px dashed #E0E0DC',padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5',borderRadius:'4px'}}>
+                  style={{border:`1px dashed ${pedirFoto && !foto ? '#F07987' : '#E0E0DC'}`,padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5',borderRadius:'4px'}}>
                   {fotoPreview ? (
                     <img src={fotoPreview} alt="Preview" style={{maxHeight:'200px',maxWidth:'100%',objectFit:'contain'}}/>
                   ) : (
                     <div>
-                      <div style={{fontSize:'0.82rem',fontWeight:300,color:'#888884',marginBottom:'0.25rem'}}>{t('fotoInfo')}</div>
+                      <div style={{fontSize:'0.82rem',fontWeight:300,color: pedirFoto ? '#F07987' : '#888884',marginBottom:'0.25rem'}}>{t('fotoInfo')}</div>
                       <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>JPG, PNG o WEBP</div>
                     </div>
                   )}
