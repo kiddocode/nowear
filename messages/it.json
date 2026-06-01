@@ -179,7 +179,7 @@
       },
       {
         "q": "Cosa succede se due ospiti vogliono lo stesso look?",
-        "a": "Il sistema avvisa immediatamente la seconda ospite quando tenta di registrare un look già prenotato. Nessuna ha più diritti dell'altra, solo chi ha registrato per prima."
+        "a": "Il sistema rileva il conflitto all'istante e blocca la registrazione con un avviso sullo schermo. In caso di dubbio, richiede informazioni aggiuntive per confermarlo. Tutte e tre le parti vengono informate: la seconda ospite, la prima e l'organizzatrice."
       },
       {
         "q": "Posso bloccare il mio look come organizzatrice?",

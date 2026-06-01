@@ -179,7 +179,7 @@
       },
       {
         "q": "Was passiert, wenn zwei Gäste denselben Look tragen möchten?",
-        "a": "Das System warnt die zweite Gästin sofort, wenn sie versucht, einen bereits reservierten Look zu registrieren. Niemand hat mehr Rechte als eine andere, nur wer zuerst registriert hat."
+        "a": "Das System erkennt den Konflikt sofort und blockiert die Registrierung mit einem Hinweis auf dem Bildschirm. Bei Zweifeln werden zusätzliche Informationen angefordert. Alle drei Parteien werden informiert: die zweite Gästin, die erste und die Gastgeberin."
       },
       {
         "q": "Kann ich meinen eigenen Look als Organisatorin sperren?",

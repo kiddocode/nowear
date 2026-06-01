@@ -179,7 +179,7 @@
       },
       {
         "q": "What happens if two guests want to wear the same look?",
-        "a": "The system instantly alerts the second guest when she tries to register an already-taken look. No one has more rights than another, only whoever registered first. If two guests register the same model in different colors, they also get a warning."
+        "a": "The system detects the conflict instantly and blocks the registration with an on-screen alert. When there is doubt, it requests additional information to confirm it. All three parties are kept informed: the second guest, the first and the host."
       },
       {
         "q": "Can I block my own look as the organizer?",

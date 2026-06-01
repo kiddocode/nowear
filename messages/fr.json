@@ -179,7 +179,7 @@
       },
       {
         "q": "Que se passe-t-il si deux invitées veulent porter le même look ?",
-        "a": "Le système alerte immédiatement la deuxième invitée lorsqu'elle tente d'enregistrer un look déjà pris. Personne n'a plus de droits que l'autre, seulement celle qui a enregistré en premier."
+        "a": "Le système détecte le conflit instantanément et bloque l'enregistrement avec un avis à l'écran. En cas de doute, il demande des informations supplémentaires pour le confirmer. Les trois parties sont informées : la deuxième invitée, la première et l'organisatrice."
       },
       {
         "q": "Puis-je bloquer mon propre look en tant qu'organisatrice ?",

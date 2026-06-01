@@ -179,7 +179,7 @@
       },
       {
         "q": "¿Qué pasa si dos invitadas quieren llevar el mismo look?",
-        "a": "El sistema avisa a la segunda invitada al instante cuando intenta registrar un look ya reservado. Nadie tiene más derecho que nadie, solo quien registró antes. Además, si dos invitadas llevan el mismo modelo en distinto color, también se avisa para evitar coincidencias."
+        "a": "El sistema detecta el conflicto al instante y bloquea el registro con un aviso en pantalla. Cuando hay dudas, pide información adicional para confirmarlo. Las tres partes quedan informadas: la segunda invitada, la primera y la organizadora."
       },
       {
         "q": "¿Puedo bloquear mi propio look como organizadora?",

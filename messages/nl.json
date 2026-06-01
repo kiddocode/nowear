@@ -179,7 +179,7 @@
       },
       {
         "q": "Wat gebeurt er als twee gasten dezelfde look willen dragen?",
-        "a": "Het systeem waarschuwt de tweede gaste onmiddellijk wanneer ze een al gereserveerde look probeert te registreren. Niemand heeft meer rechten dan een ander, alleen wie het eerst registreerde."
+        "a": "Het systeem detecteert het conflict onmiddellijk en blokkeert de registratie met een melding op het scherm. Bij twijfel vraagt het om aanvullende informatie ter bevestiging. Alle drie de partijen worden geïnformeerd: de tweede gaste, de eerste en de organisator."
       },
       {
         "q": "Kan ik mijn eigen look blokkeren als organisatrice?",

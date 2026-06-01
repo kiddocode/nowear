@@ -179,7 +179,7 @@
       },
       {
         "q": "O que acontece se duas convidadas quiserem usar o mesmo look?",
-        "a": "O sistema avisa imediatamente a segunda convidada quando tenta registar um look já reservado. Ninguém tem mais direitos do que outra, só quem registou primeiro."
+        "a": "O sistema deteta o conflito ao instante e bloqueia o registo com um aviso no ecrã. Quando há dúvidas, pede informação adicional para o confirmar. As três partes ficam informadas: a segunda convidada, a primeira e a organizadora."
       },
       {
         "q": "Posso bloquear o meu próprio look como organizadora?",
