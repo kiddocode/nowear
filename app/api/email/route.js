@@ -305,6 +305,19 @@ export async function POST(req) {
       })
     }
 
+    // ─── ELIMINACION SOLICITADA (aviso admin) ──────────────────────
+    if (tipo === 'eliminacion_solicitada') {
+      await resend.emails.send({
+        from: 'NOWEAR <support@nowear.es>',
+        to: 'mnavarretegon@gmail.com',
+        subject: `Cuenta solicitó eliminación · ${marca}`,
+        html: emailBase(`
+          ${h1('Solicitud de eliminación')}
+          ${alerta(`La usuaria <strong>${modelo}</strong> (<strong>${marca}</strong>) ha solicitado eliminar su cuenta. Se eliminará el <strong>${color}</strong>.`, 'warn')}
+        `)
+      })
+    }
+
     return Response.json({ ok: true })
   } catch (error) {
     return Response.json({ ok: false, error: error.message }, { status: 500 })
