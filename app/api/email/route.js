@@ -37,25 +37,12 @@ function emailBase(contenido) {
 </html>`
 }
 
-function lookCard(marca, modelo, color, fotoUrl) {
+function lookCard(marca, modelo, fotoUrl) {
   return `
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E0E0DC;margin-bottom:8px;">
       <tr><td style="padding:16px 20px;">
         ${fotoUrl ? `<img src="${fotoUrl}" alt="Look" style="width:100%;max-height:200px;object-fit:cover;display:block;margin-bottom:12px;border-radius:4px;"/>` : ''}
-        <p style="font-size:14px;font-weight:700;color:#0A0A0A;margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;">${marca} &middot; ${modelo}</p>
-        <p style="font-size:12px;color:#888884;margin:0;font-family:'Helvetica Neue',Arial,sans-serif;">${color}</p>
-      </td></tr>
-    </table>`
-}
-
-function btn(texto, href, estilo = 'primary') {
-  const bg = estilo === 'primary' ? '#0A0A0A' : '#FFFFFF'
-  const color = estilo === 'primary' ? '#FFFFFF' : '#F07987'
-  const border = estilo === 'primary' ? 'none' : '1px solid #F07987'
-  return `
-    <table cellpadding="0" cellspacing="0" border="0" style="margin-top:0;">
-      <tr><td style="background:${bg};border-radius:4px;border:${border};">
-        <a href="${href}" style="display:inline-block;padding:12px 24px;font-size:13px;font-weight:600;color:${color};text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</a>
+        ${marca ? `<p style="font-size:14px;font-weight:700;color:#0A0A0A;margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;">${marca}${modelo ? ` &middot; ${modelo}` : ''}</p>` : ''}
       </td></tr>
     </table>`
 }
@@ -84,19 +71,37 @@ function parrafo(texto) {
   return `<p style="font-size:13px;color:#555552;line-height:1.7;margin:16px 0 0;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>`
 }
 
+function btn(texto, href) {
+  return `
+    <table cellpadding="0" cellspacing="0" border="0" style="margin-top:20px;">
+      <tr><td style="background:#0A0A0A;border-radius:4px;">
+        <a href="${href}" style="display:inline-block;padding:12px 24px;font-size:13px;font-weight:600;color:#FFFFFF;text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</a>
+      </td></tr>
+    </table>`
+}
+
+function btnDanger(texto, href) {
+  return `
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tr><td style="background:#FFFFFF;border-radius:4px;border:1px solid #F07987;">
+        <a href="${href}" style="display:inline-block;padding:12px 24px;font-size:13px;font-weight:600;color:#F07987;text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</a>
+      </td></tr>
+    </table>`
+}
+
 export async function POST(req) {
+  const body = await req.json()
   const {
     tipo, emailInvitada, nombreInvitada, nombreEvento, fechaEvento,
     nombreOrganizadora, marca, modelo, color, eventoId, organizadoraId,
     fotoUrl, nombreCandidata, emailCandidata,
     marcaCandidata, modeloCandidata, colorCandidata, fotoCandidataUrl,
     token, emailPrimera, nombrePrimera,
-    // Para validacion lista (ambas fotos subidas)
     fotoUrlNueva, fotoUrlCandidata,
     nombreNueva, nombreCandidataValidacion,
-    marcaNueva, modeloNueva, colorNueva,
-    marcaCandidataV, modeloCandidataV, colorCandidataV,
-  } = await req.json()
+    marcaNueva, modeloNueva,
+    marcaCandidataV, modeloCandidataV,
+  } = body
 
   try {
     let emailOrganizadora = null
@@ -122,10 +127,25 @@ export async function POST(req) {
         html: emailBase(`
           ${h1('Look registrado')}
           ${subtitulo(eventoSubtitulo)}
-          ${lookCard(marca, modelo, color, null)}
-          ${parrafo(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente.`)}
+          ${lookCard(marca, modelo, null)}
+          ${parrafo(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente en <strong>${nombreEvento}</strong>.`)}
           ${parrafo('Si necesitas hacer algún cambio, vuelve al enlace del evento:')}
-          <div style="margin-top:20px;">${btn('Ver mi look', eventoUrl)}</div>
+          ${btn('Ver mi look', eventoUrl)}
+        `)
+      })
+    }
+
+    // ─── PENDIENTE DE VALIDACION (Ester sube foto, queda pendiente) ─
+    if (tipo === 'look_pendiente') {
+      await resend.emails.send({
+        from: 'NOWEAR <support@nowear.es>',
+        to: emailInvitada,
+        subject: `Tu look está pendiente de validación · ${nombreEvento}`,
+        html: emailBase(`
+          ${h1('Tu look está pendiente')}
+          ${subtitulo(eventoSubtitulo)}
+          ${lookCard(marca, modelo, fotoUrl || null)}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu look y tu foto. Hay una posible coincidencia con otra invitada, así que la organizadora necesita revisarlo antes de confirmarlo. Te avisaremos en cuanto esté validado.`, 'warn')}
         `)
       })
     }
@@ -139,9 +159,9 @@ export async function POST(req) {
         html: emailBase(`
           ${h1('Look no disponible')}
           ${subtitulo(eventoSubtitulo)}
-          ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar (<strong>${marca}, ${modelo}</strong>) ya está reservado por otra invitada.`, 'error')}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar (<strong>${marca}${modelo ? `, ${modelo}` : ''}</strong>) ya está reservado por otra invitada.`, 'error')}
           ${parrafo('Vuelve al enlace del evento y elige otro look.')}
-          <div style="margin-top:20px;">${btn('Elegir otro look', eventoUrl)}</div>
+          ${btn('Elegir otro look', eventoUrl)}
         `)
       })
 
@@ -153,8 +173,8 @@ export async function POST(req) {
           html: emailBase(`
             ${h1('Conflicto detectado')}
             ${subtitulo(eventoSubtitulo)}
-            ${alerta(`<strong>${nombreInvitada}</strong> intentó registrar <strong>${marca}, ${modelo}</strong> pero ya estaba reservado por <strong>${nombrePrimera || 'otra invitada'}</strong>.`, 'error')}
-            <div style="margin-top:20px;">${btn('Ver mi evento', `https://nowear.es/evento/${eventoId}`)}</div>
+            ${alerta(`<strong>${nombreInvitada}</strong> intentó registrar <strong>${marca}${modelo ? `, ${modelo}` : ''}</strong> pero ya estaba reservado por <strong>${nombrePrimera || 'otra invitada'}</strong>.`, 'error')}
+            ${btn('Ver mi evento', `https://nowear.es/evento/${eventoId}`)}
           `)
         })
       }
@@ -167,14 +187,13 @@ export async function POST(req) {
           html: emailBase(`
             ${h1('Tu look sigue siendo único')}
             ${subtitulo(eventoSubtitulo)}
-            ${alerta(`Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú (<strong>${marca}, ${modelo}</strong>), pero el sistema lo ha bloqueado. Tu look sigue siendo exclusivo.`, 'ok')}
+            ${alerta(`Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú (<strong>${marca}${modelo ? `, ${modelo}` : ''}</strong>), pero el sistema lo ha bloqueado. Tu look sigue siendo exclusivo.`, 'ok')}
           `)
         })
       }
     }
 
     // ─── PEDIR FOTO A CANDIDATA (Ana) ───────────────────────────────
-    // Se envía cuando Ester sube foto pero Ana no tiene identificador
     if (tipo === 'pedir_foto_candidata') {
       const urlSubirFoto = `https://nowear.es/${eventoId}?token=${token}`
       await resend.emails.send({
@@ -186,12 +205,12 @@ export async function POST(req) {
           ${subtitulo(eventoSubtitulo)}
           ${alerta(`Hola <strong>${nombreInvitada}</strong>, otra invitada tiene un look muy similar al tuyo. Para que la organizadora pueda verificar que son distintos, necesitamos que subas una foto de tu look.`, 'warn')}
           ${parrafo('Solo tardarás un momento. Pulsa el botón para añadir tu foto:')}
-          <div style="margin-top:20px;">${btn('Subir mi foto', urlSubirFoto)}</div>
+          ${btn('Subir mi foto', urlSubirFoto)}
           ${parrafo('Si tus looks son claramente distintos, la organizadora lo confirmará y todo quedará resuelto.')}
         `)
       })
 
-      // Email a organizadora avisando que está esperando la foto de Ana
+      // Email a organizadora: esperando foto de Ana
       if (emailOrganizadora) {
         await resend.emails.send({
           from: 'NOWEAR <support@nowear.es>',
@@ -202,14 +221,14 @@ export async function POST(req) {
             ${subtitulo(eventoSubtitulo)}
             ${alerta('Hay una posible coincidencia entre dos looks. Ya hemos pedido a la segunda invitada que suba su foto. Te avisaremos cuando ambas fotos estén listas para que puedas validar.', 'warn')}
             <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:20px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look nuevo · ${nombreCandidata || ''}</p>
-            ${lookCard(marcaCandidata || '', modeloCandidata || '', colorCandidata || '', fotoUrl || null)}
+            ${lookCard(marcaCandidata || '', modeloCandidata || '', fotoUrl || null)}
             ${parrafo('Estamos esperando la foto de la otra invitada. No necesitas hacer nada por ahora.')}
           `)
         })
       }
     }
 
-    // ─── VALIDACION LISTA (ambas fotos subidas) ─────────────────────
+    // ─── VALIDACION LISTA (ambas fotos subidas, Ana subió la suya) ──
     if (tipo === 'validacion_lista') {
       const urlAprobar = `https://nowear.es/api/validar?token=${token}&decision=aprobar`
       const urlRechazar = `https://nowear.es/api/validar?token=${token}&decision=rechazar`
@@ -224,13 +243,13 @@ export async function POST(req) {
             ${subtitulo(eventoSubtitulo)}
             ${alerta('Las dos invitadas han subido sus fotos. Revísalas y decide si son el mismo look.', 'warn')}
             <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:20px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look de ${nombreNueva || 'invitada nueva'}</p>
-            ${lookCard(marcaNueva || '', modeloNueva || '', colorNueva || '', fotoUrlNueva || null)}
+            ${lookCard(marcaNueva || '', modeloNueva || '', fotoUrlNueva || null)}
             <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:16px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look de ${nombreCandidataValidacion || 'primera invitada'}</p>
-            ${lookCard(marcaCandidataV || '', modeloCandidataV || '', colorCandidataV || '', fotoUrlCandidata || null)}
+            ${lookCard(marcaCandidataV || '', modeloCandidataV || '', fotoUrlCandidata || null)}
             <table cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;">
               <tr>
-                <td style="padding-right:12px;">${btn('Aprobar look', urlAprobar, 'primary')}</td>
-                <td>${btn('Rechazar look', urlRechazar, 'danger')}</td>
+                <td style="padding-right:12px;">${btn('Aprobar look', urlAprobar).replace('margin-top:20px','margin-top:0')}</td>
+                <td>${btnDanger('Rechazar look', urlRechazar)}</td>
               </tr>
             </table>
             <p style="font-size:11px;color:#BEBEBA;margin-top:16px;line-height:1.6;font-family:'Helvetica Neue',Arial,sans-serif;">Al aprobar, el look de ${nombreNueva || 'la invitada'} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
@@ -239,7 +258,7 @@ export async function POST(req) {
       }
     }
 
-    // ─── AMBIGUEDAD CON FOTO (flujo anterior sin candidata) ─────────
+    // ─── AMBIGUEDAD CON FOTO (ambas ya tienen foto/id, va directo a org) ─
     if (tipo === 'ambiguedad_foto') {
       const urlAprobar = `https://nowear.es/api/validar?token=${token}&decision=aprobar`
       const urlRechazar = `https://nowear.es/api/validar?token=${token}&decision=rechazar`
@@ -254,13 +273,13 @@ export async function POST(req) {
             ${subtitulo(eventoSubtitulo)}
             ${alerta('Hay una posible coincidencia entre dos looks. Revisa las fotos y decide si son el mismo producto.', 'warn')}
             <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:20px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look nuevo · ${nombreInvitada}</p>
-            ${lookCard(marca, modelo, color, fotoUrl || null)}
+            ${lookCard(marca, modelo, fotoUrl || null)}
             <p style="font-size:12px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:16px 0 6px;font-family:'Helvetica Neue',Arial,sans-serif;">Look registrado · ${nombreCandidata || ''}</p>
-            ${lookCard(marcaCandidata || '', modeloCandidata || '', colorCandidata || '', fotoCandidataUrl || null)}
+            ${lookCard(marcaCandidata || '', modeloCandidata || '', fotoCandidataUrl || null)}
             <table cellpadding="0" cellspacing="0" border="0" style="margin-top:28px;">
               <tr>
-                <td style="padding-right:12px;">${btn('Aprobar look', urlAprobar, 'primary')}</td>
-                <td>${btn('Rechazar look', urlRechazar, 'danger')}</td>
+                <td style="padding-right:12px;">${btn('Aprobar look', urlAprobar).replace('margin-top:20px','margin-top:0')}</td>
+                <td>${btnDanger('Rechazar look', urlRechazar)}</td>
               </tr>
             </table>
             <p style="font-size:11px;color:#BEBEBA;margin-top:16px;line-height:1.6;font-family:'Helvetica Neue',Arial,sans-serif;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
