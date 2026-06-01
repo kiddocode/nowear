@@ -20,6 +20,19 @@ function puedeExportar(evento) { return PLAN_NIVEL[getPlan(evento)] >= PLAN_NIVE
 function esPremiumOSuperior(evento) { return PLAN_NIVEL[getPlan(evento)] >= PLAN_NIVEL['premium'] }
 function esEnterprise(evento) { return getPlan(evento) === 'enterprise' }
 
+function normalizarStrict(texto) {
+  if (!texto) return ''
+  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'').trim()
+}
+
+function similitudPalabras(a, b) {
+  if (!a || !b) return 0
+  const pa = a.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,'').trim().split(/\s+/).filter(p => p.length > 2)
+  const pb = b.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,'').trim().split(/\s+/).filter(p => p.length > 2)
+  if (pa.length === 0) return 0
+  return pa.filter(p => pb.includes(p)).length / pa.length
+}
+
 const COLORES_LISTA = [
   {hex:'#F5C6D0',nombre:'Rosa palo'},{hex:'#D4A8D4',nombre:'Lila'},{hex:'#6B3FA0',nombre:'Morado'},
   {hex:'#D4006A',nombre:'Fucsia'},{hex:'#A8C4E0',nombre:'Azul cielo'},{hex:'#8B9DC3',nombre:'Azul marino'},
@@ -73,13 +86,16 @@ export default function EventoDetalle() {
   const [editLookBloqueadoTipo1, setEditLookBloqueadoTipo1] = useState('')
   const [editLookBloqueadoModelo1, setEditLookBloqueadoModelo1] = useState('')
   const [editLookBloqueadoReferencia1, setEditLookBloqueadoReferencia1] = useState('')
+  const [editLookBloqueadoLink1, setEditLookBloqueadoLink1] = useState('')
   const [editLookBloqueadoMarca2, setEditLookBloqueadoMarca2] = useState('')
   const [editLookBloqueadoTipo2, setEditLookBloqueadoTipo2] = useState('')
   const [editLookBloqueadoModelo2, setEditLookBloqueadoModelo2] = useState('')
   const [editLookBloqueadoReferencia2, setEditLookBloqueadoReferencia2] = useState('')
+  const [editLookBloqueadoLink2, setEditLookBloqueadoLink2] = useState('')
   const [tieneLookBloqueado, setTieneLookBloqueado] = useState(false)
   const [guardandoBloqueos, setGuardandoBloqueos] = useState(false)
   const [bloqueosMensaje, setBloqueosMensaje] = useState('')
+  const [conflictoLookMsg, setConflictoLookMsg] = useState('')
 
   useEffect(() => {
     async function cargar() {
@@ -93,7 +109,6 @@ export default function EventoDetalle() {
       setEditMensajeInvitada(ev.mensaje_invitada || '')
       setEditFotoEvento(ev.foto_evento_url || '')
       if (ev.foto_evento_url) setFotoEventoPreview(ev.foto_evento_url)
-      // Look bloqueado
       const tieneL = !!(ev.look_bloqueado_marca1)
       setTieneLookBloqueado(tieneL)
       setEditLookBloqueadoColor(ev.look_bloqueado_color || '')
@@ -101,10 +116,12 @@ export default function EventoDetalle() {
       setEditLookBloqueadoTipo1(ev.look_bloqueado_tipo1 || '')
       setEditLookBloqueadoModelo1(ev.look_bloqueado_modelo1 || '')
       setEditLookBloqueadoReferencia1(ev.look_bloqueado_referencia1 || '')
+      setEditLookBloqueadoLink1(ev.look_bloqueado_link1 || '')
       setEditLookBloqueadoMarca2(ev.look_bloqueado_marca2 || '')
       setEditLookBloqueadoTipo2(ev.look_bloqueado_tipo2 || '')
       setEditLookBloqueadoModelo2(ev.look_bloqueado_modelo2 || '')
       setEditLookBloqueadoReferencia2(ev.look_bloqueado_referencia2 || '')
+      setEditLookBloqueadoLink2(ev.look_bloqueado_link2 || '')
 
       const { data: lks } = await supabase.from('looks').select('*').eq('evento_id', ev.id).order('created_at', { ascending: false })
       setLooks(lks || [])
@@ -120,6 +137,33 @@ export default function EventoDetalle() {
     const interval = setInterval(cargar, 30000)
     return () => clearInterval(interval)
   }, [slug])
+
+  // Comprobar si alguna invitada ya lleva el look bloqueado cuando se edita
+  useEffect(() => {
+    if (!evento || !tieneLookBloqueado || !editLookBloqueadoMarca1 || !editLookBloqueadoTipo1 || !editLookBloqueadoModelo1 || !editLookBloqueadoColor) {
+      setConflictoLookMsg(''); return
+    }
+    const marcaNorm = normalizarStrict(editLookBloqueadoMarca1)
+    const modeloNorm = normalizarStrict(editLookBloqueadoModelo1)
+    const tipoNorm = editLookBloqueadoTipo1.trim().toLowerCase()
+    const colorHex = editLookBloqueadoColor
+
+    const coincidentes = looks.filter(l => {
+      const lMarca = normalizarStrict(l.marca)
+      const lModelo = normalizarStrict(l.modelo)
+      const lTipo = (l.tipo || '').trim().toLowerCase()
+      const lColor = l.color_hex
+      const modeloOk = lModelo === modeloNorm || similitudPalabras(l.modelo, editLookBloqueadoModelo1) >= 0.6
+      return lMarca === marcaNorm && lTipo === tipoNorm && modeloOk && lColor === colorHex
+    })
+
+    if (coincidentes.length > 0) {
+      const nombres = coincidentes.map(l => l.nombre_invitada).join(', ')
+      setConflictoLookMsg(`⚠️ ${nombres} ya ${coincidentes.length === 1 ? 'lleva' : 'llevan'} este look registrado. Puedes verlo en la pestaña Looks.`)
+    } else {
+      setConflictoLookMsg('')
+    }
+  }, [tieneLookBloqueado, editLookBloqueadoMarca1, editLookBloqueadoTipo1, editLookBloqueadoModelo1, editLookBloqueadoColor, looks, evento])
 
   function copiarLink() {
     navigator.clipboard.writeText(`https://nowear.es/${slug}`)
@@ -164,10 +208,12 @@ export default function EventoDetalle() {
       look_bloqueado_tipo1: tieneLookBloqueado && editLookBloqueadoTipo1 ? editLookBloqueadoTipo1 : null,
       look_bloqueado_modelo1: tieneLookBloqueado && editLookBloqueadoModelo1 ? editLookBloqueadoModelo1 : null,
       look_bloqueado_referencia1: tieneLookBloqueado && editLookBloqueadoReferencia1 ? editLookBloqueadoReferencia1 : null,
+      look_bloqueado_link1: tieneLookBloqueado && editLookBloqueadoLink1 ? editLookBloqueadoLink1 : null,
       look_bloqueado_marca2: tieneLookBloqueado && editLookBloqueadoMarca2 ? editLookBloqueadoMarca2 : null,
       look_bloqueado_tipo2: tieneLookBloqueado && editLookBloqueadoTipo2 ? editLookBloqueadoTipo2 : null,
       look_bloqueado_modelo2: tieneLookBloqueado && editLookBloqueadoModelo2 ? editLookBloqueadoModelo2 : null,
       look_bloqueado_referencia2: tieneLookBloqueado && editLookBloqueadoReferencia2 ? editLookBloqueadoReferencia2 : null,
+      look_bloqueado_link2: tieneLookBloqueado && editLookBloqueadoLink2 ? editLookBloqueadoLink2 : null,
     }).eq('id', evento.id)
     setEvento(prev => ({
       ...prev,
@@ -177,10 +223,12 @@ export default function EventoDetalle() {
       look_bloqueado_tipo1: tieneLookBloqueado ? editLookBloqueadoTipo1 : null,
       look_bloqueado_modelo1: tieneLookBloqueado ? editLookBloqueadoModelo1 : null,
       look_bloqueado_referencia1: tieneLookBloqueado ? editLookBloqueadoReferencia1 : null,
+      look_bloqueado_link1: tieneLookBloqueado ? editLookBloqueadoLink1 : null,
       look_bloqueado_marca2: tieneLookBloqueado ? editLookBloqueadoMarca2 : null,
       look_bloqueado_tipo2: tieneLookBloqueado ? editLookBloqueadoTipo2 : null,
       look_bloqueado_modelo2: tieneLookBloqueado ? editLookBloqueadoModelo2 : null,
       look_bloqueado_referencia2: tieneLookBloqueado ? editLookBloqueadoReferencia2 : null,
+      look_bloqueado_link2: tieneLookBloqueado ? editLookBloqueadoLink2 : null,
     }))
     setGuardandoBloqueos(false)
     setBloqueosMensaje('Bloqueos guardados correctamente.')
@@ -217,7 +265,6 @@ export default function EventoDetalle() {
     await supabase.from('evento_organizadores').insert({ evento_id: evento.id, user_id: perfil.id })
     setOrganizadores(prev => [...prev, { user_id: perfil.id, profiles: { nombre: perfil.nombre } }])
     setEmailNuevoOrg('')
-    setOrgMensaje(`${perfil.nombre} ${t('orgAnadir')}.`)
     setAñadiendoOrg(false)
     setTimeout(() => setOrgMensaje(''), 3000)
   }
@@ -241,6 +288,7 @@ export default function EventoDetalle() {
   const labelStyle = {display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}
   const textareaStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box',resize:'vertical',minHeight:'100px'}
   const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
+  const notaStyle = {fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.35rem',lineHeight:1.5}
 
   const tabs = [t('tabLooks'), t('tabConflictos'), 'Bloqueos', t('tabAjustes')]
   if (isPremium) tabs.push(t('tabPersonalizacion'))
@@ -466,17 +514,14 @@ export default function EventoDetalle() {
               <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>Bloqueos</h2>
               <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>Colores y looks que ninguna invitada podrá registrar.</p>
 
-              {/* COLORES BLOQUEADOS */}
               <div style={{marginBottom:'1.5rem'}}>
                 <label style={labelStyle}>{t('ajustesColores') || 'Colores bloqueados'}</label>
                 <input type="text" value={editColores} onChange={e => setEditColores(e.target.value)} placeholder={t('ajustesPlaceholder') || 'Ej: blanco, crudo, verde botella...'} style={inputStyle}/>
-                <p style={{fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.4rem',lineHeight:1.5}}>Ninguna invitada podrá registrar looks con estos colores.</p>
+                <p style={notaStyle}>Ninguna invitada podrá registrar looks con estos colores.</p>
               </div>
 
-              {/* LOOK BLOQUEADO */}
               <div style={{padding:'1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',marginBottom:'2rem'}}>
-                <button
-                  onClick={() => setTieneLookBloqueado(!tieneLookBloqueado)}
+                <button onClick={() => setTieneLookBloqueado(!tieneLookBloqueado)}
                   style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0}}>
                   <div style={{textAlign:'left'}}>
                     <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.2rem'}}>¿Tienes ya tu look escogido?</div>
@@ -490,7 +535,6 @@ export default function EventoDetalle() {
                 {tieneLookBloqueado && (
                   <div style={{marginTop:'1.5rem',borderTop:'1px solid #E0E0DC',paddingTop:'1.5rem'}}>
 
-                    {/* Resumen si ya tiene look guardado */}
                     {tieneBloqueoLook && (
                       <div style={{padding:'0.75rem 1rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px',marginBottom:'1.25rem',display:'flex',alignItems:'center',gap:'0.75rem'}}>
                         {evento.look_bloqueado_color && <span style={{width:'20px',height:'20px',borderRadius:'50%',background:evento.look_bloqueado_color,border:'1px solid #E0E0DC',flexShrink:0,display:'inline-block'}}></span>}
@@ -498,6 +542,13 @@ export default function EventoDetalle() {
                           <div style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A'}}>{evento.look_bloqueado_marca1} · {evento.look_bloqueado_modelo1}</div>
                           <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884'}}>{evento.look_bloqueado_tipo1}{evento.look_bloqueado_marca2 ? ` · 2ª prenda: ${evento.look_bloqueado_marca2}` : ''}</div>
                         </div>
+                      </div>
+                    )}
+
+                    {/* AVISO CONFLICTO CON INVITADA */}
+                    {conflictoLookMsg && (
+                      <div style={{padding:'0.75rem 1rem',background:'#FFF8F0',border:'1px solid #F5D6A0',borderRadius:'4px',marginBottom:'1.25rem'}}>
+                        <p style={{fontSize:'0.78rem',fontWeight:400,color:'#C4917C',margin:0,lineHeight:1.6}}>{conflictoLookMsg}</p>
                       </div>
                     )}
 
@@ -536,9 +587,15 @@ export default function EventoDetalle() {
                         <label style={labelStyle}>Modelo <span style={{color:'#F07987'}}>*</span></label>
                         <input type="text" placeholder="Nombre del vestido o modelo" value={editLookBloqueadoModelo1} onChange={e => setEditLookBloqueadoModelo1(e.target.value)} style={inputStyle}/>
                       </div>
+                      <div style={{marginBottom:'0.75rem'}}>
+                        <label style={labelStyle}>Referencia de la prenda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+                        <input type="text" placeholder="Ej: 123456789" value={editLookBloqueadoReferencia1} onChange={e => setEditLookBloqueadoReferencia1(e.target.value)} style={inputStyle}/>
+                        <p style={notaStyle}>El código de referencia. Lo encuentras en la web o en la etiqueta del producto.</p>
+                      </div>
                       <div>
-                        <label style={labelStyle}>Referencia o link <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
-                        <input type="text" placeholder="URL o referencia del producto" value={editLookBloqueadoReferencia1} onChange={e => setEditLookBloqueadoReferencia1(e.target.value)} style={inputStyle}/>
+                        <label style={labelStyle}>Link de la tienda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+                        <input type="url" placeholder="https://www.zara.com/es/..." value={editLookBloqueadoLink1} onChange={e => setEditLookBloqueadoLink1(e.target.value)} style={inputStyle}/>
+                        <p style={notaStyle}>El enlace directo al producto en la web de la tienda.</p>
                       </div>
                     </div>
 
@@ -562,9 +619,13 @@ export default function EventoDetalle() {
                         <label style={labelStyle}>Modelo</label>
                         <input type="text" placeholder="Nombre del vestido o modelo" value={editLookBloqueadoModelo2} onChange={e => setEditLookBloqueadoModelo2(e.target.value)} style={inputStyle}/>
                       </div>
+                      <div style={{marginBottom:'0.75rem'}}>
+                        <label style={labelStyle}>Referencia de la prenda</label>
+                        <input type="text" placeholder="Ej: 123456789" value={editLookBloqueadoReferencia2} onChange={e => setEditLookBloqueadoReferencia2(e.target.value)} style={inputStyle}/>
+                      </div>
                       <div>
-                        <label style={labelStyle}>Referencia o link</label>
-                        <input type="text" placeholder="URL o referencia del producto" value={editLookBloqueadoReferencia2} onChange={e => setEditLookBloqueadoReferencia2(e.target.value)} style={inputStyle}/>
+                        <label style={labelStyle}>Link de la tienda</label>
+                        <input type="url" placeholder="https://www.zara.com/es/..." value={editLookBloqueadoLink2} onChange={e => setEditLookBloqueadoLink2(e.target.value)} style={inputStyle}/>
                       </div>
                     </div>
                   </div>

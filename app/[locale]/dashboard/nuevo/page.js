@@ -9,6 +9,19 @@ function slugify(text) {
   return text.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-')
 }
 
+function normalizarStrict(texto) {
+  if (!texto) return ''
+  return texto.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'').trim()
+}
+
+function similitudPalabras(a, b) {
+  if (!a || !b) return 0
+  const pa = a.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,'').trim().split(/\s+/).filter(p => p.length > 2)
+  const pb = b.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9\s]/g,'').trim().split(/\s+/).filter(p => p.length > 2)
+  if (pa.length === 0) return 0
+  return pa.filter(p => pb.includes(p)).length / pa.length
+}
+
 const PLANES_BASE = [
   {id:'basico',precio:'9€',meses:1},
   {id:'estandar',precio:'19€',meses:3,popular:true},
@@ -49,6 +62,7 @@ export default function NuevoEvento() {
   const [planSeleccionado, setPlanSeleccionado] = useState(null)
   const [planError, setPlanError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [conflictoLookMsg, setConflictoLookMsg] = useState('')
 
   // Look bloqueado
   const [tieneLookBloqueado, setTieneLookBloqueado] = useState(false)
@@ -57,27 +71,40 @@ export default function NuevoEvento() {
   const [lookBloqueadoTipo1, setLookBloqueadoTipo1] = useState('')
   const [lookBloqueadoModelo1, setLookBloqueadoModelo1] = useState('')
   const [lookBloqueadoReferencia1, setLookBloqueadoReferencia1] = useState('')
+  const [lookBloqueadoLink1, setLookBloqueadoLink1] = useState('')
   const [lookBloqueadoMarca2, setLookBloqueadoMarca2] = useState('')
   const [lookBloqueadoTipo2, setLookBloqueadoTipo2] = useState('')
   const [lookBloqueadoModelo2, setLookBloqueadoModelo2] = useState('')
   const [lookBloqueadoReferencia2, setLookBloqueadoReferencia2] = useState('')
+  const [lookBloqueadoLink2, setLookBloqueadoLink2] = useState('')
 
-  // FIX: teclado móvil tapa inputs
   useEffect(() => {
     const handler = (e) => {
-      setTimeout(() => {
-        e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })
-      }, 350)
+      setTimeout(() => { e.target.scrollIntoView({ behavior: 'smooth', block: 'center' }) }, 350)
     }
     document.addEventListener('focusin', handler)
     return () => document.removeEventListener('focusin', handler)
   }, [])
+
+  // Comprobar si alguna invitada ya tiene el look bloqueado
+  useEffect(() => {
+    async function comprobarLookExistente() {
+      if (!tieneLookBloqueado || !lookBloqueadoMarca1 || !lookBloqueadoTipo1 || !lookBloqueadoModelo1 || !lookBloqueadoColor) {
+        setConflictoLookMsg('')
+        return
+      }
+      // No tenemos evento aún (es nuevo), así que no hay looks que comprobar
+      setConflictoLookMsg('')
+    }
+    comprobarLookExistente()
+  }, [tieneLookBloqueado, lookBloqueadoMarca1, lookBloqueadoTipo1, lookBloqueadoModelo1, lookBloqueadoColor])
 
   const planesData = tp.raw('planes')
 
   const inputStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box'}
   const labelStyle = {display:'block',fontSize:'0.6rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'0.55rem'}
   const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
+  const notaStyle = {fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.35rem',lineHeight:1.5}
 
   function validarFechaPlan(fecha, planId) {
     if (!fecha || planId === 'premium') return { ok: true }
@@ -122,10 +149,12 @@ export default function NuevoEvento() {
       look_bloqueado_tipo1: tieneLookBloqueado && lookBloqueadoTipo1 ? lookBloqueadoTipo1 : null,
       look_bloqueado_modelo1: tieneLookBloqueado && lookBloqueadoModelo1 ? lookBloqueadoModelo1 : null,
       look_bloqueado_referencia1: tieneLookBloqueado && lookBloqueadoReferencia1 ? lookBloqueadoReferencia1 : null,
+      look_bloqueado_link1: tieneLookBloqueado && lookBloqueadoLink1 ? lookBloqueadoLink1 : null,
       look_bloqueado_marca2: tieneLookBloqueado && lookBloqueadoMarca2 ? lookBloqueadoMarca2 : null,
       look_bloqueado_tipo2: tieneLookBloqueado && lookBloqueadoTipo2 ? lookBloqueadoTipo2 : null,
       look_bloqueado_modelo2: tieneLookBloqueado && lookBloqueadoModelo2 ? lookBloqueadoModelo2 : null,
       look_bloqueado_referencia2: tieneLookBloqueado && lookBloqueadoReferencia2 ? lookBloqueadoReferencia2 : null,
+      look_bloqueado_link2: tieneLookBloqueado && lookBloqueadoLink2 ? lookBloqueadoLink2 : null,
     })
     if (eventoError) { setLoading(false); setError(t('errorEvento')); setShowPlanes(false); return }
     const res = await fetch('/api/checkout', {
@@ -155,7 +184,6 @@ export default function NuevoEvento() {
         .nuevo-planes-modal { background: #FFFFFF; max-width: 1060px; width: 100%; max-height: 90vh; overflow-y: auto; }
         .nuevo-planes-header { padding: 2.5rem 3rem 2rem; border-bottom: 1px solid #E0E0DC; display: flex; justify-content: space-between; align-items: flex-start; }
         .nuevo-planes-footer { padding: 1.5rem 3rem 2.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
-
         @media (max-width: 1024px) {
           .nuevo-outer { grid-template-columns: 1fr; }
           .nuevo-sidebar-wrap { display: none; }
@@ -249,16 +277,11 @@ export default function NuevoEvento() {
             {/* LOOK BLOQUEADO */}
             <div style={{marginBottom:'2.5rem'}}>
               <div style={{padding:'1.25rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px'}}>
-                <button
-                  onClick={() => setTieneLookBloqueado(!tieneLookBloqueado)}
+                <button onClick={() => setTieneLookBloqueado(!tieneLookBloqueado)}
                   style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0}}>
                   <div style={{textAlign:'left'}}>
-                    <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.2rem'}}>
-                      {t('lookBloqueadoPregunta') || '¿Tienes ya tu look escogido?'}
-                    </div>
-                    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884'}}>
-                      {t('lookBloqueadoInfo') || 'Ninguna invitada podrá registrar el mismo look que tú.'}
-                    </div>
+                    <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.2rem'}}>{t('lookBloqueadoPregunta') || '¿Tienes ya tu look escogido?'}</div>
+                    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884'}}>{t('lookBloqueadoInfo') || 'Ninguna invitada podrá registrar el mismo look que tú.'}</div>
                   </div>
                   <div style={{width:'44px',height:'24px',borderRadius:'12px',border:'none',background:tieneLookBloqueado?'#0A0A0A':'#E0E0DC',position:'relative',flexShrink:0,marginLeft:'1rem',transition:'background 0.2s'}}>
                     <span style={{position:'absolute',top:'3px',left:tieneLookBloqueado?'23px':'3px',width:'18px',height:'18px',borderRadius:'50%',background:'#FFFFFF',transition:'left 0.2s',display:'block'}}></span>
@@ -273,9 +296,7 @@ export default function NuevoEvento() {
                       <label style={labelStyle}>{t('colorLook') || 'Color del look'} <span style={{color:'#F07987'}}>*</span></label>
                       <select value={lookBloqueadoColor} onChange={e => setLookBloqueadoColor(e.target.value)} style={selectStyle}>
                         <option value="">{t('seleccionaColor') || 'Selecciona un color...'}</option>
-                        {COLORES_BLOQUEO.map((c,i) => (
-                          <option key={i} value={c.hex}>{c.nombre}</option>
-                        ))}
+                        {COLORES_BLOQUEO.map((c,i) => <option key={i} value={c.hex}>{c.nombre}</option>)}
                       </select>
                       {lookBloqueadoColor && (
                         <div style={{display:'flex',alignItems:'center',gap:'0.5rem',marginTop:'0.5rem'}}>
@@ -307,9 +328,15 @@ export default function NuevoEvento() {
                         <label style={labelStyle}>{t('modelo') || 'Modelo'} <span style={{color:'#F07987'}}>*</span></label>
                         <input type="text" placeholder={t('modeloPlaceholder') || 'Nombre del vestido o modelo'} value={lookBloqueadoModelo1} onChange={e => setLookBloqueadoModelo1(e.target.value)} style={inputStyle}/>
                       </div>
+                      <div style={{marginBottom:'0.75rem'}}>
+                        <label style={labelStyle}>{t('referenciaCodigoLabel') || 'Referencia de la prenda'} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+                        <input type="text" placeholder={t('referenciaCodigoPlaceholder') || 'Ej: 123456789'} value={lookBloqueadoReferencia1} onChange={e => setLookBloqueadoReferencia1(e.target.value)} style={inputStyle}/>
+                        <p style={notaStyle}>{t('referenciaCodigoNota') || 'El código de referencia. Lo encuentras en la web o en la etiqueta del producto.'}</p>
+                      </div>
                       <div>
-                        <label style={labelStyle}>{t('referencia') || 'Referencia o link'} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
-                        <input type="text" placeholder={t('referenciaPlaceholder') || 'URL o referencia del producto'} value={lookBloqueadoReferencia1} onChange={e => setLookBloqueadoReferencia1(e.target.value)} style={inputStyle}/>
+                        <label style={labelStyle}>{t('referenciaLinkLabel') || 'Link de la tienda'} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+                        <input type="url" placeholder={t('referenciaLinkPlaceholder') || 'https://www.zara.com/es/...'} value={lookBloqueadoLink1} onChange={e => setLookBloqueadoLink1(e.target.value)} style={inputStyle}/>
+                        <p style={notaStyle}>{t('referenciaLinkNota') || 'El enlace directo al producto en la web de la tienda.'}</p>
                       </div>
                     </div>
 
@@ -335,9 +362,15 @@ export default function NuevoEvento() {
                         <label style={labelStyle}>{t('modelo') || 'Modelo'}</label>
                         <input type="text" placeholder={t('modeloPlaceholder') || 'Nombre del vestido o modelo'} value={lookBloqueadoModelo2} onChange={e => setLookBloqueadoModelo2(e.target.value)} style={inputStyle}/>
                       </div>
+                      <div style={{marginBottom:'0.75rem'}}>
+                        <label style={labelStyle}>{t('referenciaCodigoLabel') || 'Referencia de la prenda'}</label>
+                        <input type="text" placeholder={t('referenciaCodigoPlaceholder') || 'Ej: 123456789'} value={lookBloqueadoReferencia2} onChange={e => setLookBloqueadoReferencia2(e.target.value)} style={inputStyle}/>
+                        <p style={notaStyle}>{t('referenciaCodigoNota') || 'El código de referencia.'}</p>
+                      </div>
                       <div>
-                        <label style={labelStyle}>{t('referencia') || 'Referencia o link'}</label>
-                        <input type="text" placeholder={t('referenciaPlaceholder') || 'URL o referencia del producto'} value={lookBloqueadoReferencia2} onChange={e => setLookBloqueadoReferencia2(e.target.value)} style={inputStyle}/>
+                        <label style={labelStyle}>{t('referenciaLinkLabel') || 'Link de la tienda'}</label>
+                        <input type="url" placeholder={t('referenciaLinkPlaceholder') || 'https://www.zara.com/es/...'} value={lookBloqueadoLink2} onChange={e => setLookBloqueadoLink2(e.target.value)} style={inputStyle}/>
+                        <p style={notaStyle}>{t('referenciaLinkNota') || 'El enlace directo al producto.'}</p>
                       </div>
                     </div>
                   </div>
