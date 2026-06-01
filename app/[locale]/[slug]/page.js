@@ -818,9 +818,9 @@ export default function InvitadaPage() {
                             <span style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{look.marca} · {look.modelo}</span>
                           </div>
                           <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.2rem 0.6rem',borderRadius:'20px',
-                            background:look.estado==='confirmado'?'#0A0A0A':look.estado==='pendiente'?'#FFF8F0':'#F5EDE8',
-                            color:look.estado==='confirmado'?'#FFFFFF':look.estado==='pendiente'?'#C4917C':'#C4917C'}}>
-                            {look.estado === 'confirmado' ? t('estadoConfirmado') : look.estado === 'pendiente' ? 'Pendiente' : t('estadoPrereservado')}
+                            background:look.estado==='confirmado'?'#0A0A0A':look.estado==='pendiente'?'#FFF8F0':look.estado==='rechazado'?'#FFF0F1':'#F5EDE8',
+                            color:look.estado==='confirmado'?'#FFFFFF':look.estado==='pendiente'?'#C4917C':look.estado==='rechazado'?'#F07987':'#C4917C'}}>
+                            {look.estado === 'confirmado' ? t('estadoConfirmado') : look.estado === 'pendiente' ? 'Pendiente' : look.estado === 'rechazado' ? 'Rechazado' : t('estadoPrereservado')}
                           </span>
                         </div>
                         <div style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'1rem'}}>{look.tipo}</div>
