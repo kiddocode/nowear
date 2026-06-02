@@ -77,7 +77,6 @@ function subtitulo(texto) {
 }
 
   return `<p style="font-size:15px;color:#0A0A0A;line-height:1.9;margin:0 0 20px;${P}font-weight:300;text-align:center;">${texto}</p>`
-  return `<p style="font-size:13px;color:#555552;line-height:1.8;margin:0 0 16px;${P}font-weight:300;text-align:center;">${texto}</p>`
 }
 
 function separador() {
