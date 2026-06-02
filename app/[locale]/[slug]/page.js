@@ -305,7 +305,6 @@ export default function InvitadaPage() {
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       referencia2: referencia2 || null, link2: link2 || null,
-      referencia2: referencia2 || null, link2: link2 || null,
     }).select().single()
     if (insertError) {
       setEnviando(false)
