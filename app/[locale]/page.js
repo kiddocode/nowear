@@ -514,9 +514,13 @@ export default function Home() {
             ))}
           </div>
         </div>
-        <div style={{borderTop:'1px solid #3A3A38',paddingTop:'2rem',display:'flex',justifyContent:'space-between',flexWrap:'wrap',gap:'1rem'}}>
+        <div style={{borderTop:"1px solid #3A3A38",paddingTop:"2rem",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:"1rem"}}>
           <span style={{fontSize:'0.65rem',fontWeight:300,color:'#3A3A38'}}>{t('footer.copyright')}</span>
-          <span style={{fontSize:'0.65rem',fontWeight:300,color:'#3A3A38'}}>support@nowear.es</span>
+          <span style={{fontSize:"0.65rem",fontWeight:300,color:"#3A3A38"}}>support@nowear.es</span>
+          <div style={{display:"flex",gap:"1rem",alignItems:"center"}}>
+            <a href="https://instagram.com/nowearapp" target="_blank" rel="noopener noreferrer" style={{color:"#888884",textDecoration:"none",fontSize:"0.65rem",fontWeight:300,letterSpacing:"0.05em"}}>Instagram</a>
+            <a href="https://tiktok.com/@nowearapp" target="_blank" rel="noopener noreferrer" style={{color:"#888884",textDecoration:"none",fontSize:"0.65rem",fontWeight:300,letterSpacing:"0.05em"}}>TikTok</a>
+          </div>
         </div>
       </footer>
     </>
