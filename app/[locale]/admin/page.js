@@ -18,13 +18,10 @@ export default function AdminPage() {
   const [loadingEvento, setLoadingEvento] = useState(false)
   const [stats, setStats] = useState({ totalUsuarios: 0, totalEventos: 0, totalLooks: 0, totalConflictos: 0 })
 
-  useEffect(() => {
+    async function verificar() {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
-      const { data: { session } } = await supabase.auth.getSession()
-        router.push('/')
-        return
-      }
+      if (!user || user.email !== ADMIN_EMAIL) { router.push('/'); return }
       setAutorizado(true)
       await cargarDatos(session.access_token)
       setLoading(false)
