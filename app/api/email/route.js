@@ -127,13 +127,13 @@ function etiqueta(texto) {
 function bloqueLook(marca, modelo, marca2, modelo2) {
   if (marca2) {
     return `
-      ${etiqueta('Prenda 1')}
+      ${etiqueta('Prenda 1 de tu look')}
       ${lookCardSimple(marca, modelo)}
-      ${etiqueta('Prenda 2')}
+      ${etiqueta('Prenda 2 de tu look')}
       ${lookCardSimple(marca2, modelo2)}`
   }
   return `
-    ${etiqueta('Tu look consta de 1 única pieza')}
+    ${etiqueta('Este es el look que has registrado')}
     ${lookCardSimple(marca, modelo)}`
 }
 

@@ -304,9 +304,8 @@ export default function InvitadaPage() {
       marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, link2: link2 || null,
-      estado: estadoLook, foto_url
+      referencia2: referencia2 || null, link2: link2 || null,
     }).select().single()
 
     if (insertError) {
