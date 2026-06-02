@@ -232,7 +232,7 @@ export default function InvitadaPage() {
           nombreEvento: evento.nombre,
           fechaEvento: evento.fecha,
           nombreOrganizadora: organizadora?.nombre || 'la organizadora',
-          marca: marca1, modelo: modelo1,
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
           color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
           organizadoraId: evento.organizadora_id, eventoId: evento.slug,
           ...extra
@@ -301,7 +301,7 @@ export default function InvitadaPage() {
     const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
       evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1,
+      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
@@ -320,7 +320,7 @@ export default function InvitadaPage() {
   async function actualizarLook() {
     await supabase.from('looks').update({
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1,
+      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
@@ -331,7 +331,7 @@ export default function InvitadaPage() {
     const lookActualizado = {
       ...lookEditando,
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1,
+      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, link2: link2 || null, estado
@@ -470,7 +470,7 @@ export default function InvitadaPage() {
       if (candidato) {
         await supabase.from('conflictos').insert({
           evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-          marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
         })
         enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
           emailPrimera: candidato.email_invitada, nombrePrimera: candidato.nombre_invitada,
@@ -491,7 +491,7 @@ export default function InvitadaPage() {
       if (candidato) {
         await supabase.from('conflictos').insert({
           evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-          marca: marca1, modelo: modelo1, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
         })
         enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
           emailPrimera: candidato.email_invitada, nombrePrimera: candidato.nombre_invitada,

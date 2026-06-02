@@ -12,8 +12,9 @@ const HERO_IMG = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/pub
 const IG = 'https://instagram.com/nowearapp'
 const TK = 'https://tiktok.com/@nowearapp'
 const WEB = 'https://nowear.es'
+const P = `font-family:'Poppins','Helvetica Neue',Arial,sans-serif;`
 
-function emailWrapper(contenido, eventoUrl = null) {
+function emailWrapper(contenido) {
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -21,15 +22,14 @@ function emailWrapper(contenido, eventoUrl = null) {
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 </head>
-<body style="margin:0;padding:0;background:#F7F7F5;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">
+<body style="margin:0;padding:0;background:#F7F7F5;${P}">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;padding:40px 16px;">
     <tr><td align="center">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
 
         <!-- HEADER -->
-        <tr><td style="background:#0A0A0A;padding:28px 32px;text-align:center;">
-          <img src="${LOGO_WHITE}" alt="NOWEAR" style="height:36px;display:inline-block;margin-bottom:6px;"/>
-          <p style="margin:0;font-size:9px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">NO TWO LOOKS ALIKE</p>
+        <tr><td style="background:#0A0A0A;padding:20px 24px;text-align:center;">
+          <img src="${LOGO_WHITE}" alt="NOWEAR" style="width:100%;max-width:280px;height:auto;display:inline-block;"/>
         </td></tr>
 
         <!-- HERO IMAGE -->
@@ -38,30 +38,26 @@ function emailWrapper(contenido, eventoUrl = null) {
         </td></tr>
 
         <!-- CONTENIDO -->
-        <tr><td style="background:#FFFFFF;padding:44px 40px;border-left:1px solid #E8E8E4;border-right:1px solid #E8E8E4;">
+        <tr><td style="background:#FFFFFF;padding:44px 40px;border-left:1px solid #E8E8E4;border-right:1px solid #E8E8E4;text-align:center;">
           ${contenido}
         </td></tr>
 
         <!-- FOOTER -->
-        <tr><td style="background:#FFFFFF;padding:20px 40px 32px;border:1px solid #E8E8E4;border-top:1px solid #F0F0EC;text-align:center;">
-          <table width="100%" cellpadding="0" cellspacing="0" border="0">
-            <tr><td align="center" style="padding-bottom:12px;">
-              <table cellpadding="0" cellspacing="0" border="0">
-                <tr>
-                  <td style="padding:0 10px;">
-                    <a href="${IG}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.04em;">Instagram</a>
-                  </td>
-                  <td style="color:#BEBEBA;font-size:11px;">·</td>
-                  <td style="padding:0 10px;">
-                    <a href="${TK}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.04em;">TikTok</a>
-                  </td>
-                  ${eventoUrl ? `<td style="color:#BEBEBA;font-size:11px;">·</td><td style="padding:0 10px;"><a href="${eventoUrl}" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.04em;">Ver mi look</a></td>` : ''}
-                </tr>
-              </table>
-            </td></tr>
-            <tr><td align="center">
-              <a href="${WEB}" style="font-size:10px;font-weight:300;color:#BEBEBA;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.06em;">nowear.es</a>
-            </td></tr>
+        <tr><td style="background:#FFFFFF;padding:16px 40px 28px;border:1px solid #E8E8E4;border-top:1px solid #F0F0EC;text-align:center;">
+          <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+            <tr>
+              <td style="padding:0 10px;">
+                <a href="${IG}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">Instagram</a>
+              </td>
+              <td style="color:#BEBEBA;font-size:11px;">·</td>
+              <td style="padding:0 10px;">
+                <a href="${TK}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">TikTok</a>
+              </td>
+              <td style="color:#BEBEBA;font-size:11px;">·</td>
+              <td style="padding:0 10px;">
+                <a href="${WEB}" style="font-size:11px;font-weight:300;color:#BEBEBA;text-decoration:none;${P}letter-spacing:0.04em;">nowear.es</a>
+              </td>
+            </tr>
           </table>
         </td></tr>
 
@@ -73,15 +69,15 @@ function emailWrapper(contenido, eventoUrl = null) {
 }
 
 function titulo(texto) {
-  return `<h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;line-height:1.3;">${texto}</h1>`
+  return `<h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;${P}line-height:1.3;text-align:center;">${texto}</h1>`
 }
 
 function subtitulo(texto) {
-  return `<p style="font-size:10px;color:#888884;margin:0 0 28px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;">${texto}</p>`
+  return `<p style="font-size:11px;color:#888884;margin:0 0 28px;${P}letter-spacing:0.14em;text-transform:uppercase;font-weight:600;text-align:center;">${texto}</p>`
 }
 
 function parrafo(texto) {
-  return `<p style="font-size:13px;color:#555552;line-height:1.8;margin:0 0 16px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">${texto}</p>`
+  return `<p style="font-size:13px;color:#555552;line-height:1.8;margin:0 0 16px;${P}font-weight:300;text-align:center;">${texto}</p>`
 }
 
 function separador() {
@@ -93,9 +89,9 @@ function boton(texto, href, tipo = 'primary') {
   const color = tipo === 'danger' ? '#F07987' : '#FFFFFF'
   const border = tipo === 'danger' ? '1px solid #F07987' : 'none'
   return `
-    <table cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">
+    <table cellpadding="0" cellspacing="0" border="0" style="margin:8px auto 0;">
       <tr><td style="background:${bg};border-radius:3px;border:${border};">
-        <a href="${href}" style="display:inline-block;padding:13px 28px;font-size:11px;font-weight:600;color:${color};text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">${texto}</a>
+        <a href="${href}" style="display:inline-block;padding:13px 32px;font-size:11px;font-weight:600;color:${color};text-decoration:none;${P}letter-spacing:0.1em;text-transform:uppercase;">${texto}</a>
       </td></tr>
     </table>`
 }
@@ -110,20 +106,30 @@ function alerta(texto, tipo = 'warn') {
   return `
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;">
       <tr><td style="background:${s.bg};border-left:3px solid ${s.border};padding:14px 18px;border-radius:0 3px 3px 0;">
-        <p style="font-size:13px;color:${s.color};line-height:1.7;margin:0;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">${texto}</p>
+        <p style="font-size:13px;color:${s.color};line-height:1.7;margin:0;${P}font-weight:300;text-align:left;">${texto}</p>
       </td></tr>
     </table>`
 }
 
-function lookCard(nombre, marca, modelo, fotoUrl) {
+function lookCardSimple(marca, modelo) {
+  if (!marca) return ''
+  return `
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:8px;border-radius:3px;">
+      <tr><td style="padding:14px 18px;text-align:left;">
+        <p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p>
+      </td></tr>
+    </table>`
+}
+
+function lookCardConFoto(nombre, marca, modelo, fotoUrl) {
   return `
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:12px;border-radius:3px;overflow:hidden;">
       <tr><td>
         ${fotoUrl ? `<img src="${fotoUrl}" alt="Look" style="width:100%;max-height:220px;object-fit:cover;display:block;"/>` : ''}
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
-          <tr><td style="padding:14px 18px;">
-            ${nombre ? `<p style="font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#888884;margin:0 0 5px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">${nombre}</p>` : ''}
-            ${marca ? `<p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">${marca}${modelo ? ` · ${modelo}` : ''}</p>` : ''}
+          <tr><td style="padding:14px 18px;text-align:left;">
+            ${nombre ? `<p style="font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#888884;margin:0 0 5px;${P}">${nombre}</p>` : ''}
+            ${marca ? `<p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p>` : ''}
           </td></tr>
         </table>
       </td></tr>
@@ -131,7 +137,20 @@ function lookCard(nombre, marca, modelo, fotoUrl) {
 }
 
 function etiqueta(texto) {
-  return `<p style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#888884;margin:20px 0 8px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">${texto}</p>`
+  return `<p style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#888884;margin:20px 0 8px;${P}text-align:left;">${texto}</p>`
+}
+
+function bloqueLook(marca, modelo, marca2, modelo2) {
+  if (marca2) {
+    return `
+      ${etiqueta('Prenda 1')}
+      ${lookCardSimple(marca, modelo)}
+      ${etiqueta('Prenda 2')}
+      ${lookCardSimple(marca2, modelo2)}`
+  }
+  return `
+    ${etiqueta('Tu look consta de 1 única pieza')}
+    ${lookCardSimple(marca, modelo)}`
 }
 
 export async function POST(req) {
@@ -139,6 +158,7 @@ export async function POST(req) {
   const {
     tipo, emailInvitada, nombreInvitada, nombreEvento, fechaEvento,
     nombreOrganizadora, marca, modelo, color, eventoId, organizadoraId,
+    marca2, modelo2, tipo2,
     fotoUrl, nombreCandidata, emailCandidata,
     marcaCandidata, modeloCandidata, colorCandidata, fotoCandidataUrl,
     token, emailPrimera, nombrePrimera,
@@ -173,9 +193,9 @@ export async function POST(req) {
           ${titulo('Tu look está registrado')}
           ${subtitulo(eventoTag)}
           ${alerta(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente. Si necesitas hacer algún cambio, vuelve al link del evento.`, 'ok')}
-          ${lookCard('', marca, modelo, null)}
-          ${boton('Ver mi look', eventoUrl)}
-        `, eventoUrl)
+          ${bloqueLook(marca, modelo, marca2, modelo2)}
+          ${eventoUrl ? boton('Ver mi look', eventoUrl) : ''}
+        `)
       })
     }
 
@@ -188,8 +208,8 @@ export async function POST(req) {
           ${titulo('Tu look está pendiente')}
           ${subtitulo(eventoTag)}
           ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu look y tu foto. Hay una posible coincidencia con otra invitada, así que la organizadora necesita revisarlo antes de confirmarlo. Te avisaremos en cuanto esté validado.`, 'warn')}
-          ${lookCard('', marca, modelo, fotoUrl || null)}
-        `, eventoUrl)
+          ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
+        `)
       })
     }
 
@@ -203,8 +223,8 @@ export async function POST(req) {
           ${subtitulo(eventoTag)}
           ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar ya está reservado por otra invitada. Solo la primera en registrar tiene el look reservado.`, 'error')}
           ${parrafo('Vuelve al enlace del evento y elige otro look.')}
-          ${boton('Elegir otro look', eventoUrl)}
-        `, eventoUrl)
+          ${eventoUrl ? boton('Elegir otro look', eventoUrl) : ''}
+        `)
       })
 
       if (emailOrganizadora && notifConflicto) {
@@ -230,7 +250,7 @@ export async function POST(req) {
             ${titulo('Tu look sigue siendo único')}
             ${subtitulo(eventoTag)}
             ${alerta(`Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú, pero el sistema lo ha bloqueado. Tu look sigue siendo exclusivo.`, 'ok')}
-          `, eventoUrl)
+          `)
         })
       }
     }
@@ -248,7 +268,7 @@ export async function POST(req) {
           ${parrafo('Solo tardarás un momento.')}
           ${boton('Subir mi foto', urlSubirFoto)}
           ${parrafo('Si tus looks son claramente distintos, la organizadora lo confirmará y todo quedará resuelto.')}
-        `, eventoUrl)
+        `)
       })
 
       if (emailOrganizadora) {
@@ -261,7 +281,7 @@ export async function POST(req) {
             ${subtitulo(eventoTag)}
             ${alerta('Hay una posible coincidencia entre dos looks. Ya hemos pedido a la segunda invitada que suba su foto. Te avisaremos cuando ambas fotos estén listas.', 'warn')}
             ${etiqueta(`Look nuevo · ${nombreCandidata || ''}`)}
-            ${lookCard('', marcaCandidata || '', modeloCandidata || '', fotoUrl || null)}
+            ${lookCardConFoto('', marcaCandidata || '', modeloCandidata || '', fotoUrl || null)}
             ${parrafo('No necesitas hacer nada por ahora.')}
           `)
         })
@@ -282,17 +302,17 @@ export async function POST(req) {
             ${subtitulo(eventoTag)}
             ${alerta('Las dos invitadas han subido sus fotos. Revísalas y decide si son el mismo look.', 'warn')}
             ${etiqueta(`Look de ${nombreNueva || 'invitada nueva'}`)}
-            ${lookCard('', marcaNueva || '', modeloNueva || '', fotoUrlNueva || null)}
+            ${lookCardConFoto('', marcaNueva || '', modeloNueva || '', fotoUrlNueva || null)}
             ${etiqueta(`Look de ${nombreCandidataValidacion || 'primera invitada'}`)}
-            ${lookCard('', marcaCandidataV || '', modeloCandidataV || '', fotoUrlCandidata || null)}
+            ${lookCardConFoto('', marcaCandidataV || '', modeloCandidataV || '', fotoUrlCandidata || null)}
             ${separador()}
-            <table cellpadding="0" cellspacing="0" border="0">
+            <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
               <tr>
-                <td style="padding-right:12px;">${boton('Aprobar look', urlAprobar).replace('margin-top:8px','margin-top:0')}</td>
-                <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin-top:8px','margin-top:0')}</td>
+                <td style="padding-right:12px;">${boton('Aprobar look', urlAprobar).replace('margin:8px auto 0','margin:0')}</td>
+                <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin:8px auto 0','margin:0')}</td>
               </tr>
             </table>
-            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">Al aprobar, el look de ${nombreNueva || 'la invitada'} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
+            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;${P}font-weight:300;text-align:center;">Al aprobar, el look de ${nombreNueva || 'la invitada'} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
           `)
         })
       }
@@ -312,17 +332,17 @@ export async function POST(req) {
             ${subtitulo(eventoTag)}
             ${alerta('Hay una posible coincidencia entre dos looks. Revisa las fotos y decide si son el mismo producto.', 'warn')}
             ${etiqueta(`Look nuevo · ${nombreInvitada}`)}
-            ${lookCard('', marca, modelo, fotoUrl || null)}
+            ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
             ${etiqueta(`Look registrado · ${nombreCandidata || ''}`)}
-            ${lookCard('', marcaCandidata || '', modeloCandidata || '', fotoCandidataUrl || null)}
+            ${lookCardConFoto('', marcaCandidata || '', modeloCandidata || '', fotoCandidataUrl || null)}
             ${separador()}
-            <table cellpadding="0" cellspacing="0" border="0">
+            <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
               <tr>
-                <td style="padding-right:12px;">${boton('Aprobar look', urlAprobar).replace('margin-top:8px','margin-top:0')}</td>
-                <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin-top:8px','margin-top:0')}</td>
+                <td style="padding-right:12px;">${boton('Aprobar look', urlAprobar).replace('margin:8px auto 0','margin:0')}</td>
+                <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin:8px auto 0','margin:0')}</td>
               </tr>
             </table>
-            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
+            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;${P}font-weight:300;text-align:center;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
           `)
         })
       }
