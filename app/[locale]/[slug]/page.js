@@ -225,7 +225,7 @@ export default function InvitadaPage() {
 
   async function enviarEmailAsync(tipo, emailInv, nombreInv, extra = {}) {
     try {
-      fetch('/api/email', {
+      await fetch('/api/email', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           tipo, emailInvitada: emailInv, nombreInvitada: nombreInv,
