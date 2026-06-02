@@ -20,7 +20,7 @@ export default function Register() {
     setLoading(true)
     const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { nombre } } })
     if (error) { setLoading(false); setError(error.message); return }
-    if (data.user) { await supabase.from('profiles').update({ nombre }).eq('id', data.user.id); fetch('/api/admin/nuevousuario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, nombre, proveedor: 'email', created_at: new Date().toISOString() }) }) }
+    if (data.user) { await supabase.from('profiles').update({ nombre }).eq('id', data.user.id); await fetch('/api/admin/nuevousuario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, nombre, proveedor: 'email', created_at: new Date().toISOString() }) }) }
     setLoading(false); setRegistrado(true)
   }
 
