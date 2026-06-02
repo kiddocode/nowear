@@ -12,7 +12,7 @@ const HERO_IMG = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/pub
 const IG = 'https://instagram.com/nowearapp'
 const TK = 'https://tiktok.com/@nowearapp'
 const WEB = 'https://nowear.es'
-const P = `font-family:'Poppins','Helvetica Neue',Arial,sans-serif;`
+const P = `font-family:'Century Gothic','Gill Sans','Trebuchet MS',Arial,sans-serif;`
 
 function emailWrapper(contenido) {
   return `<!DOCTYPE html>
