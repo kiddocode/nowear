@@ -153,7 +153,6 @@ export async function POST(req) {
     marcaCandidataV, modeloCandidataV,
     cancelUrl, fechaEliminacion,
   } = body
-Push, registra un look con prenda 2, y luego en Vercel: proyecto, pestaña Logs, filtra por /api/email. Pégame lo que aparece.
 
   try {
     let emailOrganizadora = null
