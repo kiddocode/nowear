@@ -69,14 +69,14 @@ function emailWrapper(contenido) {
 }
 
 function titulo(texto) {
-  return `<h1 style="font-size:30px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;${P}line-height:1.3;text-align:center;">${texto}</h1>`
+  return `<h1 style="font-size:32px;font-weight:400;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 8px;${P}line-height:1.3;text-align:center;">${texto}</h1>`
 }
 
 function subtitulo(texto) {
-  return `<p style="font-size:11px;color:#888884;margin:0 0 28px;${P}letter-spacing:0.14em;text-transform:uppercase;font-weight:600;text-align:center;">${texto}</p>`
+  return `<p style="font-size:13px;color:#555552;margin:0 0 28px;${P}letter-spacing:0.12em;text-transform:uppercase;font-weight:700;text-align:center;">${texto}</p>`
 }
 
-function parrafo(texto) {
+  return `<p style="font-size:15px;color:#0A0A0A;line-height:1.9;margin:0 0 20px;${P}font-weight:300;text-align:center;">${texto}</p>`
   return `<p style="font-size:13px;color:#555552;line-height:1.8;margin:0 0 16px;${P}font-weight:300;text-align:center;">${texto}</p>`
 }
 
@@ -104,7 +104,7 @@ function alerta(texto, tipo = 'warn') {
   }
   const s = estilos[tipo] || estilos.warn
   return `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;">
+        <p style="font-size:15px;color:${s.color};line-height:1.8;margin:0;${P}font-weight:300;text-align:left;">${texto}</p>
       <tr><td style="background:${s.bg};border-left:3px solid ${s.border};padding:14px 18px;border-radius:0 3px 3px 0;">
         <p style="font-size:13px;color:${s.color};line-height:1.7;margin:0;${P}font-weight:300;text-align:left;">${texto}</p>
       </td></tr>
@@ -188,7 +188,7 @@ export async function POST(req) {
         html: emailWrapper(`
           ${titulo('Tu look está registrado')}
           ${subtitulo(eventoTag)}
-          ${parrafo(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente. Si necesitas hacer algún cambio, vuelve al link del evento.`)}
+          ${parrafo(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido <strong>registrado correctamente</strong>. Si necesitas hacer algún cambio, vuelve al link del evento.`)}
           ${bloqueLook(marca, modelo, marca2, modelo2)}
           ${eventoUrl ? boton('Ver mi look', eventoUrl) : ''}
         `)
@@ -218,7 +218,7 @@ export async function POST(req) {
           ${titulo('Look no disponible')}
           ${subtitulo(eventoTag)}
           ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar ya está reservado por otra invitada. Solo la primera en registrar tiene el look reservado.`, 'error')}
-          ${parrafo('Vuelve al enlace del evento y elige otro look.')}
+          ${parrafo(`<strong>Vuelve al enlace del evento</strong> y elige otro look.`)}
           ${eventoUrl ? boton('Elegir otro look', eventoUrl) : ''}
         `)
       })
@@ -261,7 +261,7 @@ export async function POST(req) {
           ${titulo('Necesitamos tu foto')}
           ${subtitulo(eventoTag)}
           ${alerta(`Hola <strong>${nombreInvitada}</strong>, otra invitada tiene un look muy similar al tuyo. Para que la organizadora pueda verificar que son distintos, necesitamos que subas una foto de tu look.`, 'warn')}
-          ${parrafo('Solo tardarás un momento.')}
+          ${parrafo(`<strong>Solo tardarás un momento.</strong>`)}
           ${boton('Subir mi foto', urlSubirFoto)}
           ${parrafo('Si tus looks son claramente distintos, la organizadora lo confirmará y todo quedará resuelto.')}
         `)
@@ -278,7 +278,7 @@ export async function POST(req) {
             ${alerta('Hay una posible coincidencia entre dos looks. Ya hemos pedido a la segunda invitada que suba su foto. Te avisaremos cuando ambas fotos estén listas.', 'warn')}
             ${etiqueta(`Look nuevo · ${nombreCandidata || ''}`)}
             ${lookCardConFoto('', marcaCandidata || '', modeloCandidata || '', fotoUrl || null)}
-            ${parrafo('No necesitas hacer nada por ahora.')}
+            ${parrafo(`<strong>No necesitas hacer nada</strong> por ahora.`)}
           `)
         })
       }
