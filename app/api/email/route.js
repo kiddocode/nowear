@@ -13,59 +13,57 @@ const IG = 'https://instagram.com/nowearapp'
 const TK = 'https://tiktok.com/@nowearapp'
 const WEB = 'https://nowear.es'
 
-const IG_ICON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="2" y="2" width="20" height="20" rx="5" stroke="#BEBEBA" stroke-width="1.5"/><circle cx="12" cy="12" r="4" stroke="#BEBEBA" stroke-width="1.5"/><circle cx="17.5" cy="6.5" r="1" fill="#BEBEBA"/></svg>`
-const TK_ICON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.74a4.85 4.85 0 0 1-1.01-.05z" fill="#BEBEBA"/></svg>`
-
 function emailWrapper(contenido, eventoUrl = null) {
-  const footer = `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#0A0A0A;padding:32px 28px;">
-      <tr><td align="center">
-        <img src="${LOGO_WHITE}" alt="NOWEAR" style="height:22px;display:block;margin-bottom:20px;"/>
-        <table cellpadding="0" cellspacing="0" border="0" style="margin-bottom:16px;">
-          <tr>
-            <td style="padding:0 8px;">
-              <a href="${IG}" style="text-decoration:none;">${IG_ICON}</a>
-            </td>
-            <td style="padding:0 8px;">
-              <a href="${TK}" style="text-decoration:none;">${TK_ICON}</a>
-            </td>
-          </tr>
-        </table>
-        ${eventoUrl ? `<p style="margin:0 0 8px;"><a href="${eventoUrl}" style="font-size:11px;color:#888884;font-family:'Helvetica Neue',Arial,sans-serif;text-decoration:none;">Ver mi look</a></p>` : ''}
-        <p style="margin:0 0 4px;"><a href="${WEB}" style="font-size:11px;color:#888884;font-family:'Helvetica Neue',Arial,sans-serif;text-decoration:none;">nowear.es</a></p>
-        <p style="margin:8px 0 0;font-size:10px;color:#555552;font-family:'Helvetica Neue',Arial,sans-serif;">No two looks alike</p>
-      </td></tr>
-    </table>`
-
   return `<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <meta name="color-scheme" content="light"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 </head>
-<body style="margin:0;padding:0;background:#F7F7F5;font-family:'Helvetica Neue',Arial,sans-serif;">
-  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;padding:32px 16px;">
+<body style="margin:0;padding:0;background:#F7F7F5;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;padding:40px 16px;">
     <tr><td align="center">
-      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:560px;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
 
         <!-- HEADER -->
-        <tr><td style="background:#0A0A0A;padding:24px 32px;text-align:center;">
-          <img src="${LOGO_WHITE}" alt="NOWEAR" style="height:28px;display:inline-block;"/>
+        <tr><td style="background:#0A0A0A;padding:28px 32px;text-align:center;">
+          <img src="${LOGO_WHITE}" alt="NOWEAR" style="height:36px;display:inline-block;margin-bottom:6px;"/>
+          <p style="margin:0;font-size:9px;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.4);font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">NO TWO LOOKS ALIKE</p>
         </td></tr>
 
         <!-- HERO IMAGE -->
         <tr><td style="padding:0;line-height:0;">
-          <img src="${HERO_IMG}" alt="" style="width:100%;max-height:200px;object-fit:cover;display:block;"/>
+          <img src="${HERO_IMG}" alt="" style="width:100%;height:180px;object-fit:cover;object-position:center 30%;display:block;"/>
         </td></tr>
 
         <!-- CONTENIDO -->
-        <tr><td style="background:#FFFFFF;padding:40px 32px;border-left:1px solid #E0E0DC;border-right:1px solid #E0E0DC;">
+        <tr><td style="background:#FFFFFF;padding:44px 40px;border-left:1px solid #E8E8E4;border-right:1px solid #E8E8E4;">
           ${contenido}
         </td></tr>
 
         <!-- FOOTER -->
-        <tr><td>${footer}</td></tr>
+        <tr><td style="background:#FFFFFF;padding:20px 40px 32px;border:1px solid #E8E8E4;border-top:1px solid #F0F0EC;text-align:center;">
+          <table width="100%" cellpadding="0" cellspacing="0" border="0">
+            <tr><td align="center" style="padding-bottom:12px;">
+              <table cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:0 10px;">
+                    <a href="${IG}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.04em;">Instagram</a>
+                  </td>
+                  <td style="color:#BEBEBA;font-size:11px;">·</td>
+                  <td style="padding:0 10px;">
+                    <a href="${TK}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.04em;">TikTok</a>
+                  </td>
+                  ${eventoUrl ? `<td style="color:#BEBEBA;font-size:11px;">·</td><td style="padding:0 10px;"><a href="${eventoUrl}" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.04em;">Ver mi look</a></td>` : ''}
+                </tr>
+              </table>
+            </td></tr>
+            <tr><td align="center">
+              <a href="${WEB}" style="font-size:10px;font-weight:300;color:#BEBEBA;text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.06em;">nowear.es</a>
+            </td></tr>
+          </table>
+        </td></tr>
 
       </table>
     </td></tr>
@@ -75,19 +73,19 @@ function emailWrapper(contenido, eventoUrl = null) {
 }
 
 function titulo(texto) {
-  return `<h1 style="font-size:28px;font-weight:300;letter-spacing:-0.03em;color:#0A0A0A;margin:0 0 8px;font-family:'Helvetica Neue',Arial,sans-serif;line-height:1.2;">${texto}</h1>`
+  return `<h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;line-height:1.3;">${texto}</h1>`
 }
 
 function subtitulo(texto) {
-  return `<p style="font-size:13px;color:#888884;margin:0 0 32px;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:0.02em;text-transform:uppercase;font-weight:500;">${texto}</p>`
+  return `<p style="font-size:10px;color:#888884;margin:0 0 28px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;">${texto}</p>`
 }
 
 function parrafo(texto) {
-  return `<p style="font-size:14px;color:#555552;line-height:1.8;margin:0 0 16px;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>`
+  return `<p style="font-size:13px;color:#555552;line-height:1.8;margin:0 0 16px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">${texto}</p>`
 }
 
 function separador() {
-  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:24px 0;"><tr><td style="border-top:1px solid #E0E0DC;"></td></tr></table>`
+  return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:28px 0;"><tr><td style="border-top:1px solid #E8E8E4;"></td></tr></table>`
 }
 
 function boton(texto, href, tipo = 'primary') {
@@ -96,8 +94,8 @@ function boton(texto, href, tipo = 'primary') {
   const border = tipo === 'danger' ? '1px solid #F07987' : 'none'
   return `
     <table cellpadding="0" cellspacing="0" border="0" style="margin-top:8px;">
-      <tr><td style="background:${bg};border-radius:4px;border:${border};">
-        <a href="${href}" style="display:inline-block;padding:14px 28px;font-size:13px;font-weight:600;color:${color};text-decoration:none;font-family:'Helvetica Neue',Arial,sans-serif;letter-spacing:0.03em;">${texto}</a>
+      <tr><td style="background:${bg};border-radius:3px;border:${border};">
+        <a href="${href}" style="display:inline-block;padding:13px 28px;font-size:11px;font-weight:600;color:${color};text-decoration:none;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;letter-spacing:0.08em;text-transform:uppercase;">${texto}</a>
       </td></tr>
     </table>`
 }
@@ -111,21 +109,21 @@ function alerta(texto, tipo = 'warn') {
   const s = estilos[tipo] || estilos.warn
   return `
     <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;">
-      <tr><td style="background:${s.bg};border-left:3px solid ${s.border};padding:16px 20px;border-radius:0 4px 4px 0;">
-        <p style="font-size:13px;color:${s.color};line-height:1.7;margin:0;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>
+      <tr><td style="background:${s.bg};border-left:3px solid ${s.border};padding:14px 18px;border-radius:0 3px 3px 0;">
+        <p style="font-size:13px;color:${s.color};line-height:1.7;margin:0;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">${texto}</p>
       </td></tr>
     </table>`
 }
 
 function lookCard(nombre, marca, modelo, fotoUrl) {
   return `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E0E0DC;margin-bottom:12px;border-radius:4px;overflow:hidden;">
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:12px;border-radius:3px;overflow:hidden;">
       <tr><td>
         ${fotoUrl ? `<img src="${fotoUrl}" alt="Look" style="width:100%;max-height:220px;object-fit:cover;display:block;"/>` : ''}
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr><td style="padding:14px 18px;">
-            ${nombre ? `<p style="font-size:11px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#888884;margin:0 0 4px;font-family:'Helvetica Neue',Arial,sans-serif;">${nombre}</p>` : ''}
-            ${marca ? `<p style="font-size:14px;font-weight:700;color:#0A0A0A;margin:0;font-family:'Helvetica Neue',Arial,sans-serif;">${marca}${modelo ? ` · ${modelo}` : ''}</p>` : ''}
+            ${nombre ? `<p style="font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#888884;margin:0 0 5px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">${nombre}</p>` : ''}
+            ${marca ? `<p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">${marca}${modelo ? ` · ${modelo}` : ''}</p>` : ''}
           </td></tr>
         </table>
       </td></tr>
@@ -133,7 +131,7 @@ function lookCard(nombre, marca, modelo, fotoUrl) {
 }
 
 function etiqueta(texto) {
-  return `<p style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:#888884;margin:20px 0 8px;font-family:'Helvetica Neue',Arial,sans-serif;">${texto}</p>`
+  return `<p style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#888884;margin:20px 0 8px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;">${texto}</p>`
 }
 
 export async function POST(req) {
@@ -166,7 +164,6 @@ export async function POST(req) {
     const fechaStr = fechaEvento ? new Date(fechaEvento).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}) : ''
     const eventoTag = fechaStr ? `${nombreEvento} · ${fechaStr}` : nombreEvento
 
-    // ─── CONFIRMACION ──────────────────────────────────────────────
     if (tipo === 'confirmacion') {
       await resend.emails.send({
         from: 'NOWEAR <support@nowear.es>',
@@ -182,7 +179,6 @@ export async function POST(req) {
       })
     }
 
-    // ─── LOOK PENDIENTE (Ester sube foto) ─────────────────────────
     if (tipo === 'look_pendiente') {
       await resend.emails.send({
         from: 'NOWEAR <support@nowear.es>',
@@ -197,7 +193,6 @@ export async function POST(req) {
       })
     }
 
-    // ─── CONFLICTO INVITADA ────────────────────────────────────────
     if (tipo === 'conflicto_invitada') {
       await resend.emails.send({
         from: 'NOWEAR <support@nowear.es>',
@@ -240,7 +235,6 @@ export async function POST(req) {
       }
     }
 
-    // ─── PEDIR FOTO A CANDIDATA (Ana) ──────────────────────────────
     if (tipo === 'pedir_foto_candidata') {
       const urlSubirFoto = `https://nowear.es/${eventoId}?token=${token}`
       await resend.emails.send({
@@ -274,7 +268,6 @@ export async function POST(req) {
       }
     }
 
-    // ─── VALIDACION LISTA (ambas fotos) ────────────────────────────
     if (tipo === 'validacion_lista') {
       const urlAprobar = `https://nowear.es/api/validar?token=${token}&decision=aprobar`
       const urlRechazar = `https://nowear.es/api/validar?token=${token}&decision=rechazar`
@@ -299,13 +292,12 @@ export async function POST(req) {
                 <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin-top:8px','margin-top:0')}</td>
               </tr>
             </table>
-            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;font-family:'Helvetica Neue',Arial,sans-serif;">Al aprobar, el look de ${nombreNueva || 'la invitada'} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
+            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">Al aprobar, el look de ${nombreNueva || 'la invitada'} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
           `)
         })
       }
     }
 
-    // ─── AMBIGUEDAD CON FOTO ────────────────────────────────────────
     if (tipo === 'ambiguedad_foto') {
       const urlAprobar = `https://nowear.es/api/validar?token=${token}&decision=aprobar`
       const urlRechazar = `https://nowear.es/api/validar?token=${token}&decision=rechazar`
@@ -330,13 +322,12 @@ export async function POST(req) {
                 <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin-top:8px','margin-top:0')}</td>
               </tr>
             </table>
-            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;font-family:'Helvetica Neue',Arial,sans-serif;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
+            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;font-family:'Poppins','Helvetica Neue',Arial,sans-serif;font-weight:300;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
           `)
         })
       }
     }
 
-    // ─── CUENTA PENDIENTE ELIMINACION ──────────────────────────────
     if (tipo === 'cuenta_pendiente_eliminacion') {
       await resend.emails.send({
         from: 'NOWEAR <support@nowear.es>',
@@ -351,7 +342,6 @@ export async function POST(req) {
       })
     }
 
-    // ─── ELIMINACION SOLICITADA (aviso admin) ──────────────────────
     if (tipo === 'eliminacion_solicitada') {
       await resend.emails.send({
         from: 'NOWEAR <support@nowear.es>',
