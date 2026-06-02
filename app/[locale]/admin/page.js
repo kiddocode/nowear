@@ -22,7 +22,6 @@ export default function AdminPage() {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
       const { data: { session } } = await supabase.auth.getSession()
-      if (!user || user.email !== ADMIN_EMAIL) {
         router.push('/')
         return
       }
