@@ -20,7 +20,8 @@ export default function AdminPage() {
 
   useEffect(() => {
     async function verificar() {
-      const { data: { user, session } } = await supabase.auth.getSession()
+      const { data: { user } } = await supabase.auth.getUser()
+      const { data: { session } } = await supabase.auth.getSession()
       if (!user || user.email !== ADMIN_EMAIL) {
         router.push('/')
         return
