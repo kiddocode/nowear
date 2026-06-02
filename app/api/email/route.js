@@ -139,6 +139,7 @@ function bloqueLook(marca, modelo, marca2, modelo2) {
 
 export async function POST(req) {
   const body = await req.json()
+  console.log('EMAIL BODY:', JSON.stringify(body))  // ← esta línea
   const {
     tipo, emailInvitada, nombreInvitada, nombreEvento, fechaEvento,
     nombreOrganizadora, marca, modelo, color, eventoId, organizadoraId,
@@ -152,6 +153,7 @@ export async function POST(req) {
     marcaCandidataV, modeloCandidataV,
     cancelUrl, fechaEliminacion,
   } = body
+Push, registra un look con prenda 2, y luego en Vercel: proyecto, pestaña Logs, filtra por /api/email. Pégame lo que aparece.
 
   try {
     let emailOrganizadora = null
