@@ -28,13 +28,13 @@ function emailWrapper(contenido) {
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
 
         <!-- HEADER -->
-        <tr><td style="background:#0A0A0A;padding:20px 24px;text-align:center;">
-          <img src="${LOGO_WHITE}" alt="NOWEAR" style="width:100%;max-width:280px;height:auto;display:inline-block;"/>
+        <tr><td style="background:#0A0A0A;padding:12px 20px;text-align:center;">
+          <img src="${LOGO_WHITE}" alt="NOWEAR" style="width:100%;max-width:200px;height:auto;display:inline-block;"/>
         </td></tr>
 
         <!-- HERO IMAGE -->
         <tr><td style="padding:0;line-height:0;">
-          <img src="${HERO_IMG}" alt="" style="width:100%;height:180px;object-fit:cover;object-position:center 30%;display:block;"/>
+          <img src="${HERO_IMG}" alt="" style="width:100%;height:130px;object-fit:cover;object-position:center 30%;display:block;"/>
         </td></tr>
 
         <!-- CONTENIDO -->
@@ -55,7 +55,7 @@ function emailWrapper(contenido) {
               </td>
               <td style="color:#BEBEBA;font-size:11px;">·</td>
               <td style="padding:0 10px;">
-                <a href="${WEB}" style="font-size:11px;font-weight:300;color:#BEBEBA;text-decoration:none;${P}letter-spacing:0.04em;">nowear.es</a>
+                <a href="${WEB}" style="font-size:11px;font-weight:600;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">nowear.es</a>
               </td>
             </tr>
           </table>
@@ -69,7 +69,7 @@ function emailWrapper(contenido) {
 }
 
 function titulo(texto) {
-  return `<h1 style="font-size:26px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;${P}line-height:1.3;text-align:center;">${texto}</h1>`
+  return `<h1 style="font-size:30px;font-weight:300;letter-spacing:-0.02em;color:#0A0A0A;margin:0 0 6px;${P}line-height:1.3;text-align:center;">${texto}</h1>`
 }
 
 function subtitulo(texto) {
@@ -114,11 +114,7 @@ function alerta(texto, tipo = 'warn') {
 function lookCardSimple(marca, modelo) {
   if (!marca) return ''
   return `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:8px;border-radius:3px;">
-      <tr><td style="padding:14px 18px;text-align:left;">
-        <p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p>
-      </td></tr>
-    </table>`
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:8px;border-radius:3px;"><tr><td style="padding:14px 18px;text-align:center;"><p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p></td></tr></table>`
 }
 
 function lookCardConFoto(nombre, marca, modelo, fotoUrl) {
@@ -137,7 +133,7 @@ function lookCardConFoto(nombre, marca, modelo, fotoUrl) {
 }
 
 function etiqueta(texto) {
-  return `<p style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#888884;margin:20px 0 8px;${P}text-align:left;">${texto}</p>`
+  return `<p style="font-size:10px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:#888884;margin:20px 0 8px;${P}text-align:center;">${texto}</p>`
 }
 
 function bloqueLook(marca, modelo, marca2, modelo2) {
@@ -192,7 +188,7 @@ export async function POST(req) {
         html: emailWrapper(`
           ${titulo('Tu look está registrado')}
           ${subtitulo(eventoTag)}
-          ${alerta(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente. Si necesitas hacer algún cambio, vuelve al link del evento.`, 'ok')}
+          ${parrafo(`Hola <strong>${nombreInvitada}</strong>, tu look ha sido registrado correctamente. Si necesitas hacer algún cambio, vuelve al link del evento.`)}
           ${bloqueLook(marca, modelo, marca2, modelo2)}
           ${eventoUrl ? boton('Ver mi look', eventoUrl) : ''}
         `)
