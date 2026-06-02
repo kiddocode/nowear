@@ -1,15 +1,9 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '@/lib/supabase'
 
 const ADMIN_EMAIL = 'mnavarretegon@gmail.com'
-
-const supabaseAdmin = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
-
 const PLAN_COLORES = { basico:'#888884', estandar:'#8B9DC3', premium:'#C4917C', enterprise:'#F07987' }
 
 export default function AdminPage() {
@@ -26,69 +20,43 @@ export default function AdminPage() {
 
   useEffect(() => {
     async function verificar() {
-      const { data: { user } } = await supabaseAdmin.auth.getUser()
+      const { data: { user, session } } = await supabase.auth.getSession()
       if (!user || user.email !== ADMIN_EMAIL) {
         router.push('/')
         return
       }
       setAutorizado(true)
-      await cargarDatos()
+      await cargarDatos(session.access_token)
       setLoading(false)
     }
     verificar()
   }, [])
 
-  async function cargarDatos() {
-    const { data: perfiles } = await supabaseAdmin
-      .from('profiles')
-      .select('id, nombre, email, created_at, pending_deletion_at')
-      .order('created_at', { ascending: false })
-
-    if (!perfiles) return
-
-    const { data: eventos } = await supabaseAdmin
-      .from('eventos')
-      .select('id, nombre, slug, tipo, fecha, plan, organizadora_id, activo, created_at')
-      .order('created_at', { ascending: false })
-
-    const { count: totalLooks } = await supabaseAdmin
-      .from('looks')
-      .select('id', { count: 'exact', head: true })
-
-    const { count: totalConflictos } = await supabaseAdmin
-      .from('conflictos')
-      .select('id', { count: 'exact', head: true })
-
-    // Agrupa eventos por organizadora
-    const eventosPorUser = {}
-    if (eventos) {
-      eventos.forEach(ev => {
-        if (!eventosPorUser[ev.organizadora_id]) eventosPorUser[ev.organizadora_id] = []
-        eventosPorUser[ev.organizadora_id].push(ev)
-      })
-    }
-
-    const usuariosConEventos = perfiles.map(p => ({
-      ...p,
-      eventos: eventosPorUser[p.id] || []
-    }))
-
-    setUsuarios(usuariosConEventos)
-    setStats({
-      totalUsuarios: perfiles.length,
-      totalEventos: eventos?.length || 0,
-      totalLooks: totalLooks || 0,
-      totalConflictos: totalConflictos || 0
+  async function cargarDatos(token) {
+    const res = await fetch('/api/admin/data', {
+      headers: { 'Authorization': `Bearer ${token}` }
     })
+    const data = await res.json()
+    if (data.ok) {
+      setUsuarios(data.usuarios)
+      setStats(data.stats)
+    }
   }
 
-  async function verEvento(evento) {
+  async function verEvento(evento, token) {
     setLoadingEvento(true)
     setEventoDetalle(evento)
-    const { data: lks } = await supabaseAdmin.from('looks').select('*').eq('evento_id', evento.id).order('created_at', { ascending: false })
-    const { data: cnf } = await supabaseAdmin.from('conflictos').select('*').eq('evento_id', evento.id).order('created_at', { ascending: false })
-    setLooks(lks || [])
-    setConflictos(cnf || [])
+    const { data: { session } } = await supabase.auth.getSession()
+    const res = await fetch('/api/admin/data', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ eventoId: evento.id })
+    })
+    const data = await res.json()
+    if (data.ok) {
+      setLooks(data.looks)
+      setConflictos(data.conflictos)
+    }
     setLoadingEvento(false)
   }
 

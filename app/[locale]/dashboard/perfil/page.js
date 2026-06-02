@@ -74,14 +74,19 @@ export default function Perfil() {
     })
 
     // Email a admin
-    await fetch('/api/admin/nuevousuario', {
+    await fetch('/api/email', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         tipo: 'eliminacion_solicitada',
-        email: user.email,
-        nombre,
-        fechaEliminacion
+        emailInvitada: 'mnavarretegon@gmail.com',
+        nombreInvitada: 'Admin',
+        marca: user.email,
+        modelo: nombre,
+        color: new Date(fechaEliminacion).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}),
+        organizadoraId: null,
+        eventoId: null,
+        nombreEvento: 'Eliminacion de cuenta',
       })
     })
 
