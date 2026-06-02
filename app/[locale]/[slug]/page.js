@@ -232,7 +232,11 @@ export default function InvitadaPage() {
           nombreEvento: evento.nombre,
           fechaEvento: evento.fecha,
           nombreOrganizadora: organizadora?.nombre || 'la organizadora',
-          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+          marca: extra.marca !== undefined ? extra.marca : marca1,
+          modelo: extra.modelo !== undefined ? extra.modelo : modelo1,
+          marca2: extra.marca2 !== undefined ? extra.marca2 : (marca2 || null),
+          modelo2: extra.modelo2 !== undefined ? extra.modelo2 : (modelo2 || null),
+          tipo2: extra.tipo2 !== undefined ? extra.tipo2 : (tipo2 || null),
           color: COLORES.find(c => c.hex === colores[0])?.nombre || colores[0],
           organizadoraId: evento.organizadora_id, eventoId: evento.slug,
           ...extra
@@ -317,28 +321,35 @@ export default function InvitadaPage() {
   async function actualizarLook() {
     await supabase.from('looks').update({
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, link2: link2 || null, estado
     }).eq('id', lookEditando.id)
 
-    // Actualizar lista local inmediatamente
     const lookActualizado = {
       ...lookEditando,
       nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
       referencia2: referencia2 || null, link2: link2 || null, estado
     }
+
     const emailGuardado = email.toLowerCase().trim()
+    const nombreGuardado = nombre
+    const m1 = marca1, mo1 = modelo1, m2 = marca2 || null, mo2 = modelo2 || null, t2 = tipo2 || null
+
     setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
     setEmailGestion(emailGuardado)
     setEnviando(false)
     resetForm()
     setModoGestion(true)
+
+    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado, {
+      marca: m1, modelo: mo1, marca2: m2, modelo2: mo2, tipo2: t2
+    })
   }
 
   async function comprobarConflicto(excludeId = null) {
@@ -350,7 +361,6 @@ export default function InvitadaPage() {
     const colorHex = colores[0]
     const yoTengoId = tieneId(referencia1, link1)
 
-    // ── 1. LOOK BLOQUEADO ORGANIZADORA ──────────────────────────────
     if (evento.look_bloqueado_marca1) {
       const marcaOrg = normalizarStrict(evento.look_bloqueado_marca1)
       const refOrg = evento.look_bloqueado_referencia1 || ''
@@ -359,7 +369,6 @@ export default function InvitadaPage() {
       const tipoOrg = (evento.look_bloqueado_tipo1 || '').trim().toLowerCase()
       const colorOrg = evento.look_bloqueado_color
 
-      // Misma marca + referencia exacta → bloqueo directo
       if (marcaNorm === marcaOrg && referencia1 && refOrg) {
         if (normalizarStrict(referencia1) === normalizarStrict(refOrg)) {
           return { tipo: 'bloqueo_directo', esOrganizadora: true }
@@ -390,7 +399,6 @@ export default function InvitadaPage() {
       }
     }
 
-    // ── 2. BUSCAR CANDIDATOS ────────────────────────────────────────
     const { data: todos } = await supabase
       .from('looks')
       .select('id, nombre_invitada, email_invitada, color_hex, marca, modelo, tipo, referencia, link, foto_url, marca_normalizada, modelo_normalizado')
@@ -416,17 +424,14 @@ export default function InvitadaPage() {
       const modeloSimilar = similitudPalabras(modelo1, c.modelo) >= 0.6
       const colorOk = colorHex === cColor
 
-      // REGLA 0: Misma marca + referencia exacta → bloqueo directo
       if (referencia1 && cRef && normalizarStrict(referencia1) === normalizarStrict(cRef) && normalizarStrict(referencia1).length > 0) {
         return { tipo: 'bloqueo_directo', candidato: c }
       }
 
-      // REGLA 1: Mismo modelo distinto color → bloqueo
       if ((modeloExacto || modeloSimilar) && tipoOk && !colorOk) {
         return { tipo: 'bloqueo_mismo_modelo_otro_color', candidato: c }
       }
 
-      // REGLA 2: Color + tipo + modelo exactos
       if (colorOk && tipoOk && modeloExacto) {
         if (!yoTengoId && !cTieneId) return { tipo: 'bloqueo_directo', candidato: c }
         if (yoTengoId && cTieneId) {
@@ -434,11 +439,9 @@ export default function InvitadaPage() {
           if (cmp === 'exacto' || cmp === 'mismo_producto') return { tipo: 'bloqueo_directo', candidato: c }
           return { tipo: 'pedir_foto', candidato: c }
         }
-        // Una tiene id, la otra no → pedir foto directamente
         return { tipo: 'pedir_foto', candidato: c }
       }
 
-      // REGLA 3: Color + tipo coinciden, modelo similar
       if (colorOk && tipoOk && !modeloExacto && modeloSimilar) {
         if (!yoTengoId && !cTieneId) return { tipo: 'pedir_referencia', candidato: c }
         if (yoTengoId && cTieneId) {
@@ -449,7 +452,6 @@ export default function InvitadaPage() {
         return { tipo: 'pedir_foto', candidato: c }
       }
 
-      // REGLA 4: Color + modelo exactos, tipo distinto
       if (colorOk && modeloExacto && !tipoOk) {
         if (!yoTengoId) return { tipo: 'pedir_referencia', candidato: c }
         return { tipo: 'pedir_foto', candidato: c }
@@ -470,6 +472,7 @@ export default function InvitadaPage() {
           marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
         })
         enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
           emailPrimera: candidato.email_invitada, nombrePrimera: candidato.nombre_invitada,
         })
       }
@@ -491,6 +494,7 @@ export default function InvitadaPage() {
           marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
         })
         enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
           emailPrimera: candidato.email_invitada, nombrePrimera: candidato.nombre_invitada,
         })
       }
@@ -521,7 +525,6 @@ export default function InvitadaPage() {
     if (resultado.tipo === 'pedir_foto') {
       if (foto) {
         const foto_url = await subirFotoStorage(foto)
-        // Guardar look con estado 'pendiente'
         const lookInsertado = await guardarLook(foto_url, 'pendiente')
         if (!lookInsertado) return
 
@@ -543,19 +546,18 @@ export default function InvitadaPage() {
           const candidataNecesitaFoto = candidato && !tieneId(candidato.referencia, candidato.link) && !candidato.foto_url
 
           if (candidataNecesitaFoto) {
-            // Pedir foto a Ana, avisar a organizadora que está esperando
             enviarEmailAsync('pedir_foto_candidata', candidato.email_invitada, candidato.nombre_invitada, {
               emailInvitada: candidato.email_invitada,
               nombreInvitada: candidato.nombre_invitada,
-              marcaCandidata: nombre, // nombre de Ester en el email a org
+              marcaCandidata: nombre,
               modeloCandidata: modelo1,
               colorCandidata: colorCandidato,
               fotoUrl: foto_url,
               token: validacion.token,
             })
           } else {
-            // Ana ya tiene foto o identificador → directo a organizadora
             enviarEmailAsync('ambiguedad_foto', email.toLowerCase().trim(), nombre, {
+              marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
               fotoUrl: foto_url,
               lookId: lookInsertado.id,
               candidatoId: candidato?.id,
@@ -569,8 +571,8 @@ export default function InvitadaPage() {
             })
           }
 
-          // Email a Ester: tu look está pendiente
           enviarEmailAsync('look_pendiente', email.toLowerCase().trim(), nombre, {
+            marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
             fotoUrl: foto_url,
           })
         }
@@ -580,7 +582,6 @@ export default function InvitadaPage() {
         return
       }
 
-      // No tiene foto todavía → pedir foto
       setPedirFoto(true)
       setEnviando(false)
       setModal({
@@ -598,10 +599,13 @@ export default function InvitadaPage() {
       const foto_url = foto ? await subirFotoStorage(foto) : null
       const lookInsertado = await guardarLook(foto_url, estado)
       if (lookInsertado) {
-  enviarEmailAsync('confirmacion', email.toLowerCase().trim(), nombre)
-  setEnviando(false)
-  setEnviado(true)
-}
+        enviarEmailAsync('confirmacion', email.toLowerCase().trim(), nombre, {
+          marca: marca1, modelo: modelo1,
+          marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+        })
+        setEnviando(false)
+        setEnviado(true)
+      }
     } else {
       await actualizarLook()
     }
@@ -657,7 +661,6 @@ export default function InvitadaPage() {
   if (loading) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('cargando')}</div>
   if (!evento) return <div style={{display:'flex',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',fontSize:'0.75rem',color:'#888884'}}>{t('noEncontrado')}</div>
 
-  // MODO FOTO CANDIDATA: Ana viene desde el email
   if (modoFotoCandidata) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',maxWidth:'480px',margin:'0 auto'}}>
       <div style={{fontSize:'2rem',marginBottom:'1rem',textAlign:'center'}}>📸</div>
@@ -689,7 +692,6 @@ export default function InvitadaPage() {
     </div>
   )
 
-  // PENDIENTE DE VALIDACION
   if (pendienteValidacion) return (
     <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',minHeight:'calc(100vh - 68px)',padding:'2rem',textAlign:'center',maxWidth:'480px',margin:'0 auto'}}>
       <div style={{fontSize:'2.5rem',marginBottom:'1rem'}}>⏳</div>
@@ -897,7 +899,6 @@ export default function InvitadaPage() {
                 )}
               </div>
 
-              {/* PRENDA 1 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
                   {t('prenda1')} <span style={{color:'#F07987'}}>*</span>
@@ -947,7 +948,6 @@ export default function InvitadaPage() {
                 </div>
               </div>
 
-              {/* PRENDA 2 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:`1px solid ${requierePrenda2 ? '#F07987' : '#E0E0DC'}`,borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:requierePrenda2?'#0A0A0A':'#888884',marginBottom:'0.5rem'}}>
                   {t('prenda2')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}
@@ -987,7 +987,6 @@ export default function InvitadaPage() {
                 </div>
               </div>
 
-              {/* FOTO */}
               <div style={{marginBottom:'1.25rem'}}>
                 <label style={labelStyle}>
                   {t('foto')}
