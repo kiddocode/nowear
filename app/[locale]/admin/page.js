@@ -17,7 +17,7 @@ export default function AdminPage() {
   const [conflictos, setConflictos] = useState([])
   const [loadingEvento, setLoadingEvento] = useState(false)
   const [stats, setStats] = useState({ totalUsuarios: 0, totalEventos: 0, totalLooks: 0, totalConflictos: 0 })
-
+  useEffect(() => {
     async function verificar() {
       const { data: { session } } = await supabase.auth.getSession()
       const user = session?.user
