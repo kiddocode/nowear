@@ -598,9 +598,9 @@ export default function InvitadaPage() {
       const foto_url = foto ? await subirFotoStorage(foto) : null
       const lookInsertado = await guardarLook(foto_url, estado)
       if (lookInsertado) {
+        enviarEmailAsync('confirmacion', email.toLowerCase().trim(), nombre)
         setEnviando(false)
         setEnviado(true)
-        enviarEmailAsync('confirmacion', email.toLowerCase().trim(), nombre)
       }
     } else {
       await actualizarLook()
