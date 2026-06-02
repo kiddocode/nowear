@@ -292,7 +292,9 @@
     "crear": "Criar conta",
     "google": "Continuar com Google",
     "yaTieneCuenta": "Já tens conta?",
-    "iniciarSesion": "Iniciar sessão"
+    "iniciarSesion": "Iniciar sessão",
+    "emailConfirmacion": "Verifica a tua caixa de entrada e confirma o teu email para aceder.",
+    "emailConfirmacionTitulo": "Conta criada"
   },
   "invitada": {
     "cargando": "A carregar...",

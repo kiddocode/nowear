@@ -292,7 +292,9 @@
     "crear": "Crea account",
     "google": "Continua con Google",
     "yaTieneCuenta": "Hai già un account?",
-    "iniciarSesion": "Accedi"
+    "iniciarSesion": "Accedi",
+    "emailConfirmacion": "Controlla la tua casella di posta e conferma la tua email per accedere.",
+    "emailConfirmacionTitulo": "Account creato"
   },
   "invitada": {
     "cargando": "Caricamento...",

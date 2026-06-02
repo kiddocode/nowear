@@ -292,7 +292,9 @@
     "crear": "Account aanmaken",
     "google": "Doorgaan met Google",
     "yaTieneCuenta": "Heb je al een account?",
-    "iniciarSesion": "Inloggen"
+    "iniciarSesion": "Inloggen",
+    "emailConfirmacion": "Controleer je inbox en bevestig je e-mail om toegang te krijgen.",
+    "emailConfirmacionTitulo": "Account aangemaakt"
   },
   "invitada": {
     "cargando": "Laden...",

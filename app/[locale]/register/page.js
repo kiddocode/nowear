@@ -12,6 +12,7 @@ export default function Register() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [registrado, setRegistrado] = useState(false)
 
   async function handleRegister() {
     setError('')
@@ -20,13 +21,20 @@ export default function Register() {
     const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { nombre } } })
     if (error) { setLoading(false); setError(error.message); return }
     if (data.user) { await supabase.from('profiles').update({ nombre }).eq('id', data.user.id); fetch('/api/admin/nuevousuario', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, nombre, proveedor: 'email', created_at: new Date().toISOString() }) }) }
-    setLoading(false)
-    router.push('/dashboard')
+    setLoading(false); setRegistrado(true)
   }
 
   async function handleGoogle() {
     await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/dashboard` } })
   }
+
+  if (registrado) return (
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",minHeight:"calc(100vh - 68px)",padding:"2rem",textAlign:"center"}}>
+      <div style={{fontSize:"2rem",marginBottom:"1rem"}}>📧</div>
+      <h2 style={{fontSize:"1.5rem",fontWeight:300,color:"#0A0A0A",letterSpacing:"-0.02em",marginBottom:"0.75rem"}}>{t("emailConfirmacionTitulo")}</h2>
+      <p style={{fontSize:"0.88rem",fontWeight:300,color:"#888884",lineHeight:1.8,maxWidth:"400px"}}>{t("emailConfirmacion")}</p>
+    </div>
+  )
 
   return (
     <>

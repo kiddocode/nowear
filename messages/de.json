@@ -292,7 +292,9 @@
     "crear": "Konto erstellen",
     "google": "Mit Google fortfahren",
     "yaTieneCuenta": "Haben Sie bereits ein Konto?",
-    "iniciarSesion": "Anmelden"
+    "iniciarSesion": "Anmelden",
+    "emailConfirmacion": "Überprüfe deinen Posteingang und bestätige deine E-Mail für den Zugang.",
+    "emailConfirmacionTitulo": "Konto erstellt"
   },
   "invitada": {
     "cargando": "Laden...",
