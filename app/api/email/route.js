@@ -20,47 +20,31 @@ function emailWrapper(contenido) {
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 </head>
 <body style="margin:0;padding:0;background:#F7F7F5;${P}">
   <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;padding:40px 16px;">
     <tr><td align="center">
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:520px;">
-
-        <!-- HEADER -->
         <tr><td style="background:#0A0A0A;padding:12px 20px;text-align:center;">
           <img src="${LOGO_WHITE}" alt="NOWEAR" style="width:100%;max-width:200px;height:auto;display:inline-block;"/>
         </td></tr>
-
-        <!-- HERO IMAGE -->
         <tr><td style="padding:0;line-height:0;">
           <img src="${HERO_IMG}" alt="" style="width:100%;height:130px;object-fit:cover;object-position:center 30%;display:block;"/>
         </td></tr>
-
-        <!-- CONTENIDO -->
         <tr><td style="background:#FFFFFF;padding:44px 40px;border-left:1px solid #E8E8E4;border-right:1px solid #E8E8E4;text-align:center;">
           ${contenido}
         </td></tr>
-
-        <!-- FOOTER -->
         <tr><td style="background:#FFFFFF;padding:16px 40px 28px;border:1px solid #E8E8E4;border-top:1px solid #F0F0EC;text-align:center;">
           <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
             <tr>
-              <td style="padding:0 10px;">
-                <a href="${IG}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">Instagram</a>
-              </td>
+              <td style="padding:0 10px;"><a href="${IG}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">Instagram</a></td>
               <td style="color:#BEBEBA;font-size:11px;">·</td>
-              <td style="padding:0 10px;">
-                <a href="${TK}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">TikTok</a>
-              </td>
+              <td style="padding:0 10px;"><a href="${TK}" target="_blank" style="font-size:11px;font-weight:500;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">TikTok</a></td>
               <td style="color:#BEBEBA;font-size:11px;">·</td>
-              <td style="padding:0 10px;">
-                <a href="${WEB}" style="font-size:11px;font-weight:600;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">nowear.es</a>
-              </td>
+              <td style="padding:0 10px;"><a href="${WEB}" style="font-size:11px;font-weight:600;color:#0A0A0A;text-decoration:none;${P}letter-spacing:0.04em;">nowear.es</a></td>
             </tr>
           </table>
         </td></tr>
-
       </table>
     </td></tr>
   </table>
@@ -76,6 +60,7 @@ function subtitulo(texto) {
   return `<p style="font-size:13px;color:#555552;margin:0 0 28px;${P}letter-spacing:0.12em;text-transform:uppercase;font-weight:700;text-align:center;">${texto}</p>`
 }
 
+function parrafo(texto) {
   return `<p style="font-size:15px;color:#0A0A0A;line-height:1.9;margin:0 0 20px;${P}font-weight:300;text-align:center;">${texto}</p>`
 }
 
@@ -103,9 +88,9 @@ function alerta(texto, tipo = 'warn') {
   }
   const s = estilos[tipo] || estilos.warn
   return `
-        <p style="font-size:15px;color:${s.color};line-height:1.8;margin:0;${P}font-weight:300;text-align:left;">${texto}</p>
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:0 0 24px;">
       <tr><td style="background:${s.bg};border-left:3px solid ${s.border};padding:14px 18px;border-radius:0 3px 3px 0;">
-        <p style="font-size:13px;color:${s.color};line-height:1.7;margin:0;${P}font-weight:300;text-align:left;">${texto}</p>
+        <p style="font-size:15px;color:${s.color};line-height:1.8;margin:0;${P}font-weight:300;text-align:left;">${texto}</p>
       </td></tr>
     </table>`
 }
@@ -113,7 +98,11 @@ function alerta(texto, tipo = 'warn') {
 function lookCardSimple(marca, modelo) {
   if (!marca) return ''
   return `
-    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:8px;border-radius:3px;"><tr><td style="padding:14px 18px;text-align:center;"><p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p></td></tr></table>`
+    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#F7F7F5;border:1px solid #E8E8E4;margin-bottom:8px;border-radius:3px;">
+      <tr><td style="padding:14px 18px;text-align:center;">
+        <p style="font-size:14px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p>
+      </td></tr>
+    </table>`
 }
 
 function lookCardConFoto(nombre, marca, modelo, fotoUrl) {
@@ -124,7 +113,7 @@ function lookCardConFoto(nombre, marca, modelo, fotoUrl) {
         <table width="100%" cellpadding="0" cellspacing="0" border="0">
           <tr><td style="padding:14px 18px;text-align:left;">
             ${nombre ? `<p style="font-size:10px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:#888884;margin:0 0 5px;${P}">${nombre}</p>` : ''}
-            ${marca ? `<p style="font-size:13px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p>` : ''}
+            ${marca ? `<p style="font-size:14px;font-weight:500;color:#0A0A0A;margin:0;${P}">${marca}${modelo ? ` · ${modelo}` : ''}</p>` : ''}
           </td></tr>
         </table>
       </td></tr>
@@ -202,7 +191,7 @@ export async function POST(req) {
         html: emailWrapper(`
           ${titulo('Tu look está pendiente')}
           ${subtitulo(eventoTag)}
-          ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu look y tu foto. Hay una posible coincidencia con otra invitada, así que la organizadora necesita revisarlo antes de confirmarlo. Te avisaremos en cuanto esté validado.`, 'warn')}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu look y tu foto. Hay una <strong>posible coincidencia</strong> con otra invitada, así que la organizadora necesita revisarlo antes de confirmarlo. Te avisaremos en cuanto esté validado.`, 'warn')}
           ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
         `)
       })
@@ -216,7 +205,7 @@ export async function POST(req) {
         html: emailWrapper(`
           ${titulo('Look no disponible')}
           ${subtitulo(eventoTag)}
-          ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar ya está reservado por otra invitada. Solo la primera en registrar tiene el look reservado.`, 'error')}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, el look que intentaste registrar ya está <strong>reservado por otra invitada</strong>. Solo la primera en registrar tiene el look reservado.`, 'error')}
           ${parrafo(`<strong>Vuelve al enlace del evento</strong> y elige otro look.`)}
           ${eventoUrl ? boton('Elegir otro look', eventoUrl) : ''}
         `)
@@ -244,7 +233,7 @@ export async function POST(req) {
           html: emailWrapper(`
             ${titulo('Tu look sigue siendo único')}
             ${subtitulo(eventoTag)}
-            ${alerta(`Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú, pero el sistema lo ha bloqueado. Tu look sigue siendo exclusivo.`, 'ok')}
+            ${alerta(`Hola <strong>${nombrePrimera}</strong>, otra invitada intentó registrar el mismo look que tú, pero el sistema lo ha bloqueado. Tu look <strong>sigue siendo exclusivo</strong>.`, 'ok')}
           `)
         })
       }
@@ -259,8 +248,8 @@ export async function POST(req) {
         html: emailWrapper(`
           ${titulo('Necesitamos tu foto')}
           ${subtitulo(eventoTag)}
-          ${alerta(`Hola <strong>${nombreInvitada}</strong>, otra invitada tiene un look muy similar al tuyo. Para que la organizadora pueda verificar que son distintos, necesitamos que subas una foto de tu look.`, 'warn')}
-          ${parrafo(`<strong>Solo tardarás un momento.</strong>`)}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, otra invitada tiene un look muy similar al tuyo. Para que la organizadora pueda verificar que son distintos, <strong>necesitamos que subas una foto de tu look</strong>.`, 'warn')}
+          ${parrafo('Solo tardarás un momento.')}
           ${boton('Subir mi foto', urlSubirFoto)}
           ${parrafo('Si tus looks son claramente distintos, la organizadora lo confirmará y todo quedará resuelto.')}
         `)
@@ -274,10 +263,10 @@ export async function POST(req) {
           html: emailWrapper(`
             ${titulo('Validación en proceso')}
             ${subtitulo(eventoTag)}
-            ${alerta('Hay una posible coincidencia entre dos looks. Ya hemos pedido a la segunda invitada que suba su foto. Te avisaremos cuando ambas fotos estén listas.', 'warn')}
+            ${alerta('Hay una posible coincidencia entre dos looks. Ya hemos pedido a la segunda invitada que suba su foto. <strong>Te avisaremos cuando ambas fotos estén listas.</strong>', 'warn')}
             ${etiqueta(`Look nuevo · ${nombreCandidata || ''}`)}
             ${lookCardConFoto('', marcaCandidata || '', modeloCandidata || '', fotoUrl || null)}
-            ${parrafo(`<strong>No necesitas hacer nada</strong> por ahora.`)}
+            ${parrafo('No necesitas hacer nada por ahora.')}
           `)
         })
       }
@@ -295,7 +284,7 @@ export async function POST(req) {
           html: emailWrapper(`
             ${titulo('Ya puedes validar')}
             ${subtitulo(eventoTag)}
-            ${alerta('Las dos invitadas han subido sus fotos. Revísalas y decide si son el mismo look.', 'warn')}
+            ${alerta('Las dos invitadas han subido sus fotos. <strong>Revísalas y decide si son el mismo look.</strong>', 'warn')}
             ${etiqueta(`Look de ${nombreNueva || 'invitada nueva'}`)}
             ${lookCardConFoto('', marcaNueva || '', modeloNueva || '', fotoUrlNueva || null)}
             ${etiqueta(`Look de ${nombreCandidataValidacion || 'primera invitada'}`)}
@@ -325,7 +314,7 @@ export async function POST(req) {
           html: emailWrapper(`
             ${titulo('Validación pendiente')}
             ${subtitulo(eventoTag)}
-            ${alerta('Hay una posible coincidencia entre dos looks. Revisa las fotos y decide si son el mismo producto.', 'warn')}
+            ${alerta('Hay una posible coincidencia entre dos looks. <strong>Revisa las fotos y decide si son el mismo producto.</strong>', 'warn')}
             ${etiqueta(`Look nuevo · ${nombreInvitada}`)}
             ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
             ${etiqueta(`Look registrado · ${nombreCandidata || ''}`)}
@@ -350,7 +339,7 @@ export async function POST(req) {
         subject: `Tu cuenta será eliminada el ${fechaEliminacion}`,
         html: emailWrapper(`
           ${titulo('Solicitud de eliminación recibida')}
-          ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu solicitud. Tu cuenta y todos tus datos se eliminarán definitivamente el <strong>${fechaEliminacion}</strong>. Tienes 30 días para cancelarlo.`, 'warn')}
+          ${alerta(`Hola <strong>${nombreInvitada}</strong>, hemos recibido tu solicitud. Tu cuenta y todos tus datos se eliminarán definitivamente el <strong>${fechaEliminacion}</strong>. Tienes <strong>30 días para cancelarlo</strong>.`, 'warn')}
           ${boton('Cancelar eliminación', cancelUrl)}
           ${parrafo('Si no solicitaste esto, cancela el proceso inmediatamente desde el enlace de arriba.')}
         `)
