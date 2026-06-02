@@ -306,7 +306,7 @@ export default function InvitadaPage() {
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       referencia2: referencia2 || null, link2: link2 || null,
     }).select().single()
-    if (insertError) {
+    if (insertError) { console.error("INSERT ERROR:", insertError); setEnviando(false); setModal({ icono:"❌", titulo: "Error", desc: "Error al registrar el look. Inténtalo de nuevo.", textoConfirmar:"OK", onConfirmar: cerrarModal }); return null }
       setEnviando(false)
       setModal({ icono:'❌', titulo: 'Error', desc: 'Error al registrar el look. Inténtalo de nuevo.', textoConfirmar:'OK', onConfirmar: cerrarModal })
       return null
