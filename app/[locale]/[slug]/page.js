@@ -321,6 +321,7 @@ export default function InvitadaPage() {
     descatalogada: descatalogada,
     descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
     estado: estadoLook,
+    foto_url: foto_url,
   }).select().single()
   if (insertError) {
     setEnviando(false)
