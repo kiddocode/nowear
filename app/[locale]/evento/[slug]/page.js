@@ -79,8 +79,8 @@ export default function EventoDetalle() {
   const [emailNuevoOrg, setEmailNuevoOrg] = useState('')
   const [añadiendoOrg, setAñadiendoOrg] = useState(false)
   const [orgMensaje, setOrgMensaje] = useState('')
+  const [fotoModal, setFotoModal] = useState(null)
 
-  // Look bloqueado editable
   const [editLookBloqueadoColor, setEditLookBloqueadoColor] = useState('')
   const [editLookBloqueadoMarca1, setEditLookBloqueadoMarca1] = useState('')
   const [editLookBloqueadoTipo1, setEditLookBloqueadoTipo1] = useState('')
@@ -138,7 +138,6 @@ export default function EventoDetalle() {
     return () => clearInterval(interval)
   }, [slug])
 
-  // Comprobar si alguna invitada ya lleva el look bloqueado cuando se edita
   useEffect(() => {
     if (!evento || !tieneLookBloqueado || !editLookBloqueadoMarca1 || !editLookBloqueadoTipo1 || !editLookBloqueadoModelo1 || !editLookBloqueadoColor) {
       setConflictoLookMsg(''); return
@@ -310,8 +309,20 @@ export default function EventoDetalle() {
         .bloqueos-prenda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
         @media (max-width: 768px) {
           .bloqueos-prenda-grid { grid-template-columns: 1fr; }
+          .evento-stats { grid-template-columns: repeat(2,1fr) !important; }
+          .evento-contenido { padding: 1.5rem !important; }
+          .evento-hero { padding: 1.5rem !important; }
+          .evento-tabs { padding: 0 1.5rem !important; }
         }
       `}</style>
+
+      {/* MODAL FOTO */}
+      {fotoModal && (
+        <div onClick={() => setFotoModal(null)}
+          style={{position:'fixed',inset:0,background:'rgba(10,10,10,0.85)',zIndex:3000,display:'flex',alignItems:'center',justifyContent:'center',padding:'2rem',cursor:'pointer'}}>
+          <img src={fotoModal} alt="Look" style={{maxWidth:'90vw',maxHeight:'85vh',objectFit:'contain',borderRadius:'4px'}}/>
+        </div>
+      )}
 
       <div style={{fontFamily:"'Poppins',sans-serif",paddingBottom:'2rem'}}>
 
@@ -430,10 +441,10 @@ export default function EventoDetalle() {
                 </div>
               ) : (
                 <div className="evento-tabla-wrap" style={{border:'1px solid #E0E0DC',overflowX:'auto',borderRadius:'8px'}}>
-                  <table style={{width:'100%',borderCollapse:'collapse',minWidth:'500px'}}>
+                  <table style={{width:'100%',borderCollapse:'collapse',minWidth:'600px'}}>
                     <thead>
                       <tr style={{background:'#F7F7F5'}}>
-                        {[t('colColor'),t('colNombre'),t('colMarca'),t('colModelo'),t('colTipo'),t('colEstado')].map((h,i) => (
+                        {[t('colColor'),t('colNombre'),t('colMarca'),t('colModelo'),t('colTipo'),'Foto',t('colEstado')].map((h,i) => (
                           <th key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',textAlign:'left',padding:'0.9rem 1rem',borderBottom:'1px solid #E0E0DC'}}>{h}</th>
                         ))}
                       </tr>
@@ -449,10 +460,32 @@ export default function EventoDetalle() {
                           </td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{row.nombre_invitada}</td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.marca||'—'}</td>
-                          <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.modelo||'—'}</td>
+                          <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>
+                            <div>{row.modelo||'—'}</div>
+                            {row.marca2 && (
+                              <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>
+                                {row.marca2} · {row.modelo2}
+                              </div>
+                            )}
+                            {row.descatalogada && (
+                              <div style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',marginTop:'0.2rem',letterSpacing:'0.05em'}}>ANTIGUA</div>
+                            )}
+                          </td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>{row.tipo||'—'}</td>
                           <td style={{padding:'0.9rem 1rem'}}>
-                            <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.3rem 0.65rem',borderRadius:'20px',background:row.estado==='confirmado'?'#0A0A0A':'#F5EDE8',color:row.estado==='confirmado'?'#FFFFFF':'#C4917C'}}>
+                            {row.foto_url ? (
+                              <img
+                                src={row.foto_url}
+                                alt="Look"
+                                onClick={() => setFotoModal(row.foto_url)}
+                                style={{width:'36px',height:'36px',objectFit:'cover',borderRadius:'4px',cursor:'pointer',border:'1px solid #E0E0DC'}}
+                              />
+                            ) : (
+                              <span style={{fontSize:'0.72rem',color:'#BEBEBA'}}>—</span>
+                            )}
+                          </td>
+                          <td style={{padding:'0.9rem 1rem'}}>
+                            <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',padding:'0.3rem 0.65rem',borderRadius:'20px',background:row.estado==='confirmado'?'#0A0A0A':row.estado==='pendiente'?'#FFF8F0':row.estado==='rechazado'?'#FFF0F1':'#F5EDE8',color:row.estado==='confirmado'?'#FFFFFF':row.estado==='pendiente'?'#C4917C':row.estado==='rechazado'?'#F07987':'#C4917C'}}>
                               {row.estado}
                             </span>
                           </td>
@@ -534,7 +567,6 @@ export default function EventoDetalle() {
 
                 {tieneLookBloqueado && (
                   <div style={{marginTop:'1.5rem',borderTop:'1px solid #E0E0DC',paddingTop:'1.5rem'}}>
-
                     {tieneBloqueoLook && (
                       <div style={{padding:'0.75rem 1rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px',marginBottom:'1.25rem',display:'flex',alignItems:'center',gap:'0.75rem'}}>
                         {evento.look_bloqueado_color && <span style={{width:'20px',height:'20px',borderRadius:'50%',background:evento.look_bloqueado_color,border:'1px solid #E0E0DC',flexShrink:0,display:'inline-block'}}></span>}
@@ -544,15 +576,11 @@ export default function EventoDetalle() {
                         </div>
                       </div>
                     )}
-
-                    {/* AVISO CONFLICTO CON INVITADA */}
                     {conflictoLookMsg && (
                       <div style={{padding:'0.75rem 1rem',background:'#FFF8F0',border:'1px solid #F5D6A0',borderRadius:'4px',marginBottom:'1.25rem'}}>
                         <p style={{fontSize:'0.78rem',fontWeight:400,color:'#C4917C',margin:0,lineHeight:1.6}}>{conflictoLookMsg}</p>
                       </div>
                     )}
-
-                    {/* COLOR */}
                     <div style={{marginBottom:'1.25rem'}}>
                       <label style={labelStyle}>Color del look <span style={{color:'#F07987'}}>*</span></label>
                       <select value={editLookBloqueadoColor} onChange={e => setEditLookBloqueadoColor(e.target.value)} style={selectStyle}>
@@ -566,8 +594,6 @@ export default function EventoDetalle() {
                         </div>
                       )}
                     </div>
-
-                    {/* PRENDA 1 */}
                     <div style={{padding:'1.25rem',background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'4px',marginBottom:'1rem'}}>
                       <div style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1rem'}}>PRENDA 1 <span style={{color:'#F07987'}}>*</span></div>
                       <div className="bloqueos-prenda-grid">
@@ -588,18 +614,14 @@ export default function EventoDetalle() {
                         <input type="text" placeholder="Nombre del vestido o modelo" value={editLookBloqueadoModelo1} onChange={e => setEditLookBloqueadoModelo1(e.target.value)} style={inputStyle}/>
                       </div>
                       <div style={{marginBottom:'0.75rem'}}>
-                        <label style={labelStyle}>Referencia de la prenda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+                        <label style={labelStyle}>Referencia <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
                         <input type="text" placeholder="Ej: 123456789" value={editLookBloqueadoReferencia1} onChange={e => setEditLookBloqueadoReferencia1(e.target.value)} style={inputStyle}/>
-                        <p style={notaStyle}>El código de referencia. Lo encuentras en la web o en la etiqueta del producto.</p>
                       </div>
                       <div>
-                        <label style={labelStyle}>Link de la tienda <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
+                        <label style={labelStyle}>Link <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0}}>opcional</span></label>
                         <input type="url" placeholder="https://www.zara.com/es/..." value={editLookBloqueadoLink1} onChange={e => setEditLookBloqueadoLink1(e.target.value)} style={inputStyle}/>
-                        <p style={notaStyle}>El enlace directo al producto en la web de la tienda.</p>
                       </div>
                     </div>
-
-                    {/* PRENDA 2 */}
                     <div style={{padding:'1.25rem',background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                       <div style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',marginBottom:'1rem'}}>SEGUNDA PRENDA (OPCIONAL)</div>
                       <div className="bloqueos-prenda-grid">
@@ -620,11 +642,11 @@ export default function EventoDetalle() {
                         <input type="text" placeholder="Nombre del vestido o modelo" value={editLookBloqueadoModelo2} onChange={e => setEditLookBloqueadoModelo2(e.target.value)} style={inputStyle}/>
                       </div>
                       <div style={{marginBottom:'0.75rem'}}>
-                        <label style={labelStyle}>Referencia de la prenda</label>
+                        <label style={labelStyle}>Referencia</label>
                         <input type="text" placeholder="Ej: 123456789" value={editLookBloqueadoReferencia2} onChange={e => setEditLookBloqueadoReferencia2(e.target.value)} style={inputStyle}/>
                       </div>
                       <div>
-                        <label style={labelStyle}>Link de la tienda</label>
+                        <label style={labelStyle}>Link</label>
                         <input type="url" placeholder="https://www.zara.com/es/..." value={editLookBloqueadoLink2} onChange={e => setEditLookBloqueadoLink2(e.target.value)} style={inputStyle}/>
                       </div>
                     </div>
