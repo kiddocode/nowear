@@ -308,31 +308,32 @@ export default function InvitadaPage() {
     else setError('Error al enviar la foto. Inténtalo de nuevo.')
   }
 
-  async function guardarLook(foto_url = null, estadoLook = 'confirmado') {
-    const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
-      evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-      color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
-      referencia: referencia1 || null, link: link1 || null,
-      marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
-      referencia2: referencia2 || null, link2: link2 || null,
-      descatalogada: descatalogada,
-      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
-    }).select().single()
-    if (insertError) {
-      setEnviando(false)
-      const esDuplicado = insertError.code === '23505'
-      setModal({
-        icono: esDuplicado ? 'ℹ️' : '❌',
-        titulo: esDuplicado ? 'Ya tienes un look confirmado' : 'Error',
-        desc: esDuplicado ? 'Ya tienes un look confirmado en este evento. Solo puedes tener uno.' : 'Error al registrar el look. Inténtalo de nuevo.',
-        textoConfirmar: 'Entendido',
-        onConfirmar: cerrarModal
-      })
-      return null
-    }
-    return lookInsertado
+ async function guardarLook(foto_url = null, estadoLook = 'confirmado') {
+  const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
+    evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+    color_hex: colores[0], color_hex_2: colores[1] || null,
+    marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
+    referencia: referencia1 || null, link: link1 || null,
+    marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
+    referencia2: referencia2 || null, link2: link2 || null,
+    descatalogada: descatalogada,
+    descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
+    estado: estadoLook,
+  }).select().single()
+  if (insertError) {
+    setEnviando(false)
+    const esDuplicado = insertError.code === '23505'
+    setModal({
+      icono: esDuplicado ? 'ℹ️' : '❌',
+      titulo: esDuplicado ? 'Ya tienes un look confirmado' : 'Error',
+      desc: esDuplicado ? 'Ya tienes un look confirmado en este evento. Solo puedes tener uno.' : 'Error al registrar el look. Inténtalo de nuevo.',
+      textoConfirmar: 'Entendido',
+      onConfirmar: cerrarModal
+    })
+    return null
   }
+  return lookInsertado
+}
 
   async function actualizarLook() {
     await supabase.from('looks').update({

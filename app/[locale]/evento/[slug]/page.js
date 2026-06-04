@@ -459,19 +459,27 @@ export default function EventoDetalle() {
                             </div>
                           </td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{row.nombre_invitada}</td>
-                          <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>{row.marca||'—'}</td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>
-                            <div>{row.modelo||'—'}</div>
-                            {row.marca2 && (
-                              <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>
-                                {row.marca2} · {row.modelo2}
-                              </div>
-                            )}
-                            {row.descatalogada && (
-                              <div style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',marginTop:'0.2rem',letterSpacing:'0.05em'}}>ANTIGUA</div>
-                            )}
-                          </td>
-                          <td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>{row.tipo||'—'}</td>
+  <div>{row.marca||'—'}</div>
+  {row.marca2 && row.marca2 !== row.marca && (
+    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.marca2}</div>
+  )}
+</td>
+<td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>
+  <div>{row.modelo||'—'}</div>
+  {row.modelo2 && (
+    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.modelo2}</div>
+  )}
+  {row.descatalogada && (
+    <div style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',marginTop:'0.2rem',letterSpacing:'0.05em'}}>ANTIGUA</div>
+  )}
+</td>
+<td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>
+  <div>{row.tipo||'—'}</div>
+  {row.tipo2 && (
+    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.tipo2}</div>
+  )}
+</td>
                           <td style={{padding:'0.9rem 1rem'}}>
                             {row.foto_url ? (
                               <img
