@@ -282,16 +282,18 @@ export default function InvitadaPage() {
   }
 
   async function subirFotoStorage(archivoFoto) {
-    if (!archivoFoto) return null
-    const ext = archivoFoto.name.split('.').pop()
-    const fileName = `${evento.id}-${Date.now()}.${ext}`
-    const { data: uploadData } = await supabase.storage.from('fotos').upload(fileName, archivoFoto, { contentType: archivoFoto.type })
-    if (uploadData) {
-      const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
-      return urlData.publicUrl
-    }
-    return null
+  if (!archivoFoto) return null
+  const ext = archivoFoto.name.split('.').pop()
+  const fileName = `${evento.id}-${Date.now()}.${ext}`
+  const { data: uploadData, error: uploadError } = await supabase.storage.from('fotos').upload(fileName, archivoFoto, { contentType: archivoFoto.type })
+  console.log('UPLOAD ERROR:', uploadError)
+  console.log('UPLOAD DATA:', uploadData)
+  if (uploadData) {
+    const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
+    return urlData.publicUrl
   }
+  return null
+}
 
   async function handleSubirFotoCandidata() {
     if (!foto) return
@@ -385,8 +387,8 @@ export default function InvitadaPage() {
     // Si la prenda es descatalogada, buscar otras descatalogadas con misma marca y tipo
     if (descatalogada) {
       const { data: descatalogadas } = await supabase
-        .from('looks')
-        .select('id, nombre_invitada, email_invitada, marca, tipo, foto_url, descripcion_libre')
+  .from('looks')
+  .select('id, nombre_invitada, email_invitada, marca, tipo, modelo, foto_url, descripcion_libre')
         .eq('evento_id', evento.id)
         .eq('marca_normalizada', marcaNorm)
         .eq('descatalogada', true)
@@ -513,13 +515,15 @@ export default function InvitadaPage() {
       if (!lookInsertado) return
 
       enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
-        marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-        descripcionLibre: descripcionLibre || null,
-        fotoUrl: foto_url,
-        nombreCandidata: candidato?.nombre_invitada || '',
-        descripcionCandidata: candidato?.descripcion_libre || '',
-        fotoCandidataUrl: candidato?.foto_url || null,
-      })
+  marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+  descripcionLibre: descripcionLibre || null,
+  fotoUrl: foto_url,
+  nombreCandidata: candidato?.nombre_invitada || '',
+  marcaCandidata: candidato?.marca || '',
+  modeloCandidata: candidato?.modelo || '',
+  descripcionCandidata: candidato?.descripcion_libre || '',
+  fotoCandidataUrl: candidato?.foto_url || null,
+})
 
       setEnviando(false)
       setEnviado(true)

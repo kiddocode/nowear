@@ -349,7 +349,7 @@ export async function POST(req) {
             ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
             ${body.descripcionLibre ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;font-style:italic;text-align:left;">"${body.descripcionLibre}"</p>` : ''}
             ${etiqueta(`Look de ${body.nombreCandidata || 'otra invitada'}`)}
-            ${lookCardConFoto('', '', '', body.fotoCandidataUrl || null)}
+            ${lookCardConFoto('', body.marcaCandidata || '', body.modeloCandidata || '', body.fotoCandidataUrl || null)}
             ${body.descripcionCandidata ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;font-style:italic;text-align:left;">"${body.descripcionCandidata}"</p>` : ''}
             ${parrafo('Si son el mismo look, contacta con una de las dos invitadas directamente.')}
             ${boton('Ver mi evento', `https://nowear.es/evento/${eventoId}`)}
