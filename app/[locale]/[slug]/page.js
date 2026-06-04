@@ -544,10 +544,24 @@ export default function InvitadaPage() {
   }
 
   // Si es registro nuevo
-  const foto_url = foto ? await subirFotoStorage(foto) : null
-  const lookInsertado = await guardarLook(foto_url, estado)
-  if (!lookInsertado) return
+const foto_url = foto ? await subirFotoStorage(foto) : null
+const lookInsertado = await guardarLook(foto_url, 'pendiente')
+if (!lookInsertado) return
 
+const { data: validacion } = await supabase.from('validaciones').insert({
+  evento_id: evento.id,
+  look_id: lookInsertado.id,
+  candidato_id: candidato?.id || null,
+  nombre_invitada: nombre,
+  email_invitada: email.toLowerCase().trim(),
+  nombre_candidata: candidato?.nombre_invitada || '',
+  email_candidata: candidato?.email_invitada || '',
+  foto_url: foto_url,
+  foto_url_candidata: candidato?.foto_url || null,
+  esperando_foto_candidata: false,
+}).select().single()
+
+if (validacion) {
   enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
     marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
     descripcionLibre: descripcionLibre || null,
@@ -557,11 +571,18 @@ export default function InvitadaPage() {
     modeloCandidata: candidato?.modelo || '',
     descripcionCandidata: candidato?.descripcion_libre || '',
     fotoCandidataUrl: candidato?.foto_url || null,
+    token: validacion.token,
   })
 
-  setEnviando(false)
-  setEnviado(true)
-  return
+  enviarEmailAsync('look_pendiente', email.toLowerCase().trim(), nombre, {
+    marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+    fotoUrl: foto_url,
+  })
+}
+
+setEnviando(false)
+setPendienteValidacion(true)
+return
 }
 
     if (resultado.tipo === 'bloqueo_directo') {
