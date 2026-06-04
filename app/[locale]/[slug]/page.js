@@ -660,7 +660,7 @@ return
           email_candidata: candidato?.email_invitada || '',
           foto_url: foto_url,
           esperando_foto_candidata: candidato ? (!tieneId(candidato.referencia, candidato.link) && !candidato.foto_url) : false,
-        }).select().single()
+        }).select('id, token').single()
 
         if (validacion) {
           const candidataNecesitaFoto = candidato && !tieneId(candidato.referencia, candidato.link) && !candidato.foto_url
