@@ -718,6 +718,9 @@ export default function InvitadaPage() {
     if (requierePrenda2 && (!marca2 || !tipo2 || !modelo2)) {
       setError(t('errorPrenda2') || 'Tu look es de dos piezas. Completa los datos de la segunda prenda.'); return
     }
+    if (descatalogada && !foto && !lookEditando?.foto_url) {
+  setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
+}
     setEnviando(true)
     await procesarConflicto(lookEditando.id, 'actualizar')
   }
@@ -733,6 +736,9 @@ export default function InvitadaPage() {
     if (pedirFoto && !foto) {
       setError(t('errorFotoRequerida') || 'Por favor sube una foto de tu look para continuar.'); return
     }
+    if (descatalogada && !foto) {
+  setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
+}
     if (pedirReferencia && !tieneId(referencia1, link1)) {
       setError(t('errorPedirReferencia') || 'Por favor añade la referencia o link del producto.'); return
     }
@@ -1127,7 +1133,7 @@ export default function InvitadaPage() {
                 <label style={labelStyle}>
                   {t('foto')}
                   {pedirFoto ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida')}</span>
-                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>recomendada para prendas antiguas</span>
+                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:700,color:'#F07987',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>* obligatoria para prendas antiguas</span>
                   : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                 </label>
                 {pedirFoto && (
@@ -1136,9 +1142,8 @@ export default function InvitadaPage() {
                   </div>
                 )}
                 {descatalogada && !pedirFoto && (
-                  <div style={{padding:'0.75rem 1rem',background:'#FFF8F0',border:'1px solid #F5D6A0',marginBottom:'0.75rem',borderRadius:'4px'}}>
-                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#C4917C',margin:0,lineHeight:1.6}}>Al ser una prenda antigua, subir una foto ayuda mucho a la organizadora a verificar que no coincide con otra invitada.</p>
-                  </div>
+<div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
+  <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>Es obligatorio subir una foto para prendas antiguas o descatalogadas.</p>                  </div>
                 )}
                 <div onClick={() => document.getElementById('foto-input').click()}
                   style={{border:`1px dashed ${pedirFoto && !foto ? '#F07987' : '#E0E0DC'}`,padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5',borderRadius:'4px'}}>
