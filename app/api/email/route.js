@@ -336,36 +336,39 @@ export async function POST(req) {
     }
 
     if (tipo === 'descatalogada_sospecha') {
-  const urlAprobar = `https://nowear.es/api/validar?token=${token}&decision=aprobar`
-  const urlRechazar = `https://nowear.es/api/validar?token=${token}&decision=rechazar`
+      const urlAprobar = `https://nowear.es/api/validar?token=${token}&decision=aprobar`
+      const urlRechazar = `https://nowear.es/api/validar?token=${token}&decision=rechazar`
+      const candidatas = body.candidatas || []
 
-  if (emailOrganizadora) {
-    await resend.emails.send({
-      from: 'NOWEAR <support@nowear.es>',
-      to: emailOrganizadora,
-      subject: `Posible coincidencia a revisar · ${nombreEvento}`,
-      html: emailWrapper(`
-        ${titulo('Posible coincidencia')}
-        ${subtitulo(eventoTag)}
-        ${alerta('Dos invitadas han registrado prendas antiguas o descatalogadas de la misma marca y tipo. <strong>Revisa sus fotos y descripciones</strong> para verificar si coinciden.', 'warn')}
-        ${etiqueta(`Look de ${nombreInvitada}`)}
-        ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
-        ${body.descripcionLibre ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;font-style:italic;text-align:left;">"${body.descripcionLibre}"</p>` : ''}
-        ${etiqueta(`Look de ${body.nombreCandidata || 'otra invitada'}`)}
-        ${lookCardConFoto('', body.marcaCandidata || '', body.modeloCandidata || '', body.fotoCandidataUrl || null)}
-        ${body.descripcionCandidata ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;font-style:italic;text-align:left;">"${body.descripcionCandidata}"</p>` : ''}
-        ${separador()}
-        <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
-          <tr>
-            <td style="padding-right:12px;">${boton('Aprobar look', urlAprobar).replace('margin:8px auto 0','margin:0')}</td>
-            <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin:8px auto 0','margin:0')}</td>
-          </tr>
-        </table>
-        <p style="font-size:11px;color:#BEBEBA;margin-top:16px;${P}font-weight:300;text-align:center;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
-      `)
-    })
-  }
-}
+      if (emailOrganizadora) {
+        await resend.emails.send({
+          from: 'NOWEAR <support@nowear.es>',
+          to: emailOrganizadora,
+          subject: `Posible coincidencia a revisar · ${nombreEvento}`,
+          html: emailWrapper(`
+            ${titulo('Posible coincidencia')}
+            ${subtitulo(eventoTag)}
+            ${alerta(`Hay <strong>${candidatas.length + 1} invitadas</strong> con prendas antiguas o descatalogadas de la misma marca. <strong>Revisa sus fotos y descripciones</strong> para verificar si coinciden.`, 'warn')}
+            ${etiqueta(`Look de ${nombreInvitada} (nueva)`)}
+            ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
+            ${body.descripcionLibre ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;${P}font-style:italic;text-align:left;">"${body.descripcionLibre}"</p>` : ''}
+            ${candidatas.map(c => `
+              ${etiqueta(`Look de ${c.nombre}`)}
+              ${lookCardConFoto('', c.marca || '', c.modelo || '', c.fotoUrl || null)}
+              ${c.descripcion ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;${P}font-style:italic;text-align:left;">"${c.descripcion}"</p>` : ''}
+            `).join('')}
+            ${separador()}
+            <table cellpadding="0" cellspacing="0" border="0" style="margin:0 auto;">
+              <tr>
+                <td style="padding-right:12px;">${boton('Aprobar look', urlAprobar).replace('margin:8px auto 0','margin:0')}</td>
+                <td>${boton('Rechazar look', urlRechazar, 'danger').replace('margin:8px auto 0','margin:0')}</td>
+              </tr>
+            </table>
+            <p style="font-size:11px;color:#BEBEBA;margin-top:16px;${P}font-weight:300;text-align:center;">Al aprobar, el look de ${nombreInvitada} queda confirmado. Al rechazar, se le pedirá que elija otro.</p>
+          `)
+        })
+      }
+    }
 
     if (tipo === 'cuenta_pendiente_eliminacion') {
       await resend.emails.send({

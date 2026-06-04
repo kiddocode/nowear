@@ -39,7 +39,6 @@ function similitudPalabras(a, b) {
   const pa = normalizar(a).split(/\s+/).filter(p => p.length > 2)
   const pb = normalizar(b).split(/\s+/).filter(p => p.length > 2)
   if (pa.length === 0) return 0
-  // Si el modelo es una sola palabra, comprobar si está contenida en el otro
   if (pa.length === 1) return pb.includes(pa[0]) ? 1 : 0
   return pa.filter(p => pb.includes(p)).length / pa.length
 }
@@ -282,18 +281,18 @@ export default function InvitadaPage() {
   }
 
   async function subirFotoStorage(archivoFoto) {
-  if (!archivoFoto) return null
-  const ext = archivoFoto.name.split('.').pop()
-  const fileName = `${evento.id}-${Date.now()}.${ext}`
-  const { data: uploadData, error: uploadError } = await supabase.storage.from('fotos').upload(fileName, archivoFoto, { contentType: archivoFoto.type })
-  console.log('UPLOAD ERROR:', uploadError)
-  console.log('UPLOAD DATA:', uploadData)
-  if (uploadData) {
-    const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
-    return urlData.publicUrl
+    if (!archivoFoto) return null
+    const ext = archivoFoto.name.split('.').pop()
+    const fileName = `${evento.id}-${Date.now()}.${ext}`
+    const { data: uploadData, error: uploadError } = await supabase.storage.from('fotos').upload(fileName, archivoFoto, { contentType: archivoFoto.type })
+    console.log('UPLOAD ERROR:', uploadError)
+    console.log('UPLOAD DATA:', uploadData)
+    if (uploadData) {
+      const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
+      return urlData.publicUrl
+    }
+    return null
   }
-  return null
-}
 
   async function handleSubirFotoCandidata() {
     if (!foto) return
@@ -310,86 +309,85 @@ export default function InvitadaPage() {
     else setError('Error al enviar la foto. Inténtalo de nuevo.')
   }
 
- async function guardarLook(foto_url = null, estadoLook = 'confirmado') {
-  const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
-    evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
-    color_hex: colores[0], color_hex_2: colores[1] || null,
-    marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
-    referencia: referencia1 || null, link: link1 || null,
-    marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
-    referencia2: referencia2 || null, link2: link2 || null,
-    descatalogada: descatalogada,
-    descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
-    estado: estadoLook,
-    foto_url: foto_url,
-  }).select().single()
-  if (insertError) {
-    setEnviando(false)
-    const esDuplicado = insertError.code === '23505'
-    setModal({
-      icono: esDuplicado ? 'ℹ️' : '❌',
-      titulo: esDuplicado ? 'Ya tienes un look confirmado' : 'Error',
-      desc: esDuplicado ? 'Ya tienes un look confirmado en este evento. Solo puedes tener uno.' : 'Error al registrar el look. Inténtalo de nuevo.',
-      textoConfirmar: 'Entendido',
-      onConfirmar: cerrarModal
-    })
-    return null
+  async function guardarLook(foto_url = null, estadoLook = 'confirmado') {
+    const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
+      evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+      color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
+      referencia: referencia1 || null, link: link1 || null,
+      marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
+      referencia2: referencia2 || null, link2: link2 || null,
+      descatalogada: descatalogada,
+      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
+      estado: estadoLook,
+      foto_url: foto_url,
+    }).select().single()
+    if (insertError) {
+      setEnviando(false)
+      const esDuplicado = insertError.code === '23505'
+      setModal({
+        icono: esDuplicado ? 'ℹ️' : '❌',
+        titulo: esDuplicado ? 'Ya tienes un look confirmado' : 'Error',
+        desc: esDuplicado ? 'Ya tienes un look confirmado en este evento. Solo puedes tener uno.' : 'Error al registrar el look. Inténtalo de nuevo.',
+        textoConfirmar: 'Entendido',
+        onConfirmar: cerrarModal
+      })
+      return null
+    }
+    return lookInsertado
   }
-  return lookInsertado
-}
 
   async function actualizarLook() {
-  if (!lookEditando?.id) {
+    if (!lookEditando?.id) {
+      setEnviando(false)
+      setError('Error: no se encontró el look a editar.')
+      return
+    }
+
+    let foto_url = lookEditando.foto_url || null
+    if (foto) {
+      const nuevaFotoUrl = await subirFotoStorage(foto)
+      if (nuevaFotoUrl) foto_url = nuevaFotoUrl
+    }
+
+    await supabase.from('looks').update({
+      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
+      referencia: referencia1 || null, link: link1 || null,
+      marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, link2: link2 || null, estado,
+      descatalogada: descatalogada,
+      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
+      foto_url: foto_url,
+    }).eq('id', lookEditando.id)
+
+    const lookActualizado = {
+      ...lookEditando,
+      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      marca: marca1, modelo: modelo1, tipo: tipo1,
+      referencia: referencia1 || null, link: link1 || null,
+      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      referencia2: referencia2 || null, link2: link2 || null, estado,
+      descatalogada: descatalogada,
+      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
+      foto_url: foto_url,
+    }
+
+    const emailGuardado = email.toLowerCase().trim()
+    const nombreGuardado = nombre
+    const m1 = marca1, mo1 = modelo1, m2 = marca2 || null, mo2 = modelo2 || null, t2 = tipo2 || null
+
+    setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
+    setEmailGestion(emailGuardado)
     setEnviando(false)
-    setError('Error: no se encontró el look a editar.')
-    return
+    resetForm()
+    setModoGestion(true)
+
+    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado, {
+      marca: m1, modelo: mo1, marca2: m2, modelo2: mo2, tipo2: t2
+    })
   }
-
-  // Subir foto si hay una nueva
-  let foto_url = lookEditando.foto_url || null
-  if (foto) {
-    const nuevaFotoUrl = await subirFotoStorage(foto)
-    if (nuevaFotoUrl) foto_url = nuevaFotoUrl
-  }
-
-  await supabase.from('looks').update({
-    nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-    marca: marca1, modelo: modelo1, tipo: tipo1,
-    referencia: referencia1 || null, link: link1 || null,
-    marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
-    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-    referencia2: referencia2 || null, link2: link2 || null, estado,
-    descatalogada: descatalogada,
-    descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
-    foto_url: foto_url,
-  }).eq('id', lookEditando.id)
-
-  const lookActualizado = {
-    ...lookEditando,
-    nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-    marca: marca1, modelo: modelo1, tipo: tipo1,
-    referencia: referencia1 || null, link: link1 || null,
-    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-    referencia2: referencia2 || null, link2: link2 || null, estado,
-    descatalogada: descatalogada,
-    descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
-    foto_url: foto_url,
-  }
-
-  const emailGuardado = email.toLowerCase().trim()
-  const nombreGuardado = nombre
-  const m1 = marca1, mo1 = modelo1, m2 = marca2 || null, mo2 = modelo2 || null, t2 = tipo2 || null
-
-  setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
-  setEmailGestion(emailGuardado)
-  setEnviando(false)
-  resetForm()
-  setModoGestion(true)
-
-  enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado, {
-    marca: m1, modelo: mo1, marca2: m2, modelo2: mo2, tipo2: t2
-  })
-}
 
   async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
@@ -400,22 +398,21 @@ export default function InvitadaPage() {
     const colorHex = colores[0]
     const yoTengoId = tieneId(referencia1, link1)
 
-    // Si la prenda es descatalogada, buscar otras descatalogadas con misma marca y tipo
+    // Si la prenda es descatalogada, buscar todas las descatalogadas con misma marca
     if (descatalogada) {
       const { data: descatalogadas } = await supabase
-  .from('looks')
-  .select('id, nombre_invitada, email_invitada, marca, tipo, modelo, foto_url, descripcion_libre')
+        .from('looks')
+        .select('id, nombre_invitada, email_invitada, marca, tipo, modelo, foto_url, descripcion_libre')
         .eq('evento_id', evento.id)
         .eq('marca_normalizada', marcaNorm)
         .eq('descatalogada', true)
         .neq('email_invitada', email.toLowerCase().trim())
-        .in('estado', ['confirmado', 'prereservado'])
+        .in('estado', ['confirmado', 'prereservado', 'pendiente'])
 
       const candidatasDesc = excludeId ? (descatalogadas || []).filter(c => c.id !== excludeId) : (descatalogadas || [])
 
       if (candidatasDesc.length > 0) {
-        const candidata = candidatasDesc.find(c => (c.tipo || '').trim().toLowerCase() === tipoNorm) || candidatasDesc[0]
-        return { tipo: 'descatalogada_sospecha', candidato: candidata }
+        return { tipo: 'descatalogada_sospecha', candidatos: candidatasDesc }
       }
 
       return { tipo: 'ninguno' }
@@ -523,67 +520,70 @@ export default function InvitadaPage() {
 
   async function procesarConflicto(excludeId, accion) {
     const resultado = await comprobarConflicto(excludeId)
-    const candidato = resultado.candidato
+    const candidato = resultado.candidato || null
+    const candidatos = resultado.candidatos || []
 
     if (resultado.tipo === 'descatalogada_sospecha') {
-  if (accion === 'actualizar') {
-    // Si estamos editando, solo actualizar sin insertar nuevo
-    await actualizarLook()
-    // Mandar email igualmente
-    enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
-      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      descripcionLibre: descripcionLibre || null,
-      fotoUrl: null,
-      nombreCandidata: candidato?.nombre_invitada || '',
-      marcaCandidata: candidato?.marca || '',
-      modeloCandidata: candidato?.modelo || '',
-      descripcionCandidata: candidato?.descripcion_libre || '',
-      fotoCandidataUrl: candidato?.foto_url || null,
-    })
-    return
-  }
+      if (accion === 'actualizar') {
+        await actualizarLook()
+        enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+          descripcionLibre: descripcionLibre || null,
+          fotoUrl: null,
+          candidatas: candidatos.map(c => ({
+            nombre: c.nombre_invitada,
+            marca: c.marca,
+            modelo: c.modelo,
+            descripcion: c.descripcion_libre || '',
+            fotoUrl: c.foto_url || null,
+          })),
+        })
+        return
+      }
 
-  // Si es registro nuevo
-const foto_url = foto ? await subirFotoStorage(foto) : null
-const lookInsertado = await guardarLook(foto_url, 'pendiente')
-if (!lookInsertado) return
+      // Registro nuevo
+      const foto_url = foto ? await subirFotoStorage(foto) : null
+      const lookInsertado = await guardarLook(foto_url, 'pendiente')
+      if (!lookInsertado) return
 
-const { data: validacion } = await supabase.from('validaciones').insert({
-  evento_id: evento.id,
-  look_id: lookInsertado.id,
-  candidato_id: candidato?.id || null,
-  nombre_invitada: nombre,
-  email_invitada: email.toLowerCase().trim(),
-  nombre_candidata: candidato?.nombre_invitada || '',
-  email_candidata: candidato?.email_invitada || '',
-  foto_url: foto_url,
-  foto_url_candidata: candidato?.foto_url || null,
-  esperando_foto_candidata: false,
-}).select().single()
+      const { data: validacion } = await supabase.from('validaciones').insert({
+        evento_id: evento.id,
+        look_id: lookInsertado.id,
+        candidato_id: candidatos[0]?.id || null,
+        nombre_invitada: nombre,
+        email_invitada: email.toLowerCase().trim(),
+        nombre_candidata: candidatos[0]?.nombre_invitada || '',
+        email_candidata: candidatos[0]?.email_invitada || '',
+        foto_url: foto_url,
+        foto_url_candidata: candidatos[0]?.foto_url || null,
+        esperando_foto_candidata: false,
+      }).select('id, token').single()
 
-if (validacion) {
-  enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
-    marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-    descripcionLibre: descripcionLibre || null,
-    fotoUrl: foto_url,
-    nombreCandidata: candidato?.nombre_invitada || '',
-    marcaCandidata: candidato?.marca || '',
-    modeloCandidata: candidato?.modelo || '',
-    descripcionCandidata: candidato?.descripcion_libre || '',
-    fotoCandidataUrl: candidato?.foto_url || null,
-    token: validacion.token,
-  })
+      if (validacion) {
+        enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+          descripcionLibre: descripcionLibre || null,
+          fotoUrl: foto_url,
+          candidatas: candidatos.map(c => ({
+            nombre: c.nombre_invitada,
+            marca: c.marca,
+            modelo: c.modelo,
+            descripcion: c.descripcion_libre || '',
+            fotoUrl: c.foto_url || null,
+          })),
+          token: validacion.token,
+        })
 
-  enviarEmailAsync('look_pendiente', email.toLowerCase().trim(), nombre, {
-    marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-    fotoUrl: foto_url,
-  })
-}
+        enviarEmailAsync('look_pendiente', email.toLowerCase().trim(), nombre, {
+          marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+          fotoUrl: foto_url,
+        })
+      }
 
-setEnviando(false)
-setPendienteValidacion(true)
-return
-}
+      setEnviando(false)
+      setPendienteValidacion(true)
+      return
+    }
 
     if (resultado.tipo === 'bloqueo_directo') {
       if (candidato) {
@@ -740,8 +740,8 @@ return
       setError(t('errorPrenda2') || 'Tu look es de dos piezas. Completa los datos de la segunda prenda.'); return
     }
     if (descatalogada && !foto && !lookEditando?.foto_url) {
-  setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
-}
+      setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
+    }
     setEnviando(true)
     await procesarConflicto(lookEditando.id, 'actualizar')
   }
@@ -758,15 +758,14 @@ return
       setError(t('errorFotoRequerida') || 'Por favor sube una foto de tu look para continuar.'); return
     }
     if (descatalogada && !foto) {
-  setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
-}
+      setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
+    }
     if (pedirReferencia && !tieneId(referencia1, link1)) {
       setError(t('errorPedirReferencia') || 'Por favor añade la referencia o link del producto.'); return
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
 
-    // Bloqueo por email: máximo 1 confirmado y 3 prereservados por email
     const { data: existentes } = await supabase.from('looks').select('estado')
       .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
     if (existentes && existentes.length > 0) {
@@ -1031,14 +1030,13 @@ return
                       <div key={i} style={{display:'flex',alignItems:'center',gap:'0.5rem',padding:'0.4rem 0.75rem',border:'1px solid #E0E0DC',background:'#F7F7F5',borderRadius:'4px'}}>
                         <div style={{width:'14px',height:'14px',borderRadius:'50%',background:hex,border:'1px solid #E0E0DC',flexShrink:0}}></div>
                         <span style={{fontSize:'0.78rem',fontWeight:400,color:'#0A0A0A'}}>{COLORES.find(c=>c.hex===hex)?.nombre}</span>
-                        <button onClick={() => toggleColor(hex)} style={{background:'none',border:'none',cursor:'pointer',color:'#888884',fontSize:'0.75rem',padding:'0',lineHeight:1,marginLeft:'0.25rem'}}>×</button>
+                        <button onClick={() => toggleColor(hex)} style={{background:'none',border:'none',cursor:'pointer',color:'#888884',fontSize:'0.75rem',padding:'0',lineHeight:1,marginLeft:'0.25rem'}}>x</button>
                       </div>
                     ))}
                   </div>
                 )}
               </div>
 
-              {/* PRENDA 1 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
                   {t('prenda1')} <span style={{color:'#F07987'}}>*</span>
@@ -1087,7 +1085,6 @@ return
                   )}
                 </div>
 
-                {/* CHECKBOX DESCATALOGADA */}
                 <div style={{paddingTop:'0.75rem',borderTop:'1px solid #E0E0DC'}}>
                   <label style={{display:'flex',alignItems:'flex-start',gap:'0.75rem',cursor:'pointer'}}>
                     <input type="checkbox" checked={descatalogada} onChange={e => { setDescatalogada(e.target.checked); if (!e.target.checked) setDescripcionLibre('') }}
@@ -1109,7 +1106,6 @@ return
                 </div>
               </div>
 
-              {/* PRENDA 2 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:`1px solid ${requierePrenda2 ? '#F07987' : '#E0E0DC'}`,borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:requierePrenda2?'#0A0A0A':'#888884',marginBottom:'0.5rem'}}>
                   {t('prenda2')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}
@@ -1149,7 +1145,6 @@ return
                 </div>
               </div>
 
-              {/* FOTO */}
               <div style={{marginBottom:'1.25rem'}}>
                 <label style={labelStyle}>
                   {t('foto')}
@@ -1163,8 +1158,9 @@ return
                   </div>
                 )}
                 {descatalogada && !pedirFoto && (
-<div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
-  <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>Es obligatorio subir una foto para prendas antiguas o descatalogadas.</p>                  </div>
+                  <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
+                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>Es obligatorio subir una foto para prendas antiguas o descatalogadas.</p>
+                  </div>
                 )}
                 <div onClick={() => document.getElementById('foto-input').click()}
                   style={{border:`1px dashed ${pedirFoto && !foto ? '#F07987' : '#E0E0DC'}`,padding:'1.5rem',textAlign:'center',cursor:'pointer',background:fotoPreview?'transparent':'#F7F7F5',borderRadius:'4px'}}>
