@@ -321,7 +321,14 @@ export default function InvitadaPage() {
     }).select().single()
     if (insertError) {
       setEnviando(false)
-      setModal({ icono:'❌', titulo: 'Error', desc: 'Error al registrar el look. Inténtalo de nuevo.', textoConfirmar:'OK', onConfirmar: cerrarModal })
+      const esDuplicado = insertError.code === '23505'
+      setModal({
+        icono: esDuplicado ? 'ℹ️' : '❌',
+        titulo: esDuplicado ? 'Ya tienes un look confirmado' : 'Error',
+        desc: esDuplicado ? 'Ya tienes un look confirmado en este evento. Solo puedes tener uno.' : 'Error al registrar el look. Inténtalo de nuevo.',
+        textoConfirmar: 'Entendido',
+        onConfirmar: cerrarModal
+      })
       return null
     }
     return lookInsertado
