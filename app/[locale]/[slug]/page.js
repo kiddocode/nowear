@@ -1175,7 +1175,7 @@ export default function InvitadaPage() {
               </div>
 
               <div style={{marginBottom:'2rem'}}>
-                {t('estado')} <span style={{color:'#F07987'}}>*</span></label>
+                <label style={labelStyle}>{t('estado')} <span style={{color:'#F07987'}}>*</span></label>
                 <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
                   <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoConfirmado')}:</strong> {t('estadoConfirmadoDesc')}<br/>
                   <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoPrereservado')}:</strong> {t('estadoPrereservadoDesc')}
