@@ -1175,4 +1175,43 @@ export default function InvitadaPage() {
               </div>
 
               <div style={{marginBottom:'2rem'}}>
-                <label style={labelStyle}></label>
+                {t('estado')} <span style={{color:'#F07987'}}>*</span></label>
+                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
+                  <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoConfirmado')}:</strong> {t('estadoConfirmadoDesc')}<br/>
+                  <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoPrereservado')}:</strong> {t('estadoPrereservadoDesc')}
+                </p>
+                <div className="estado-grid">
+                  {[{val:'confirmado',label:t('estadoConfirmado')},{val:'prereservado',label:t('estadoPrereservado')}].map(e => (
+                    <button key={e.val} onClick={() => setEstado(e.val)}
+                      style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,fontFamily:'Poppins,sans-serif',cursor:'pointer',border:'1px solid',borderColor:estado===e.val?'#0A0A0A':'#E0E0DC',background:estado===e.val?'#0A0A0A':'#FFFFFF',color:estado===e.val?'#FFFFFF':'#888884',borderRadius:'4px'}}>
+                      {e.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {error && (
+                <div style={{marginBottom:'1rem',padding:'1rem 1.25rem',background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'8px',boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
+                  <p style={{fontSize:'0.82rem',fontWeight:500,color:'#0A0A0A',margin:0}}>{error}</p>
+                </div>
+              )}
+
+              <div style={{display:'flex',gap:'0.75rem'}}>
+                {lookEditando && (
+                  <button onClick={() => { resetForm(); setModoGestion(true) }}
+                    style={{flex:1,padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
+                    {t('cancelar')}
+                  </button>
+                )}
+                <button onClick={lookEditando ? handleActualizarLook : handleEnviar} disabled={enviando}
+                  style={{flex:1,padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1,borderRadius:'4px'}}>
+                  {enviando ? t('guardando') : lookEditando ? t('guardarCambios') : t('registrar')}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  )
+}
