@@ -158,11 +158,14 @@ export async function POST(req) {
     let notifConflicto = true
 
     if (organizadoraId) {
-      const { data: authUser } = await supabaseAdmin.auth.admin.getUserById(organizadoraId)
-      emailOrganizadora = authUser?.user?.email || null
-      const { data: prof } = await supabaseAdmin.from('profiles').select('notif_conflicto').eq('id', organizadoraId).single()
-      notifConflicto = prof?.notif_conflicto ?? true
-    }
+  const { data: prof } = await supabaseAdmin
+    .from('profiles')
+    .select('email, notif_conflicto')
+    .eq('id', organizadoraId)
+    .single()
+  emailOrganizadora = prof?.email || null
+  notifConflicto = prof?.notif_conflicto ?? true
+}
 
     const eventoUrl = eventoId ? `https://nowear.es/${eventoId}` : null
     const fechaStr = fechaEvento ? new Date(fechaEvento).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}) : ''
