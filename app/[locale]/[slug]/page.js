@@ -338,42 +338,57 @@ export default function InvitadaPage() {
 }
 
   async function actualizarLook() {
-    await supabase.from('looks').update({
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1,
-      referencia: referencia1 || null, link: link1 || null,
-      marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, link2: link2 || null, estado,
-      descatalogada: descatalogada,
-      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
-    }).eq('id', lookEditando.id)
-
-    const lookActualizado = {
-      ...lookEditando,
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
-      marca: marca1, modelo: modelo1, tipo: tipo1,
-      referencia: referencia1 || null, link: link1 || null,
-      marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, link2: link2 || null, estado,
-      descatalogada: descatalogada,
-      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
-    }
-
-    const emailGuardado = email.toLowerCase().trim()
-    const nombreGuardado = nombre
-    const m1 = marca1, mo1 = modelo1, m2 = marca2 || null, mo2 = modelo2 || null, t2 = tipo2 || null
-
-    setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
-    setEmailGestion(emailGuardado)
+  if (!lookEditando?.id) {
     setEnviando(false)
-    resetForm()
-    setModoGestion(true)
-
-    enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado, {
-      marca: m1, modelo: mo1, marca2: m2, modelo2: mo2, tipo2: t2
-    })
+    setError('Error: no se encontró el look a editar.')
+    return
   }
+
+  // Subir foto si hay una nueva
+  let foto_url = lookEditando.foto_url || null
+  if (foto) {
+    const nuevaFotoUrl = await subirFotoStorage(foto)
+    if (nuevaFotoUrl) foto_url = nuevaFotoUrl
+  }
+
+  await supabase.from('looks').update({
+    nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+    marca: marca1, modelo: modelo1, tipo: tipo1,
+    referencia: referencia1 || null, link: link1 || null,
+    marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
+    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+    referencia2: referencia2 || null, link2: link2 || null, estado,
+    descatalogada: descatalogada,
+    descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
+    foto_url: foto_url,
+  }).eq('id', lookEditando.id)
+
+  const lookActualizado = {
+    ...lookEditando,
+    nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+    marca: marca1, modelo: modelo1, tipo: tipo1,
+    referencia: referencia1 || null, link: link1 || null,
+    marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+    referencia2: referencia2 || null, link2: link2 || null, estado,
+    descatalogada: descatalogada,
+    descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
+    foto_url: foto_url,
+  }
+
+  const emailGuardado = email.toLowerCase().trim()
+  const nombreGuardado = nombre
+  const m1 = marca1, mo1 = modelo1, m2 = marca2 || null, mo2 = modelo2 || null, t2 = tipo2 || null
+
+  setLooksExistentes(prev => prev ? prev.map(l => l.id === lookEditando.id ? lookActualizado : l) : [lookActualizado])
+  setEmailGestion(emailGuardado)
+  setEnviando(false)
+  resetForm()
+  setModoGestion(true)
+
+  enviarEmailAsync('confirmacion', emailGuardado, nombreGuardado, {
+    marca: m1, modelo: mo1, marca2: m2, modelo2: mo2, tipo2: t2
+  })
+}
 
   async function comprobarConflicto(excludeId = null) {
     if (!marca1 || !tipo1 || !modelo1 || colores.length === 0) return { tipo: 'ninguno' }
@@ -510,25 +525,43 @@ export default function InvitadaPage() {
     const candidato = resultado.candidato
 
     if (resultado.tipo === 'descatalogada_sospecha') {
-      const foto_url = foto ? await subirFotoStorage(foto) : null
-      const lookInsertado = await guardarLook(foto_url, estado)
-      if (!lookInsertado) return
+  if (accion === 'actualizar') {
+    // Si estamos editando, solo actualizar sin insertar nuevo
+    await actualizarLook()
+    // Mandar email igualmente
+    enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
+      marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+      descripcionLibre: descripcionLibre || null,
+      fotoUrl: null,
+      nombreCandidata: candidato?.nombre_invitada || '',
+      marcaCandidata: candidato?.marca || '',
+      modeloCandidata: candidato?.modelo || '',
+      descripcionCandidata: candidato?.descripcion_libre || '',
+      fotoCandidataUrl: candidato?.foto_url || null,
+    })
+    return
+  }
 
-      enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
-  marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-  descripcionLibre: descripcionLibre || null,
-  fotoUrl: foto_url,
-  nombreCandidata: candidato?.nombre_invitada || '',
-  marcaCandidata: candidato?.marca || '',
-  modeloCandidata: candidato?.modelo || '',
-  descripcionCandidata: candidato?.descripcion_libre || '',
-  fotoCandidataUrl: candidato?.foto_url || null,
-})
+  // Si es registro nuevo
+  const foto_url = foto ? await subirFotoStorage(foto) : null
+  const lookInsertado = await guardarLook(foto_url, estado)
+  if (!lookInsertado) return
 
-      setEnviando(false)
-      setEnviado(true)
-      return
-    }
+  enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
+    marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+    descripcionLibre: descripcionLibre || null,
+    fotoUrl: foto_url,
+    nombreCandidata: candidato?.nombre_invitada || '',
+    marcaCandidata: candidato?.marca || '',
+    modeloCandidata: candidato?.modelo || '',
+    descripcionCandidata: candidato?.descripcion_libre || '',
+    fotoCandidataUrl: candidato?.foto_url || null,
+  })
+
+  setEnviando(false)
+  setEnviado(true)
+  return
+}
 
     if (resultado.tipo === 'bloqueo_directo') {
       if (candidato) {
