@@ -39,6 +39,8 @@ function similitudPalabras(a, b) {
   const pa = normalizar(a).split(/\s+/).filter(p => p.length > 2)
   const pb = normalizar(b).split(/\s+/).filter(p => p.length > 2)
   if (pa.length === 0) return 0
+  // Si el modelo es una sola palabra, comprobar si está contenida en el otro
+  if (pa.length === 1) return pb.includes(pa[0]) ? 1 : 0
   return pa.filter(p => pb.includes(p)).length / pa.length
 }
 
@@ -173,6 +175,8 @@ export default function InvitadaPage() {
   const [modal, setModal] = useState(null)
   const [tokenValidacion, setTokenValidacion] = useState(null)
   const [modoFotoCandidata, setModoFotoCandidata] = useState(false)
+  const [descatalogada, setDescatalogada] = useState(false)
+  const [descripcionLibre, setDescripcionLibre] = useState('')
 
   const requierePrenda2 = tipo1 && !PRENDAS_COMPLETAS.includes(tipo1)
 
@@ -219,6 +223,7 @@ export default function InvitadaPage() {
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
     setLookEditando(null); setError(''); setPedirReferencia(false); setPedirFoto(false)
     setModal(null); setPendienteValidacion(false)
+    setDescatalogada(false); setDescripcionLibre('')
   }
 
   function cerrarModal() { setModal(null) }
@@ -270,6 +275,8 @@ export default function InvitadaPage() {
     setMarca2(look.marca2 || ''); setModelo2(look.modelo2 || '')
     setTipo2(look.tipo2 || ''); setReferencia2(look.referencia2 || ''); setLink2(look.link2 || '')
     setEstado(look.estado || 'confirmado')
+    setDescatalogada(look.descatalogada || false)
+    setDescripcionLibre(look.descripcion_libre || '')
     setPedirReferencia(false); setPedirFoto(false); setModal(null)
     setModoGestion(false)
   }
@@ -309,6 +316,8 @@ export default function InvitadaPage() {
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       referencia2: referencia2 || null, link2: link2 || null,
+      descatalogada: descatalogada,
+      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
     }).select().single()
     if (insertError) {
       setEnviando(false)
@@ -325,7 +334,9 @@ export default function InvitadaPage() {
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, link2: link2 || null, estado
+      referencia2: referencia2 || null, link2: link2 || null, estado,
+      descatalogada: descatalogada,
+      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
     }).eq('id', lookEditando.id)
 
     const lookActualizado = {
@@ -334,7 +345,9 @@ export default function InvitadaPage() {
       marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
-      referencia2: referencia2 || null, link2: link2 || null, estado
+      referencia2: referencia2 || null, link2: link2 || null, estado,
+      descatalogada: descatalogada,
+      descripcion_libre: descatalogada && descripcionLibre ? descripcionLibre : null,
     }
 
     const emailGuardado = email.toLowerCase().trim()
@@ -360,6 +373,27 @@ export default function InvitadaPage() {
     const tipoNorm = tipo1.trim().toLowerCase()
     const colorHex = colores[0]
     const yoTengoId = tieneId(referencia1, link1)
+
+    // Si la prenda es descatalogada, buscar otras descatalogadas con misma marca y tipo
+    if (descatalogada) {
+      const { data: descatalogadas } = await supabase
+        .from('looks')
+        .select('id, nombre_invitada, email_invitada, marca, tipo, foto_url, descripcion_libre')
+        .eq('evento_id', evento.id)
+        .eq('marca_normalizada', marcaNorm)
+        .eq('descatalogada', true)
+        .neq('email_invitada', email.toLowerCase().trim())
+        .in('estado', ['confirmado', 'prereservado'])
+
+      const candidatasDesc = excludeId ? (descatalogadas || []).filter(c => c.id !== excludeId) : (descatalogadas || [])
+
+      if (candidatasDesc.length > 0) {
+        const candidata = candidatasDesc.find(c => (c.tipo || '').trim().toLowerCase() === tipoNorm) || candidatasDesc[0]
+        return { tipo: 'descatalogada_sospecha', candidato: candidata }
+      }
+
+      return { tipo: 'ninguno' }
+    }
 
     if (evento.look_bloqueado_marca1) {
       const marcaOrg = normalizarStrict(evento.look_bloqueado_marca1)
@@ -464,6 +498,25 @@ export default function InvitadaPage() {
   async function procesarConflicto(excludeId, accion) {
     const resultado = await comprobarConflicto(excludeId)
     const candidato = resultado.candidato
+
+    if (resultado.tipo === 'descatalogada_sospecha') {
+      const foto_url = foto ? await subirFotoStorage(foto) : null
+      const lookInsertado = await guardarLook(foto_url, estado)
+      if (!lookInsertado) return
+
+      enviarEmailAsync('descatalogada_sospecha', email.toLowerCase().trim(), nombre, {
+        marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
+        descripcionLibre: descripcionLibre || null,
+        fotoUrl: foto_url,
+        nombreCandidata: candidato?.nombre_invitada || '',
+        descripcionCandidata: candidato?.descripcion_libre || '',
+        fotoCandidataUrl: candidato?.foto_url || null,
+      })
+
+      setEnviando(false)
+      setEnviado(true)
+      return
+    }
 
     if (resultado.tipo === 'bloqueo_directo') {
       if (candidato) {
@@ -640,17 +693,30 @@ export default function InvitadaPage() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (!emailRegex.test(email)) { setError(t('errorEmail')); return }
 
+    // Bloqueo por email: máximo 1 confirmado y 3 prereservados por email
     const { data: existentes } = await supabase.from('looks').select('estado')
       .eq('evento_id', evento.id).eq('email_invitada', email.toLowerCase().trim())
     if (existentes && existentes.length > 0) {
       const confirmados = existentes.filter(l => l.estado === 'confirmado').length
       const prereservados = existentes.filter(l => l.estado === 'prereservado').length
       if (estado === 'confirmado' && confirmados >= 1) {
-        setModal({ icono:'ℹ️', titulo: t('modalMaxConfirmadosTitulo'), desc: t('errorMaxConfirmados'), textoConfirmar: t('modalEntendido'), onConfirmar: cerrarModal })
+        setModal({
+          icono:'ℹ️',
+          titulo: t('modalMaxConfirmadosTitulo'),
+          desc: t('errorMaxConfirmados'),
+          textoConfirmar: t('modalEntendido'),
+          onConfirmar: cerrarModal
+        })
         return
       }
       if (estado === 'prereservado' && prereservados >= 3) {
-        setModal({ icono:'ℹ️', titulo: t('modalMaxPrereservasTitulo'), desc: t('errorMaxPrereservas'), textoConfirmar: t('modalEntendido'), onConfirmar: cerrarModal })
+        setModal({
+          icono:'ℹ️',
+          titulo: t('modalMaxPrereservasTitulo'),
+          desc: t('errorMaxPrereservas'),
+          textoConfirmar: t('modalEntendido'),
+          onConfirmar: cerrarModal
+        })
         return
       }
     }
@@ -899,6 +965,7 @@ export default function InvitadaPage() {
                 )}
               </div>
 
+              {/* PRENDA 1 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#0A0A0A',marginBottom:'1.25rem'}}>
                   {t('prenda1')} <span style={{color:'#F07987'}}>*</span>
@@ -931,7 +998,7 @@ export default function InvitadaPage() {
                     style={{...inputStyle, borderColor: pedirReferencia && !referencia1 && !link1 ? '#F07987' : '#E0E0DC'}}/>
                   <p style={notaStyle}>{t('referenciaCodigoNota')}</p>
                 </div>
-                <div>
+                <div style={{marginBottom:'1rem'}}>
                   <label style={labelStyle}>
                     {t('referenciaLinkLabel')}
                     {pedirReferencia ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>{t('referenciaLinkRequerido')}</span>
@@ -946,8 +1013,30 @@ export default function InvitadaPage() {
                     </p>
                   )}
                 </div>
+
+                {/* CHECKBOX DESCATALOGADA */}
+                <div style={{paddingTop:'0.75rem',borderTop:'1px solid #E0E0DC'}}>
+                  <label style={{display:'flex',alignItems:'flex-start',gap:'0.75rem',cursor:'pointer'}}>
+                    <input type="checkbox" checked={descatalogada} onChange={e => { setDescatalogada(e.target.checked); if (!e.target.checked) setDescripcionLibre('') }}
+                      style={{marginTop:'2px',width:'16px',height:'16px',cursor:'pointer',accentColor:'#0A0A0A',flexShrink:0}}/>
+                    <div>
+                      <span style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A',display:'block',marginBottom:'0.15rem'}}>Es una prenda antigua o descatalogada</span>
+                      <span style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.5}}>No está disponible online y no puedes añadir referencia o link.</span>
+                    </div>
+                  </label>
+                  {descatalogada && (
+                    <div style={{marginTop:'1rem'}}>
+                      <label style={labelStyle}>Describe tu look <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional pero recomendado</span></label>
+                      <textarea value={descripcionLibre} onChange={e => setDescripcionLibre(e.target.value)}
+                        placeholder="Ej: Vestido largo azul marino con escote en V, manga larga, bordados en el escote. Temporada 2019."
+                        style={{...inputStyle,height:'90px',resize:'vertical',lineHeight:1.6}}/>
+                      <p style={notaStyle}>Cuantos más detalles, más fácil detectar coincidencias.</p>
+                    </div>
+                  )}
+                </div>
               </div>
 
+              {/* PRENDA 2 */}
               <div style={{marginBottom:'1.5rem',padding:'1.5rem',background:'#F7F7F5',border:`1px solid ${requierePrenda2 ? '#F07987' : '#E0E0DC'}`,borderRadius:'4px'}}>
                 <div style={{fontSize:'0.7rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:requierePrenda2?'#0A0A0A':'#888884',marginBottom:'0.5rem'}}>
                   {t('prenda2')} {requierePrenda2 && <span style={{color:'#F07987'}}>*</span>}
@@ -987,15 +1076,22 @@ export default function InvitadaPage() {
                 </div>
               </div>
 
+              {/* FOTO */}
               <div style={{marginBottom:'1.25rem'}}>
                 <label style={labelStyle}>
                   {t('foto')}
                   {pedirFoto ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida')}</span>
+                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>recomendada para prendas antiguas</span>
                   : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                 </label>
                 {pedirFoto && (
                   <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
                     <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>{t('modalPedirFotoDesc')}</p>
+                  </div>
+                )}
+                {descatalogada && !pedirFoto && (
+                  <div style={{padding:'0.75rem 1rem',background:'#FFF8F0',border:'1px solid #F5D6A0',marginBottom:'0.75rem',borderRadius:'4px'}}>
+                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#C4917C',margin:0,lineHeight:1.6}}>Al ser una prenda antigua, subir una foto ayuda mucho a la organizadora a verificar que no coincide con otra invitada.</p>
                   </div>
                 )}
                 <div onClick={() => document.getElementById('foto-input').click()}

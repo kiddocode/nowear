@@ -158,14 +158,14 @@ export async function POST(req) {
     let notifConflicto = true
 
     if (organizadoraId) {
-  const { data: prof } = await supabaseAdmin
-    .from('profiles')
-    .select('email, notif_conflicto')
-    .eq('id', organizadoraId)
-    .single()
-  emailOrganizadora = prof?.email || null
-  notifConflicto = prof?.notif_conflicto ?? true
-}
+      const { data: prof } = await supabaseAdmin
+        .from('profiles')
+        .select('email, notif_conflicto')
+        .eq('id', organizadoraId)
+        .single()
+      emailOrganizadora = prof?.email || null
+      notifConflicto = prof?.notif_conflicto ?? true
+    }
 
     const eventoUrl = eventoId ? `https://nowear.es/${eventoId}` : null
     const fechaStr = fechaEvento ? new Date(fechaEvento).toLocaleDateString('es-ES', {day:'numeric',month:'long',year:'numeric'}) : ''
@@ -335,6 +335,29 @@ export async function POST(req) {
       }
     }
 
+    if (tipo === 'descatalogada_sospecha') {
+      if (emailOrganizadora) {
+        await resend.emails.send({
+          from: 'NOWEAR <support@nowear.es>',
+          to: emailOrganizadora,
+          subject: `Posible coincidencia a revisar · ${nombreEvento}`,
+          html: emailWrapper(`
+            ${titulo('Posible coincidencia')}
+            ${subtitulo(eventoTag)}
+            ${alerta('Dos invitadas han registrado prendas antiguas o descatalogadas de la misma marca y tipo. <strong>Revisa sus descripciones y fotos</strong> para verificar si coinciden.', 'warn')}
+            ${etiqueta(`Look de ${nombreInvitada}`)}
+            ${lookCardConFoto('', marca, modelo, fotoUrl || null)}
+            ${body.descripcionLibre ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;font-style:italic;text-align:left;">"${body.descripcionLibre}"</p>` : ''}
+            ${etiqueta(`Look de ${body.nombreCandidata || 'otra invitada'}`)}
+            ${lookCardConFoto('', '', '', body.fotoCandidataUrl || null)}
+            ${body.descripcionCandidata ? `<p style="font-size:13px;color:#555552;line-height:1.7;margin:0 0 16px;font-style:italic;text-align:left;">"${body.descripcionCandidata}"</p>` : ''}
+            ${parrafo('Si son el mismo look, contacta con una de las dos invitadas directamente.')}
+            ${boton('Ver mi evento', `https://nowear.es/evento/${eventoId}`)}
+          `)
+        })
+      }
+    }
+
     if (tipo === 'cuenta_pendiente_eliminacion') {
       await resend.emails.send({
         from: 'NOWEAR <support@nowear.es>',
@@ -365,4 +388,4 @@ export async function POST(req) {
   } catch (error) {
     return Response.json({ ok: false, error: error.message }, { status: 500 })
   }
-}// Tue Jun  2 14:38:34 CEST 2026
+}
