@@ -398,7 +398,6 @@ export default function InvitadaPage() {
     const colorHex = colores[0]
     const yoTengoId = tieneId(referencia1, link1)
 
-    // Si la prenda es descatalogada, buscar todas las descatalogadas con misma marca
     if (descatalogada) {
       const { data: descatalogadas } = await supabase
         .from('looks')
@@ -541,7 +540,6 @@ export default function InvitadaPage() {
         return
       }
 
-      // Registro nuevo
       const foto_url = foto ? await subirFotoStorage(foto) : null
       const lookInsertado = await guardarLook(foto_url, 'pendiente')
       if (!lookInsertado) return
@@ -714,7 +712,6 @@ export default function InvitadaPage() {
       return
     }
 
-    // Sin conflicto
     if (accion === 'enviar') {
       const foto_url = foto ? await subirFotoStorage(foto) : null
       const lookInsertado = await guardarLook(foto_url, estado)
@@ -740,7 +737,7 @@ export default function InvitadaPage() {
       setError(t('errorPrenda2') || 'Tu look es de dos piezas. Completa los datos de la segunda prenda.'); return
     }
     if (descatalogada && !foto && !lookEditando?.foto_url) {
-      setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
+      setError(t('errorDescatalogadaSinFoto')); return
     }
     setEnviando(true)
     await procesarConflicto(lookEditando.id, 'actualizar')
@@ -758,7 +755,7 @@ export default function InvitadaPage() {
       setError(t('errorFotoRequerida') || 'Por favor sube una foto de tu look para continuar.'); return
     }
     if (descatalogada && !foto) {
-      setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
+      setError(t('errorDescatalogadaSinFoto')); return
     }
     if (pedirReferencia && !tieneId(referencia1, link1)) {
       setError(t('errorPedirReferencia') || 'Por favor añade la referencia o link del producto.'); return
@@ -1090,17 +1087,17 @@ export default function InvitadaPage() {
                     <input type="checkbox" checked={descatalogada} onChange={e => { setDescatalogada(e.target.checked); if (!e.target.checked) setDescripcionLibre('') }}
                       style={{marginTop:'2px',width:'16px',height:'16px',cursor:'pointer',accentColor:'#0A0A0A',flexShrink:0}}/>
                     <div>
-                      <span style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A',display:'block',marginBottom:'0.15rem'}}>Es una prenda antigua o descatalogada</span>
-                      <span style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.5}}>No está disponible online y no puedes añadir referencia o link.</span>
+                      <span style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A',display:'block',marginBottom:'0.15rem'}}>{t('descatalogadaLabel')}</span>
+                      <span style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.5}}>{t('descatalogadaInfo')}</span>
                     </div>
                   </label>
                   {descatalogada && (
                     <div style={{marginTop:'1rem'}}>
-                      <label style={labelStyle}>Describe tu look <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional pero recomendado</span></label>
+                      <label style={labelStyle}>{t('descatalogadaDescribeLabel')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('descatalogadaDescribeOpcional')}</span></label>
                       <textarea value={descripcionLibre} onChange={e => setDescripcionLibre(e.target.value)}
-                        placeholder="Ej: Vestido largo azul marino con escote en V, manga larga, bordados en el escote. Temporada 2019."
+                        placeholder={t('descatalogadaDescribePlaceholder')}
                         style={{...inputStyle,height:'90px',resize:'vertical',lineHeight:1.6}}/>
-                      <p style={notaStyle}>Cuantos más detalles, más fácil detectar coincidencias.</p>
+                      <p style={notaStyle}>{t('descatalogadaDescribeNota')}</p>
                     </div>
                   )}
                 </div>
@@ -1149,7 +1146,7 @@ export default function InvitadaPage() {
                 <label style={labelStyle}>
                   {t('foto')}
                   {pedirFoto ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida')}</span>
-                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:700,color:'#F07987',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>* obligatoria para prendas antiguas</span>
+                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:700,color:'#F07987',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('descatalogadaFotoObligatoria')}</span>
                   : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                 </label>
                 {pedirFoto && (
@@ -1159,7 +1156,7 @@ export default function InvitadaPage() {
                 )}
                 {descatalogada && !pedirFoto && (
                   <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
-                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>Es obligatorio subir una foto para prendas antiguas o descatalogadas.</p>
+                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>{t('descatalogadaFotoAviso')}</p>
                   </div>
                 )}
                 <div onClick={() => document.getElementById('foto-input').click()}
@@ -1178,43 +1175,4 @@ export default function InvitadaPage() {
               </div>
 
               <div style={{marginBottom:'2rem'}}>
-                <label style={labelStyle}>{t('estado')} <span style={{color:'#F07987'}}>*</span></label>
-                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>
-                  <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoConfirmado')}:</strong> {t('estadoConfirmadoDesc')}<br/>
-                  <strong style={{fontWeight:600,color:'#0A0A0A'}}>{t('estadoPrereservado')}:</strong> {t('estadoPrereservadoDesc')}
-                </p>
-                <div className="estado-grid">
-                  {[{val:'confirmado',label:t('estadoConfirmado')},{val:'prereservado',label:t('estadoPrereservado')}].map(e => (
-                    <button key={e.val} onClick={() => setEstado(e.val)}
-                      style={{flex:1,padding:'0.85rem',fontSize:'0.78rem',fontWeight:600,fontFamily:'Poppins,sans-serif',cursor:'pointer',border:'1px solid',borderColor:estado===e.val?'#0A0A0A':'#E0E0DC',background:estado===e.val?'#0A0A0A':'#FFFFFF',color:estado===e.val?'#FFFFFF':'#888884',borderRadius:'4px'}}>
-                      {e.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {error && (
-                <div style={{marginBottom:'1rem',padding:'1rem 1.25rem',background:'#FFFFFF',border:'1px solid #E0E0DC',borderRadius:'8px',boxShadow:'0 2px 8px rgba(0,0,0,0.06)'}}>
-                  <p style={{fontSize:'0.82rem',fontWeight:500,color:'#0A0A0A',margin:0}}>{error}</p>
-                </div>
-              )}
-
-              <div style={{display:'flex',gap:'0.75rem'}}>
-                {lookEditando && (
-                  <button onClick={() => { resetForm(); setModoGestion(true) }}
-                    style={{flex:1,padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'transparent',color:'#888884',border:'1px solid #E0E0DC',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
-                    {t('cancelar')}
-                  </button>
-                )}
-                <button onClick={lookEditando ? handleActualizarLook : handleEnviar} disabled={enviando}
-                  style={{flex:1,padding:'1rem',fontSize:'0.88rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',opacity:enviando?0.6:1,borderRadius:'4px'}}>
-                  {enviando ? t('guardando') : lookEditando ? t('guardarCambios') : t('registrar')}
-                </button>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </>
-  )
-}
+                <label style={labelStyle}></label>

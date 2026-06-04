@@ -406,7 +406,6 @@
     "referenciaCodigoLabel": "Referencia de la prenda",
     "referenciaCodigoNota": "El código de referencia. Lo encuentras en la web o en la etiqueta del producto.",
     "referenciaCodigoPlaceholder": "Ej: 123456789",
-    "referenciaCodigoNota": "El código de referencia. Lo encuentras en la web o en la etiqueta del producto.",
     "referenciaLinkLabel": "Link de la tienda",
     "referenciaLinkNota": "El enlace directo al producto en la web de la tienda.",
     "referenciaLinkPlaceholder": "https://www.zara.com/es/...",
@@ -437,7 +436,16 @@
     "modalMaxPrereservasTitulo": "Máximo de prerreservas",
     "modalEntendido": "Entendido",
     "modalElegirOtro": "Elegir otro look",
-    "modalAnadirReferencia": "Entendido, añado la referencia"
+    "modalAnadirReferencia": "Entendido, añado la referencia",
+    "descatalogadaLabel": "Es una prenda antigua o descatalogada",
+    "descatalogadaInfo": "No está disponible online y no puedes añadir referencia o link.",
+    "descatalogadaDescribeLabel": "Describe tu look",
+    "descatalogadaDescribeOpcional": "opcional pero recomendado",
+    "descatalogadaDescribePlaceholder": "Ej: Vestido largo azul marino con escote en V, manga larga, bordados en el escote. Temporada 2019.",
+    "descatalogadaDescribeNota": "Cuantos más detalles, más fácil detectar coincidencias.",
+    "descatalogadaFotoObligatoria": "* obligatoria para prendas antiguas",
+    "descatalogadaFotoAviso": "Es obligatorio subir una foto para prendas antiguas o descatalogadas.",
+    "errorDescatalogadaSinFoto": "Para prendas antiguas o descatalogadas la foto es obligatoria."
   },
   "sidebar": {
     "principal": "Principal",
