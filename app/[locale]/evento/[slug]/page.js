@@ -121,7 +121,7 @@ export default function EventoDetalle() {
       // Cargar lista de invitadas guardada
       if (ev.lista_invitadas && Array.isArray(ev.lista_invitadas)) {
         setInvitadasArchivo(ev.lista_invitadas)
-        setNombreArchivo('Lista guardada (' + ev.lista_invitadas.length + ' invitadas)')
+setNombreArchivo(t('recListaGuardada').replace('{n}', ev.lista_invitadas.length))
         setRecordatorioMensaje(t('recArchivoCargado').replace('{n}', ev.lista_invitadas.length))
       }
       const tieneL = !!(ev.look_bloqueado_marca1)
@@ -399,7 +399,7 @@ export default function EventoDetalle() {
 
   // Tabs visibles: solo las 4 base + Organizadores Enterprise
   // Personalización y Recordatorios se acceden por los boxes del hero, no por tabs
-  const tabs = [t('tabLooks'), t('tabConflictos'), 'Bloqueos', t('tabAjustes')]
+const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes')]
   if (isEnterprise) tabs.push(t('tabOrganizadores'))
   // Índices para el contenido (aunque no aparecen en las tabs visibles)
   const tabPersonalizacionIdx = 10
@@ -504,7 +504,7 @@ export default function EventoDetalle() {
                   {isPremium ? (invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio') : 'Enviar recordatorio'}
                 </p>
                 <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.35)',margin:'0.2rem 0 0 0'}}>
-                  {isPremium ? (invitadasArchivo.length > 0 ? 'Haz clic para cruzar y enviar' : 'Sube tu lista de invitadas') : 'desde Premium'}
+                  {isPremium ? (invitadasArchivo.length > 0 ? t('recHazClic') : t('recSubeLista')) : 'desde Premium'}
                 </p>
               </button>
 
@@ -515,9 +515,9 @@ export default function EventoDetalle() {
                 <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:isPremium?'#C4917C':'#888884',marginBottom:'0.4rem'}}>
                   {isPremium ? '✨ ' : '🔒 '}{t('tabPersonalizacion')}
                 </p>
-                <p style={{fontSize:'0.78rem',fontWeight:500,color:isPremium?'#FFFFFF':'rgba(255,255,255,0.4)',margin:0}}>Foto e imagen</p>
+                <p style={{fontSize:'0.78rem',fontWeight:500,color:isPremium?'#FFFFFF':'rgba(255,255,255,0.4)',margin:0}}>{t('recFotoImagen')}</p>
                 <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.35)',margin:'0.2rem 0 0 0'}}>
-                  {isPremium ? 'Personaliza el link de tus invitadas' : 'desde Premium'}
+                  {isPremium ? t('recPersonaliza') : 'desde Premium'}
                 </p>
               </button>
             </div>
