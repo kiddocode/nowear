@@ -733,7 +733,18 @@
     "colTipo": "Typ",
     "colEstado": "Status",
     "mejorarPlan": "Paket upgraden",
-    "planLabel": "Paket"
+    "planLabel": "Paket",
+    "tabRecordatorios": "Erinnerungen",
+    "recTitulo": "Erinnerungen",
+    "recSubtitulo": "Gleiche deine Gästeliste mit denen ab, die ihren Look bereits registriert haben, und sende eine Erinnerung an die anderen.",
+    "recListaLabel": "Gästeliste",
+    "recListaInfo": "Schreibe einen vollständigen Namen pro Zeile, genau wie im Formular eingegeben.",
+    "recListaPlaceholder": "Maria Müller\nAnna Schmidt\nLaura Weber...",
+    "recEnviar": "Liste abgleichen und Erinnerungen senden",
+    "recEnviando": "Verarbeitung...",
+    "recPendientes": "Gäste, die ihren Look noch nicht registriert haben",
+    "recWhatsapp": "Nachricht zum Kopieren und per WhatsApp senden",
+    "recCopiarWhatsapp": "Nachricht kopieren"
   },
   "dashboard": {
     "titulo": "Meine Events",

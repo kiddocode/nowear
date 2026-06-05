@@ -80,6 +80,11 @@ export default function EventoDetalle() {
   const [añadiendoOrg, setAñadiendoOrg] = useState(false)
   const [orgMensaje, setOrgMensaje] = useState('')
   const [fotoModal, setFotoModal] = useState(null)
+const [listaInvitadas, setListaInvitadas] = useState('')
+  const [enviandoRecordatorios, setEnviandoRecordatorios] = useState(false)
+  const [recordatorioMensaje, setRecordatorioMensaje] = useState('')
+  const [pendientesRecordatorio, setPendientesRecordatorio] = useState([])
+  const [recordatorioWhatsapp, setRecordatorioWhatsapp] = useState('')
 
   const [editLookBloqueadoColor, setEditLookBloqueadoColor] = useState('')
   const [editLookBloqueadoMarca1, setEditLookBloqueadoMarca1] = useState('')
@@ -254,6 +259,45 @@ export default function EventoDetalle() {
     setTimeout(() => setPersonalizacionMensaje(''), 4000)
   }
 
+  async function handleRecordatorios() {
+    setEnviandoRecordatorios(true)
+    setRecordatorioMensaje('')
+    setPendientesRecordatorio([])
+    setRecordatorioWhatsapp('')
+    const lineas = listaInvitadas.split('\n').map(l => l.trim()).filter(Boolean)
+    if (lineas.length === 0) { setRecordatorioMensaje('Añade al menos un nombre.'); setEnviandoRecordatorios(false); return }
+    const registradas = looks.map(l => (l.nombre_invitada || '').toLowerCase().trim())
+    const pendientes = lineas.filter(n => !registradas.includes(n.toLowerCase().trim()))
+    setPendientesRecordatorio(pendientes)
+    const linkEvento = `${process.env.NEXT_PUBLIC_URL}/${locale}/${evento.slug}`
+    const textoWA = `Hola! Te escribo porque aún no has registrado tu look para ${evento.nombre}. Hazlo aquí para asegurarte de que nadie lleve el mismo outfit que tú: ${linkEvento}`
+    setRecordatorioWhatsapp(textoWA)
+    const conEmail = pendientes.filter(n => {
+      const look = looks.find(l => (l.nombre_invitada || '').toLowerCase().trim() === n.toLowerCase().trim())
+      return look?.email_invitada
+    })
+    if (conEmail.length > 0) {
+      for (const nombre of conEmail) {
+        const look = looks.find(l => (l.nombre_invitada || '').toLowerCase().trim() === nombre.toLowerCase().trim())
+        if (look?.email_invitada) {
+          await fetch('/api/email', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              tipo: 'recordatorio_invitada',
+              email: look.email_invitada,
+              nombre: nombre,
+              nombreEvento: evento.nombre,
+              linkEvento
+            })
+          })
+        }
+      }
+    }
+    setRecordatorioMensaje(`Listo. ${pendientes.length} invitadas pendientes de registrar su look.`)
+    setEnviandoRecordatorios(false)
+  }
+
   async function handleAñadirOrganizador() {
     if (!emailNuevoOrg.trim()) return
     setAñadiendoOrg(true); setOrgMensaje('')
@@ -291,8 +335,10 @@ export default function EventoDetalle() {
 
   const tabs = [t('tabLooks'), t('tabConflictos'), 'Bloqueos', t('tabAjustes')]
   if (isPremium) tabs.push(t('tabPersonalizacion'))
+  if (isPremium) tabs.push(t('tabRecordatorios'))
   if (isEnterprise) tabs.push(t('tabOrganizadores'))
   const tabPersonalizacionIdx = isPremium ? tabs.indexOf(t('tabPersonalizacion')) : -1
+  const tabRecordatoriosIdx = isPremium ? tabs.indexOf(t('tabRecordatorios')) : -1
   const tabBloqueosIdx = 2
 
   const tieneBloqueoLook = !!(evento.look_bloqueado_marca1)
@@ -744,6 +790,53 @@ export default function EventoDetalle() {
               <button onClick={handleGuardarPersonalizacion} disabled={guardandoPersonalizacion} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#C4917C',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:guardandoPersonalizacion?0.6:1}}>
                 {guardandoPersonalizacion ? t('personGuardando') : t('personGuardar')}
               </button>
+            </div>
+          )}
+
+{/* TAB RECORDATORIOS */}
+          {isPremium && tabActiva === tabRecordatoriosIdx && (
+            <div style={{maxWidth:'600px'}}>
+              <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>{t('recTitulo')}</h2>
+              <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>{t('recSubtitulo')}</p>
+              <div style={{marginBottom:'1.5rem'}}>
+                <label style={labelStyle}>{t('recListaLabel')}</label>
+                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>{t('recListaInfo')}</p>
+                <textarea
+                  value={listaInvitadas}
+                  onChange={e => setListaInvitadas(e.target.value)}
+                  placeholder={t('recListaPlaceholder')}
+                  style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box',resize:'vertical',minHeight:'140px',borderRadius:'4px'}}
+                />
+              </div>
+              <button onClick={handleRecordatorios} disabled={enviandoRecordatorios} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:enviandoRecordatorios?0.6:1,marginBottom:'1.5rem'}}>
+                {enviandoRecordatorios ? t('recEnviando') : t('recEnviar')}
+              </button>
+              {recordatorioMensaje && (
+                <p style={{fontSize:'0.78rem',fontWeight:400,color:'#4A6B42',marginBottom:'1.5rem',padding:'0.75rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px'}}>{recordatorioMensaje}</p>
+              )}
+              {pendientesRecordatorio.length > 0 && (
+                <div style={{marginBottom:'1.5rem'}}>
+                  <p style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.75rem'}}>{t('recPendientes')} ({pendientesRecordatorio.length})</p>
+                  <div style={{border:'1px solid #E0E0DC',borderRadius:'8px',overflow:'hidden'}}>
+                    {pendientesRecordatorio.map((n, i) => (
+                      <div key={i} style={{padding:'0.75rem 1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',borderBottom: i < pendientesRecordatorio.length-1 ? '1px solid #E0E0DC' : 'none',background:'#FFFFFF'}}>
+                        {n}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {recordatorioWhatsapp && (
+                <div style={{marginBottom:'1.5rem'}}>
+                  <p style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.75rem'}}>{t('recWhatsapp')}</p>
+                  <div style={{background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',padding:'1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',lineHeight:1.6,marginBottom:'0.75rem'}}>
+                    {recordatorioWhatsapp}
+                  </div>
+                  <button onClick={() => navigator.clipboard.writeText(recordatorioWhatsapp)} style={{padding:'0.6rem 1.5rem',fontSize:'0.75rem',fontWeight:500,background:'#25D366',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
+                    {t('recCopiarWhatsapp')}
+                  </button>
+                </div>
+              )}
             </div>
           )}
 

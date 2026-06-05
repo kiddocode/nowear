@@ -396,6 +396,22 @@ export async function POST(req) {
       })
     }
 
+    if (tipo === 'recordatorio_invitada') {
+      const { email, nombre, nombreEvento, linkEvento } = body
+      await resend.emails.send({
+        from: 'NOWEAR <support@nowear.es>',
+        to: email,
+        subject: `Recuerda registrar tu look · ${nombreEvento}`,
+        html: emailWrapper(`
+          ${titulo('Aún no has registrado tu look')}
+          ${subtitulo(nombreEvento)}
+          ${parrafo(`Hola <strong>${nombre}</strong>, todavía no has registrado tu look para <strong>${nombreEvento}</strong>.`)}
+          ${alerta('Registra tu look cuanto antes para asegurarte de que nadie lleve el mismo outfit que tú el día del evento.', 'warn')}
+          ${boton('Registrar mi look', linkEvento)}
+          ${parrafo('Solo te lleva un minuto. Sin app, sin registro.')}
+        `)
+      })
+    }
     return Response.json({ ok: true })
   } catch (error) {
     return Response.json({ ok: false, error: error.message }, { status: 500 })

@@ -732,7 +732,18 @@
     "colTipo": "Tipo",
     "colEstado": "Estado",
     "mejorarPlan": "Actualizar plan",
-    "planLabel": "Plan"
+    "planLabel": "Plan",
+    "tabRecordatorios": "Recordatorios",
+    "recTitulo": "Recordatorios",
+    "recSubtitulo": "Cruza tu lista de invitadas con las que ya han registrado su look y envía un recordatorio a las que faltan.",
+    "recListaLabel": "Lista de invitadas",
+    "recListaInfo": "Escribe un nombre y apellido por línea, tal como los registraron en el formulario.",
+    "recListaPlaceholder": "María García López\nAna Martínez Ruiz\nLaura Sánchez...",
+    "recEnviar": "Cruzar lista y enviar recordatorios",
+    "recEnviando": "Procesando...",
+    "recPendientes": "Invitadas que aún no han registrado su look",
+    "recWhatsapp": "Mensaje para copiar y enviar por WhatsApp",
+    "recCopiarWhatsapp": "Copiar mensaje"
   },
   "dashboard": {
     "titulo": "Mis eventos",

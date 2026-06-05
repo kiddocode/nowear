@@ -737,7 +737,18 @@
     "colTipo": "Tipo",
     "colEstado": "Estado",
     "mejorarPlan": "Atualizar plano",
-    "planLabel": "Plano"
+    "planLabel": "Plano",
+    "tabRecordatorios": "Lembretes",
+    "recTitulo": "Lembretes",
+    "recSubtitulo": "Cruza a tua lista de convidadas com as que já registaram o look e envia um lembrete às que faltam.",
+    "recListaLabel": "Lista de convidadas",
+    "recListaInfo": "Escreve um nome completo por linha, tal como foi registado no formulário.",
+    "recListaPlaceholder": "Maria Silva Santos\nAna Costa Ferreira\nLaura Rodrigues...",
+    "recEnviar": "Cruzar lista e enviar lembretes",
+    "recEnviando": "A processar...",
+    "recPendientes": "Convidadas que ainda não registaram o look",
+    "recWhatsapp": "Mensagem para copiar e enviar pelo WhatsApp",
+    "recCopiarWhatsapp": "Copiar mensagem"
   },
   "dashboard": {
     "titulo": "Os meus eventos",

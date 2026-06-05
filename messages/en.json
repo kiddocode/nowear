@@ -733,7 +733,18 @@
     "colTipo": "Type",
     "colEstado": "Status",
     "mejorarPlan": "Upgrade plan",
-    "planLabel": "Plan"
+    "planLabel": "Plan",
+    "tabRecordatorios": "Reminders",
+    "recTitulo": "Reminders",
+    "recSubtitulo": "Match your guest list with those who have already registered their look and send a reminder to those who have not.",
+    "recListaLabel": "Guest list",
+    "recListaInfo": "Write one full name per line, exactly as registered in the form.",
+    "recListaPlaceholder": "Maria Garcia Lopez\nAna Martinez Ruiz\nLaura Sanchez...",
+    "recEnviar": "Match list and send reminders",
+    "recEnviando": "Processing...",
+    "recPendientes": "Guests who have not registered their look yet",
+    "recWhatsapp": "Message to copy and send via WhatsApp",
+    "recCopiarWhatsapp": "Copy message"
   },
   "dashboard": {
     "titulo": "My events",

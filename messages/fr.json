@@ -733,7 +733,18 @@
     "colTipo": "Type",
     "colEstado": "Statut",
     "mejorarPlan": "Mettre à niveau",
-    "planLabel": "Forfait"
+    "planLabel": "Forfait",
+    "tabRecordatorios": "Rappels",
+    "recTitulo": "Rappels",
+    "recSubtitulo": "Croise ta liste d invitées avec celles qui ont déjà enregistré leur look et envoie un rappel aux autres.",
+    "recListaLabel": "Liste des invitées",
+    "recListaInfo": "Écris un nom complet par ligne, tel qu il a été saisi dans le formulaire.",
+    "recListaPlaceholder": "Marie Dupont\nSophie Martin\nCamille Bernard...",
+    "recEnviar": "Croiser la liste et envoyer les rappels",
+    "recEnviando": "Traitement...",
+    "recPendientes": "Invitées qui n ont pas encore enregistré leur look",
+    "recWhatsapp": "Message à copier et envoyer par WhatsApp",
+    "recCopiarWhatsapp": "Copier le message"
   },
   "dashboard": {
     "titulo": "Mes événements",

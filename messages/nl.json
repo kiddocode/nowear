@@ -733,7 +733,18 @@
     "colTipo": "Type",
     "colEstado": "Status",
     "mejorarPlan": "Pakket upgraden",
-    "planLabel": "Pakket"
+    "planLabel": "Pakket",
+    "tabRecordatorios": "Herinneringen",
+    "recTitulo": "Herinneringen",
+    "recSubtitulo": "Vergelijk je gastenlijst met wie al een look heeft geregistreerd en stuur een herinnering naar de rest.",
+    "recListaLabel": "Gastenlijst",
+    "recListaInfo": "Schrijf één volledige naam per regel, precies zoals ingevuld in het formulier.",
+    "recListaPlaceholder": "Maria de Vries\nAnna Jansen\nLaura Peters...",
+    "recEnviar": "Lijst vergelijken en herinneringen sturen",
+    "recEnviando": "Verwerken...",
+    "recPendientes": "Gasten die hun look nog niet hebben geregistreerd",
+    "recWhatsapp": "Bericht om te kopiëren en via WhatsApp te sturen",
+    "recCopiarWhatsapp": "Bericht kopiëren"
   },
   "dashboard": {
     "titulo": "Mijn evenementen",
