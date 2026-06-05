@@ -342,6 +342,17 @@ function handleArchivoInvitadas(e) {
     setEnviandoRecordatorios(false)
   }
 
+  function descargarPlantilla() {
+  const wb = XLSX.utils.book_new()
+  const ws = XLSX.utils.aoa_to_sheet([
+    ['Nombre', 'Apellido', 'Email'],
+    ['Ana', 'García', 'ana@email.com'],
+    ['Laura', 'Martínez', ''],
+  ])
+  XLSX.utils.book_append_sheet(wb, ws, 'Invitadas')
+  XLSX.writeFile(wb, 'plantilla-invitadas-nowear.xlsx')
+}
+
   async function handleAñadirOrganizador() {
     if (!emailNuevoOrg.trim()) return
     setAñadiendoOrg(true); setOrgMensaje('')
