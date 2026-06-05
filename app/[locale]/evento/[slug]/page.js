@@ -81,7 +81,7 @@ export default function EventoDetalle() {
   const [añadiendoOrg, setAñadiendoOrg] = useState(false)
   const [orgMensaje, setOrgMensaje] = useState('')
   const [fotoModal, setFotoModal] = useState(null)
-const [invitadasArchivo, setInvitadasArchivo] = useState([])
+  const [invitadasArchivo, setInvitadasArchivo] = useState([])
   const [nombreArchivo, setNombreArchivo] = useState('')
   const [enviandoRecordatorios, setEnviandoRecordatorios] = useState(false)
   const [recordatorioMensaje, setRecordatorioMensaje] = useState('')
@@ -118,6 +118,12 @@ const [invitadasArchivo, setInvitadasArchivo] = useState([])
       setEditMensajeInvitada(ev.mensaje_invitada || '')
       setEditFotoEvento(ev.foto_evento_url || '')
       if (ev.foto_evento_url) setFotoEventoPreview(ev.foto_evento_url)
+      // Cargar lista de invitadas guardada
+      if (ev.lista_invitadas && Array.isArray(ev.lista_invitadas)) {
+        setInvitadasArchivo(ev.lista_invitadas)
+        setNombreArchivo('Lista guardada (' + ev.lista_invitadas.length + ' invitadas)')
+        setRecordatorioMensaje(t('recArchivoCargado').replace('{n}', ev.lista_invitadas.length))
+      }
       const tieneL = !!(ev.look_bloqueado_marca1)
       setTieneLookBloqueado(tieneL)
       setEditLookBloqueadoColor(ev.look_bloqueado_color || '')
@@ -263,7 +269,7 @@ const [invitadasArchivo, setInvitadasArchivo] = useState([])
     setTimeout(() => setPersonalizacionMensaje(''), 4000)
   }
 
-function handleArchivoInvitadas(e) {
+  function handleArchivoInvitadas(e) {
     setErrorArchivo('')
     setRecordatorioMensaje('')
     setPendientesConEmail([])
@@ -273,7 +279,7 @@ function handleArchivoInvitadas(e) {
     if (!file) return
     setNombreArchivo(file.name)
     const reader = new FileReader()
-    reader.onload = (evt) => {
+    reader.onload = async (evt) => {
       try {
         const wb = XLSX.read(evt.target.result, { type: 'binary' })
         const sheet = wb.Sheets[wb.SheetNames[0]]
@@ -294,6 +300,9 @@ function handleArchivoInvitadas(e) {
         }).filter(i => i.nombreCompleto)
         setInvitadasArchivo(invitadas)
         setRecordatorioMensaje(t('recArchivoCargado').replace('{n}', invitadas.length))
+        // Guardar lista en Supabase
+        await supabase.from('eventos').update({ lista_invitadas: invitadas }).eq('id', evento.id)
+        setNombreArchivo(file.name + ' ✓ guardado')
       } catch (err) {
         setErrorArchivo(t('recErrorLectura'))
         setInvitadasArchivo([])
@@ -343,15 +352,15 @@ function handleArchivoInvitadas(e) {
   }
 
   function descargarPlantilla() {
-  const wb = XLSX.utils.book_new()
-  const ws = XLSX.utils.aoa_to_sheet([
-    ['Nombre', 'Apellido', 'Email'],
-    ['Ana', 'García', 'ana@email.com'],
-    ['Laura', 'Martínez', ''],
-  ])
-  XLSX.utils.book_append_sheet(wb, ws, 'Invitadas')
-  XLSX.writeFile(wb, 'plantilla-invitadas-nowear.xlsx')
-}
+    const wb = XLSX.utils.book_new()
+    const ws = XLSX.utils.aoa_to_sheet([
+      ['Nombre', 'Apellido', 'Email'],
+      ['Ana', 'García', 'ana@email.com'],
+      ['Laura', 'Martínez', ''],
+    ])
+    XLSX.utils.book_append_sheet(wb, ws, 'Invitadas')
+    XLSX.writeFile(wb, 'plantilla-invitadas-nowear.xlsx')
+  }
 
   async function handleAñadirOrganizador() {
     if (!emailNuevoOrg.trim()) return
@@ -403,8 +412,8 @@ function handleArchivoInvitadas(e) {
       <style>{`
         .evento-premium-link-mobile { display: none; }
         .evento-tab-personalizacion { display: block; }
+        /* En móvil: oculta la tab Personalización de las tabs y muestra el botón en el hero */
         @media (max-width: 1024px) {
-          .evento-premium-link-mobile { display: block !important; }
           .evento-tab-personalizacion { display: none !important; }
         }
         .bloqueos-prenda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
@@ -414,6 +423,7 @@ function handleArchivoInvitadas(e) {
           .evento-contenido { padding: 1.5rem !important; }
           .evento-hero { padding: 1.5rem !important; }
           .evento-tabs { padding: 0 1.5rem !important; }
+          .evento-hero-boxes { flex-direction: column !important; }
         }
       `}</style>
 
@@ -433,7 +443,9 @@ function handleArchivoInvitadas(e) {
           <button onClick={() => router.push(prefijo + '/dashboard')} style={{display:'inline-flex',alignItems:'center',gap:'0.5rem',fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',marginBottom:'2rem',padding:0}}>
             {t('misEventos')}
           </button>
-          <div className="evento-hero-inner" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>
+
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>
+            {/* Info evento */}
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>
                 {evento.tipo} · <span style={{color: PLAN_LABEL_COLORES[planEvento]}}>{t('planLabel')} {evento.plan}</span>
@@ -450,25 +462,76 @@ function handleArchivoInvitadas(e) {
                 </button>
               )}
             </div>
-            <div className="evento-hero-link" style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'260px',borderRadius:'4px',flexShrink:0}}>
-              <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>{t('linkInvitadas')}</p>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
-                <span style={{fontSize:'0.78rem',fontWeight:500,color:'#0A0A0A',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>nowear.es/{slug}</span>
-                <button onClick={copiarLink} style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:copiado?'#4A6B42':'#F07987',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',flexShrink:0}}>
-                  {copiado ? t('copiado') : t('copiar')}
-                </button>
-              </div>
-              {isPremium && (
-                <div className="evento-premium-link-mobile" style={{marginTop:'0.75rem',paddingTop:'0.75rem',borderTop:'1px solid #F0D8CC'}}>
-                  <button onClick={() => setTabActiva(tabPersonalizacionIdx)}
-                    style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0}}>
-                    <span style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#C4917C'}}>✨ {t('tabPersonalizacion')}</span>
-                    <span style={{fontSize:'0.75rem',color:'#C4917C'}}>›</span>
+
+            {/* Boxes derechos: link + recordatorios en desktop */}
+            <div className="evento-hero-boxes" style={{display:'flex',flexDirection:'row',gap:'1rem',alignItems:'stretch',flexShrink:0}}>
+
+              {/* Box link */}
+              <div style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'220px',borderRadius:'4px',display:'flex',flexDirection:'column',justifyContent:'center'}}>
+                <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>{t('linkInvitadas')}</p>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
+                  <span style={{fontSize:'0.78rem',fontWeight:500,color:'#0A0A0A',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>nowear.es/{slug}</span>
+                  <button onClick={copiarLink} style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.1em',textTransform:'uppercase',color:copiado?'#4A6B42':'#F07987',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',flexShrink:0}}>
+                    {copiado ? t('copiado') : t('copiar')}
                   </button>
                 </div>
+              </div>
+
+              {/* Box recordatorios: solo Premium en desktop */}
+              {isPremium && (
+                <button
+                  onClick={() => setTabActiva(tabRecordatoriosIdx)}
+                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left',transition:'background 0.15s'}}>
+                  <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.4rem'}}>Recordatorios</p>
+                  <p style={{fontSize:'0.78rem',fontWeight:500,color:'#FFFFFF',margin:0}}>
+                    {invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio'}
+                  </p>
+                  <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.5)',margin:'0.2rem 0 0 0'}}>
+                    {invitadasArchivo.length > 0 ? 'Haz clic para cruzar y enviar' : 'Sube tu lista de invitadas'}
+                  </p>
+                </button>
+              )}
+
+              {/* Box personalización: solo Premium en móvil (en desktop va en tab) */}
+              {isPremium && (
+                <button
+                  onClick={() => setTabActiva(tabPersonalizacionIdx)}
+                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left',transition:'background 0.15s'}}
+                  className="evento-tab-personalizacion">
+                  <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.4rem'}}>✨ {t('tabPersonalizacion')}</p>
+                  <p style={{fontSize:'0.78rem',fontWeight:500,color:'#FFFFFF',margin:0}}>Foto e imagen</p>
+                  <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.5)',margin:'0.2rem 0 0 0'}}>Personaliza el link de tus invitadas</p>
+                </button>
               )}
             </div>
           </div>
+
+          {/* Botones Premium visibles en móvil bajo la info del evento */}
+          {isPremium && (
+            <div style={{marginTop:'1.5rem',display:'flex',flexDirection:'column',gap:'0.75rem'}} className="evento-mobile-premium-btns">
+              <style>{`.evento-mobile-premium-btns { display: none; } @media (max-width: 1024px) { .evento-mobile-premium-btns { display: flex !important; } }`}</style>
+              <button
+                onClick={() => setTabActiva(tabPersonalizacionIdx)}
+                style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'rgba(196,145,124,0.15)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'8px',padding:'1rem 1.25rem',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',gap:'0.15rem'}}>
+                  <span style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#C4917C'}}>✨ {t('tabPersonalizacion')}</span>
+                  <span style={{fontSize:'0.75rem',fontWeight:400,color:'#FFFFFF'}}>Personaliza el link de tus invitadas</span>
+                </div>
+                <span style={{fontSize:'1rem',color:'#C4917C',flexShrink:0}}>›</span>
+              </button>
+              <button
+                onClick={() => setTabActiva(tabRecordatoriosIdx)}
+                style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'rgba(196,145,124,0.15)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'8px',padding:'1rem 1.25rem',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
+                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',gap:'0.15rem'}}>
+                  <span style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#C4917C'}}>Recordatorios</span>
+                  <span style={{fontSize:'0.75rem',fontWeight:400,color:'#FFFFFF'}}>
+                    {invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio a las que faltan'}
+                  </span>
+                </div>
+                <span style={{fontSize:'1rem',color:'#C4917C',flexShrink:0}}>›</span>
+              </button>
+            </div>
+          )}
         </div>
 
         {/* TABS */}
@@ -561,34 +624,30 @@ function handleArchivoInvitadas(e) {
                           </td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:700,color:'#0A0A0A'}}>{row.nombre_invitada}</td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>
-  <div>{row.marca||'—'}</div>
-  {row.marca2 && row.marca2 !== row.marca && (
-    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.marca2}</div>
-  )}
-</td>
-<td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>
-  <div>{row.modelo||'—'}</div>
-  {row.modelo2 && (
-    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.modelo2}</div>
-  )}
-  {row.descatalogada && (
-    <div style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',marginTop:'0.2rem',letterSpacing:'0.05em'}}>ANTIGUA</div>
-  )}
-</td>
-<td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>
-  <div>{row.tipo||'—'}</div>
-  {row.tipo2 && (
-    <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.tipo2}</div>
-  )}
-</td>
+                            <div>{row.marca||'—'}</div>
+                            {row.marca2 && row.marca2 !== row.marca && (
+                              <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.marca2}</div>
+                            )}
+                          </td>
+                          <td style={{padding:'0.9rem 1rem',fontSize:'0.82rem',fontWeight:400,color:'#0A0A0A'}}>
+                            <div>{row.modelo||'—'}</div>
+                            {row.modelo2 && (
+                              <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.modelo2}</div>
+                            )}
+                            {row.descatalogada && (
+                              <div style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',marginTop:'0.2rem',letterSpacing:'0.05em'}}>ANTIGUA</div>
+                            )}
+                          </td>
+                          <td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>
+                            <div>{row.tipo||'—'}</div>
+                            {row.tipo2 && (
+                              <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.tipo2}</div>
+                            )}
+                          </td>
                           <td style={{padding:'0.9rem 1rem'}}>
                             {row.foto_url ? (
-                              <img
-                                src={row.foto_url}
-                                alt="Look"
-                                onClick={() => setFotoModal(row.foto_url)}
-                                style={{width:'36px',height:'36px',objectFit:'cover',borderRadius:'4px',cursor:'pointer',border:'1px solid #E0E0DC'}}
-                              />
+                              <img src={row.foto_url} alt="Look" onClick={() => setFotoModal(row.foto_url)}
+                                style={{width:'36px',height:'36px',objectFit:'cover',borderRadius:'4px',cursor:'pointer',border:'1px solid #E0E0DC'}}/>
                             ) : (
                               <span style={{fontSize:'0.72rem',color:'#BEBEBA'}}>—</span>
                             )}
@@ -615,7 +674,7 @@ function handleArchivoInvitadas(e) {
               </div>
             ) : (
               <div style={{border:'1px solid #E0E0DC',borderRadius:'8px',overflow:'hidden'}}>
-                <div className="evento-conflictos-header" style={{background:'#FFF0F1',padding:'1rem 1.5rem',borderBottom:'1px solid #F07987',display:'flex',alignItems:'center',gap:'0.75rem'}}>
+                <div style={{background:'#FFF0F1',padding:'1rem 1.5rem',borderBottom:'1px solid #F07987',display:'flex',alignItems:'center',gap:'0.75rem'}}>
                   <span style={{fontSize:'0.75rem',fontWeight:700,color:'#F07987'}}>{conflictos.length} {t('tabConflictos').toLowerCase()}</span>
                 </div>
                 <div className="evento-tabla-wrap" style={{overflowX:'auto'}}>
@@ -848,7 +907,7 @@ function handleArchivoInvitadas(e) {
             </div>
           )}
 
-{/* TAB RECORDATORIOS */}
+          {/* TAB RECORDATORIOS */}
           {isPremium && tabActiva === tabRecordatoriosIdx && (
             <div style={{maxWidth:'600px'}}>
               <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>{t('recTitulo')}</h2>
@@ -865,14 +924,20 @@ function handleArchivoInvitadas(e) {
                   <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>{t('recArchivoFormatos')}</div>
                 </div>
                 <input id="archivo-invitadas-input" type="file" accept=".xlsx,.xls,.csv" style={{display:'none'}} onChange={handleArchivoInvitadas}/>
-                <p style={{fontSize:'0.7rem',fontWeight:300,color:'#888884',marginTop:'0.5rem',lineHeight:1.6}}>{t('recPlantillaInfo')} <button onClick={descargarPlantilla} style={{fontSize:'0.7rem',fontWeight:600,color:'#C4917C',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0,textDecoration:'underline'}}>{t('recPlantillaLink')}</button></p>
+                <p style={{fontSize:'0.7rem',fontWeight:300,color:'#888884',marginTop:'0.5rem',lineHeight:1.6}}>
+                  {t('recPlantillaInfo')}{' '}
+                  <button onClick={descargarPlantilla} style={{fontSize:'0.7rem',fontWeight:600,color:'#C4917C',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0,textDecoration:'underline'}}>
+                    {t('recPlantillaLink')}
+                  </button>
+                </p>
               </div>
 
               {errorArchivo && (
                 <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',marginBottom:'1.5rem',padding:'0.75rem',background:'#FFF0F1',border:'1px solid #F07987',borderRadius:'4px'}}>{errorArchivo}</p>
               )}
 
-              <button onClick={handleRecordatorios} disabled={enviandoRecordatorios || invitadasArchivo.length === 0} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:invitadasArchivo.length===0?'not-allowed':'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:(enviandoRecordatorios||invitadasArchivo.length===0)?0.5:1,marginBottom:'1.5rem'}}>
+              <button onClick={handleRecordatorios} disabled={enviandoRecordatorios || invitadasArchivo.length === 0}
+                style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:invitadasArchivo.length===0?'not-allowed':'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:(enviandoRecordatorios||invitadasArchivo.length===0)?0.5:1,marginBottom:'1.5rem'}}>
                 {enviandoRecordatorios ? t('recEnviando') : t('recEnviar')}
               </button>
 
@@ -911,7 +976,8 @@ function handleArchivoInvitadas(e) {
                       <div style={{background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',padding:'1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',lineHeight:1.6,marginBottom:'0.75rem'}}>
                         {recordatorioWhatsapp}
                       </div>
-                      <button onClick={() => navigator.clipboard.writeText(recordatorioWhatsapp)} style={{padding:'0.6rem 1.5rem',fontSize:'0.75rem',fontWeight:500,background:'#25D366',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
+                      <button onClick={() => navigator.clipboard.writeText(recordatorioWhatsapp)}
+                        style={{padding:'0.6rem 1.5rem',fontSize:'0.75rem',fontWeight:500,background:'#25D366',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
                         {t('recCopiarWhatsapp')}
                       </button>
                     </>
@@ -928,7 +994,8 @@ function handleArchivoInvitadas(e) {
               <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>{t('orgSubtitulo')}</p>
               <div className="evento-org-row" style={{display:'flex',gap:'0.75rem',marginBottom:'1.5rem'}}>
                 <input type="email" placeholder={t('orgPlaceholder')} value={emailNuevoOrg} onChange={e => setEmailNuevoOrg(e.target.value)} onKeyDown={e => e.key === 'Enter' && handleAñadirOrganizador()} style={{...inputStyle, flex:1}}/>
-                <button onClick={handleAñadirOrganizador} disabled={añadiendoOrg} style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:añadiendoOrg?0.6:1,borderRadius:'4px'}}>
+                <button onClick={handleAñadirOrganizador} disabled={añadiendoOrg}
+                  style={{padding:'0.9rem 1.5rem',fontSize:'0.78rem',fontWeight:600,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',opacity:añadiendoOrg?0.6:1,borderRadius:'4px'}}>
                   {añadiendoOrg ? t('orgAnandiendo') : t('orgAnadir')}
                 </button>
               </div>
@@ -942,7 +1009,8 @@ function handleArchivoInvitadas(e) {
                   {organizadores.map((org, i) => (
                     <div key={i} style={{display:'flex',justifyContent:'space-between',alignItems:'center',padding:'1rem 1.25rem',border:'1px solid #E0E0DC',borderRadius:'8px',background:'#FFFFFF'}}>
                       <div style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A'}}>{org.profiles?.nombre || 'Sin nombre'}</div>
-                      <button onClick={() => handleEliminarOrganizador(org.user_id)} style={{fontSize:'0.65rem',fontWeight:600,color:'#F07987',background:'none',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.35rem 0.75rem',borderRadius:'4px'}}>
+                      <button onClick={() => handleEliminarOrganizador(org.user_id)}
+                        style={{fontSize:'0.65rem',fontWeight:600,color:'#F07987',background:'none',border:'1px solid #F07987',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:'0.35rem 0.75rem',borderRadius:'4px'}}>
                         {t('orgEliminar')}
                       </button>
                     </div>
