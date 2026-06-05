@@ -501,7 +501,7 @@ const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes
                   {!isPremium && '🔒 '}{t('tabRecordatorios')}
                 </p>
                 <p style={{fontSize:'0.78rem',fontWeight:500,color:isPremium?'#FFFFFF':'rgba(255,255,255,0.4)',margin:0}}>
-                  {isPremium ? (invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio') : 'Enviar recordatorio'}
+                  {isPremium ? (invitadasArchivo.length > 0 ? t('recInvitadasCargadas').replace('{n}', invitadasArchivo.length) : t('recTitulo')) : t('recTitulo')}
                 </p>
                 <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.35)',margin:'0.2rem 0 0 0'}}>
                   {isPremium ? (invitadasArchivo.length > 0 ? t('recHazClic') : t('recSubeLista')) : 'desde Premium'}
