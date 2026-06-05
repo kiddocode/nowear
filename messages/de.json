@@ -760,7 +760,15 @@
     "recErrorVacio": "Die Datei ist leer oder hat nur eine Kopfzeile.",
     "recErrorColumnas": "Wir konnten keine Namensspalte finden. Prüfe, ob deine Datei eine Spalte namens Name hat.",
     "recErrorLectura": "Wir konnten die Datei nicht lesen. Stelle sicher, dass es eine gültige Excel- oder CSV-Datei ist.",
-    "recErrorSinArchivo": "Lade zuerst eine Datei mit deiner Gästeliste hoch."
+    "recErrorSinArchivo": "Lade zuerst eine Datei mit deiner Gästeliste hoch.",
+    "tabBloqueos": "Blockierungen",
+    "bloqueosSubtitulo": "Farben und Looks, die keine Gaestin registrieren kann.",
+    "recInvitadasCargadas": "{n} Gaestinnen geladen",
+    "recHazClic": "Klicken zum Abgleichen und Senden",
+    "recSubeLista": "Gaesteliste hochladen",
+    "recListaGuardada": "Gespeicherte Liste ({n} Gaestinnen)",
+    "recFotoImagen": "Foto und Bild",
+    "recPersonaliza": "Gastelink personalisieren"
   },
   "dashboard": {
     "titulo": "Meine Events",

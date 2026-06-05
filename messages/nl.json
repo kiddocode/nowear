@@ -760,7 +760,15 @@
     "recErrorVacio": "Het bestand is leeg of heeft alleen een koptekst.",
     "recErrorColumnas": "We konden geen naamkolom vinden. Controleer of je bestand een kolom genaamd Naam heeft.",
     "recErrorLectura": "We konden het bestand niet lezen. Zorg dat het een geldig Excel- of CSV-bestand is.",
-    "recErrorSinArchivo": "Upload eerst een bestand met je gastenlijst."
+    "recErrorSinArchivo": "Upload eerst een bestand met je gastenlijst.",
+    "tabBloqueos": "Blokkeringen",
+    "bloqueosSubtitulo": "Kleuren en looks die geen gaste kan registreren.",
+    "recInvitadasCargadas": "{n} gasten geladen",
+    "recHazClic": "Klik om te vergelijken en te verzenden",
+    "recSubeLista": "Upload uw gastenlijst",
+    "recListaGuardada": "Opgeslagen lijst ({n} gasten)",
+    "recFotoImagen": "Foto en afbeelding",
+    "recPersonaliza": "Personaliseer de link van uw gasten"
   },
   "dashboard": {
     "titulo": "Mijn evenementen",

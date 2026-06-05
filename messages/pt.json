@@ -764,7 +764,15 @@
     "recErrorVacio": "O ficheiro está vazio ou só tem cabeçalho.",
     "recErrorColumnas": "Não encontrámos uma coluna de nome. Verifica que o teu ficheiro tem uma coluna chamada Nome.",
     "recErrorLectura": "Não conseguimos ler o ficheiro. Certifica-te de que é um Excel ou CSV válido.",
-    "recErrorSinArchivo": "Primeiro carrega um ficheiro com a tua lista de convidadas."
+    "recErrorSinArchivo": "Primeiro carrega um ficheiro com a tua lista de convidadas.",
+    "tabBloqueos": "Bloqueios",
+    "bloqueosSubtitulo": "Cores e looks que nenhuma convidada poderá registar.",
+    "recInvitadasCargadas": "{n} convidadas carregadas",
+    "recHazClic": "Clique para cruzar e enviar",
+    "recSubeLista": "Carrega a tua lista de convidadas",
+    "recListaGuardada": "Lista guardada ({n} convidadas)",
+    "recFotoImagen": "Foto e imagem",
+    "recPersonaliza": "Personaliza o link das tuas convidadas"
   },
   "dashboard": {
     "titulo": "Os meus eventos",

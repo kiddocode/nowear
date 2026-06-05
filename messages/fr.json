@@ -760,7 +760,15 @@
     "recErrorVacio": "Le fichier est vide ou ne contient que l en-tête.",
     "recErrorColumnas": "Nous n avons pas trouvé de colonne nom. Vérifie que ton fichier a une colonne Nom.",
     "recErrorLectura": "Impossible de lire le fichier. Assure-toi que c est un Excel ou CSV valide.",
-    "recErrorSinArchivo": "Téléverse d abord un fichier avec ta liste d invitées."
+    "recErrorSinArchivo": "Téléverse d abord un fichier avec ta liste d invitées.",
+    "tabBloqueos": "Blocages",
+    "bloqueosSubtitulo": "Couleurs et looks qu'aucune invitée ne pourra enregistrer.",
+    "recInvitadasCargadas": "{n} invitées chargées",
+    "recHazClic": "Cliquez pour croiser et envoyer",
+    "recSubeLista": "Téléchargez votre liste d'invitées",
+    "recListaGuardada": "Liste sauvegardée ({n} invitées)",
+    "recFotoImagen": "Photo et image",
+    "recPersonaliza": "Personnalisez le lien de vos invitées"
   },
   "dashboard": {
     "titulo": "Mes événements",

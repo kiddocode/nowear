@@ -760,7 +760,15 @@
     "recErrorVacio": "The file is empty or only has a header.",
     "recErrorColumnas": "We could not find a name column. Check that your file has a column called Name.",
     "recErrorLectura": "We could not read the file. Make sure it is a valid Excel or CSV.",
-    "recErrorSinArchivo": "Upload a file with your guest list first."
+    "recErrorSinArchivo": "Upload a file with your guest list first.",
+    "tabBloqueos": "Blocks",
+    "bloqueosSubtitulo": "Colors and looks that no guest will be able to register.",
+    "recInvitadasCargadas": "{n} guests loaded",
+    "recHazClic": "Click to match and send",
+    "recSubeLista": "Upload your guest list",
+    "recListaGuardada": "Saved list ({n} guests)",
+    "recFotoImagen": "Photo and image",
+    "recPersonaliza": "Customize your guest link"
   },
   "dashboard": {
     "titulo": "My events",
