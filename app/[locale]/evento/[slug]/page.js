@@ -4,6 +4,7 @@ import { useParams, useRouter, usePathname } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import { supabase } from '@/lib/supabase'
 import ModalPlanes from '@/app/components/ModalPlanes'
+import * as XLSX from 'xlsx'
 
 const PLAN_NIVEL = { 'basico': 1, 'estandar': 2, 'premium': 3, 'enterprise': 4 }
 
@@ -80,11 +81,14 @@ export default function EventoDetalle() {
   const [añadiendoOrg, setAñadiendoOrg] = useState(false)
   const [orgMensaje, setOrgMensaje] = useState('')
   const [fotoModal, setFotoModal] = useState(null)
-const [listaInvitadas, setListaInvitadas] = useState('')
+const [invitadasArchivo, setInvitadasArchivo] = useState([])
+  const [nombreArchivo, setNombreArchivo] = useState('')
   const [enviandoRecordatorios, setEnviandoRecordatorios] = useState(false)
   const [recordatorioMensaje, setRecordatorioMensaje] = useState('')
-  const [pendientesRecordatorio, setPendientesRecordatorio] = useState([])
+  const [pendientesConEmail, setPendientesConEmail] = useState([])
+  const [pendientesSinEmail, setPendientesSinEmail] = useState([])
   const [recordatorioWhatsapp, setRecordatorioWhatsapp] = useState('')
+  const [errorArchivo, setErrorArchivo] = useState('')
 
   const [editLookBloqueadoColor, setEditLookBloqueadoColor] = useState('')
   const [editLookBloqueadoMarca1, setEditLookBloqueadoMarca1] = useState('')
@@ -259,42 +263,82 @@ const [listaInvitadas, setListaInvitadas] = useState('')
     setTimeout(() => setPersonalizacionMensaje(''), 4000)
   }
 
-  async function handleRecordatorios() {
-    setEnviandoRecordatorios(true)
+function handleArchivoInvitadas(e) {
+    setErrorArchivo('')
     setRecordatorioMensaje('')
-    setPendientesRecordatorio([])
+    setPendientesConEmail([])
+    setPendientesSinEmail([])
     setRecordatorioWhatsapp('')
-    const lineas = listaInvitadas.split('\n').map(l => l.trim()).filter(Boolean)
-    if (lineas.length === 0) { setRecordatorioMensaje('Añade al menos un nombre.'); setEnviandoRecordatorios(false); return }
-    const registradas = looks.map(l => (l.nombre_invitada || '').toLowerCase().trim())
-    const pendientes = lineas.filter(n => !registradas.includes(n.toLowerCase().trim()))
-    setPendientesRecordatorio(pendientes)
-    const linkEvento = `${process.env.NEXT_PUBLIC_URL}/${locale}/${evento.slug}`
-    const textoWA = `Hola! Te escribo porque aún no has registrado tu look para ${evento.nombre}. Hazlo aquí para asegurarte de que nadie lleve el mismo outfit que tú: ${linkEvento}`
-    setRecordatorioWhatsapp(textoWA)
-    const conEmail = pendientes.filter(n => {
-      const look = looks.find(l => (l.nombre_invitada || '').toLowerCase().trim() === n.toLowerCase().trim())
-      return look?.email_invitada
-    })
-    if (conEmail.length > 0) {
-      for (const nombre of conEmail) {
-        const look = looks.find(l => (l.nombre_invitada || '').toLowerCase().trim() === nombre.toLowerCase().trim())
-        if (look?.email_invitada) {
-          await fetch('/api/email', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              tipo: 'recordatorio_invitada',
-              email: look.email_invitada,
-              nombre: nombre,
-              nombreEvento: evento.nombre,
-              linkEvento
-            })
-          })
-        }
+    const file = e.target.files[0]
+    if (!file) return
+    setNombreArchivo(file.name)
+    const reader = new FileReader()
+    reader.onload = (evt) => {
+      try {
+        const wb = XLSX.read(evt.target.result, { type: 'binary' })
+        const sheet = wb.Sheets[wb.SheetNames[0]]
+        const filas = XLSX.utils.sheet_to_json(sheet, { header: 1, defval: '' })
+        if (filas.length < 2) { setErrorArchivo(t('recErrorVacio')); setInvitadasArchivo([]); return }
+        const norm = s => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
+        const cabecera = filas[0].map(norm)
+        const idxNombre = cabecera.findIndex(c => c.includes('nombre') || c.includes('name'))
+        const idxApellido = cabecera.findIndex(c => c.includes('apellido') || c.includes('surname'))
+        const idxEmail = cabecera.findIndex(c => c.includes('email') || c.includes('correo') || c.includes('mail'))
+        if (idxNombre === -1) { setErrorArchivo(t('recErrorColumnas')); setInvitadasArchivo([]); return }
+        const invitadas = filas.slice(1).map(fila => {
+          const nombre = (fila[idxNombre] || '').toString().trim()
+          const apellido = idxApellido !== -1 ? (fila[idxApellido] || '').toString().trim() : ''
+          const email = idxEmail !== -1 ? (fila[idxEmail] || '').toString().trim().toLowerCase() : ''
+          const nombreCompleto = (nombre + ' ' + apellido).trim()
+          return { nombreCompleto, email }
+        }).filter(i => i.nombreCompleto)
+        setInvitadasArchivo(invitadas)
+        setRecordatorioMensaje(t('recArchivoCargado').replace('{n}', invitadas.length))
+      } catch (err) {
+        setErrorArchivo(t('recErrorLectura'))
+        setInvitadasArchivo([])
       }
     }
-    setRecordatorioMensaje(`Listo. ${pendientes.length} invitadas pendientes de registrar su look.`)
+    reader.readAsBinaryString(file)
+  }
+
+  async function handleRecordatorios() {
+    if (invitadasArchivo.length === 0) { setErrorArchivo(t('recErrorSinArchivo')); return }
+    setEnviandoRecordatorios(true)
+    setRecordatorioMensaje('')
+    setPendientesConEmail([])
+    setPendientesSinEmail([])
+    setRecordatorioWhatsapp('')
+    const norm = s => (s || '').toString().toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim()
+    const emailsRegistrados = looks.map(l => (l.email_invitada || '').toLowerCase().trim()).filter(Boolean)
+    const nombresRegistrados = looks.map(l => norm(l.nombre_invitada)).filter(Boolean)
+    const pendientes = invitadasArchivo.filter(inv => {
+      if (inv.email && emailsRegistrados.includes(inv.email)) return false
+      if (norm(inv.nombreCompleto) && nombresRegistrados.includes(norm(inv.nombreCompleto))) return false
+      return true
+    })
+    const conEmail = pendientes.filter(p => p.email)
+    const sinEmail = pendientes.filter(p => !p.email)
+    setPendientesConEmail(conEmail)
+    setPendientesSinEmail(sinEmail)
+    const linkEvento = `${process.env.NEXT_PUBLIC_URL || 'https://nowear.es'}/${locale === 'es' ? '' : locale + '/'}${evento.slug}`.replace('nowear.es//', 'nowear.es/')
+    if (sinEmail.length > 0) {
+      setRecordatorioWhatsapp(`Hola! Te escribo porque aún no has registrado tu look para ${evento.nombre}. Hazlo aquí para asegurarte de que nadie lleve el mismo outfit que tú: ${linkEvento}`)
+    }
+    for (const inv of conEmail) {
+      await fetch('/api/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo: 'recordatorio_invitada',
+          email: inv.email,
+          nombre: inv.nombreCompleto,
+          nombreEvento: evento.nombre,
+          linkEvento
+        })
+      })
+    }
+    setRecordatorioMensaje(t('recResultado').replace('{total}', pendientes.length).replace('{email}', conEmail.length).replace('{wa}', sinEmail.length))
     setEnviandoRecordatorios(false)
   }
 
