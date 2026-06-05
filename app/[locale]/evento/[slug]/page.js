@@ -487,7 +487,7 @@ const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes
                   <button onClick={() => isPremium ? setTabActiva(tabRecordatoriosIdx) : setModalPlanes(true)}
                     style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:isPremium?'rgba(196,145,124,0.1)':'rgba(0,0,0,0.04)',border:isPremium?'1px solid rgba(196,145,124,0.4)':'1px solid #E0E0DC',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
                     <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:isPremium?'#C4917C':'#BEBEBA'}}>
-                      {isPremium ? 'Recordatorios' : '🔒 Recordatorios'}
+                      {isPremium ? t('tabRecordatorios') : `🔒 ${t('tabRecordatorios')}`}
                     </span>
                   </button>
                 </div>
@@ -498,7 +498,7 @@ const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes
                 onClick={() => isPremium ? setTabActiva(tabRecordatoriosIdx) : setModalPlanes(true)}
                 style={{background:isPremium?'rgba(196,145,124,0.12)':'rgba(255,255,255,0.04)',border:isPremium?'1px solid rgba(196,145,124,0.35)':'1px solid rgba(255,255,255,0.1)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
                 <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:isPremium?'#C4917C':'#888884',marginBottom:'0.4rem'}}>
-                  {!isPremium && '🔒 '}Recordatorios
+                  {!isPremium && '🔒 '}{t('tabRecordatorios')}
                 </p>
                 <p style={{fontSize:'0.78rem',fontWeight:500,color:isPremium?'#FFFFFF':'rgba(255,255,255,0.4)',margin:0}}>
                   {isPremium ? (invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio') : 'Enviar recordatorio'}
