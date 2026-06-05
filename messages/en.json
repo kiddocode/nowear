@@ -171,8 +171,12 @@
         "a": "NOWEAR works for any event where outfits matter: weddings, communions, christenings, engagements, graduations, baby showers, confirmations, birthdays, galas, award ceremonies, red carpets, premieres, corporate events with dress code, company dinners, institutional protocol events, fashion showrooms, VIP client events, private fashion shows, dress code restaurants and much more."
       },
       {
+        "q": "What if a guest decides to wear a look that is already registered?",
+        "a": "When there is a conflict, NOWEAR notifies all three parties: the second guest sees the block on screen, the first registered guest receives an email informing her that someone tried to register her same look, and the organiser is also notified. If the second guest still decides to wear that look, she does so knowing that both the organiser and the first guest already know what happened. If she shows up at the event in that same look, it will not be a surprise to anyone, and it will be clear it was a conscious decision. The responsibility is entirely hers.\n\nTo minimise this as much as possible, the Premium plan includes automatic reminders: upload your guest list in Excel or CSV, NOWEAR detects who is missing and acts before the day of the event."
+      },
+      {
         "q": "How do I make sure all my guests register their look?",
-        "a": "The system only detects conflicts between registered looks, so it is important that everyone participates. To help you, the Premium plan includes automatic reminders: upload your guest list in Excel or CSV and NOWEAR detects who is missing, sends an automatic email to those who have an email in your list and generates a ready-to-copy WhatsApp message for the rest. No chasing anyone.\n\nThat said, the final decision always rests with each person. Registering your look is a matter of consideration towards the person organising the event, who has invested time and money to avoid those awkward moments. If someone sends you the NOWEAR link it is because they care about their day going well, and about you arriving confident too."
+        "a": "The system only detects conflicts between registered looks, so it is important that everyone participates. To help you, the Premium plan includes automatic reminders: upload your guest list in Excel or CSV, NOWEAR detects who is missing, sends an automatic email to those who have an email in your list and generates a ready-to-copy WhatsApp message for the rest. No chasing anyone.\n\nThat said, the final decision always rests with each person. Registering your look is a matter of consideration towards the person organising the event, who has invested time and money to avoid those awkward moments."
       },
       {
         "q": "How do I prevent two guests from wearing the same dress at my wedding or event?",
@@ -213,10 +217,6 @@
       {
         "q": "How do I share the NOWEAR link with my guests?",
         "a": "Once you create your event on nowear.es, you get a unique link. Share it via WhatsApp, your wedding website, email or digital invitations. Guests access directly without signing up or downloading anything."
-      },
-      {
-        "q": "What if a guest decides to wear a look that is already registered?",
-        "a": "NOWEAR alerts the second guest the moment she tries to register an already-taken look. If she still decides to wear it anyway, the responsibility is entirely hers. The organizer has paid for this service precisely to avoid conflicts and has done everything possible to coordinate outfits. Respecting the registration is a matter of consideration for the person who organized the event."
       },
       {
         "q": "Can I register a look with vintage or discontinued items?",

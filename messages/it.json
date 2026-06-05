@@ -170,8 +170,12 @@
         "a": "NOWEAR funziona per qualsiasi evento dove l'outfit conta: matrimoni, comunioni, battesimi, fidanzamenti, lauree, baby shower, cresime, compleanni, gala, cerimonie di premiazione, eventi aziendali con dress code, cene aziendali, eventi di protocollo istituzionale, showroom di moda, eventi VIP e molto altro."
       },
       {
+        "q": "Cosa succede se un'ospite decide di indossare un look già registrato?",
+        "a": "Quando c'è un conflitto, NOWEAR avvisa tutte e tre le parti: la seconda invitata vede il blocco sullo schermo, la prima registrata riceve un'email e l'organizzatrice viene anch'essa notificata. Se la seconda decide comunque di indossare quel look, lo fa sapendo che tutte sono già al corrente. La responsabilità è interamente sua.\n\nPer ridurre questa eventualità, il piano Premium include promemoria automatici: carica la tua lista in Excel o CSV, NOWEAR rileva chi manca e agisce prima del giorno dell'evento."
+      },
+      {
         "q": "Come mi assicuro che tutte le mie invitate registrino il loro look?",
-        "a": "Il sistema rileva solo i conflitti tra i look registrati, quindi è importante che tutte partecipino. Per aiutarti, il piano Premium include promemoria automatici: carica la tua lista di invitate in Excel o CSV e NOWEAR rileva chi manca, invia un'email automatica a quelle che hanno un'email nella tua lista e genera un messaggio pronto da copiare per WhatsApp per le altre. Senza dover rincorrere nessuno.\n\nDetto questo, la decisione finale spetta sempre a ciascuna persona. Registrare il proprio look è una questione di considerazione verso chi organizza l'evento, che ha investito tempo e denaro per evitare proprio quei momenti imbarazzanti. Se qualcuno ti manda il link di NOWEAR è perché vuole che la sua giornata vada bene, e che anche tu possa arrivare serena."
+        "a": "Il sistema rileva solo i conflitti tra i look registrati, quindi è importante che tutte partecipino. Il piano Premium include promemoria automatici: carica la tua lista in Excel o CSV, NOWEAR rileva chi manca, invia un'email a quelle con email nella tua lista e genera un messaggio WhatsApp per le altre. Senza dover rincorrere nessuno.\n\nLa decisione finale spetta sempre a ciascuna persona."
       },
       {
         "q": "Come evito che due ospiti indossino lo stesso vestito al mio matrimonio?",
@@ -212,10 +216,6 @@
       {
         "q": "Come condivido il link NOWEAR con le mie ospiti?",
         "a": "Dopo aver creato il tuo evento su nowear.es, ricevi un link unico. Puoi condividerlo via WhatsApp, includerlo nel tuo sito di nozze, inviarlo via email o aggiungerlo agli inviti digitali."
-      },
-      {
-        "q": "Cosa succede se un'ospite decide di indossare un look già registrato?",
-        "a": "NOWEAR avvisa la seconda ospite nel momento in cui tenta di registrare un look già prenotato. Se decide comunque di indossarlo, la responsabilità è interamente sua. L'organizzatrice ha pagato per questo servizio proprio per evitare conflitti. Rispettare la registrazione è una questione di considerazione verso chi ha organizzato l'evento."
       }
     ]
   },

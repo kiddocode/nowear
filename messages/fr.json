@@ -171,8 +171,12 @@
         "a": "NOWEAR fonctionne pour tout événement où la tenue vestimentaire compte : mariages, communions, baptêmes, fiançailles, remises de diplômes, baby showers, confirmations, anniversaires, galas, remises de prix, tapis rouges, avant-premières, événements d'entreprise avec dress code, dîners d'entreprise, événements de protocole institutionnel, showrooms de mode, événements VIP et bien plus."
       },
       {
+        "q": "Que se passe-t-il si une invitée décide de porter un look déjà enregistré ?",
+        "a": "Quand il y a un conflit, NOWEAR avertit les trois parties : la deuxième invitée voit le blocage à l écran, la première enregistrée reçoit un email l informant que quelqu un a tenté d enregistrer son même look, et l organisatrice est également notifiée. Si la deuxième décide quand même de porter ce look, elle le fait en sachant que l organisatrice et la première invitée sont déjà au courant. Si elle apparaît à l événement avec ce même look ce ne sera une surprise pour personne. La responsabilité lui appartient entièrement.\n\nPour réduire au maximum ce risque, le plan Premium inclut des rappels automatiques : téléverse ta liste d invitées en Excel ou CSV, NOWEAR détecte qui manque et agit avant le jour de l événement."
+      },
+      {
         "q": "Comment m assurer que toutes mes invitées enregistrent leur look ?",
-        "a": "Le système ne détecte les conflits qu entre les looks enregistrés, il est donc important que tout le monde participe. Pour t aider, le plan Premium inclut des rappels automatiques : téléverse ta liste d invitées en Excel ou CSV et NOWEAR détecte qui manque, envoie un email automatique à celles qui ont un email dans ta liste et génère un message WhatsApp prêt à copier pour les autres. Sans courir après personne.\n\nCela dit, la décision finale appartient toujours à chacune. Enregistrer son look est une question de considération envers celle qui organise l événement, qui a investi du temps et de l argent pour éviter ces moments gênants. Si quelqu un t envoie le lien NOWEAR c est parce que son jour compte, et que toi aussi tu mérites d arriver sereine."
+        "a": "Le système ne détecte les conflits qu entre les looks enregistrés, il est donc important que tout le monde participe. Pour t aider, le plan Premium inclut des rappels automatiques : téléverse ta liste d invitées en Excel ou CSV, NOWEAR détecte qui manque, envoie un email automatique à celles qui ont un email dans ta liste et génère un message prêt à copier pour WhatsApp pour les autres. Sans courir après personne.\n\nCela dit, la décision finale appartient toujours à chacune. Enregistrer son look est une question de considération envers celle qui organise l événement."
       },
       {
         "q": "Comment éviter que deux invitées portent la même robe à mon mariage ?",
@@ -217,10 +221,6 @@
       {
         "q": "Comment partager le lien NOWEAR avec mes invitées ?",
         "a": "Après création sur nowear.es vous recevez un lien unique à partager par WhatsApp, email, site de mariage ou invitations digitales. Les invitées accèdent directement sans inscription."
-      },
-      {
-        "q": "Que se passe-t-il si une invitée décide de porter un look déjà enregistré ?",
-        "a": "NOWEAR alerte immédiatement la deuxième invitée lorsqu'elle tente d'enregistrer un look déjà réservé. Si elle décide quand même de le porter, la responsabilité lui incombe entièrement. L'organisatrice a payé pour ce service précisément pour éviter les doublons et a tout mis en oeuvre pour coordonner les tenues. Respecter l'enregistrement est une question de considération envers celle qui a organisé l'événement."
       },
       {
         "q": "Puis-je enregistrer un look avec des pièces vintage ou introuvables en ligne ?",

@@ -171,6 +171,10 @@
         "a": "NOWEAR funktioniert für jede Veranstaltung, bei der Outfits eine Rolle spielen: Hochzeiten, Kommunionen, Taufen, Verlobungen, Abschlussfeiern, Babypartys, Konfirmationen, Geburtstage, Galas, Preisverleihungen, rote Teppiche, Premieren, Firmenevents mit Dresscode, Firmenessen, institutionelle Protokollveranstaltungen, Mode-Showrooms, VIP-Kundenevents und vieles mehr."
       },
       {
+        "q": "Was passiert, wenn eine Gästin beschließt, einen bereits registrierten Look zu tragen?",
+        "a": "NOWEAR warnt die zweite Gästin sofort, wenn sie versucht, einen bereits reservierten Look zu registrieren. Wenn sie sich trotzdem dafür entscheidet, liegt die Verantwortung vollständig bei ihr. Die Organisatorin hat für diesen Service bezahlt, um genau solche Überschneidungen zu vermeiden. Den Look zu respektieren ist eine Frage der Rücksichtnahme gegenüber derjenigen, die die Veranstaltung organisiert hat."
+      },
+      {
         "q": "Wie stelle ich sicher, dass alle Gäste ihren Look registrieren?",
         "a": "Das System erkennt nur Konflikte zwischen registrierten Looks, daher ist es wichtig, dass alle mitmachen. Um dir zu helfen, enthält der Premium-Plan automatische Erinnerungen: Lade deine Gästeliste als Excel oder CSV hoch und NOWEAR erkennt, wer fehlt, sendet eine automatische E-Mail an die, die eine E-Mail in deiner Liste haben, und erstellt eine fertige WhatsApp-Nachricht zum Kopieren für den Rest. Ohne jemandem hinterherzulaufen.\n\nLetztendlich liegt die Entscheidung immer bei jeder Person selbst. Den Look zu registrieren ist eine Frage der Rücksichtnahme gegenüber der Person, die die Veranstaltung organisiert und Zeit und Geld investiert hat, um genau diese unangenehmen Momente zu vermeiden. Wenn jemand dir den NOWEAR-Link schickt, liegt es daran, dass ihr Tag gut werden soll und dass auch du sicher ankommen kannst."
       },
@@ -213,10 +217,6 @@
       {
         "q": "Wie teile ich den NOWEAR-Link mit meinen Gästen?",
         "a": "Nach der Erstellung auf nowear.es erhalten Sie einen einzigartigen Link zum Teilen per WhatsApp, E-Mail, Hochzeitswebsite oder digitalen Einladungen."
-      },
-      {
-        "q": "Was passiert, wenn eine Gästin beschließt, einen bereits registrierten Look zu tragen?",
-        "a": "NOWEAR warnt die zweite Gästin sofort, wenn sie versucht, einen bereits reservierten Look zu registrieren. Wenn sie sich trotzdem dafür entscheidet, liegt die Verantwortung vollständig bei ihr. Die Organisatorin hat für diesen Service bezahlt, um genau solche Überschneidungen zu vermeiden. Den Look zu respektieren ist eine Frage der Rücksichtnahme gegenüber derjenigen, die die Veranstaltung organisiert hat."
       },
       {
         "q": "Kann ich ein Look mit vintage oder nicht mehr erhältlichen Teilen registrieren?",

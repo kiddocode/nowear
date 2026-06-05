@@ -171,8 +171,12 @@
         "a": "NOWEAR werkt voor elk evenement waar outfits belangrijk zijn: bruiloften, communies, dopen, verlovingen, diploma-uitreikingen, babyshowers, vormsels, verjaardagen, gala's, prijsuitreikingen, rode lopers, premières, bedrijfsevenementen met dresscode, bedrijfsdineers, institutionele protocolevenementen, mode showrooms, VIP-klantevenementen en veel meer."
       },
       {
+        "q": "Wat als een gaste besluit een look te dragen die al geregistreerd is?",
+        "a": "Bij een conflict waarschuwt NOWEAR alle drie de partijen: de tweede gast ziet de blokkering, de eerste geregistreerde gast ontvangt een e-mail en de organisatrice wordt ook op de hoogte gesteld. Als de tweede toch die look draagt doet ze dat wetende dat iedereen al weet wat er is gebeurd. De verantwoordelijkheid ligt volledig bij haar.\n\nOm dit te voorkomen bevat het Premium-plan automatische herinneringen: upload je gastenlijst als Excel of CSV, NOWEAR detecteert wie ontbreekt en handelt voor de dag van het evenement."
+      },
+      {
         "q": "Hoe zorg ik ervoor dat al mijn gasten hun look registreren?",
-        "a": "Het systeem detecteert alleen conflicten tussen geregistreerde looks, dus het is belangrijk dat iedereen meedoet. Om je te helpen bevat het Premium-plan automatische herinneringen: upload je gastenlijst als Excel of CSV en NOWEAR detecteert wie ontbreekt, stuurt een automatische e-mail naar degenen die een e-mail in je lijst hebben en genereert een kant-en-klaar WhatsApp-bericht voor de rest. Zonder iemand achterna te zitten.\n\nDat gezegd hebbende, de uiteindelijke beslissing ligt altijd bij elke persoon zelf. Je look registreren is een kwestie van consideratie voor degene die het evenement organiseert, die tijd en geld heeft geïnvesteerd om precies die ongemakkelijke momenten te vermijden. Als iemand je de NOWEAR-link stuurt is het omdat hun dag goed moet gaan, en omdat jij ook zeker wil aankomen."
+        "a": "Het systeem detecteert alleen conflicten tussen geregistreerde looks, dus het is belangrijk dat iedereen meedoet. Het Premium-plan bevat automatische herinneringen: upload je gastenlijst als Excel of CSV, NOWEAR detecteert wie ontbreekt, stuurt een e-mail naar degenen met een e-mail in je lijst en genereert een WhatsApp-bericht voor de rest. Zonder iemand achterna te zitten.\n\nDe uiteindelijke beslissing ligt altijd bij elke persoon zelf."
       },
       {
         "q": "Hoe voorkom ik dat twee gasten dezelfde jurk dragen op mijn bruiloft?",
@@ -213,10 +217,6 @@
       {
         "q": "Hoe deel ik de NOWEAR-link met mijn gasten?",
         "a": "Na aanmaken op nowear.es ontvang je een unieke link te delen via WhatsApp, e-mail, trouwwebsite of digitale uitnodigingen. Gasten gaan direct zonder registratie."
-      },
-      {
-        "q": "Wat als een gaste besluit een look te dragen die al geregistreerd is?",
-        "a": "NOWEAR waarschuwt de tweede gaste op het moment dat ze een al gereserveerde look probeert te registreren. Als ze er toch voor kiest die look te dragen, ligt de verantwoordelijkheid volledig bij haar. De organisatrice heeft betaald voor deze service om conflicten te vermijden en heeft alles gedaan om de looks te coördineren. De registratie respecteren is een kwestie van consideratie voor degene die het evenement heeft georganiseerd."
       },
       {
         "q": "Kan ik een look registreren met vintage of niet meer verkrijgbare kleding?",
