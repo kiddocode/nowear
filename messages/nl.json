@@ -133,6 +133,7 @@
         "price": "29",
         "desc": "Registratie opent wanneer je wilt, zonder tijdslimiet. Voor de meest georganiseerden.",
         "feats": [
+          "Automatische herinnering aan gasten die hun look niet hebben geregistreerd",
           "Alles hiervoor",
           "Vroege toegang tot nieuwe functies",
           "Gepersonaliseerde gastenlink"

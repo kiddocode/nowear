@@ -133,6 +133,7 @@
         "price": "29",
         "desc": "Die Anmeldung öffnet wann immer Sie wollen, ohne Zeitlimit. Für die Organisiertesten.",
         "feats": [
+          "Automatische Erinnerung an Gäste die ihren Look nicht registriert haben",
           "Alles Vorherige",
           "Frühzeitiger Zugang zu neuen Funktionen",
           "Personalisierter Gast-Link"

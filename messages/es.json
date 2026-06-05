@@ -133,6 +133,7 @@
         "price": "29",
         "desc": "El registro abre cuando quieras, sin límite de tiempo. Para las más organizadas.",
         "feats": [
+          "Recordatorio automático a invitadas que no han registrado su look",
           "Todo lo anterior",
           "Acceso anticipado a nuevas funciones",
           "Link de invitada personalizado"

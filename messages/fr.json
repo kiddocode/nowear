@@ -133,6 +133,7 @@
         "price": "29",
         "desc": "L'inscription ouvre quand vous voulez, sans limite de temps. Pour les plus organisées.",
         "feats": [
+          "Rappel automatique aux invitées qui n ont pas enregistré leur look",
           "Tout le précédent",
           "Accès anticipé aux nouvelles fonctions",
           "Lien invitée personnalisé"

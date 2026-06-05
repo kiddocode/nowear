@@ -93,8 +93,8 @@ export default function ModalPlanes({ onClose, planActual, evento }) {
                 <div style={{width:'100%',height:'1px',background: plan.destacado ? 'rgba(255,255,255,0.1)' : '#E0E0DC',marginBottom:'1rem'}}></div>
                 <div style={{display:'flex',flexDirection:'column',gap:'0.4rem',marginBottom:'1.5rem'}}>
                   {plan.feats.map((f,i) => (
-                    <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',fontSize:'0.72rem',fontWeight:300,color: plan.destacado ? 'rgba(255,255,255,0.8)' : '#0A0A0A'}}>
-                      <span style={{color: plan.destacado ? '#F07987' : plan.color,fontWeight:700,flexShrink:0,marginTop:'1px'}}>✓</span>
+                    <div key={i} style={{display:'flex',alignItems:'flex-start',gap:'0.5rem',fontSize:'0.72rem',fontWeight:i===0&&plan.key==='premium'?600:300,color: plan.destacado ? 'rgba(255,255,255,0.8)' : '#0A0A0A',background:i===0&&plan.key==='premium'?'rgba(196,145,124,0.12)':'transparent',padding:i===0&&plan.key==='premium'?'0.35rem 0.5rem':'0',borderRadius:i===0&&plan.key==='premium'?'4px':'0',border:i===0&&plan.key==='premium'?'1px solid rgba(196,145,124,0.3)':'none'}}>
+                      <span style={{color:i===0&&plan.key==='premium'?'#C4917C': plan.destacado ? '#F07987' : plan.color,fontWeight:700,flexShrink:0,marginTop:'1px'}}>✓</span>
                       <span>{f}</span>
                     </div>
                   ))}

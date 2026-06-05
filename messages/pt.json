@@ -133,6 +133,7 @@
         "price": "29",
         "desc": "O registo abre quando quiseres, sem limite de tempo. Para as mais organizadas.",
         "feats": [
+          "Lembrete automático a convidadas que não registaram o look",
           "Tudo anterior",
           "Acesso antecipado a novas funcionalidades",
           "Link de convidada personalizado"
