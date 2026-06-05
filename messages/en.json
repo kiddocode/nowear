@@ -216,6 +216,10 @@
       {
         "q": "What if a guest decides to wear a look that is already registered?",
         "a": "NOWEAR alerts the second guest the moment she tries to register an already-taken look. If she still decides to wear it anyway, the responsibility is entirely hers. The organizer has paid for this service precisely to avoid conflicts and has done everything possible to coordinate outfits. Respecting the registration is a matter of consideration for the person who organized the event."
+      },
+      {
+        "q": "Can I register a look with vintage or discontinued items?",
+        "a": "Yes. When registering your look, you will find the option \"This is a vintage or discontinued item\". If you check it, you do not need to add a reference or link. In that case, a photo is required so the organiser can check there is no conflict with another registered look. The more details you add in the description, the better."
       }
     ]
   },

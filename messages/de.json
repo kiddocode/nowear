@@ -216,6 +216,10 @@
       {
         "q": "Was passiert, wenn eine Gästin beschließt, einen bereits registrierten Look zu tragen?",
         "a": "NOWEAR warnt die zweite Gästin sofort, wenn sie versucht, einen bereits reservierten Look zu registrieren. Wenn sie sich trotzdem dafür entscheidet, liegt die Verantwortung vollständig bei ihr. Die Organisatorin hat für diesen Service bezahlt, um genau solche Überschneidungen zu vermeiden. Den Look zu respektieren ist eine Frage der Rücksichtnahme gegenüber derjenigen, die die Veranstaltung organisiert hat."
+      },
+      {
+        "q": "Kann ich ein Look mit vintage oder nicht mehr erhältlichen Teilen registrieren?",
+        "a": "Ja. Beim Registrieren deines Looks findest du die Option \"Das ist ein altes oder nicht mehr erhältliches Kleidungsstück\". Wenn du sie aktivierst, musst du keine Referenz oder keinen Link hinzufügen. In diesem Fall ist ein Foto erforderlich, damit die Organisatorin prüfen kann, ob kein Konflikt mit einem anderen registrierten Look vorliegt. Je mehr Details du in der Beschreibung angibst, desto besser."
       }
     ]
   },

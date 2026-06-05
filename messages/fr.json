@@ -216,6 +216,10 @@
       {
         "q": "Que se passe-t-il si une invitée décide de porter un look déjà enregistré ?",
         "a": "NOWEAR alerte immédiatement la deuxième invitée lorsqu'elle tente d'enregistrer un look déjà réservé. Si elle décide quand même de le porter, la responsabilité lui incombe entièrement. L'organisatrice a payé pour ce service précisément pour éviter les doublons et a tout mis en oeuvre pour coordonner les tenues. Respecter l'enregistrement est une question de considération envers celle qui a organisé l'événement."
+      },
+      {
+        "q": "Puis-je enregistrer un look avec des pièces vintage ou introuvables en ligne ?",
+        "a": "Oui. Lors de l enregistrement de ton look, tu trouveras l option \"C est une pièce ancienne ou introuvable en ligne\". Si tu la coches, tu n as pas besoin d ajouter une référence ou un lien. Dans ce cas, une photo est obligatoire pour que l organisatrice puisse vérifier qu il n y a pas de conflit avec un autre look enregistré. Plus tu ajoutes de détails dans la description, mieux c est."
       }
     ]
   },

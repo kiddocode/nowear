@@ -216,6 +216,10 @@
       {
         "q": "¿Qué pasa si una invitada decide ir con un look que ya está registrado?",
         "a": "NOWEAR avisa a la segunda invitada en el momento en que intenta registrar un look ya reservado. Si aun así decide ir con ese mismo look, la responsabilidad es completamente suya. La organizadora ha pagado por este servicio precisamente para evitar coincidencias y ha hecho todo lo posible para coordinarlo. Respetar el registro es una cuestión de consideración hacia quien ha organizado el evento."
+      },
+      {
+        "q": "¿Puedo registrar un look con prendas antiguas o descatalogadas?",
+        "a": "Sí. Al registrar tu look encontrarás la opción \"Es una prenda antigua o descatalogada\". Si la marcas, no necesitas añadir referencia ni link. En ese caso la foto es obligatoria para que la organizadora pueda validar que no coincide con otro look registrado. Cuantos más detalles añadas en la descripción, mejor."
       }
     ]
   },
