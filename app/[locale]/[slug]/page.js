@@ -285,8 +285,6 @@ export default function InvitadaPage() {
     const ext = archivoFoto.name.split('.').pop()
     const fileName = `${evento.id}-${Date.now()}.${ext}`
     const { data: uploadData, error: uploadError } = await supabase.storage.from('fotos').upload(fileName, archivoFoto, { contentType: archivoFoto.type })
-    console.log('UPLOAD ERROR:', uploadError)
-    console.log('UPLOAD DATA:', uploadData)
     if (uploadData) {
       const { data: urlData } = supabase.storage.from('fotos').getPublicUrl(fileName)
       return urlData.publicUrl
@@ -398,6 +396,7 @@ export default function InvitadaPage() {
     const colorHex = colores[0]
     const yoTengoId = tieneId(referencia1, link1)
 
+    // Si la prenda es descatalogada, buscar todas las descatalogadas con misma marca
     if (descatalogada) {
       const { data: descatalogadas } = await supabase
         .from('looks')
@@ -540,6 +539,7 @@ export default function InvitadaPage() {
         return
       }
 
+      // Registro nuevo
       const foto_url = foto ? await subirFotoStorage(foto) : null
       const lookInsertado = await guardarLook(foto_url, 'pendiente')
       if (!lookInsertado) return
@@ -712,6 +712,7 @@ export default function InvitadaPage() {
       return
     }
 
+    // Sin conflicto
     if (accion === 'enviar') {
       const foto_url = foto ? await subirFotoStorage(foto) : null
       const lookInsertado = await guardarLook(foto_url, estado)
@@ -737,7 +738,7 @@ export default function InvitadaPage() {
       setError(t('errorPrenda2') || 'Tu look es de dos piezas. Completa los datos de la segunda prenda.'); return
     }
     if (descatalogada && !foto && !lookEditando?.foto_url) {
-      setError(t('errorDescatalogadaSinFoto')); return
+      setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
     }
     setEnviando(true)
     await procesarConflicto(lookEditando.id, 'actualizar')
@@ -755,7 +756,7 @@ export default function InvitadaPage() {
       setError(t('errorFotoRequerida') || 'Por favor sube una foto de tu look para continuar.'); return
     }
     if (descatalogada && !foto) {
-      setError(t('errorDescatalogadaSinFoto')); return
+      setError('Para prendas antiguas o descatalogadas la foto es obligatoria.'); return
     }
     if (pedirReferencia && !tieneId(referencia1, link1)) {
       setError(t('errorPedirReferencia') || 'Por favor añade la referencia o link del producto.'); return
@@ -1087,17 +1088,17 @@ export default function InvitadaPage() {
                     <input type="checkbox" checked={descatalogada} onChange={e => { setDescatalogada(e.target.checked); if (!e.target.checked) setDescripcionLibre('') }}
                       style={{marginTop:'2px',width:'16px',height:'16px',cursor:'pointer',accentColor:'#0A0A0A',flexShrink:0}}/>
                     <div>
-                      <span style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A',display:'block',marginBottom:'0.15rem'}}>{t('descatalogadaLabel')}</span>
-                      <span style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.5}}>{t('descatalogadaInfo')}</span>
+                      <span style={{fontSize:'0.78rem',fontWeight:600,color:'#0A0A0A',display:'block',marginBottom:'0.15rem'}}>Es una prenda antigua o descatalogada</span>
+                      <span style={{fontSize:'0.65rem',fontWeight:300,color:'#888884',lineHeight:1.5}}>No está disponible online y no puedes añadir referencia o link.</span>
                     </div>
                   </label>
                   {descatalogada && (
                     <div style={{marginTop:'1rem'}}>
-                      <label style={labelStyle}>{t('descatalogadaDescribeLabel')} <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('descatalogadaDescribeOpcional')}</span></label>
+                      <label style={labelStyle}>Describe tu look <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>opcional pero recomendado</span></label>
                       <textarea value={descripcionLibre} onChange={e => setDescripcionLibre(e.target.value)}
-                        placeholder={t('descatalogadaDescribePlaceholder')}
+                        placeholder="Ej: Vestido largo azul marino con escote en V, manga larga, bordados en el escote. Temporada 2019."
                         style={{...inputStyle,height:'90px',resize:'vertical',lineHeight:1.6}}/>
-                      <p style={notaStyle}>{t('descatalogadaDescribeNota')}</p>
+                      <p style={notaStyle}>Cuantos más detalles, más fácil detectar coincidencias.</p>
                     </div>
                   )}
                 </div>
@@ -1146,7 +1147,7 @@ export default function InvitadaPage() {
                 <label style={labelStyle}>
                   {t('foto')}
                   {pedirFoto ? <span style={{color:'#F07987',marginLeft:'0.4rem',fontWeight:700}}>* {t('referenciaRequerida')}</span>
-                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:700,color:'#F07987',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('descatalogadaFotoObligatoria')}</span>
+                  : descatalogada ? <span style={{fontSize:'0.6rem',fontWeight:700,color:'#F07987',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>* obligatoria para prendas antiguas</span>
                   : <span style={{fontSize:'0.6rem',fontWeight:300,color:'#BEBEBA',textTransform:'none',letterSpacing:0,marginLeft:'0.4rem'}}>{t('opcional')}</span>}
                 </label>
                 {pedirFoto && (
@@ -1156,7 +1157,7 @@ export default function InvitadaPage() {
                 )}
                 {descatalogada && !pedirFoto && (
                   <div style={{padding:'0.75rem 1rem',background:'rgba(240,121,135,0.08)',border:'1px solid rgba(240,121,135,0.3)',marginBottom:'0.75rem',borderRadius:'4px'}}>
-                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>{t('descatalogadaFotoAviso')}</p>
+                    <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',margin:0,lineHeight:1.6}}>Es obligatorio subir una foto para prendas antiguas o descatalogadas.</p>
                   </div>
                 )}
                 <div onClick={() => document.getElementById('foto-input').click()}
