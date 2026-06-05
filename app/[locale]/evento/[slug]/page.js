@@ -422,6 +422,8 @@ export default function EventoDetalle() {
           .evento-tabs { padding: 0 1.5rem !important; }
           .evento-hero-boxes { flex-direction: column !important; }
           .hero-box-desktop-only { display: none !important; }
+          .evento-hero-inner { flex-direction: column !important; align-items: flex-start !important; }
+.evento-hero-boxes { width: 100% !important; }
         }
         @media (min-width: 769px) {
           .hero-box-mobile-btns { display: none !important; }
@@ -445,8 +447,7 @@ export default function EventoDetalle() {
             {t('misEventos')}
           </button>
 
-          <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>
-            {/* Info evento */}
+<div className="evento-hero-inner" style={{display:'flex',justifyContent:'space-between',alignItems:'flex-end',flexWrap:'wrap',gap:'2rem'}}>            {/* Info evento */}
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:'0.58rem',fontWeight:600,letterSpacing:'0.18em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>
                 {evento.tipo} · <span style={{color: PLAN_LABEL_COLORES[planEvento]}}>{t('planLabel')} {evento.plan}</span>
