@@ -759,7 +759,15 @@
     "recErrorVacio": "El archivo está vacío o solo tiene cabecera.",
     "recErrorColumnas": "No encontramos una columna de nombre. Revisa que tu archivo tenga una columna llamada Nombre.",
     "recErrorLectura": "No pudimos leer el archivo. Asegúrate de que es un Excel o CSV válido.",
-    "recErrorSinArchivo": "Primero sube un archivo con tu lista de invitadas."
+    "recErrorSinArchivo": "Primero sube un archivo con tu lista de invitadas.",
+    "tabBloqueos": "Bloqueos",
+    "bloqueosSubtitulo": "Colores y looks que ninguna invitada podrá registrar.",
+    "recInvitadasCargadas": "{n} invitadas cargadas",
+    "recHazClic": "Haz clic para cruzar y enviar",
+    "recSubeLista": "Sube tu lista de invitadas",
+    "recListaGuardada": "Lista guardada ({n} invitadas)",
+    "recFotoImagen": "Foto e imagen",
+    "recPersonaliza": "Personaliza el link de tus invitadas"
   },
   "dashboard": {
     "titulo": "Mis eventos",
