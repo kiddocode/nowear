@@ -170,6 +170,10 @@
         "a": "NOWEAR funziona per qualsiasi evento dove l'outfit conta: matrimoni, comunioni, battesimi, fidanzamenti, lauree, baby shower, cresime, compleanni, gala, cerimonie di premiazione, eventi aziendali con dress code, cene aziendali, eventi di protocollo istituzionale, showroom di moda, eventi VIP e molto altro."
       },
       {
+        "q": "Come mi assicuro che tutte le mie invitate registrino il loro look?",
+        "a": "Il sistema rileva solo i conflitti tra i look registrati, quindi è importante che tutte partecipino. Per aiutarti, il piano Premium include promemoria automatici: carica la tua lista di invitate in Excel o CSV e NOWEAR rileva chi manca, invia un'email automatica a quelle che hanno un'email nella tua lista e genera un messaggio pronto da copiare per WhatsApp per le altre. Senza dover rincorrere nessuno.\n\nDetto questo, la decisione finale spetta sempre a ciascuna persona. Registrare il proprio look è una questione di considerazione verso chi organizza l'evento, che ha investito tempo e denaro per evitare proprio quei momenti imbarazzanti. Se qualcuno ti manda il link di NOWEAR è perché vuole che la sua giornata vada bene, e che anche tu possa arrivare serena."
+      },
+      {
         "q": "Come evito che due ospiti indossino lo stesso vestito al mio matrimonio?",
         "a": "Crea il tuo evento su nowear.es, condividi il link con le tue ospiti e lascia che il sistema lavori. Ogni ospite registra il suo marchio, modello e colore. Se qualcuno tenta di registrare un look già prenotato, riceve un avviso immediato."
       },
@@ -200,10 +204,6 @@
       {
         "q": "Quanto costa coordinare i look delle ospiti al mio matrimonio?",
         "a": "NOWEAR parte da 9€ per evento, pagamento unico senza abbonamenti. Il piano Base (9€) apre la registrazione 1 mese prima, Standard (19€) 3 mesi prima, Premium (29€) senza limite di tempo con personalizzazione inclusa."
-      },
-      {
-        "q": "Cosa succede se un'ospite non registra il suo look?",
-        "a": "Il sistema rileva solo i conflitti tra look registrati. Se un'ospite non registra il suo look, rischia di coincidere con un'altra che lo ha fatto. Raccomandiamo di condividere il link con tutte le ospiti il prima possibile."
       },
       {
         "q": "Posso usare NOWEAR per una comunione, battesimo o laurea?",

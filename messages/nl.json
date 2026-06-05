@@ -133,10 +133,10 @@
         "price": "29",
         "desc": "Registratie opent wanneer je wilt, zonder tijdslimiet. Voor de meest georganiseerden.",
         "feats": [
-          "Automatische herinnering aan gasten die hun look niet hebben geregistreerd",
           "Alles hiervoor",
           "Vroege toegang tot nieuwe functies",
-          "Gepersonaliseerde gastenlink"
+          "Gepersonaliseerde gastenlink",
+          "Automatische herinnering aan gasten die hun look niet hebben geregistreerd"
         ]
       },
       {
@@ -171,6 +171,10 @@
         "a": "NOWEAR werkt voor elk evenement waar outfits belangrijk zijn: bruiloften, communies, dopen, verlovingen, diploma-uitreikingen, babyshowers, vormsels, verjaardagen, gala's, prijsuitreikingen, rode lopers, premières, bedrijfsevenementen met dresscode, bedrijfsdineers, institutionele protocolevenementen, mode showrooms, VIP-klantevenementen en veel meer."
       },
       {
+        "q": "Hoe zorg ik ervoor dat al mijn gasten hun look registreren?",
+        "a": "Het systeem detecteert alleen conflicten tussen geregistreerde looks, dus het is belangrijk dat iedereen meedoet. Om je te helpen bevat het Premium-plan automatische herinneringen: upload je gastenlijst als Excel of CSV en NOWEAR detecteert wie ontbreekt, stuurt een automatische e-mail naar degenen die een e-mail in je lijst hebben en genereert een kant-en-klaar WhatsApp-bericht voor de rest. Zonder iemand achterna te zitten.\n\nDat gezegd hebbende, de uiteindelijke beslissing ligt altijd bij elke persoon zelf. Je look registreren is een kwestie van consideratie voor degene die het evenement organiseert, die tijd en geld heeft geïnvesteerd om precies die ongemakkelijke momenten te vermijden. Als iemand je de NOWEAR-link stuurt is het omdat hun dag goed moet gaan, en omdat jij ook zeker wil aankomen."
+      },
+      {
         "q": "Hoe voorkom ik dat twee gasten dezelfde jurk dragen op mijn bruiloft?",
         "a": "Maak je evenement aan op nowear.es, deel de link met je gasten en laat het systeem het werk doen. Elke gaste registreert haar merk, model en kleur. Als iemand een al gereserveerde look probeert te registreren, krijgt ze direct een waarschuwing."
       },
@@ -201,10 +205,6 @@
       {
         "q": "Hoeveel kost het coördineren van looks op mijn bruiloft?",
         "a": "NOWEAR begint vanaf 9€ per evenement, eenmalige betaling zonder abonnement. Basis (9€) opent 1 maand van tevoren, Standaard (19€) 3 maanden, Premium (29€) zonder tijdslimiet met aanpassing."
-      },
-      {
-        "q": "Wat gebeurt er als een gaste haar look niet registreert?",
-        "a": "Het systeem detecteert alleen conflicten tussen geregistreerde looks. Als een gaste niet registreert loopt ze het risico overeen te komen. Deel de link zo vroeg mogelijk."
       },
       {
         "q": "Kan ik NOWEAR gebruiken voor communie, doop of diploma-uitreiking?",

@@ -133,10 +133,10 @@
         "price": "29",
         "desc": "O registo abre quando quiseres, sem limite de tempo. Para as mais organizadas.",
         "feats": [
-          "Lembrete automático a convidadas que não registaram o look",
           "Tudo anterior",
           "Acesso antecipado a novas funcionalidades",
-          "Link de convidada personalizado"
+          "Link de convidada personalizado",
+          "Lembrete automático a convidadas que não registaram o look"
         ]
       },
       {
@@ -169,6 +169,10 @@
       {
         "q": "Para que tipo de eventos serve o NOWEAR?",
         "a": "O NOWEAR funciona para qualquer evento onde o outfit importa: casamentos, comunhões, batizados, pedidos, formaturas, baby showers, confirmações, aniversários, galas, entregas de prémios, tapetes vermelhos, estreias, eventos corporativos com dress code, jantares de empresa, eventos de protocolo institucional, showrooms de moda, eventos VIP e muito mais."
+      },
+      {
+        "q": "Como me asseguro de que todas as minhas convidadas registam o look?",
+        "a": "O sistema só deteta coincidências entre os looks registados, por isso é importante que todas participem. Para te ajudar, o plano Premium inclui lembretes automáticos: carrega a tua lista de convidadas em Excel ou CSV e o NOWEAR deteta quem falta, envia um email automático às que têm email na tua lista e gera uma mensagem pronta a copiar para WhatsApp para as restantes. Sem perseguir ninguém.\n\nDito isto, a decisão final é sempre de cada pessoa. Registar o look é uma questão de consideração para com quem organiza o evento, que investiu tempo e dinheiro em evitar precisamente esses momentos incómodos. Se alguém te envia o link do NOWEAR é porque quer que o seu dia corra bem, e que tu também chegues segura."
       },
       {
         "q": "Como evito que duas convidadas usem o mesmo vestido no meu casamento?",

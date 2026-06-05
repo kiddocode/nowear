@@ -133,10 +133,10 @@
         "price": "29",
         "desc": "Registration opens whenever you want, with no time limit. For the most organized.",
         "feats": [
-          "Automatic reminder to guests who have not registered their look",
           "Everything before",
           "Early access to new features",
-          "Personalized guest link"
+          "Personalized guest link",
+          "Automatic reminder to guests who have not registered their look"
         ]
       },
       {
@@ -171,6 +171,10 @@
         "a": "NOWEAR works for any event where outfits matter: weddings, communions, christenings, engagements, graduations, baby showers, confirmations, birthdays, galas, award ceremonies, red carpets, premieres, corporate events with dress code, company dinners, institutional protocol events, fashion showrooms, VIP client events, private fashion shows, dress code restaurants and much more."
       },
       {
+        "q": "How do I make sure all my guests register their look?",
+        "a": "The system only detects conflicts between registered looks, so it is important that everyone participates. To help you, the Premium plan includes automatic reminders: upload your guest list in Excel or CSV and NOWEAR detects who is missing, sends an automatic email to those who have an email in your list and generates a ready-to-copy WhatsApp message for the rest. No chasing anyone.\n\nThat said, the final decision always rests with each person. Registering your look is a matter of consideration towards the person organising the event, who has invested time and money to avoid those awkward moments. If someone sends you the NOWEAR link it is because they care about their day going well, and about you arriving confident too."
+      },
+      {
         "q": "How do I prevent two guests from wearing the same dress at my wedding or event?",
         "a": "Create your event on nowear.es, share the link with your guests and let the system do the work. Each guest registers their brand, model and color. If someone tries to register an already-taken look, they get an instant alert. No awkward conversations, no drama, no surprises on the day."
       },
@@ -201,10 +205,6 @@
       {
         "q": "How much does it cost to coordinate guest looks at my wedding or event?",
         "a": "NOWEAR starts from 9€ per event, a one-time payment with no subscriptions. Basic plan (9€) opens registration 1 month before, Standard (19€) 3 months before, and Premium (29€) with no time limit and customization included."
-      },
-      {
-        "q": "What happens if a guest does not register her look?",
-        "a": "The system can only detect conflicts between registered looks. If a guest does not register her look, she risks matching with another guest who did. We recommend sharing the link with all guests as early as possible."
       },
       {
         "q": "Can I use NOWEAR for a communion, christening, graduation or any other event?",

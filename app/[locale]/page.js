@@ -351,8 +351,8 @@ export default function Home() {
                 )}
                 <div style={{fontSize:'0.78rem',fontWeight:300,lineHeight:1.8,color:'#888884',margin:'1.5rem 0',paddingTop:'1.5rem',borderTop:`1px solid ${isFeatured?'#3A3A38':'#E0E0DC'}`}}>{p.desc}</div>
                 {p.feats.map((f,j)=>(
-                  <div key={j} style={{display:'flex',gap:'0.55rem',fontSize:'0.78rem',fontWeight:j===0&&i===2?600:300,color:isFeatured?'#888884':'#3A3A38',marginBottom:'0.55rem',background:j===0&&i===2?'rgba(196,145,124,0.12)':'transparent',padding:j===0&&i===2?'0.4rem 0.6rem':'0',borderRadius:j===0&&i===2?'4px':'0',border:j===0&&i===2?'1px solid rgba(196,145,124,0.3)':'none'}}>
-                    <span style={{color:j===0&&i===2?'#C4917C':'#F07987',flexShrink:0}}>✓</span>{f}
+                  <div key={j} style={{display:'flex',gap:'0.55rem',fontSize:'0.78rem',fontWeight:j===3&&i===2?600:300,color:isFeatured?'#888884':'#3A3A38',marginBottom:'0.55rem',background:j===3&&i===2?'rgba(196,145,124,0.12)':'transparent',padding:j===3&&i===2?'0.4rem 0.6rem':'0',borderRadius:j===3&&i===2?'4px':'0',border:j===3&&i===2?'1px solid rgba(196,145,124,0.3)':'none'}}>
+                    <span style={{color:j===3&&i===2?'#C4917C':'#F07987',flexShrink:0}}>✓</span>{f}
                   </div>
                 ))}
                 {isEnterprise ? (

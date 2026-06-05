@@ -133,10 +133,10 @@
         "price": "29",
         "desc": "Die Anmeldung öffnet wann immer Sie wollen, ohne Zeitlimit. Für die Organisiertesten.",
         "feats": [
-          "Automatische Erinnerung an Gäste die ihren Look nicht registriert haben",
           "Alles Vorherige",
           "Frühzeitiger Zugang zu neuen Funktionen",
-          "Personalisierter Gast-Link"
+          "Personalisierter Gast-Link",
+          "Automatische Erinnerung an Gäste die ihren Look nicht registriert haben"
         ]
       },
       {
@@ -171,6 +171,10 @@
         "a": "NOWEAR funktioniert für jede Veranstaltung, bei der Outfits eine Rolle spielen: Hochzeiten, Kommunionen, Taufen, Verlobungen, Abschlussfeiern, Babypartys, Konfirmationen, Geburtstage, Galas, Preisverleihungen, rote Teppiche, Premieren, Firmenevents mit Dresscode, Firmenessen, institutionelle Protokollveranstaltungen, Mode-Showrooms, VIP-Kundenevents und vieles mehr."
       },
       {
+        "q": "Wie stelle ich sicher, dass alle Gäste ihren Look registrieren?",
+        "a": "Das System erkennt nur Konflikte zwischen registrierten Looks, daher ist es wichtig, dass alle mitmachen. Um dir zu helfen, enthält der Premium-Plan automatische Erinnerungen: Lade deine Gästeliste als Excel oder CSV hoch und NOWEAR erkennt, wer fehlt, sendet eine automatische E-Mail an die, die eine E-Mail in deiner Liste haben, und erstellt eine fertige WhatsApp-Nachricht zum Kopieren für den Rest. Ohne jemandem hinterherzulaufen.\n\nLetztendlich liegt die Entscheidung immer bei jeder Person selbst. Den Look zu registrieren ist eine Frage der Rücksichtnahme gegenüber der Person, die die Veranstaltung organisiert und Zeit und Geld investiert hat, um genau diese unangenehmen Momente zu vermeiden. Wenn jemand dir den NOWEAR-Link schickt, liegt es daran, dass ihr Tag gut werden soll und dass auch du sicher ankommen kannst."
+      },
+      {
         "q": "Wie verhindere ich, dass zwei Gäste dasselbe Kleid auf meiner Hochzeit tragen?",
         "a": "Erstellen Sie Ihr Event auf nowear.es, teilen Sie den Link mit Ihren Gästen und lassen Sie das System arbeiten. Jede Gästin registriert ihre Marke, ihr Modell und ihre Farbe. Wenn jemand versucht, einen bereits reservierten Look zu registrieren, erhält sie sofort eine Warnung."
       },
@@ -201,10 +205,6 @@
       {
         "q": "Was kostet die Koordinierung der Outfits bei meiner Hochzeit?",
         "a": "NOWEAR beginnt ab 9€ pro Event, Einmalzahlung ohne Abonnement. Basic (9€) öffnet 1 Monat vorher, Standard (19€) 3 Monate, Premium (29€) ohne Zeitlimit mit Personalisierung."
-      },
-      {
-        "q": "Was passiert wenn eine Gästin ihren Look nicht registriert?",
-        "a": "Das System erkennt nur Konflikte zwischen registrierten Looks. Wenn eine Gästin nicht registriert riskiert sie eine Übereinstimmung. Teilen Sie den Link so früh wie möglich."
       },
       {
         "q": "Kann ich NOWEAR für Kommunion, Taufe oder Abschlussfeier nutzen?",
