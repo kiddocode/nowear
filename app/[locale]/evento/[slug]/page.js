@@ -397,12 +397,13 @@ export default function EventoDetalle() {
   const selectStyle = {width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',cursor:'pointer',appearance:'none',backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888884' stroke-width='1.5' fill='none'/%3E%3C/svg%3E")`,backgroundRepeat:'no-repeat',backgroundPosition:'right 1rem center',boxSizing:'border-box'}
   const notaStyle = {fontSize:'0.65rem',fontWeight:300,color:'#BEBEBA',marginTop:'0.35rem',lineHeight:1.5}
 
+  // Tabs visibles: solo las 4 base + Organizadores Enterprise
+  // Personalización y Recordatorios se acceden por los boxes del hero, no por tabs
   const tabs = [t('tabLooks'), t('tabConflictos'), 'Bloqueos', t('tabAjustes')]
-  if (isPremium) tabs.push(t('tabPersonalizacion'))
-  if (isPremium) tabs.push(t('tabRecordatorios'))
   if (isEnterprise) tabs.push(t('tabOrganizadores'))
-  const tabPersonalizacionIdx = isPremium ? tabs.indexOf(t('tabPersonalizacion')) : -1
-  const tabRecordatoriosIdx = isPremium ? tabs.indexOf(t('tabRecordatorios')) : -1
+  // Índices para el contenido (aunque no aparecen en las tabs visibles)
+  const tabPersonalizacionIdx = 10
+  const tabRecordatoriosIdx = 11
   const tabBloqueosIdx = 2
 
   const tieneBloqueoLook = !!(evento.look_bloqueado_marca1)
@@ -410,13 +411,9 @@ export default function EventoDetalle() {
   return (
     <>
       <style>{`
-        .evento-premium-link-mobile { display: none; }
-        .evento-tab-personalizacion { display: block; }
-        /* En móvil: oculta la tab Personalización de las tabs y muestra el botón en el hero */
-        @media (max-width: 1024px) {
-          .evento-tab-personalizacion { display: none !important; }
-        }
         .bloqueos-prenda-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+        .evento-hero-boxes { flex-direction: row; }
+        /* En móvil: boxes premium en columna dentro del box de link, boxes desktop ocultos */
         @media (max-width: 768px) {
           .bloqueos-prenda-grid { grid-template-columns: 1fr; }
           .evento-stats { grid-template-columns: repeat(2,1fr) !important; }
@@ -424,6 +421,10 @@ export default function EventoDetalle() {
           .evento-hero { padding: 1.5rem !important; }
           .evento-tabs { padding: 0 1.5rem !important; }
           .evento-hero-boxes { flex-direction: column !important; }
+          .hero-box-desktop-only { display: none !important; }
+        }
+        @media (min-width: 769px) {
+          .hero-box-mobile-btns { display: none !important; }
         }
       `}</style>
 
@@ -463,10 +464,10 @@ export default function EventoDetalle() {
               )}
             </div>
 
-            {/* Boxes derechos: link + recordatorios en desktop */}
+            {/* Boxes derechos */}
             <div className="evento-hero-boxes" style={{display:'flex',flexDirection:'row',gap:'1rem',alignItems:'stretch',flexShrink:0}}>
 
-              {/* Box link */}
+              {/* Box link - en móvil incluye botones premium dentro */}
               <div style={{background:'#FFFFFF',padding:'1.25rem 1.75rem',minWidth:'220px',borderRadius:'4px',display:'flex',flexDirection:'column',justifyContent:'center'}}>
                 <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'0.5rem'}}>{t('linkInvitadas')}</p>
                 <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:'1rem'}}>
@@ -475,13 +476,25 @@ export default function EventoDetalle() {
                     {copiado ? t('copiado') : t('copiar')}
                   </button>
                 </div>
+                {isPremium && (
+                  <div className="hero-box-mobile-btns" style={{marginTop:'0.75rem',paddingTop:'0.75rem',borderTop:'1px solid #F0F0EE',display:'flex',gap:'0.5rem'}}>
+                    <button onClick={() => setTabActiva(tabPersonalizacionIdx)}
+                      style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:'rgba(196,145,124,0.1)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
+                      <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#C4917C'}}>✨ {t('tabPersonalizacion')}</span>
+                    </button>
+                    <button onClick={() => setTabActiva(tabRecordatoriosIdx)}
+                      style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:'rgba(196,145,124,0.1)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
+                      <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#C4917C'}}>Recordatorios</span>
+                    </button>
+                  </div>
+                )}
               </div>
 
-              {/* Box recordatorios: solo Premium en desktop */}
+              {/* Box recordatorios: solo Premium, solo desktop */}
               {isPremium && (
-                <button
+                <button className="hero-box-desktop-only"
                   onClick={() => setTabActiva(tabRecordatoriosIdx)}
-                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left',transition:'background 0.15s'}}>
+                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
                   <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.4rem'}}>Recordatorios</p>
                   <p style={{fontSize:'0.78rem',fontWeight:500,color:'#FFFFFF',margin:0}}>
                     {invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio'}
@@ -492,12 +505,11 @@ export default function EventoDetalle() {
                 </button>
               )}
 
-              {/* Box personalización: solo Premium en móvil (en desktop va en tab) */}
+              {/* Box personalización: solo Premium, solo desktop */}
               {isPremium && (
-                <button
+                <button className="hero-box-desktop-only"
                   onClick={() => setTabActiva(tabPersonalizacionIdx)}
-                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left',transition:'background 0.15s'}}
-                  className="evento-tab-personalizacion">
+                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
                   <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.4rem'}}>✨ {t('tabPersonalizacion')}</p>
                   <p style={{fontSize:'0.78rem',fontWeight:500,color:'#FFFFFF',margin:0}}>Foto e imagen</p>
                   <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.5)',margin:'0.2rem 0 0 0'}}>Personaliza el link de tus invitadas</p>
@@ -505,49 +517,18 @@ export default function EventoDetalle() {
               )}
             </div>
           </div>
-
-          {/* Botones Premium visibles en móvil bajo la info del evento */}
-          {isPremium && (
-            <div style={{marginTop:'1.5rem',display:'flex',flexDirection:'column',gap:'0.75rem'}} className="evento-mobile-premium-btns">
-              <style>{`.evento-mobile-premium-btns { display: none; } @media (max-width: 1024px) { .evento-mobile-premium-btns { display: flex !important; } }`}</style>
-              <button
-                onClick={() => setTabActiva(tabPersonalizacionIdx)}
-                style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'rgba(196,145,124,0.15)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'8px',padding:'1rem 1.25rem',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
-                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',gap:'0.15rem'}}>
-                  <span style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#C4917C'}}>✨ {t('tabPersonalizacion')}</span>
-                  <span style={{fontSize:'0.75rem',fontWeight:400,color:'#FFFFFF'}}>Personaliza el link de tus invitadas</span>
-                </div>
-                <span style={{fontSize:'1rem',color:'#C4917C',flexShrink:0}}>›</span>
-              </button>
-              <button
-                onClick={() => setTabActiva(tabRecordatoriosIdx)}
-                style={{width:'100%',display:'flex',justifyContent:'space-between',alignItems:'center',background:'rgba(196,145,124,0.15)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'8px',padding:'1rem 1.25rem',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
-                <div style={{display:'flex',flexDirection:'column',alignItems:'flex-start',gap:'0.15rem'}}>
-                  <span style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#C4917C'}}>Recordatorios</span>
-                  <span style={{fontSize:'0.75rem',fontWeight:400,color:'#FFFFFF'}}>
-                    {invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio a las que faltan'}
-                  </span>
-                </div>
-                <span style={{fontSize:'1rem',color:'#C4917C',flexShrink:0}}>›</span>
-              </button>
-            </div>
-          )}
         </div>
 
         {/* TABS */}
         <div className="evento-tabs" style={{display:'flex',padding:'0 3rem',borderBottom:'2px solid #E0E0DC',background:'#FFFFFF',position:'sticky',top:'68px',zIndex:100,overflowX:'auto'}}>
-          {tabs.map((tab,i) => {
-            const esPersonalizacion = tab === t('tabPersonalizacion')
-            return (
-              <button key={i} onClick={() => setTabActiva(i)}
-                className={esPersonalizacion ? 'evento-tab-personalizacion' : ''}
-                style={{padding:'1.1rem 0',marginRight:'2.5rem',fontSize:'0.72rem',fontWeight:tabActiva===i?700:400,color:tabActiva===i?'#0A0A0A':'#888884',cursor:'pointer',background:'none',border:'none',borderBottom:tabActiva===i?'2px solid #0A0A0A':'2px solid transparent',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',marginBottom:'-2px',flexShrink:0}}>
-                {tab}
-                {i===1&&conflictos.length>0&&<span style={{marginLeft:'0.4rem',fontSize:'0.55rem',fontWeight:700,background:'#F07987',color:'#FFFFFF',padding:'0.1rem 0.4rem',borderRadius:'10px'}}>{conflictos.length}</span>}
-                {tab===t('tabOrganizadores')&&<span style={{marginLeft:'0.4rem',fontSize:'0.5rem',fontWeight:700,background:'#F07987',color:'#FFFFFF',padding:'0.1rem 0.4rem',borderRadius:'10px'}}>{t('badgeEnterprise')}</span>}
-              </button>
-            )
-          })}
+          {tabs.map((tab,i) => (
+            <button key={i} onClick={() => setTabActiva(i)}
+              style={{padding:'1.1rem 0',marginRight:'2.5rem',fontSize:'0.72rem',fontWeight:tabActiva===i?700:400,color:tabActiva===i?'#0A0A0A':'#888884',cursor:'pointer',background:'none',border:'none',borderBottom:tabActiva===i?'2px solid #0A0A0A':'2px solid transparent',fontFamily:'Poppins,sans-serif',whiteSpace:'nowrap',marginBottom:'-2px',flexShrink:0}}>
+              {tab}
+              {i===1&&conflictos.length>0&&<span style={{marginLeft:'0.4rem',fontSize:'0.55rem',fontWeight:700,background:'#F07987',color:'#FFFFFF',padding:'0.1rem 0.4rem',borderRadius:'10px'}}>{conflictos.length}</span>}
+              {tab===t('tabOrganizadores')&&<span style={{marginLeft:'0.4rem',fontSize:'0.5rem',fontWeight:700,background:'#F07987',color:'#FFFFFF',padding:'0.1rem 0.4rem',borderRadius:'10px'}}>{t('badgeEnterprise')}</span>}
+            </button>
+          ))}
         </div>
 
         {/* CONTENIDO */}
