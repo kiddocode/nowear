@@ -842,43 +842,69 @@ function handleArchivoInvitadas(e) {
             <div style={{maxWidth:'600px'}}>
               <h2 style={{fontSize:'1.2rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.35rem'}}>{t('recTitulo')}</h2>
               <p style={{fontSize:'0.75rem',fontWeight:300,color:'#888884',marginBottom:'2rem'}}>{t('recSubtitulo')}</p>
+
               <div style={{marginBottom:'1.5rem'}}>
-                <label style={labelStyle}>{t('recListaLabel')}</label>
-                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>{t('recListaInfo')}</p>
-                <textarea
-                  value={listaInvitadas}
-                  onChange={e => setListaInvitadas(e.target.value)}
-                  placeholder={t('recListaPlaceholder')}
-                  style={{width:'100%',fontFamily:'Poppins,sans-serif',fontSize:'0.82rem',fontWeight:300,padding:'0.9rem 1rem',border:'1px solid #E0E0DC',background:'#FFFFFF',outline:'none',boxSizing:'border-box',resize:'vertical',minHeight:'140px',borderRadius:'4px'}}
-                />
+                <label style={labelStyle}>{t('recArchivoLabel')}</label>
+                <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem',lineHeight:1.6}}>{t('recArchivoInfo')}</p>
+                <div onClick={() => document.getElementById('archivo-invitadas-input').click()}
+                  style={{border:'1px dashed #E0E0DC',padding:'1.5rem',textAlign:'center',cursor:'pointer',background:'#F7F7F5',borderRadius:'8px',marginBottom:'0.5rem'}}>
+                  <div style={{fontSize:'0.82rem',fontWeight:500,color:nombreArchivo?'#0A0A0A':'#888884',marginBottom:'0.25rem'}}>
+                    {nombreArchivo || t('recArchivoBtn')}
+                  </div>
+                  <div style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>{t('recArchivoFormatos')}</div>
+                </div>
+                <input id="archivo-invitadas-input" type="file" accept=".xlsx,.xls,.csv" style={{display:'none'}} onChange={handleArchivoInvitadas}/>
+                <p style={{fontSize:'0.7rem',fontWeight:300,color:'#888884',marginTop:'0.5rem',lineHeight:1.6}}>{t('recPlantillaInfo')} <button onClick={descargarPlantilla} style={{fontSize:'0.7rem',fontWeight:600,color:'#C4917C',background:'none',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',padding:0,textDecoration:'underline'}}>{t('recPlantillaLink')}</button></p>
               </div>
-              <button onClick={handleRecordatorios} disabled={enviandoRecordatorios} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:enviandoRecordatorios?0.6:1,marginBottom:'1.5rem'}}>
+
+              {errorArchivo && (
+                <p style={{fontSize:'0.78rem',fontWeight:400,color:'#F07987',marginBottom:'1.5rem',padding:'0.75rem',background:'#FFF0F1',border:'1px solid #F07987',borderRadius:'4px'}}>{errorArchivo}</p>
+              )}
+
+              <button onClick={handleRecordatorios} disabled={enviandoRecordatorios || invitadasArchivo.length === 0} style={{padding:'0.9rem 2.5rem',fontSize:'0.78rem',fontWeight:500,background:'#0A0A0A',color:'#FFFFFF',border:'none',cursor:invitadasArchivo.length===0?'not-allowed':'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px',opacity:(enviandoRecordatorios||invitadasArchivo.length===0)?0.5:1,marginBottom:'1.5rem'}}>
                 {enviandoRecordatorios ? t('recEnviando') : t('recEnviar')}
               </button>
+
               {recordatorioMensaje && (
                 <p style={{fontSize:'0.78rem',fontWeight:400,color:'#4A6B42',marginBottom:'1.5rem',padding:'0.75rem',background:'#EEF4E8',border:'1px solid #C8DFC0',borderRadius:'4px'}}>{recordatorioMensaje}</p>
               )}
-              {pendientesRecordatorio.length > 0 && (
+
+              {pendientesConEmail.length > 0 && (
                 <div style={{marginBottom:'1.5rem'}}>
-                  <p style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.75rem'}}>{t('recPendientes')} ({pendientesRecordatorio.length})</p>
+                  <p style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.4rem'}}>{t('recConEmail')} ({pendientesConEmail.length})</p>
+                  <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem'}}>{t('recConEmailInfo')}</p>
                   <div style={{border:'1px solid #E0E0DC',borderRadius:'8px',overflow:'hidden'}}>
-                    {pendientesRecordatorio.map((n, i) => (
-                      <div key={i} style={{padding:'0.75rem 1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',borderBottom: i < pendientesRecordatorio.length-1 ? '1px solid #E0E0DC' : 'none',background:'#FFFFFF'}}>
-                        {n}
+                    {pendientesConEmail.map((p, i) => (
+                      <div key={i} style={{display:'flex',justifyContent:'space-between',padding:'0.75rem 1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',borderBottom: i < pendientesConEmail.length-1 ? '1px solid #E0E0DC' : 'none',background:'#FFFFFF'}}>
+                        <span style={{fontWeight:500}}>{p.nombreCompleto}</span>
+                        <span style={{color:'#888884'}}>{p.email}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               )}
-              {recordatorioWhatsapp && (
+
+              {pendientesSinEmail.length > 0 && (
                 <div style={{marginBottom:'1.5rem'}}>
-                  <p style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.75rem'}}>{t('recWhatsapp')}</p>
-                  <div style={{background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',padding:'1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',lineHeight:1.6,marginBottom:'0.75rem'}}>
-                    {recordatorioWhatsapp}
+                  <p style={{fontSize:'0.82rem',fontWeight:600,color:'#0A0A0A',marginBottom:'0.4rem'}}>{t('recSinEmail')} ({pendientesSinEmail.length})</p>
+                  <p style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginBottom:'0.75rem'}}>{t('recSinEmailInfo')}</p>
+                  <div style={{border:'1px solid #E0E0DC',borderRadius:'8px',overflow:'hidden',marginBottom:'0.75rem'}}>
+                    {pendientesSinEmail.map((p, i) => (
+                      <div key={i} style={{padding:'0.75rem 1rem',fontSize:'0.82rem',fontWeight:500,color:'#0A0A0A',borderBottom: i < pendientesSinEmail.length-1 ? '1px solid #E0E0DC' : 'none',background:'#FFFFFF'}}>
+                        {p.nombreCompleto}
+                      </div>
+                    ))}
                   </div>
-                  <button onClick={() => navigator.clipboard.writeText(recordatorioWhatsapp)} style={{padding:'0.6rem 1.5rem',fontSize:'0.75rem',fontWeight:500,background:'#25D366',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
-                    {t('recCopiarWhatsapp')}
-                  </button>
+                  {recordatorioWhatsapp && (
+                    <>
+                      <div style={{background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',padding:'1rem',fontSize:'0.82rem',fontWeight:300,color:'#0A0A0A',lineHeight:1.6,marginBottom:'0.75rem'}}>
+                        {recordatorioWhatsapp}
+                      </div>
+                      <button onClick={() => navigator.clipboard.writeText(recordatorioWhatsapp)} style={{padding:'0.6rem 1.5rem',fontSize:'0.75rem',fontWeight:500,background:'#25D366',color:'#FFFFFF',border:'none',cursor:'pointer',fontFamily:'Poppins,sans-serif',borderRadius:'4px'}}>
+                        {t('recCopiarWhatsapp')}
+                      </button>
+                    </>
+                  )}
                 </div>
               )}
             </div>
