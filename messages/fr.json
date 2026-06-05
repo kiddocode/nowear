@@ -533,6 +533,10 @@
         "a": "Une invitée peut marquer un look comme pré-réservé quand elle l'a vu mais ne l'a pas encore acheté. Personne d'autre ne peut enregistrer ce look tant que la pré-réservation est active."
       },
       {
+        "q": "Puis-je enregistrer un look avec des pièces vintage ou introuvables en ligne ?",
+        "a": "Oui. Lors de l enregistrement de ton look, tu trouveras l option \"C est une pièce ancienne ou introuvable en ligne\". Si tu la coches, tu n as pas besoin d ajouter une référence ou un lien. Dans ce cas, une photo est obligatoire pour que l organisatrice puisse vérifier qu il n y a pas de conflit avec un autre look enregistré. Plus tu ajoutes de détails dans la description, mieux c est."
+      },
+      {
         "q": "Besoin d'aide supplémentaire ?",
         "a": "Écrivez-nous à support@nowear.es et nous vous répondons en moins de 24 heures."
       }

@@ -533,6 +533,10 @@
         "a": "A guest can mark a look as pre-reserved when she's seen it but hasn't bought it yet. No one else can register that look while the pre-reservation is active."
       },
       {
+        "q": "Can I register a look with vintage or discontinued items?",
+        "a": "Yes. When registering your look, you will find the option \"This is a vintage or discontinued item\". If you check it, you do not need to add a reference or link. In that case, a photo is required so the organiser can check there is no conflict with another registered look. The more details you add in the description, the better."
+      },
+      {
         "q": "Need more help?",
         "a": "Write to us at support@nowear.es and we'll reply within 24 hours."
       }
