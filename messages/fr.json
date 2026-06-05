@@ -449,7 +449,9 @@
     "descatalogadaDescribeNota": "Plus il y a de détails, plus il est facile de détecter les doublons.",
     "descatalogadaFotoObligatoria": "* obligatoire pour les pièces anciennes",
     "descatalogadaFotoAviso": "Une photo est obligatoire pour les pièces anciennes ou en rupture de stock.",
-    "errorDescatalogadaSinFoto": "Une photo est obligatoire pour les pièces anciennes ou en rupture de stock."
+    "errorDescatalogadaSinFoto": "Une photo est obligatoire pour les pièces anciennes ou en rupture de stock.",
+    "tuApellido": "Ton nom de famille",
+    "apellidoPlaceholder": "Ex: Dupont"
   },
   "sidebar": {
     "principal": "Principal",

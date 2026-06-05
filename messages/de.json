@@ -449,7 +449,9 @@
     "descatalogadaDescribeNota": "Je mehr Details, desto einfacher Übereinstimmungen zu erkennen.",
     "descatalogadaFotoObligatoria": "* erforderlich für alte Kleidungsstücke",
     "descatalogadaFotoAviso": "Für alte oder abgekündigte Kleidungsstücke ist ein Foto erforderlich.",
-    "errorDescatalogadaSinFoto": "Für alte oder abgekündigte Kleidungsstücke ist ein Foto erforderlich."
+    "errorDescatalogadaSinFoto": "Für alte oder abgekündigte Kleidungsstücke ist ein Foto erforderlich.",
+    "tuApellido": "Dein Nachname",
+    "apellidoPlaceholder": "Z.B. Müller"
   },
   "sidebar": {
     "principal": "Hauptmenü",

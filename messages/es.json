@@ -449,7 +449,9 @@
     "descatalogadaDescribeNota": "Cuantos más detalles, más fácil detectar coincidencias.",
     "descatalogadaFotoObligatoria": "* obligatoria para prendas antiguas",
     "descatalogadaFotoAviso": "Es obligatorio subir una foto para prendas antiguas o descatalogadas.",
-    "errorDescatalogadaSinFoto": "Para prendas antiguas o descatalogadas la foto es obligatoria."
+    "errorDescatalogadaSinFoto": "Para prendas antiguas o descatalogadas la foto es obligatoria.",
+    "tuApellido": "Tus apellidos",
+    "apellidoPlaceholder": "Ej: García López"
   },
   "sidebar": {
     "principal": "Principal",

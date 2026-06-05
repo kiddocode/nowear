@@ -449,7 +449,9 @@
     "descatalogadaDescribeNota": "The more details, the easier to detect matches.",
     "descatalogadaFotoObligatoria": "* required for vintage items",
     "descatalogadaFotoAviso": "A photo is required for vintage or discontinued items.",
-    "errorDescatalogadaSinFoto": "A photo is required for vintage or discontinued items."
+    "errorDescatalogadaSinFoto": "A photo is required for vintage or discontinued items.",
+    "tuApellido": "Your surname",
+    "apellidoPlaceholder": "E.g. Smith"
   },
   "sidebar": {
     "principal": "Main",

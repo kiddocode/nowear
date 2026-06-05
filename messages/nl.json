@@ -449,7 +449,9 @@
     "descatalogadaDescribeNota": "Hoe meer details, hoe makkelijker overeenkomsten te detecteren.",
     "descatalogadaFotoObligatoria": "* verplicht voor vintage kledingstukken",
     "descatalogadaFotoAviso": "Een foto is verplicht voor vintage of niet meer leverbare kledingstukken.",
-    "errorDescatalogadaSinFoto": "Een foto is verplicht voor vintage of niet meer leverbare kledingstukken."
+    "errorDescatalogadaSinFoto": "Een foto is verplicht voor vintage of niet meer leverbare kledingstukken.",
+    "tuApellido": "Je achternaam",
+    "apellidoPlaceholder": "Bijv. de Vries"
   },
   "sidebar": {
     "principal": "Hoofdmenu",

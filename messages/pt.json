@@ -453,7 +453,9 @@
     "descatalogadaDescribeNota": "Quanto mais detalhes, mais fácil detetar coincidências.",
     "descatalogadaFotoObligatoria": "* obrigatória para peças antigas",
     "descatalogadaFotoAviso": "É obrigatório enviar uma foto para peças antigas ou descontinuadas.",
-    "errorDescatalogadaSinFoto": "É obrigatório enviar uma foto para peças antigas ou descontinuadas."
+    "errorDescatalogadaSinFoto": "É obrigatório enviar uma foto para peças antigas ou descontinuadas.",
+    "tuApellido": "O teu apelido",
+    "apellidoPlaceholder": "Ex: Silva"
   },
   "sidebar": {
     "principal": "Principal",

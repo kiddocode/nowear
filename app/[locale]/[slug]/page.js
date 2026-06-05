@@ -154,6 +154,7 @@ export default function InvitadaPage() {
   const [lookEditando, setLookEditando] = useState(null)
   const [eliminando, setEliminando] = useState(null)
   const [nombre, setNombre] = useState('')
+  const [apellido, setApellido] = useState('')
   const [email, setEmail] = useState('')
   const [colores, setColores] = useState([])
   const [estado, setEstado] = useState('confirmado')
@@ -216,7 +217,7 @@ export default function InvitadaPage() {
   }
 
   function resetForm() {
-    setNombre(''); setColores([])
+    setNombre(''); setApellido(''); setColores([])
     setMarca1(''); setModelo1(''); setTipo1(''); setReferencia1(''); setLink1('')
     setMarca2(''); setModelo2(''); setTipo2(''); setReferencia2(''); setLink2('')
     setEstado('confirmado'); setFoto(null); setFotoPreview(null)
@@ -309,7 +310,7 @@ export default function InvitadaPage() {
 
   async function guardarLook(foto_url = null, estadoLook = 'confirmado') {
     const { data: lookInsertado, error: insertError } = await supabase.from('looks').insert({
-      evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+      evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_invitada: email.toLowerCase().trim(),
       color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
@@ -349,7 +350,7 @@ export default function InvitadaPage() {
     }
 
     await supabase.from('looks').update({
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      nombre_invitada: (nombre + ' ' + apellido).trim(), color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
@@ -362,7 +363,7 @@ export default function InvitadaPage() {
 
     const lookActualizado = {
       ...lookEditando,
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      nombre_invitada: (nombre + ' ' + apellido).trim(), color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
@@ -548,7 +549,7 @@ export default function InvitadaPage() {
         evento_id: evento.id,
         look_id: lookInsertado.id,
         candidato_id: candidatos[0]?.id || null,
-        nombre_invitada: nombre,
+        nombre_invitada: (nombre + ' ' + apellido).trim(),
         email_invitada: email.toLowerCase().trim(),
         nombre_candidata: candidatos[0]?.nombre_invitada || '',
         email_candidata: candidatos[0]?.email_invitada || '',
@@ -586,7 +587,7 @@ export default function InvitadaPage() {
     if (resultado.tipo === 'bloqueo_directo') {
       if (candidato) {
         await supabase.from('conflictos').insert({
-          evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+          evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_invitada: email.toLowerCase().trim(),
           marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
         })
         enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
@@ -608,7 +609,7 @@ export default function InvitadaPage() {
     if (resultado.tipo === 'bloqueo_mismo_modelo_otro_color') {
       if (candidato) {
         await supabase.from('conflictos').insert({
-          evento_id: evento.id, nombre_invitada: nombre, email_invitada: email.toLowerCase().trim(),
+          evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_invitada: email.toLowerCase().trim(),
           marca: marca1, modelo: modelo1, marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null, color_hex: colores[0], nombre_conflicto_con: candidato.nombre_invitada
         })
         enviarEmailAsync('conflicto_invitada', email.toLowerCase().trim(), nombre, {
@@ -652,7 +653,7 @@ export default function InvitadaPage() {
           evento_id: evento.id,
           look_id: lookInsertado.id,
           candidato_id: candidato?.id || null,
-          nombre_invitada: nombre,
+          nombre_invitada: (nombre + ' ' + apellido).trim(),
           email_invitada: email.toLowerCase().trim(),
           nombre_candidata: candidato?.nombre_invitada || '',
           email_candidata: candidato?.email_invitada || '',
@@ -731,7 +732,7 @@ export default function InvitadaPage() {
 
   async function handleActualizarLook() {
     setError('')
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
+    if (!nombre || !apellido || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1) {
       setError(t('errorCampos')); return
     }
     if (requierePrenda2 && (!marca2 || !tipo2 || !modelo2)) {
@@ -746,7 +747,7 @@ export default function InvitadaPage() {
 
   async function handleEnviar() {
     setError('')
-    if (!nombre || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
+    if (!nombre || !apellido || !email || colores.length === 0 || !marca1 || !modelo1 || !tipo1 || !estado) {
       setError(t('errorCampos')); return
     }
     if (requierePrenda2 && (!marca2 || !tipo2 || !modelo2)) {
@@ -1002,9 +1003,15 @@ export default function InvitadaPage() {
                 </div>
               )}
 
-              <div style={{marginBottom:'1.25rem'}}>
-                <label style={labelStyle}>{t('tuNombre')} <span style={{color:'#F07987'}}>*</span></label>
-                <input type="text" placeholder={t('nombrePlaceholder')} value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
+             <div style={{marginBottom:'1.25rem',display:'grid',gridTemplateColumns:'1fr 1fr',gap:'0.75rem'}}>
+                <div>
+                  <label style={labelStyle}>{t('tuNombre')} <span style={{color:'#F07987'}}>*</span></label>
+                  <input type="text" placeholder={t('nombrePlaceholder')} value={nombre} onChange={e => setNombre(e.target.value)} style={inputStyle}/>
+                </div>
+                <div>
+                  <label style={labelStyle}>{t('tuApellido')} <span style={{color:'#F07987'}}>*</span></label>
+                  <input type="text" placeholder={t('apellidoPlaceholder')} value={apellido} onChange={e => setApellido(e.target.value)} style={inputStyle}/>
+                </div>
               </div>
 
               <div style={{marginBottom:'1.25rem'}}>
