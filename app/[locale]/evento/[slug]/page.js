@@ -476,45 +476,49 @@ export default function EventoDetalle() {
                     {copiado ? t('copiado') : t('copiar')}
                   </button>
                 </div>
-                {isPremium && (
-                  <div className="hero-box-mobile-btns" style={{marginTop:'0.75rem',paddingTop:'0.75rem',borderTop:'1px solid #F0F0EE',display:'flex',gap:'0.5rem'}}>
-                    <button onClick={() => setTabActiva(tabPersonalizacionIdx)}
-                      style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:'rgba(196,145,124,0.1)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
-                      <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#C4917C'}}>✨ {t('tabPersonalizacion')}</span>
-                    </button>
-                    <button onClick={() => setTabActiva(tabRecordatoriosIdx)}
-                      style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:'rgba(196,145,124,0.1)',border:'1px solid rgba(196,145,124,0.4)',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
-                      <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:'#C4917C'}}>Recordatorios</span>
-                    </button>
-                  </div>
-                )}
+                <div className="hero-box-mobile-btns" style={{marginTop:'0.75rem',paddingTop:'0.75rem',borderTop:'1px solid #F0F0EE',display:'flex',gap:'0.5rem'}}>
+                  <button onClick={() => isPremium ? setTabActiva(tabPersonalizacionIdx) : setModalPlanes(true)}
+                    style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:isPremium?'rgba(196,145,124,0.1)':'rgba(0,0,0,0.04)',border:isPremium?'1px solid rgba(196,145,124,0.4)':'1px solid #E0E0DC',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
+                    <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:isPremium?'#C4917C':'#BEBEBA'}}>
+                      {isPremium ? `✨ ${t('tabPersonalizacion')}` : `🔒 ${t('tabPersonalizacion')}`}
+                    </span>
+                  </button>
+                  <button onClick={() => isPremium ? setTabActiva(tabRecordatoriosIdx) : setModalPlanes(true)}
+                    style={{flex:1,display:'flex',alignItems:'center',justifyContent:'center',padding:'0.55rem 0.4rem',background:isPremium?'rgba(196,145,124,0.1)':'rgba(0,0,0,0.04)',border:isPremium?'1px solid rgba(196,145,124,0.4)':'1px solid #E0E0DC',borderRadius:'6px',cursor:'pointer',fontFamily:'Poppins,sans-serif'}}>
+                    <span style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.06em',textTransform:'uppercase',color:isPremium?'#C4917C':'#BEBEBA'}}>
+                      {isPremium ? 'Recordatorios' : '🔒 Recordatorios'}
+                    </span>
+                  </button>
+                </div>
               </div>
 
-              {/* Box recordatorios: solo Premium, solo desktop */}
-              {isPremium && (
-                <button className="hero-box-desktop-only"
-                  onClick={() => setTabActiva(tabRecordatoriosIdx)}
-                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
-                  <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.4rem'}}>Recordatorios</p>
-                  <p style={{fontSize:'0.78rem',fontWeight:500,color:'#FFFFFF',margin:0}}>
-                    {invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio'}
-                  </p>
-                  <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.5)',margin:'0.2rem 0 0 0'}}>
-                    {invitadasArchivo.length > 0 ? 'Haz clic para cruzar y enviar' : 'Sube tu lista de invitadas'}
-                  </p>
-                </button>
-              )}
+              {/* Box recordatorios: desktop, bloqueado si no Premium */}
+              <button className="hero-box-desktop-only"
+                onClick={() => isPremium ? setTabActiva(tabRecordatoriosIdx) : setModalPlanes(true)}
+                style={{background:isPremium?'rgba(196,145,124,0.12)':'rgba(255,255,255,0.04)',border:isPremium?'1px solid rgba(196,145,124,0.35)':'1px solid rgba(255,255,255,0.1)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
+                <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:isPremium?'#C4917C':'#888884',marginBottom:'0.4rem'}}>
+                  {!isPremium && '🔒 '}Recordatorios
+                </p>
+                <p style={{fontSize:'0.78rem',fontWeight:500,color:isPremium?'#FFFFFF':'rgba(255,255,255,0.4)',margin:0}}>
+                  {isPremium ? (invitadasArchivo.length > 0 ? `${invitadasArchivo.length} invitadas cargadas` : 'Enviar recordatorio') : 'Enviar recordatorio'}
+                </p>
+                <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.35)',margin:'0.2rem 0 0 0'}}>
+                  {isPremium ? (invitadasArchivo.length > 0 ? 'Haz clic para cruzar y enviar' : 'Sube tu lista de invitadas') : 'desde Premium'}
+                </p>
+              </button>
 
-              {/* Box personalización: solo Premium, solo desktop */}
-              {isPremium && (
-                <button className="hero-box-desktop-only"
-                  onClick={() => setTabActiva(tabPersonalizacionIdx)}
-                  style={{background:'rgba(196,145,124,0.12)',border:'1px solid rgba(196,145,124,0.35)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
-                  <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#C4917C',marginBottom:'0.4rem'}}>✨ {t('tabPersonalizacion')}</p>
-                  <p style={{fontSize:'0.78rem',fontWeight:500,color:'#FFFFFF',margin:0}}>Foto e imagen</p>
-                  <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.5)',margin:'0.2rem 0 0 0'}}>Personaliza el link de tus invitadas</p>
-                </button>
-              )}
+              {/* Box personalización: desktop, bloqueado si no Premium */}
+              <button className="hero-box-desktop-only"
+                onClick={() => isPremium ? setTabActiva(tabPersonalizacionIdx) : setModalPlanes(true)}
+                style={{background:isPremium?'rgba(196,145,124,0.12)':'rgba(255,255,255,0.04)',border:isPremium?'1px solid rgba(196,145,124,0.35)':'1px solid rgba(255,255,255,0.1)',borderRadius:'4px',padding:'1.25rem 1.5rem',cursor:'pointer',fontFamily:'Poppins,sans-serif',display:'flex',flexDirection:'column',justifyContent:'center',minWidth:'180px',textAlign:'left'}}>
+                <p style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:isPremium?'#C4917C':'#888884',marginBottom:'0.4rem'}}>
+                  {isPremium ? '✨ ' : '🔒 '}{t('tabPersonalizacion')}
+                </p>
+                <p style={{fontSize:'0.78rem',fontWeight:500,color:isPremium?'#FFFFFF':'rgba(255,255,255,0.4)',margin:0}}>Foto e imagen</p>
+                <p style={{fontSize:'0.62rem',fontWeight:300,color:'rgba(255,255,255,0.35)',margin:'0.2rem 0 0 0'}}>
+                  {isPremium ? 'Personaliza el link de tus invitadas' : 'desde Premium'}
+                </p>
+              </button>
             </div>
           </div>
         </div>
