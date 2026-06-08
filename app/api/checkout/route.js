@@ -1,6 +1,11 @@
 import Stripe from 'stripe'
+import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL,
+  process.env.SUPABASE_SERVICE_ROLE_KEY
+)
 
 const PRECIOS = {
   basico:   { amount: 900,  label: 'NOWEAR Básico - 1 mes' },
@@ -14,22 +19,15 @@ export async function POST(req) {
     const { plan, planActual, eventoData, eventoId, eventoNombre, eventoSlug } = body
 
     const precio = PRECIOS[plan]
-    if (!precio) {
-      return Response.json({ error: 'Plan no válido' }, { status: 400 })
-    }
+    if (!precio) return Response.json({ error: 'Plan no válido' }, { status: 400 })
 
     const nombre = eventoData?.nombre || eventoNombre || ''
     const slug   = eventoData?.slug   || eventoSlug   || ''
     const id     = eventoData?.id     || eventoId     || ''
 
-    // Calcular diferencia si ya tiene un plan
     const precioActual = planActual ? (PRECIOS[planActual]?.amount || 0) : 0
     const diferencia = Math.max(precio.amount - precioActual, 0)
-
-    // Si ya tiene ese plan o uno superior, no cobrar
-    if (diferencia === 0) {
-      return Response.json({ error: 'Ya tienes este plan o uno superior.' }, { status: 400 })
-    }
+    if (diferencia === 0) return Response.json({ error: 'Ya tienes este plan o uno superior.' }, { status: 400 })
 
     const esMejora = precioActual > 0
     const labelPago = esMejora
@@ -44,18 +42,27 @@ export async function POST(req) {
       ? `https://www.nowear.es/evento/${slug}`
       : `https://www.nowear.es/dashboard`
 
+    // Si es evento nuevo (sin id), guardar datos en tabla temporal
+    let eventoPendienteId = null
+    if (!id && eventoData) {
+      const { data: pendiente } = await supabaseAdmin
+        .from('eventos_pendientes')
+        .insert({ datos: eventoData })
+        .select('id')
+        .single()
+      eventoPendienteId = pendiente?.id || null
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'eur',
-            product_data: { name: labelPago },
-            unit_amount: diferencia,
-          },
-          quantity: 1,
+      line_items: [{
+        price_data: {
+          currency: 'eur',
+          product_data: { name: labelPago },
+          unit_amount: diferencia,
         },
-      ],
+        quantity: 1,
+      }],
       mode: 'payment',
       allow_promotion_codes: true,
       success_url: successUrl,
@@ -71,6 +78,7 @@ export async function POST(req) {
         eventoId: id,
         eventoNombre: nombre,
         eventoSlug: slug,
+        eventoPendienteId: eventoPendienteId || '',
       },
     })
 

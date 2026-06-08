@@ -25,38 +25,77 @@ export async function POST(req) {
 
     if (eventType === 'checkout.session.completed' || eventType === 'payment_intent.succeeded') {
       const metadata = session.metadata || {}
-      const { plan, eventoId, eventoSlug, eventoNombre } = metadata
+      const { plan, eventoId, eventoSlug, eventoNombre, eventoPendienteId } = metadata
 
-      if (!plan || (!eventoId && !eventoSlug)) {
+      if (!plan) {
         console.log('Webhook: metadata incompleta', metadata)
         return Response.json({ received: true })
       }
 
-      // Actualizar plan en Supabase
-      let query = supabaseAdmin.from('eventos').update({ plan })
-      if (eventoId) {
-        query = query.eq('id', eventoId)
-      } else {
-        query = query.eq('slug', eventoSlug)
+      let slugFinal = eventoSlug
+      let nombreFinal = eventoNombre
+
+      // CASO 1: Evento nuevo (viene de eventos_pendientes)
+      if (eventoPendienteId) {
+        const { data: pendiente } = await supabaseAdmin
+          .from('eventos_pendientes')
+          .select('datos')
+          .eq('id', eventoPendienteId)
+          .single()
+
+        if (pendiente?.datos) {
+          const datos = pendiente.datos
+          slugFinal = datos.slug
+          nombreFinal = datos.nombre
+
+          const { error: insertError } = await supabaseAdmin.from('eventos').insert({
+            organizadora_id: datos.organizadora_id,
+            slug: datos.slug,
+            nombre: datos.nombre,
+            tipo: datos.tipo || null,
+            fecha: datos.fecha || null,
+            lugar: datos.lugar || null,
+            num_invitadas: datos.num_invitadas || null,
+            colores_bloqueados: datos.colores_bloqueados || null,
+            damas_honor: datos.damas_honor || null,
+            plan,
+            look_bloqueado_color: datos.look_bloqueado_color || null,
+            look_bloqueado_marca1: datos.look_bloqueado_marca1 || null,
+            look_bloqueado_tipo1: datos.look_bloqueado_tipo1 || null,
+            look_bloqueado_modelo1: datos.look_bloqueado_modelo1 || null,
+            look_bloqueado_referencia1: datos.look_bloqueado_referencia1 || null,
+            look_bloqueado_link1: datos.look_bloqueado_link1 || null,
+            look_bloqueado_marca2: datos.look_bloqueado_marca2 || null,
+            look_bloqueado_tipo2: datos.look_bloqueado_tipo2 || null,
+            look_bloqueado_modelo2: datos.look_bloqueado_modelo2 || null,
+            look_bloqueado_referencia2: datos.look_bloqueado_referencia2 || null,
+            look_bloqueado_link2: datos.look_bloqueado_link2 || null,
+          })
+
+          if (insertError) {
+            console.error('Error creando evento:', insertError)
+          } else {
+            // Borrar el pendiente
+            await supabaseAdmin.from('eventos_pendientes').delete().eq('id', eventoPendienteId)
+            console.log('Evento creado:', datos.slug)
+          }
+        }
+
+      // CASO 2: Mejora de plan (evento ya existe)
+      } else if (eventoId || eventoSlug) {
+        let query = supabaseAdmin.from('eventos').update({ plan })
+        if (eventoId) query = query.eq('id', eventoId)
+        else query = query.eq('slug', eventoSlug)
+        const { error } = await query
+        if (error) console.error('Error actualizando plan:', error)
+        else console.log(`Plan actualizado: ${eventoId || eventoSlug} -> ${plan}`)
       }
 
-      const { error } = await query
-      if (error) {
-        console.error('Error actualizando plan:', error)
-        return Response.json({ error: error.message }, { status: 500 })
-      }
-
-      console.log(`Plan actualizado: ${eventoId || eventoSlug} -> ${plan}`)
-
-      // Obtener email de la organizadora
+      // Email de confirmación
       try {
-        const id = eventoId || null
-        const slug = eventoSlug || null
-
         let eventoQuery = supabaseAdmin.from('eventos').select('organizadora_id, nombre, slug')
-        if (id) eventoQuery = eventoQuery.eq('id', id)
-        else eventoQuery = eventoQuery.eq('slug', slug)
-
+        if (eventoId) eventoQuery = eventoQuery.eq('id', eventoId)
+        else eventoQuery = eventoQuery.eq('slug', slugFinal)
         const { data: evento } = await eventoQuery.single()
 
         if (evento?.organizadora_id) {
@@ -65,8 +104,8 @@ export async function POST(req) {
 
           if (emailOrganizadora) {
             const planLabel = PLAN_LABELS[plan] || plan
-            const nombreEvento = evento.nombre || eventoNombre || 'tu evento'
-            const slugEvento = evento.slug || eventoSlug || ''
+            const nombreEvento = evento.nombre || nombreFinal || 'tu evento'
+            const slugEvento = evento.slug || slugFinal || ''
 
             await resend.emails.send({
               from: 'NOWEAR <support@nowear.es>',
@@ -91,13 +130,11 @@ export async function POST(req) {
                 </div>
               `
             })
-
-            console.log(`Email de confirmación enviado a ${emailOrganizadora}`)
+            console.log(`Email enviado a ${emailOrganizadora}`)
           }
         }
       } catch (emailError) {
-        console.error('Error enviando email de confirmación:', emailError)
-        // No retornamos error para no afectar la respuesta al webhook
+        console.error('Error enviando email:', emailError)
       }
     }
 

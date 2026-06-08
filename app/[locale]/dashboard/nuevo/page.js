@@ -138,29 +138,30 @@ export default function NuevoEvento() {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { router.push(prefijo + '/login'); return }
     const slug = slugify(nombre) + '-' + Date.now().toString().slice(-4)
-    const { error: eventoError } = await supabase.from('eventos').insert({
-      organizadora_id: user.id, slug, nombre, tipo, fecha, lugar,
-      num_invitadas: numInvitadas ? parseInt(numInvitadas) : null,
-      colores_bloqueados: coloresBloqueados || null,
-      damas_honor: damasHonor || null,
-      plan: 'pendiente',
-      look_bloqueado_color: tieneLookBloqueado && lookBloqueadoColor ? lookBloqueadoColor : null,
-      look_bloqueado_marca1: tieneLookBloqueado && lookBloqueadoMarca1 ? lookBloqueadoMarca1 : null,
-      look_bloqueado_tipo1: tieneLookBloqueado && lookBloqueadoTipo1 ? lookBloqueadoTipo1 : null,
-      look_bloqueado_modelo1: tieneLookBloqueado && lookBloqueadoModelo1 ? lookBloqueadoModelo1 : null,
-      look_bloqueado_referencia1: tieneLookBloqueado && lookBloqueadoReferencia1 ? lookBloqueadoReferencia1 : null,
-      look_bloqueado_link1: tieneLookBloqueado && lookBloqueadoLink1 ? lookBloqueadoLink1 : null,
-      look_bloqueado_marca2: tieneLookBloqueado && lookBloqueadoMarca2 ? lookBloqueadoMarca2 : null,
-      look_bloqueado_tipo2: tieneLookBloqueado && lookBloqueadoTipo2 ? lookBloqueadoTipo2 : null,
-      look_bloqueado_modelo2: tieneLookBloqueado && lookBloqueadoModelo2 ? lookBloqueadoModelo2 : null,
-      look_bloqueado_referencia2: tieneLookBloqueado && lookBloqueadoReferencia2 ? lookBloqueadoReferencia2 : null,
-      look_bloqueado_link2: tieneLookBloqueado && lookBloqueadoLink2 ? lookBloqueadoLink2 : null,
-    })
-    if (eventoError) { setLoading(false); setError(t('errorEvento')); setShowPlanes(false); return }
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-     body: JSON.stringify({ plan: planSeleccionado, eventoData: { nombre, slug } })
+      body: JSON.stringify({
+        plan: planSeleccionado,
+        eventoData: {
+          nombre, slug, tipo, fecha, lugar,
+          num_invitadas: numInvitadas ? parseInt(numInvitadas) : null,
+          colores_bloqueados: coloresBloqueados || null,
+          damas_honor: damasHonor || null,
+          organizadora_id: user.id,
+          look_bloqueado_color: tieneLookBloqueado && lookBloqueadoColor ? lookBloqueadoColor : null,
+          look_bloqueado_marca1: tieneLookBloqueado && lookBloqueadoMarca1 ? lookBloqueadoMarca1 : null,
+          look_bloqueado_tipo1: tieneLookBloqueado && lookBloqueadoTipo1 ? lookBloqueadoTipo1 : null,
+          look_bloqueado_modelo1: tieneLookBloqueado && lookBloqueadoModelo1 ? lookBloqueadoModelo1 : null,
+          look_bloqueado_referencia1: tieneLookBloqueado && lookBloqueadoReferencia1 ? lookBloqueadoReferencia1 : null,
+          look_bloqueado_link1: tieneLookBloqueado && lookBloqueadoLink1 ? lookBloqueadoLink1 : null,
+          look_bloqueado_marca2: tieneLookBloqueado && lookBloqueadoMarca2 ? lookBloqueadoMarca2 : null,
+          look_bloqueado_tipo2: tieneLookBloqueado && lookBloqueadoTipo2 ? lookBloqueadoTipo2 : null,
+          look_bloqueado_modelo2: tieneLookBloqueado && lookBloqueadoModelo2 ? lookBloqueadoModelo2 : null,
+          look_bloqueado_referencia2: tieneLookBloqueado && lookBloqueadoReferencia2 ? lookBloqueadoReferencia2 : null,
+          look_bloqueado_link2: tieneLookBloqueado && lookBloqueadoLink2 ? lookBloqueadoLink2 : null,
+        }
+      })
     })
     const data = await res.json()
     setLoading(false)
