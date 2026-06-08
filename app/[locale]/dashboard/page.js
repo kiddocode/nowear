@@ -51,7 +51,9 @@ export default function Dashboard() {
       setProfile(prof)
       const { data: evs } = await supabase
         .from('eventos').select('*, looks(count)')
-        .eq('organizadora_id', user.id).order('created_at', { ascending: false })
+        .eq('organizadora_id', user.id)
+        .neq('plan', 'pendiente')
+        .order('created_at', { ascending: false })
       setEventos(evs || [])
       if (evs && evs.length > 0) {
         const eventoIds = evs.map(e => e.id)

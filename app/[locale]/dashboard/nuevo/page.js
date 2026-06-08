@@ -143,7 +143,7 @@ export default function NuevoEvento() {
       num_invitadas: numInvitadas ? parseInt(numInvitadas) : null,
       colores_bloqueados: coloresBloqueados || null,
       damas_honor: damasHonor || null,
-      plan: planSeleccionado,
+      plan: 'pendiente',
       look_bloqueado_color: tieneLookBloqueado && lookBloqueadoColor ? lookBloqueadoColor : null,
       look_bloqueado_marca1: tieneLookBloqueado && lookBloqueadoMarca1 ? lookBloqueadoMarca1 : null,
       look_bloqueado_tipo1: tieneLookBloqueado && lookBloqueadoTipo1 ? lookBloqueadoTipo1 : null,
@@ -160,7 +160,7 @@ export default function NuevoEvento() {
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: planSeleccionado, eventoData: { nombre, slug } })
+      body: JSON.stringify({ plan: 'pendiente', eventoData: { nombre, slug } })
     })
     const data = await res.json()
     setLoading(false)
