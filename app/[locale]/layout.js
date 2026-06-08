@@ -2,6 +2,7 @@ import {NextIntlClientProvider} from 'next-intl'
 import {getMessages} from 'next-intl/server'
 import NavbarWrapper from '../components/NavbarWrapper'
 import '../globals.css'
+import CookieBanner from '../components/CookieBanner'
 
 const SUPABASE = 'https://qhuatexjyxbunotvghjh.supabase.co/storage/v1/object/public/fotos/'
 
@@ -120,12 +121,28 @@ export default async function LocaleLayout({children, params}) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
         <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,200;1,300;1,400&display=swap" rel="stylesheet" />
+
+        {/* GA4 - carga con consentimiento por defecto denegado */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-WNMFPXECYM"></script>
+        <script dangerouslySetInnerHTML={{ __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('consent', 'default', { analytics_storage: 'denied' });
+          gtag('js', new Date());
+          gtag('config', 'G-WNMFPXECYM', { send_page_view: false });
+          var consent = localStorage.getItem('nw_cookie_consent');
+          if (consent === 'accepted') {
+            gtag('consent', 'update', { analytics_storage: 'granted' });
+            gtag('event', 'page_view');
+          }
+        `}} />
       </head>
       <body style={{fontFamily:"'Poppins', sans-serif"}}>
         <NextIntlClientProvider messages={messages}>
           <NavbarWrapper locale={locale}/>
           <div style={{paddingTop:'68px'}}>
             {children}
+        <CookieBanner />
           </div>
         </NextIntlClientProvider>
       </body>
