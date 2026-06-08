@@ -160,7 +160,7 @@ export default function NuevoEvento() {
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ plan: 'pendiente', eventoData: { nombre, slug } })
+     body: JSON.stringify({ plan: planSeleccionado, eventoData: { nombre, slug } })
     })
     const data = await res.json()
     setLoading(false)
