@@ -113,6 +113,19 @@ export default async function LocaleLayout({children, params}) {
             { "@type": "Offer", "price": "19", "priceCurrency": "EUR", "name": "Plan Estándar" },
             { "@type": "Offer", "price": "29", "priceCurrency": "EUR", "name": "Plan Premium" },
           ],
+          "featureList": [
+            "Detección automática de looks coincidentes",
+            "Registro de outfits por invitadas",
+            "Notificaciones por email",
+            "Panel de organizadora",
+            "Exportar lista de looks",
+            "Personalización de enlace de invitada",
+            "Compatible con bodas, comuniones, bautizos y galas"
+          ],
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Novias, organizadoras de eventos, invitadas a bodas"
+          },
           "inLanguage": ["es","fr","en","pt","de","nl","it"],
           "sameAs": ["https://www.instagram.com/nowearapp"],
         })}}/>
