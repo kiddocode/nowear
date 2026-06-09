@@ -471,6 +471,7 @@ export default function Home() {
               {label:t('footer.inspiracion'),href:'/#marcas'},
               {label:t('footer.preguntasFrecuentes'),href:'/#faq'},
               {label:t('footer.crearEvento'),href:'/register'},
+              {label:'Blog',href:'/blog'},
             ]},
             {title:t('footer.soporte'),links:[
               {label:t('footer.contacto'),href:'/#contacto'},
