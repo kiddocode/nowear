@@ -1,4 +1,11 @@
 ---
+faqs:
+  - q: "¿Qué colores están prohibidos en una boda?"
+    a: "El blanco, el crudo, el marfil, el champán y cualquier tono que pueda confundirse con el vestido de novia. El color de las damas de honor también se considera reservado."
+  - q: "¿Puedo ir de rojo a una boda?"
+    a: "Depende del contexto. En bodas modernas y urbanas es perfectamente apropiado. En bodas tradicionales puede parecer demasiado llamativo."
+  - q: "¿Cómo sé qué colores ha bloqueado la novia?"
+    a: "Si la novia usa NOWEAR, los colores bloqueados aparecen indicados en el formulario de registro. Si no hay sistema, pregunta directamente."
 titulo: "Colores prohibidos en una boda: más allá del blanco"
 descripcion: "El blanco es el color más conocido, pero hay otros colores que también pueden causar problemas en una boda. Guía completa de colores a evitar y por qué."
 fecha: "2026-06-17"

@@ -1,4 +1,13 @@
 ---
+faqs:
+  - q: "¿Cómo puedo saber si otra invitada lleva el mismo vestido que yo?"
+    a: "La forma más fiable es registrar tu look en una plataforma de coordinación como NOWEAR. El sistema cruza automáticamente todos los looks registrados y avisa si hay coincidencia antes del evento."
+  - q: "¿Qué hago si llego a una boda y otra invitada lleva el mismo vestido?"
+    a: "Lo mejor es tomárselo con elegancia, presentarte y hacer una broma para aliviar la tensión. Diferénciate con los complementos: cambia el bolso, los zapatos o el peinado para que el resultado final sea distinto."
+  - q: "¿Con qué antelación debo registrar mi look para una boda?"
+    a: "Cuanto antes mejor. Con el plan Premium de NOWEAR puedes registrarlo desde el momento en que creas el evento, sin límite de tiempo."
+  - q: "¿Es obligatorio registrar el look si la novia usa NOWEAR?"
+    a: "No es obligatorio, pero si no lo registras corres el riesgo de coincidir con alguien que sí lo haya hecho. El sistema solo puede proteger a quienes participan."
 titulo: "Cómo evitar ir vestida igual que otra invitada a una boda"
 descripcion: "El momento más temido de cualquier invitada: llegar a una boda y encontrarte con que otra lleva exactamente tu mismo vestido. Te contamos cómo evitarlo."
 fecha: "2026-06-01"

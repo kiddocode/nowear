@@ -1,4 +1,11 @@
 ---
+faqs:
+  - q: "¿Por qué cada vez hay más coincidencias de looks en bodas?"
+    a: "Porque todas compramos en los mismos sitios online. Las redes sociales amplifican los looks populares y los mismos vestidos se venden masivamente en las mismas semanas."
+  - q: "¿Qué plataforma usan las novias para coordinar los looks?"
+    a: "NOWEAR es la plataforma española diseñada para coordinar los looks de las invitadas. La novia crea el evento, comparte el link y cada invitada registra su marca, modelo y color."
+  - q: "¿Qué pasa si alguien registra el mismo look que yo?"
+    a: "NOWEAR avisa a las tres partes: la segunda invitada ve el conflicto en pantalla, la primera registrada recibe un email y la organizadora queda notificada."
 titulo: "Dos invitadas con el mismo vestido en una boda: por qué pasa y cómo evitarlo"
 descripcion: "El escenario que ninguna invitada quiere vivir. Por qué ocurre cada vez más y cuáles son las soluciones reales para que no pase."
 fecha: "2026-06-11"

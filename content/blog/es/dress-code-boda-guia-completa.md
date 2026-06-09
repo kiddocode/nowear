@@ -1,4 +1,13 @@
 ---
+faqs:
+  - q: "¿Qué significa black tie en una boda?"
+    a: "Black tie es el dress code más formal. Para las mujeres significa vestido largo de noche con telas nobles como satén, terciopelo o chiffon, y complementos de joyería."
+  - q: "¿Qué es el dress code cocktail en una boda?"
+    a: "El dress code cocktail es el más común en bodas españolas. Admite vestido midi o corto de tejido elegante, conjuntos sofisticados o trajes de chaqueta femeninos."
+  - q: "¿Puedo ir de negro a una boda en España?"
+    a: "Sí, el negro es completamente aceptable en bodas en España, especialmente para bodas de noche."
+  - q: "¿Qué pasa si no hay dress code indicado en la invitación?"
+    a: "El cocktail elegante es la opción más segura. Si la boda es en iglesia y luego en restaurante o finca, ese dress code encaja perfectamente."
 titulo: "Dress code boda: guía completa para entender qué llevar"
 descripcion: "Black tie, cocktail, smart casual, garden party... Entender el dress code de una boda puede ser confuso. Esta guía lo explica todo."
 fecha: "2026-06-05"

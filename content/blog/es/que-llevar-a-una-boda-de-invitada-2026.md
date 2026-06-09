@@ -1,4 +1,11 @@
 ---
+faqs:
+  - q: "¿Qué se lleva de invitada a una boda en 2026?"
+    a: "En 2026 triunfan los colores verde botella, terracota, azul acero y tonos tierra. La silueta midi sigue siendo la más popular."
+  - q: "¿Cuál es la marca más popular para vestidos de invitada en España?"
+    a: "Zara es la marca más usada, seguida de Mango y Massimo Dutti. Para un look más exclusivo considera firmas como Inés Martín Alcalde, Galü o Bimani."
+  - q: "¿Cómo evito ir vestida igual que otra invitada?"
+    a: "Registra tu look en NOWEAR si la organizadora ha creado el evento. El sistema cruza automáticamente todos los looks y avisa si hay coincidencia."
 titulo: "Qué llevar a una boda de invitada en 2026: guía completa"
 descripcion: "Todo lo que necesitas saber para elegir el look perfecto como invitada en 2026. Tendencias, colores, marcas y consejos para no equivocarte."
 fecha: "2026-06-02"
