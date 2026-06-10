@@ -54,6 +54,7 @@ export default async function LocaleLayout({children, params}) {
     <html lang={locale}>
       <head>
         <meta charSet="utf-8"/>
+        <meta name="msvalidate.01" content="63408183BB2EAD8B9279C5F7EBFE2A16" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
 
         {/* TÍTULO Y DESCRIPCIÓN */}
