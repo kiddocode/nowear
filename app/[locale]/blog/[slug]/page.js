@@ -1,34 +1,6 @@
 import { getPostHtml, getPostSlugs } from '@/lib/blog'
 import { notFound } from 'next/navigation'
 
-export async function generateMetadata({ params }) {
-  const { locale, slug } = await params
-  const post = await getPostHtml(slug, locale)
-  if (!post) return {}
-  const url = `https://nowear.es${locale === 'es' ? '' : '/' + locale}/blog/${slug}`
-  return {
-    title: `${post.titulo} | NOWEAR Blog`,
-    description: post.descripcion,
-    alternates: {
-      canonical: url,
-    },
-    openGraph: {
-      title: post.titulo,
-      description: post.descripcion,
-      url,
-      siteName: 'NOWEAR',
-      locale: locale,
-      type: 'article',
-      publishedTime: post.fecha,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: post.titulo,
-      description: post.descripcion,
-    },
-  }
-}
-
 export async function generateStaticParams() {
   const locales = ['es','en','fr','de','pt','nl','it']
   const params = []
@@ -44,24 +16,8 @@ export default async function BlogPost({ params }) {
   const post = await getPostHtml(slug, locale)
   if (!post) notFound()
 
-  const url = `https://nowear.es${locale === 'es' ? '' : '/' + locale}/blog/${slug}`
-
-  const schemaArticle = {
-    '@context': 'https://schema.org',
-    '@type': 'BlogPosting',
-    headline: post.titulo,
-    description: post.descripcion,
-    datePublished: post.fecha,
-    dateModified: post.fecha,
-    author: { '@type': 'Organization', name: 'NOWEAR', url: 'https://nowear.es' },
-    publisher: { '@type': 'Organization', name: 'NOWEAR', url: 'https://nowear.es' },
-    url,
-    mainEntityOfPage: url,
-  }
-
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{__html: JSON.stringify(schemaArticle)}}/>
       <style>{`
         .blog-content h2 { font-size:1.4rem;font-weight:700;color:#0A0A0A;margin:2rem 0 1rem;letter-spacing:-0.02em; }
         .blog-content h3 { font-size:1.1rem;font-weight:600;color:#0A0A0A;margin:1.5rem 0 0.75rem; }
@@ -73,14 +29,16 @@ export default async function BlogPost({ params }) {
         .blog-content hr { border:none;border-top:1px solid #E0E0DC;margin:2rem 0; }
       `}</style>
       <div style={{maxWidth:'760px',margin:'0 auto',padding:'4rem 2rem 6rem'}}>
-        <a href={`${locale === 'es' ? '' : '/' + locale}/blog`}
+        <a href={`/${locale === 'es' ? '' : locale + '/'}blog`}
           style={{fontSize:'0.62rem',fontWeight:600,letterSpacing:'0.12em',textTransform:'uppercase',color:'#888884',textDecoration:'none',display:'inline-flex',alignItems:'center',gap:'0.4rem',marginBottom:'2.5rem'}}>
           ← Blog
         </a>
         {post.categoria && (
           <span style={{fontSize:'0.55rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#F07987',display:'block',marginBottom:'0.75rem'}}>{post.categoria}</span>
         )}
-        <h1 style={{fontSize:'clamp(1.8rem,4vw,3rem)',fontWeight:100,letterSpacing:'-0.025em',lineHeight:1.1,marginBottom:'1rem',color:'#0A0A0A'}}>{post.titulo}</h1>
+        <h1 style={{fontSize:'clamp(1.8rem,4vw,3rem)',fontWeight:100,letterSpacing:'-0.025em',lineHeight:1.1,marginBottom:'1rem'}}>
+          {post.titulo.split(':').map((part, i) => i === 0 ? <span key={i}>{part}{post.titulo.includes(':') ? ':' : ''}<br/></span> : <strong key={i} style={{fontWeight:700}}>{part}</strong>)}
+        </h1>
         <p style={{fontSize:'0.95rem',fontWeight:300,color:'#888884',lineHeight:1.8,marginBottom:'1.5rem'}}>{post.descripcion}</p>
         <div style={{display:'flex',alignItems:'center',gap:'1rem',marginBottom:'3rem',paddingBottom:'2rem',borderBottom:'1px solid #E0E0DC'}}>
           <span style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>{post.fecha ? new Date(post.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}</span>
@@ -88,21 +46,10 @@ export default async function BlogPost({ params }) {
           {post.categoria && <span style={{fontSize:'0.72rem',fontWeight:300,color:'#BEBEBA'}}>{post.categoria}</span>}
         </div>
         <div className="blog-content" dangerouslySetInnerHTML={{__html: post.contentHtml}}/>
-
-        {/* LINKS INTERNOS AL FINAL */}
-        <div style={{marginTop:'3rem',padding:'1.5rem',background:'#F7F7F5',border:'1px solid #E0E0DC',borderRadius:'8px',marginBottom:'2rem'}}>
-          <p style={{fontSize:'0.65rem',fontWeight:700,letterSpacing:'0.15em',textTransform:'uppercase',color:'#888884',marginBottom:'1rem'}}>Más artículos</p>
-          <div style={{display:'flex',flexDirection:'column',gap:'0.5rem'}}>
-            <a href={`${locale === 'es' ? '' : '/' + locale}/blog/como-evitar-ir-vestida-igual-que-otra-invitada-a-una-boda`} style={{fontSize:'0.82rem',fontWeight:400,color:'#F07987',textDecoration:'none'}}>Cómo evitar ir vestida igual que otra invitada</a>
-            <a href={`${locale === 'es' ? '' : '/' + locale}/blog/dress-code-boda-guia-completa`} style={{fontSize:'0.82rem',fontWeight:400,color:'#F07987',textDecoration:'none'}}>Dress code boda: guía completa</a>
-            <a href={`${locale === 'es' ? '' : '/' + locale}/blog/dos-invitadas-mismo-vestido-boda-como-evitarlo`} style={{fontSize:'0.82rem',fontWeight:400,color:'#F07987',textDecoration:'none'}}>Dos invitadas con el mismo vestido</a>
-          </div>
-        </div>
-
-        <div style={{marginTop:'2rem',padding:'2rem',background:'#0A0A0A',borderRadius:'12px',textAlign:'center'}}>
+        <div style={{marginTop:'4rem',padding:'2rem',background:'#0A0A0A',borderRadius:'12px',textAlign:'center'}}>
           <p style={{fontSize:'0.6rem',fontWeight:700,letterSpacing:'0.18em',textTransform:'uppercase',color:'rgba(255,255,255,0.4)',marginBottom:'0.75rem'}}>NOWEAR</p>
           <p style={{fontSize:'1.1rem',fontWeight:300,color:'#FFFFFF',lineHeight:1.6,marginBottom:'1.5rem'}}>Que ninguna invitada llegue<br/><strong style={{fontWeight:700}}>vestida igual.</strong></p>
-          <a href={`${locale === 'es' ? '' : '/' + locale}/register`}
+          <a href={`/${locale === 'es' ? '' : locale + '/'}register`}
             style={{display:'inline-block',padding:'0.85rem 2rem',background:'#F07987',color:'#FFFFFF',textDecoration:'none',fontSize:'0.78rem',fontWeight:500,borderRadius:'4px'}}>
             Crear mi evento gratis
           </a>
