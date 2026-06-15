@@ -1,3 +1,15 @@
+export async function generateMetadata({ params }) {
+  const { locale, slug } = await params
+  const canonical = locale === 'es'
+    ? `https://nowear.es/blog/${slug}`
+    : `https://nowear.es/blog/${slug}`
+  return {
+    alternates: {
+      canonical,
+    }
+  }
+}
+
 import { getPostHtml, getPostSlugs } from '@/lib/blog'
 import { notFound } from 'next/navigation'
 
