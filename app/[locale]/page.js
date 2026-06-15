@@ -456,6 +456,13 @@ export default function Home() {
         </div>
       </section>
 
+{/* BADGE BODALIA */}
+      <div style={{background:'#F7F7F5',padding:'2rem 3rem',textAlign:'center',borderTop:'1px solid #E0E0DC'}}>
+        <a href="https://bodalia.es/proveedor/nowear-767" target="_blank" rel="noopener noreferrer">
+          <img src="https://bodalia.es/badge/688.svg" alt="Recomendado en Bodalia" width="200" height="119" style={{display:'inline-block'}}/>
+        </a>
+      </div>
+
       {/* FOOTER */}
       <footer style={{background:'#0A0A0A',padding:'5rem 3rem 2.5rem'}}>
         <div className="footer-grid" style={{display:'grid',gridTemplateColumns:'2fr 1fr 1fr 1fr',gap:'3rem',marginBottom:'4rem'}}>
