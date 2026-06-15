@@ -172,7 +172,7 @@
       },
       {
         "q": "Was passiert, wenn eine Gästin beschließt, einen bereits registrierten Look zu tragen?",
-        "a": "NOWEAR warnt die zweite Gästin sofort, wenn sie versucht, einen bereits reservierten Look zu registrieren. Wenn sie sich trotzdem dafür entscheidet, liegt die Verantwortung vollständig bei ihr. Die Organisatorin hat für diesen Service bezahlt, um genau solche Überschneidungen zu vermeiden. Den Look zu respektieren ist eine Frage der Rücksichtnahme gegenüber derjenigen, die die Veranstaltung organisiert hat."
+        "a": "Bei einem Konflikt benachrichtigt NOWEAR alle drei Parteien: Die zweite Gästin sieht die Sperrung auf dem Bildschirm, die erste registrierte Gästin erhält eine E-Mail und die Organisatorin wird ebenfalls benachrichtigt. Wenn die zweite dennoch diesen Look trägt, tut sie es im Wissen dass alle bereits informiert sind. Wenn sie mit demselben Look auf der Veranstaltung erscheint wird es keine Überraschung für niemanden sein. Die Verantwortung liegt vollständig bei ihr.\n\nUm dies zu reduzieren enthält der Premium-Plan automatische Erinnerungen: Lade deine Gästeliste als Excel oder CSV hoch, NOWEAR erkennt wer fehlt und handelt bevor der Tag kommt."
       },
       {
         "q": "Wie stelle ich sicher, dass alle Gäste ihren Look registrieren?",

@@ -171,7 +171,7 @@
       },
       {
         "q": "Cosa succede se un'ospite decide di indossare un look già registrato?",
-        "a": "Quando c'è un conflitto, NOWEAR avvisa tutte e tre le parti: la seconda invitata vede il blocco sullo schermo, la prima registrata riceve un'email e l'organizzatrice viene anch'essa notificata. Se la seconda decide comunque di indossare quel look, lo fa sapendo che tutte sono già al corrente. La responsabilità è interamente sua.\n\nPer ridurre questa eventualità, il piano Premium include promemoria automatici: carica la tua lista in Excel o CSV, NOWEAR rileva chi manca e agisce prima del giorno dell'evento."
+        "a": "Quando c'è un conflitto, NOWEAR avvisa tutte e tre le parti: la seconda invitata vede il blocco sullo schermo, la prima registrata riceve un'email e l'organizzatrice viene anch'essa notificata. Se la seconda decide comunque di indossare quel look, lo fa sapendo che tutte sono già al corrente. Se si presenta all'evento con lo stesso look non sarà una sorpresa per nessuno. La responsabilità è interamente sua.\n\nPer ridurre questa eventualità, il piano Premium include promemoria automatici: carica la tua lista in Excel o CSV, NOWEAR rileva chi manca e agisce prima del giorno dell'evento."
       },
       {
         "q": "Come mi assicuro che tutte le mie invitate registrino il loro look?",
