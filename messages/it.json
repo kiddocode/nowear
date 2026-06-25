@@ -174,6 +174,10 @@
         "a": "Quando c'è un conflitto, NOWEAR avvisa tutte e tre le parti: la seconda invitata vede il blocco sullo schermo, la prima registrata riceve un'email e l'organizzatrice viene anch'essa notificata. Se la seconda decide comunque di indossare quel look, lo fa sapendo che tutte sono già al corrente. Se si presenta all'evento con lo stesso look non sarà una sorpresa per nessuno. La responsabilità è interamente sua.\n\nPer ridurre questa eventualità, il piano Premium include promemoria automatici: carica la tua lista in Excel o CSV, NOWEAR rileva chi manca e agisce prima del giorno dell'evento."
       },
       {
+        "q": "Chi può vedere i look registrati?",
+        "a": "Solo l'organizzatrice dell'evento ha accesso ai look registrati. Tra le invitate non c'è visibilità reciproca: nessuna invitata può vedere il look di un'altra. Quando registri il tuo outfit, solo chi ha creato l'evento può vederlo."
+      },
+      {
         "q": "Come mi assicuro che tutte le mie invitate registrino il loro look?",
         "a": "Il sistema rileva solo i conflitti tra i look registrati, quindi è importante che tutte partecipino. Il piano Premium include promemoria automatici: carica la tua lista in Excel o CSV, NOWEAR rileva chi manca, invia un'email a quelle con email nella tua lista e genera un messaggio WhatsApp per le altre. Senza dover rincorrere nessuno.\n\nLa decisione finale spetta sempre a ciascuna persona."
       },

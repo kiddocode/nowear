@@ -175,6 +175,10 @@
         "a": "When there is a conflict, NOWEAR notifies all three parties: the second guest sees the block on screen, the first registered guest receives an email informing her that someone tried to register her same look, and the organiser is also notified. If the second guest still decides to wear that look, she does so knowing that both the organiser and the first guest already know what happened. If she shows up at the event in that same look, it will not be a surprise to anyone, and it will be clear it was a conscious decision. The responsibility is entirely hers.\n\nTo minimise this as much as possible, the Premium plan includes automatic reminders: upload your guest list in Excel or CSV, NOWEAR detects who is missing and acts before the day of the event."
       },
       {
+        "q": "Who can see the registered looks?",
+        "a": "Only the event organiser has access to the registered looks. Guests cannot see each other's looks: no guest can see what another guest is wearing. When you register your outfit, only the person who created the event can see it."
+      },
+      {
         "q": "How do I make sure all my guests register their look?",
         "a": "The system only detects conflicts between registered looks, so it is important that everyone participates. To help you, the Premium plan includes automatic reminders: upload your guest list in Excel or CSV, NOWEAR detects who is missing, sends an automatic email to those who have an email in your list and generates a ready-to-copy WhatsApp message for the rest. No chasing anyone.\n\nThat said, the final decision always rests with each person. Registering your look is a matter of consideration towards the person organising the event, who has invested time and money to avoid those awkward moments."
       },

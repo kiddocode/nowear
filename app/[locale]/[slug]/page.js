@@ -922,6 +922,9 @@ evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_i
               {evento.fecha ? new Date(evento.fecha).toLocaleDateString('es-ES',{day:'numeric',month:'long',year:'numeric'}) : ''}
               {evento.lugar ? ` · ${evento.lugar}` : ''}
             </p>
+            {mensajePanel && mensajePanel !== t('registraLook') && (
+              <p style={{fontSize:'0.72rem',fontWeight:400,color:'rgba(255,255,255,0.85)',marginTop:'0.5rem',lineHeight:1.6}}>{mensajePanel}</p>
+            )}
           </div>
         </div>
 

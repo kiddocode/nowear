@@ -174,6 +174,10 @@
         "a": "No. Tus invitadas entran directamente a través del link que les mandas por WhatsApp, email o en tu web de boda. No tienen que crearse ninguna cuenta ni descargar ninguna app. Solo el link."
       },
       {
+        "q": "¿Quién puede ver los looks registrados?",
+        "a": "Solo la organizadora del evento tiene acceso a los looks registrados. Entre invitadas no hay visibilidad: ninguna invitada puede ver el look de otra. Cuando registras tu outfit, únicamente quien ha creado el evento puede verlo."
+      },
+      {
         "q": "¿Cómo evito que dos invitadas lleven el mismo vestido en mi boda o evento?",
         "a": "Crea tu evento en nowear.es, comparte el link con tus invitadas y deja que el sistema trabaje. Cada invitada registra su marca, modelo y color. Si alguien intenta registrar un look que ya está reservado, recibe un aviso inmediato. Sin conversaciones incómodas, sin dramas, sin sorpresas el día del evento."
       },
