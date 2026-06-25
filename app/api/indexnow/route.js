@@ -15,6 +15,7 @@ export async function GET() {
     'https://nowear.es/blog/protocolo-vestuario-recepciones-oficiales-casas-reales',
     'https://nowear.es/blog/coordinacion-vestuario-agencias-eventos',
     'https://nowear.es/blog/herramienta-estilistas-agencias-moda-eventos',
+    'https://nowear.es/llms.txt',
   ]
 
   const body = {
