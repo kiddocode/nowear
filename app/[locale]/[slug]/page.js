@@ -879,11 +879,11 @@ evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_i
         @media (max-width: 1024px) {
           .invitada-layout { grid-template-columns: 1fr; }
           .invitada-panel { display: none; }
-          .invitada-panel-mobile { display: block; position: relative; height: 220px; overflow: hidden; }
+          .invitada-panel-mobile { display: block; position: relative; height: auto; min-height: 220px; overflow: hidden; }
           .invitada-form-col { padding: 2rem; padding-bottom: 6rem; }
         }
         @media (max-width: 768px) {
-          .invitada-panel-mobile { height: 180px; }
+          .invitada-panel-mobile { min-height: 180px; height: auto; }
           .invitada-form-col { padding: 1.5rem; padding-bottom: 6rem; }
           .prenda-grid { grid-template-columns: 1fr; }
           .estado-grid { flex-direction: column; }
