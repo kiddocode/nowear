@@ -199,7 +199,7 @@ export default function DemoOrganizadora() {
           <div ref={statsRef} style={{...highlightStyle('stats'),display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'1px',background:'#E0E0DC',border:'1px solid #E0E0DC',marginBottom:'2.5rem'}}>
             {[
               {n:'5',l:'Looks registrados',color:'#0A0A0A'},
-              {n:'1',l:'Prereservados',color:'#0A0A0A'},
+              {n:'1',l:'Prerreservados',color:'#0A0A0A'},
               {n:'1',l:'Conflictos',color:'#F07987'},
               {n:'137',l:'Días restantes',color:'#0A0A0A'},
             ].map((s,i) => (
