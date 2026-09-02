@@ -350,7 +350,7 @@ evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_i
     }
 
     await supabase.from('looks').update({
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      nombre_invitada: (nombre + ' ' + apellido).trim(), color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca_normalizada: normalizarStrict(marca1), modelo_normalizado: normalizarStrict(modelo1),
@@ -363,7 +363,7 @@ evento_id: evento.id, nombre_invitada: (nombre + ' ' + apellido).trim(), email_i
 
     const lookActualizado = {
       ...lookEditando,
-      nombre_invitada: nombre, color_hex: colores[0], color_hex_2: colores[1] || null,
+      nombre_invitada: (nombre + ' ' + apellido).trim(), color_hex: colores[0], color_hex_2: colores[1] || null,
       marca: marca1, modelo: modelo1, tipo: tipo1,
       referencia: referencia1 || null, link: link1 || null,
       marca2: marca2 || null, modelo2: modelo2 || null, tipo2: tipo2 || null,
