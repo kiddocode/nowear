@@ -623,6 +623,9 @@ const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes
                             {row.descatalogada && (
                               <div style={{fontSize:'0.6rem',fontWeight:600,color:'#C4917C',marginTop:'0.2rem',letterSpacing:'0.05em'}}>ANTIGUA</div>
                             )}
+                            {row.descripcion_libre && (
+                              <div style={{fontSize:'0.7rem',fontWeight:300,color:'#888884',marginTop:'0.2rem',fontStyle:'italic'}}>{row.descripcion_libre}</div>
+                            )}
                           </td>
                           <td style={{padding:'0.9rem 1rem',fontSize:'0.78rem',fontWeight:300,color:'#888884'}}>
                             <div>{row.tipo||'—'}</div>
