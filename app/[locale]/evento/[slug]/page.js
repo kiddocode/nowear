@@ -594,7 +594,7 @@ const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes
                   <table style={{width:'100%',borderCollapse:'collapse',minWidth:'600px'}}>
                     <thead>
                       <tr style={{background:'#F7F7F5'}}>
-                        {[t('colColor'),t('colNombre'),t('colMarca'),t('colModelo'),t('colTipo'),'Foto',t('colEstado')].map((h,i) => (
+                        {[t('colColor'),t('colNombre'),t('colMarca'),t('colModelo'),t('colTipo'),'Ref.','Link','Foto',t('colEstado')].map((h,i) => (
                           <th key={i} style={{fontSize:'0.58rem',fontWeight:700,letterSpacing:'0.12em',textTransform:'uppercase',color:'#555552',textAlign:'left',padding:'0.9rem 1rem',borderBottom:'1px solid #E0E0DC'}}>{h}</th>
                         ))}
                       </tr>
@@ -629,6 +629,14 @@ const tabs = [t('tabLooks'), t('tabConflictos'), t('tabBloqueos'), t('tabAjustes
                             {row.tipo2 && (
                               <div style={{fontSize:'0.72rem',fontWeight:300,color:'#888884',marginTop:'0.2rem'}}>{row.tipo2}</div>
                             )}
+                          </td>
+                          <td style={{padding:'0.9rem 1rem',fontSize:'0.75rem',fontWeight:300,color:'#888884'}}>
+                            <div>{row.referencia||'—'}</div>
+                            {row.referencia2 && <div style={{fontSize:'0.7rem',color:'#BEBEBA',marginTop:'0.2rem'}}>{row.referencia2}</div>}
+                          </td>
+                          <td style={{padding:'0.9rem 1rem',fontSize:'0.75rem'}}>
+                            {row.link ? <a href={row.link} target="_blank" rel="noopener noreferrer" style={{color:'#F07987',textDecoration:'underline',fontSize:'0.72rem'}}>Ver</a> : <span style={{color:'#BEBEBA'}}>—</span>}
+                            {row.link2 && <div style={{marginTop:'0.2rem'}}><a href={row.link2} target="_blank" rel="noopener noreferrer" style={{color:'#F07987',textDecoration:'underline',fontSize:'0.72rem'}}>Ver 2</a></div>}
                           </td>
                           <td style={{padding:'0.9rem 1rem'}}>
                             {row.foto_url ? (
